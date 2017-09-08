@@ -1,0 +1,1 @@
+web: java -jar target/lhc-1.0.jar
