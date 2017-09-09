@@ -24,7 +24,7 @@ public class SensorReportRepository {
         
         try (Connection connection = dataSource.getConnection();
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM reports ORDER BY date_time DESC LIMIT 20")) {
+            ResultSet rs = stmt.executeQuery("SELECT * FROM reports ORDER BY date_time DESC LIMIT 20;")) {
             
             while (rs.next()) {
                 SensorReport sr = new SensorReport();
