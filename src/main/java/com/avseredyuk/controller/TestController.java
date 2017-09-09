@@ -33,7 +33,7 @@ public class TestController {
             
             ArrayList<String> output = new ArrayList<String>();
             while (rs.next()) {
-                output.add("Another read from SUPER_DB: " + rs.getTimestamp("tick"));
+                output.add("Another DUMB read from SUPER_DB: " + rs.getTimestamp("tick"));
             }
             
             model.put("records", output);
