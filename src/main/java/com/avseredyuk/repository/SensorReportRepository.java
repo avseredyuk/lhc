@@ -38,7 +38,7 @@ public class SensorReportRepository {
             }
             
         } catch (Exception e) {
-            //todo: logging
+            System.out.println(e);
         }
     
         return result;
