@@ -37,7 +37,7 @@ public class SensorReportController {
         method = RequestMethod.POST,
         consumes = "application/json"
     )
-    public void newReport(@RequestBody SensorReport report, @RequestHeader(value = "AuthToken") String authToken) {
+    public void newReport(@RequestBody SensorReport report, @RequestHeader(value = "AuthToken", required = false) String authToken) {
         if (espAuthToken.equals(authToken)) {
             repository.persist(report);
         } else {
