@@ -28,12 +28,12 @@ public class SensorReportRepository {
             
             while (rs.next()) {
                 SensorReport sr = new SensorReport();
-                sr.setTemperature(rs.getDouble(1));
-                sr.setHumidity(rs.getDouble(2));
-                sr.setLuminosity(rs.getDouble(3));
-                sr.setVolume(rs.getDouble(4));
-                sr.setPpm(rs.getDouble(5));
-                sr.setDateTime(rs.getTimestamp(6).toLocalDateTime());
+                sr.setTemperature(rs.getDouble("temperature"));
+                sr.setHumidity(rs.getDouble("humidity"));
+                sr.setLuminosity(rs.getDouble("luminosity"));
+                sr.setVolume(rs.getDouble("volume"));
+                sr.setPpm(rs.getDouble("ppm"));
+                sr.setDateTime(rs.getTimestamp("date_time").toLocalDateTime());
                 result.add(sr);
             }
             
