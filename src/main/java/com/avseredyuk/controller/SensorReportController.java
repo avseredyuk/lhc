@@ -4,6 +4,7 @@ import com.avseredyuk.model.SensorReport;
 import com.avseredyuk.repository.SensorReportRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,16 @@ public class SensorReportController {
     )
     public List<SensorReport> getLastReports() {
         return repository.getLastReports();
+    }
+    
+    //todo: header authorization
+    @RequestMapping(
+        value = "/report",
+        method = RequestMethod.POST,
+        consumes = "application/json"
+    )
+    public void newReport(@RequestBody SensorReport report) {
+        repository.persist(report);
     }
     
 }

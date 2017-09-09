@@ -2,6 +2,7 @@ package com.avseredyuk.repository;
 
 import com.avseredyuk.model.SensorReport;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -19,13 +20,10 @@ public class SensorReportRepository {
     private DataSource dataSource;
     
     public List<SensorReport> getLastReports() {
-        
         ArrayList<SensorReport> result = new ArrayList<>();
-        
         try (Connection connection = dataSource.getConnection();
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM reports ORDER BY date_time DESC LIMIT 20;")) {
-            
             while (rs.next()) {
                 SensorReport sr = new SensorReport();
                 sr.setTemperature(rs.getDouble("temperature"));
@@ -36,12 +34,26 @@ public class SensorReportRepository {
                 sr.setDateTime(rs.getTimestamp("date_time").toLocalDateTime());
                 result.add(sr);
             }
-            
         } catch (Exception e) {
             System.out.println(e);
         }
-    
         return result;
+    }
+    
+    public void persist(SensorReport report) {
+        try (Connection connection = dataSource.getConnection();
+            PreparedStatement statement = connection.prepareStatement(
+                "INSERT INTO reports (temperature, humidity, luminosity, volume, ppm, date_time) VALUES (?, ?, ?, ?, ?, now());",
+                Statement.RETURN_GENERATED_KEYS)) {
+            statement.setDouble(1, report.getTemperature());
+            statement.setDouble(2, report.getHumidity());
+            statement.setDouble(3, report.getLuminosity());
+            statement.setDouble(4, report.getVolume());
+            statement.setDouble(5, report.getPpm());
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
     
 }
