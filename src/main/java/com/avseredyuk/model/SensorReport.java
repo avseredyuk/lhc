@@ -1,5 +1,6 @@
 package com.avseredyuk.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import lombok.Data;
 
@@ -8,6 +9,10 @@ import lombok.Data;
  */
 @Data
 public class SensorReport {
+    @JsonFormat(
+        shape = JsonFormat.Shape.STRING,
+        pattern = "dd-MM-yyyy hh:mm:ss"
+    )
     private LocalDateTime dateTime;
     private Double temperature;
     private Double humidity;
