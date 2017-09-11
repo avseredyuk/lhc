@@ -17,7 +17,7 @@
       var array_humidity = [];
       var array_volume = [];
       var array_ppm = [];
-      $.getJSON('http://localhost:5000/tmp.json', function(data) {
+      $.getJSON('http://localhost/lastReports', function(data) {
         for (i = 0; i < data.length; i++){
           array_temperature.push([i, data[i].temperature]);
           array_humidity.push([i, data[i].humidity]);
