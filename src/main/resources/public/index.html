@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <title>Hydro-Collider in Action</title>
+  <style>
+    body{
+      margin-top: 30px;
+      margin-left:40px;
+    }
+  </style>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="http://code.highcharts.com/highcharts.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      var array_temperature = [];
+      var array_humidity = [];
+      var array_volume = [];
+      var array_ppm = [];
+      $.getJSON('http://localhost:5000/tmp.json', function(data) {
+        for (i = 0; i < data.length; i++){
+          array_temperature.push([i, data[i].temperature]);
+          array_humidity.push([i, data[i].humidity]);
+          array_volume.push([i, data[i].volume]);
+          array_ppm.push([i, data[i].ppm]);
+        }
+
+        $('#container_temperature').highcharts({
+          chart: {
+            zoomType: 'x'
+          },
+          title: {
+            text: "Temperature"
+          },
+          xAxis: {
+            type: 'category',
+            allowDecimals: false,
+            title: {
+              text: ""
+            }
+          },
+          yAxis: {
+            title: {
+              text: "titleYtext"
+            }
+          },
+          series: [{
+            type: 'area',
+            name: 'Temperature',
+            color: '#bf4000',
+            data: array_temperature
+          }]
+        });
+
+        $('#container_humidity').highcharts({
+          chart: {
+            zoomType: 'x'
+          },
+          title: {
+            text: "Humidity"
+          },
+          xAxis: {
+            type: 'category',
+            allowDecimals: false,
+            title: {
+              text: ""
+            }
+          },
+          yAxis: {
+            title: {
+              text: "titleYtext"
+            }
+          },
+          series: [{
+            type: 'area',
+            name: 'Humidity',
+            color: '#00a6bf',
+            data: array_humidity
+          }]
+        });
+
+        $('#container_volume').highcharts({
+          chart: {
+            zoomType: 'x'
+          },
+          title: {
+            text: "Volume"
+          },
+          xAxis: {
+            type: 'category',
+            allowDecimals: false,
+            title: {
+              text: ""
+            }
+          },
+          yAxis: {
+            title: {
+              text: "titleYtext"
+            }
+          },
+          series: [{
+            type: 'area',
+            name: 'Volume',
+            color: '#2000bf',
+            data: array_volume
+          }]
+        });
+
+        $('#container_ppm').highcharts({
+          chart: {
+            zoomType: 'x'
+          },
+          title: {
+            text: "PPM"
+          },
+          xAxis: {
+            type: 'category',
+            allowDecimals: false,
+            title: {
+              text: ""
+            }
+          },
+          yAxis: {
+            title: {
+              text: "titleYtext"
+            }
+          },
+          series: [{
+            type: 'area',
+            name: 'PPM',
+            color: '#bbbf00',
+            data: array_ppm
+          }]
+        });
+
+      });
+    });
+  </script>
+</head>
+<body>
+<div id="container_temperature" style="height: 400px; width: 50%; float: left;"></div><div id="container_humidity" style="height: 400px; width: 50%; float: left;"></div>
+<div id="container_volume" style="height: 400px; width: 50%; float: left;"></div><div id="container_ppm" style="height: 400px; width: 50%; float: left;"></div>
+
+</body>
+</html>

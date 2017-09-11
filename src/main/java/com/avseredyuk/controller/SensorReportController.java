@@ -21,7 +21,7 @@ public class SensorReportController {
     @Autowired
     private SensorReportRepository repository;
     
-    @Value("${ESP_AUTH_TOKEN}")
+    @Value("${esp.auth-token}")
     private String espAuthToken;
     
     @RequestMapping(
