@@ -16,8 +16,12 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class SensorReportRepository {
-    @Autowired
     private DataSource dataSource;
+    
+    @Autowired
+    public SensorReportRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
     
     public List<SensorReport> getLastReports() {
         ArrayList<SensorReport> result = new ArrayList<>();

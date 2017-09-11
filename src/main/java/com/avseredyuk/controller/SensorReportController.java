@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class SensorReportController {
+    private SensorReportRepository repository;
     
     @Autowired
-    private SensorReportRepository repository;
+    public SensorReportController(SensorReportRepository repository) {
+        this.repository = repository;
+    }
     
     @Value("${esp.auth-token}")
     private String espAuthToken;
