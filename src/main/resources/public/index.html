@@ -18,7 +18,7 @@
       var array_volume = [];
       var array_ppm = [];
       $.getJSON('/lastReports', function(data) {
-        for (i = 0; i < data.length; i++){
+        for (i = data.length - 1; i >= 0; i--){
           array_temperature.push([data[i].dateTime, data[i].temperature]);
           array_humidity.push([data[i].dateTime, data[i].humidity]);
           array_volume.push([data[i].dateTime, data[i].volume]);
