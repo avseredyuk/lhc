@@ -19,10 +19,10 @@
       var array_ppm = [];
       $.getJSON('/lastReports', function(data) {
         for (i = 0; i < data.length; i++){
-          array_temperature.push([i, data[i].temperature]);
-          array_humidity.push([i, data[i].humidity]);
-          array_volume.push([i, data[i].volume]);
-          array_ppm.push([i, data[i].ppm]);
+          array_temperature.push([data[i].dateTime, data[i].temperature]);
+          array_humidity.push([data[i].dateTime, data[i].humidity]);
+          array_volume.push([data[i].dateTime, data[i].volume]);
+          array_ppm.push([data[i].dateTime, data[i].ppm]);
         }
 
         $('#container_temperature').highcharts({
