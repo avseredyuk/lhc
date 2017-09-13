@@ -1,5 +1,7 @@
 package com.avseredyuk.controller;
 
+import com.avseredyuk.converter.PumpActionReportConverter;
+import com.avseredyuk.dto.PumpActionReportDto;
 import com.avseredyuk.exception.AccessDeniedException;
 import com.avseredyuk.model.PumpActionReport;
 import com.avseredyuk.model.SensorReport;
@@ -21,16 +23,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class MainController {
     private SensorReportRepository sensorReportRepository;
     private PumpActionRepository pumpActionRepository;
+    private PumpActionReportConverter pumpActionReportConverter;
     
     @Value("${esp.auth-token}")
     private String espAuthToken;
     
     @Autowired
-    public MainController(
-        SensorReportRepository sensorReportRepository,
-        PumpActionRepository pumpActionRepository) {
+    public MainController(SensorReportRepository sensorReportRepository,
+        PumpActionRepository pumpActionRepository,
+        PumpActionReportConverter pumpActionReportConverter) {
         this.sensorReportRepository = sensorReportRepository;
         this.pumpActionRepository = pumpActionRepository;
+        this.pumpActionReportConverter = pumpActionReportConverter;
     }
     
     @RequestMapping(
@@ -58,8 +62,8 @@ public class MainController {
         value = "lastPumpActions",
         method = RequestMethod.GET
     )
-    public List<PumpActionReport> getLastPumpActions() {
-        return pumpActionRepository.getLastReports();
+    public List<PumpActionReportDto> getLastPumpActions() {
+        return pumpActionReportConverter.toDtoList(pumpActionRepository.getLastReports());
     }
     
     @RequestMapping(

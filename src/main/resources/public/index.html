@@ -20,20 +20,52 @@
       var array_ppm = [];
       var array_pump = [];
 
-      $.getJSON('/lastReports', function(data) {
+      $.getJSON('/lastPumpActions', function(data) {
         for (i = data.length - 1; i >= 0; i--){
-          array_temperature.push([data[i].dateTime, data[i].temperature]);
-          array_humidity.push([data[i].dateTime, data[i].humidity]);
-          array_volume.push([data[i].dateTime, data[i].volume]);
-          array_ppm.push([data[i].dateTime, data[i].ppm]);
-
           var pump_value;
           if (data[i].actionType == 'ENABLED') {
             pump_value = 1;
           } else {
             pump_value = 0;
           }
-          array_pump.push([data[i].dateTime, pump_value]);
+          console.log(data[i].timestamp);
+          console.log(new Date(data[i].timestamp));
+          array_pump.push([data[i].timestamp, pump_value]);
+        }
+
+        $('#container_pump').highcharts({
+          chart: {
+            zoomType: 'x'
+          },
+          title: {
+            text: "Pump Actions"
+          },
+          xAxis: {
+            type: 'datetime',
+            pointInterval: 1000 * 60 * 60
+          },
+          yAxis: {
+            title: {
+              text: "titleYtext"
+            }
+          },
+          series: [{
+            type: 'area',
+            name: 'Pump',
+            color: '#9a9a9a',
+            data: array_pump,
+            step: 'left'
+          }]
+        });
+
+      });
+
+      $.getJSON('/lastReports', function(data) {
+        for (i = data.length - 1; i >= 0; i--){
+          array_temperature.push([data[i].dateTime, data[i].temperature]);
+          array_humidity.push([data[i].dateTime, data[i].humidity]);
+          array_volume.push([data[i].dateTime, data[i].volume]);
+          array_ppm.push([data[i].dateTime, data[i].ppm]);
         }
 
         $('#container_temperature').highcharts({
@@ -141,33 +173,6 @@
             name: 'PPM',
             color: '#bbbf00',
             data: array_ppm
-          }]
-        });
-
-        $('#container_pump').highcharts({
-          chart: {
-            zoomType: 'x'
-          },
-          title: {
-            text: "Pump Actions"
-          },
-          xAxis: {
-            type: 'category',
-            allowDecimals: false,
-            title: {
-              text: ""
-            }
-          },
-          yAxis: {
-            title: {
-              text: "titleYtext"
-            }
-          },
-          series: [{
-            type: 'area',
-            name: 'Pump',
-            color: '#9a9a9a',
-            data: array_pump
           }]
         });
 
