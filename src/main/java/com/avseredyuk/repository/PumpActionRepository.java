@@ -28,7 +28,7 @@ public class PumpActionRepository {
         ArrayList<PumpActionReport> result = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM pump_actions ORDER BY date_time DESC LIMIT 20;")) {
+            ResultSet rs = stmt.executeQuery("SELECT * FROM pump_actions WHERE date_time >= NOW() - '1 day'::INTERVAL ORDER BY date_time DESC;")) {
             while (rs.next()) {
                 PumpActionReport par = new PumpActionReport();
                 par.setDateTime(rs.getTimestamp("date_time").toLocalDateTime());

@@ -27,7 +27,7 @@ public class SensorReportRepository {
         ArrayList<SensorReport> result = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM reports ORDER BY date_time DESC LIMIT 20;")) {
+            ResultSet rs = stmt.executeQuery("SELECT * FROM reports WHERE date_time >= NOW() - '1 day'::INTERVAL ORDER BY date_time DESC;")) {
             while (rs.next()) {
                 SensorReport sr = new SensorReport();
                 sr.setTemperature(rs.getDouble("temperature"));
