@@ -31,6 +31,7 @@ public class MainController {
     @Value("${esp.auth-token}")
     private String espAuthToken;
     
+    @Autowired
     public MainController(SensorReportRepository sensorReportRepository,
         PumpActionRepository pumpActionRepository,
         PumpActionReportConverter pumpActionReportConverter,
