@@ -9,10 +9,6 @@ import lombok.Data;
  */
 @Data
 public class SensorReport {
-    @JsonFormat(
-        shape = JsonFormat.Shape.STRING,
-        pattern = "yyyy-MM-dd HH:mm:ss"
-    )
     private LocalDateTime dateTime;
     private Double temperature;
     private Double humidity;

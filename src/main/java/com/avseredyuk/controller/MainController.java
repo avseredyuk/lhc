@@ -1,7 +1,9 @@
 package com.avseredyuk.controller;
 
 import com.avseredyuk.converter.PumpActionReportConverter;
+import com.avseredyuk.converter.SensorReportConverter;
 import com.avseredyuk.dto.PumpActionReportDto;
+import com.avseredyuk.dto.SensorReportDto;
 import com.avseredyuk.exception.AccessDeniedException;
 import com.avseredyuk.model.PumpActionReport;
 import com.avseredyuk.model.SensorReport;
@@ -24,25 +26,27 @@ public class MainController {
     private SensorReportRepository sensorReportRepository;
     private PumpActionRepository pumpActionRepository;
     private PumpActionReportConverter pumpActionReportConverter;
+    private SensorReportConverter sensorReportConverter;
     
     @Value("${esp.auth-token}")
     private String espAuthToken;
     
-    @Autowired
     public MainController(SensorReportRepository sensorReportRepository,
         PumpActionRepository pumpActionRepository,
-        PumpActionReportConverter pumpActionReportConverter) {
+        PumpActionReportConverter pumpActionReportConverter,
+        SensorReportConverter sensorReportConverter) {
         this.sensorReportRepository = sensorReportRepository;
         this.pumpActionRepository = pumpActionRepository;
         this.pumpActionReportConverter = pumpActionReportConverter;
+        this.sensorReportConverter = sensorReportConverter;
     }
     
     @RequestMapping(
         value = "/lastReports",
         method = RequestMethod.GET
     )
-    public List<SensorReport> getLastReports() {
-        return sensorReportRepository.getLastReports();
+    public List<SensorReportDto> getLastReports() {
+        return sensorReportConverter.toDtoList(sensorReportRepository.getLastReports());
     }
     
     @RequestMapping(
