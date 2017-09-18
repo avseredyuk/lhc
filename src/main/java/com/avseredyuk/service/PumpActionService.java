@@ -23,7 +23,7 @@ public class PumpActionService {
         return pumpActionRepository.getLastReports()
             .stream()
             .map(r -> {
-                r.setDateTime(r.getDateTime().plusMinutes(tzOffset));
+                r.setDateTime(r.getDateTime().minusMinutes(tzOffset));
                 return r;
             })
             .collect(Collectors.toList());
