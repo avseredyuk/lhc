@@ -14,13 +14,15 @@
   <script type="text/javascript">
     $(function () {
 
+      var tzOffset = new Date().getTimezoneOffset();
+
       var array_temperature = [];
       var array_humidity = [];
       var array_volume = [];
       var array_ppm = [];
       var array_pump = [];
 
-      $.getJSON('/lastPumpActions', function(data) {
+      $.getJSON('/lastPumpActions&tz=' + tzOffset, function(data) {
         for (i = data.length - 1; i >= 0; i--){
           var pump_value;
           if (data[i].actionType == 'ENABLED') {
@@ -60,7 +62,7 @@
 
       });
 
-      $.getJSON('/lastReports', function(data) {
+      $.getJSON('/lastReports&tz=' + tzOffset, function(data) {
         for (i = data.length - 1; i >= 0; i--){
           array_temperature.push([data[i].d, data[i].t]);
           array_humidity.push([data[i].d, data[i].h]);

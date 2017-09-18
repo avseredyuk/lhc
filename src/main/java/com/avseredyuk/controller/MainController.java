@@ -7,8 +7,8 @@ import com.avseredyuk.dto.SensorReportDto;
 import com.avseredyuk.exception.AccessDeniedException;
 import com.avseredyuk.model.PumpActionReport;
 import com.avseredyuk.model.SensorReport;
-import com.avseredyuk.repository.PumpActionRepository;
-import com.avseredyuk.repository.SensorReportRepository;
+import com.avseredyuk.service.PumpActionService;
+import com.avseredyuk.service.SensorReportService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -23,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class MainController {
-    private SensorReportRepository sensorReportRepository;
-    private PumpActionRepository pumpActionRepository;
+    private SensorReportService sensorReportService;
+    private PumpActionService pumpActionService;
     private PumpActionReportConverter pumpActionReportConverter;
     private SensorReportConverter sensorReportConverter;
     
@@ -32,12 +33,12 @@ public class MainController {
     private String espAuthToken;
     
     @Autowired
-    public MainController(SensorReportRepository sensorReportRepository,
-        PumpActionRepository pumpActionRepository,
+    public MainController(SensorReportService sensorReportService,
+        PumpActionService pumpActionService,
         PumpActionReportConverter pumpActionReportConverter,
         SensorReportConverter sensorReportConverter) {
-        this.sensorReportRepository = sensorReportRepository;
-        this.pumpActionRepository = pumpActionRepository;
+        this.sensorReportService = sensorReportService;
+        this.pumpActionService = pumpActionService;
         this.pumpActionReportConverter = pumpActionReportConverter;
         this.sensorReportConverter = sensorReportConverter;
     }
@@ -46,8 +47,8 @@ public class MainController {
         value = "/lastReports",
         method = RequestMethod.GET
     )
-    public List<SensorReportDto> getLastReports() {
-        return sensorReportConverter.toDtoList(sensorReportRepository.getLastReports());
+    public List<SensorReportDto> getLastReports(@RequestParam(name="tz") Integer tzOffset) {
+        return sensorReportConverter.toDtoList(sensorReportService.getLastReports(tzOffset));
     }
     
     @RequestMapping(
@@ -57,7 +58,7 @@ public class MainController {
     )
     public void newReport(@RequestBody SensorReport report, @RequestHeader(value = "AuthToken", required = false) String authToken) {
         if (espAuthToken.equals(authToken)) {
-            sensorReportRepository.persist(report);
+            sensorReportService.persist(report);
         } else {
             throw new AccessDeniedException();
         }
@@ -67,8 +68,8 @@ public class MainController {
         value = "lastPumpActions",
         method = RequestMethod.GET
     )
-    public List<PumpActionReportDto> getLastPumpActions() {
-        return pumpActionReportConverter.toDtoList(pumpActionRepository.getLastReports());
+    public List<PumpActionReportDto> getLastPumpActions(@RequestParam(name="tz") Integer tzOffset) {
+        return pumpActionReportConverter.toDtoList(pumpActionService.getLastReports(tzOffset));
     }
     
     @RequestMapping(
@@ -78,7 +79,7 @@ public class MainController {
     )
     public void newPumpAction(@RequestBody PumpActionReport actionReport, @RequestHeader(value = "AuthToken", required = false) String authToken) {
         if (espAuthToken.equals(authToken)) {
-            pumpActionRepository.persist(actionReport);
+            pumpActionService.persist(actionReport);
         } else {
             throw new AccessDeniedException();
         }
