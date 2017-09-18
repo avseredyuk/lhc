@@ -65,7 +65,7 @@ public class MainController {
     }
     
     @RequestMapping(
-        value = "lastPumpActions",
+        value = "/lastPumpActions",
         method = RequestMethod.GET
     )
     public List<PumpActionReportDto> getLastPumpActions(@RequestParam(name="tz") Integer tzOffset) {
