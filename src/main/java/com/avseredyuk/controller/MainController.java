@@ -61,7 +61,7 @@ public class MainController {
     )
     public void newReport(@RequestBody SensorReport report, @RequestHeader(value = "AuthToken", required = false) String authToken) {
         if (espAuthToken.equals(authToken)) {
-            backupService.checkAndBackup();
+//            backupService.checkAndBackup();
             sensorReportService.save(report);
         } else {
             throw new AccessDeniedException();
