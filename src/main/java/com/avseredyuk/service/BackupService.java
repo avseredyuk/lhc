@@ -29,7 +29,7 @@ public class BackupService {
     private static final String REPORT_FILENAME_FORMAT = "%s_%s.json";
     private static final String TMP_DIR = "/tmp";
     
-    @Value("${gdrive.uploadBatch.data.limit}")
+    @Value("${gdrive.upload.data.limit}")
     private Integer uploadDataLimit;
     
     private SensorReportRepository sensorReportRepository;
