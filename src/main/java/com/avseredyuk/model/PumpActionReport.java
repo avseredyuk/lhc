@@ -8,7 +8,7 @@ import lombok.Data;
  * Created by lenfer on 9/13/17.
  */
 @Data
-public class PumpActionReport {
+public class PumpActionReport extends IdentifiableEntity {
     private LocalDateTime dateTime;
     private PumpActionType actionType;
 }

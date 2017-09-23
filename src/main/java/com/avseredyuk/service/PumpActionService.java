@@ -29,7 +29,7 @@ public class PumpActionService {
             .collect(Collectors.toList());
     }
     
-    public void persist(PumpActionReport pumpActionReport) {
+    public void save(PumpActionReport pumpActionReport) {
         pumpActionRepository.persist(pumpActionReport);
     }
 }

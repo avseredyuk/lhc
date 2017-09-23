@@ -7,6 +7,7 @@ import com.avseredyuk.dto.SensorReportDto;
 import com.avseredyuk.exception.AccessDeniedException;
 import com.avseredyuk.model.PumpActionReport;
 import com.avseredyuk.model.SensorReport;
+import com.avseredyuk.service.BackupService;
 import com.avseredyuk.service.PumpActionService;
 import com.avseredyuk.service.SensorReportService;
 import java.util.List;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MainController {
     private SensorReportService sensorReportService;
     private PumpActionService pumpActionService;
+    private BackupService backupService;
     private PumpActionReportConverter pumpActionReportConverter;
     private SensorReportConverter sensorReportConverter;
     
@@ -34,11 +36,12 @@ public class MainController {
     
     @Autowired
     public MainController(SensorReportService sensorReportService,
-        PumpActionService pumpActionService,
+        PumpActionService pumpActionService, BackupService backupService,
         PumpActionReportConverter pumpActionReportConverter,
         SensorReportConverter sensorReportConverter) {
         this.sensorReportService = sensorReportService;
         this.pumpActionService = pumpActionService;
+        this.backupService = backupService;
         this.pumpActionReportConverter = pumpActionReportConverter;
         this.sensorReportConverter = sensorReportConverter;
     }
@@ -58,7 +61,8 @@ public class MainController {
     )
     public void newReport(@RequestBody SensorReport report, @RequestHeader(value = "AuthToken", required = false) String authToken) {
         if (espAuthToken.equals(authToken)) {
-            sensorReportService.persist(report);
+            backupService.checkAndBackup();
+            sensorReportService.save(report);
         } else {
             throw new AccessDeniedException();
         }
@@ -79,7 +83,7 @@ public class MainController {
     )
     public void newPumpAction(@RequestBody PumpActionReport actionReport, @RequestHeader(value = "AuthToken", required = false) String authToken) {
         if (espAuthToken.equals(authToken)) {
-            pumpActionService.persist(actionReport);
+            pumpActionService.save(actionReport);
         } else {
             throw new AccessDeniedException();
         }

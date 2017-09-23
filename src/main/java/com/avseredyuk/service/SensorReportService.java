@@ -29,7 +29,7 @@ public class SensorReportService {
             .collect(Collectors.toList());
     }
     
-    public void persist(SensorReport report) {
+    public void save(SensorReport report) {
         sensorReportRepository.persist(report);
     }
 }
