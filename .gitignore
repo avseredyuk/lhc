@@ -2,4 +2,3 @@ target
 .env
 .idea/
 *.iml
-/src/main/resources/client_secrets.json

@@ -18,12 +18,15 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.ParentReference;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -31,33 +34,37 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class UploaderRepository {
-    private static final String APPLICATION_NAME = "Hydro-Collider/1.0";
+    @Value("${gdrive.client.secrets}")
+    private String googleDriveClientSecrets;
+    
+    private final String APPLICATION_NAME = "Hydro-Collider/1.0";
     
     /** Directory to store user credentials. */
-    private static final java.io.File DATA_STORE_DIR =
+    private final java.io.File DATA_STORE_DIR =
         new java.io.File(System.getProperty("user.home"), ".store/drive_sample");
-    private static final String PARENT_FOLDER_ID = "0B7JuNXKn7s4SQzBBamc3cXJYZk0";
+    private final String PARENT_FOLDER_ID = "0B7JuNXKn7s4SQzBBamc3cXJYZk0";
     
     /**
      * Global instance of the {@link DataStoreFactory}. The best practice is to make it a single
      * globally shared instance across your application.
      */
-    private static FileDataStoreFactory dataStoreFactory;
+    private FileDataStoreFactory dataStoreFactory;
     
     /** Global instance of the HTTP transport. */
-    private static HttpTransport httpTransport;
+    private HttpTransport httpTransport;
     
     /** Global instance of the JSON factory. */
-    private static final JacksonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+    private final JacksonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     
     /** Global Drive API client. */
-    private static Drive drive;
+    private Drive drive;
     
     /** Authorizes the installed application to access user's protected data. */
-    private static Credential authorize() throws Exception {
+    private Credential authorize() throws Exception {
         // load client secrets
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY,
-            new InputStreamReader(AppConfiguration.class.getResourceAsStream("/client_secrets.json")));
+            new InputStreamReader(new ByteArrayInputStream(googleDriveClientSecrets.getBytes(
+                StandardCharsets.UTF_8.name()))));
         // set up authorization code flow
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
             httpTransport, JSON_FACTORY, clientSecrets,
