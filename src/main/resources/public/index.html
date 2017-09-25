@@ -30,8 +30,6 @@
           } else {
             pump_value = 0;
           }
-          console.log(data[i].timestamp);
-          console.log(new Date(data[i].timestamp));
           array_pump.push([data[i].timestamp, pump_value]);
         }
 
@@ -78,16 +76,15 @@
             text: "Temperature"
           },
           xAxis: {
-            type: 'category',
-            allowDecimals: false,
-            title: {
-              text: ""
-            }
+            type: 'datetime',
+            pointInterval: 1000 * 60 * 60
           },
           yAxis: {
             title: {
               text: "titleYtext"
-            }
+            },
+            min: Math.floor(Math.min.apply(Math, array_temperature.map(function(o){return o[1];}))),
+            max: Math.ceil(Math.max.apply(Math, array_temperature.map(function(o){return o[1];})))
           },
           series: [{
             type: 'area',
@@ -105,16 +102,15 @@
             text: "Humidity"
           },
           xAxis: {
-            type: 'category',
-            allowDecimals: false,
-            title: {
-              text: ""
-            }
+            type: 'datetime',
+            pointInterval: 1000 * 60 * 60
           },
           yAxis: {
             title: {
               text: "titleYtext"
-            }
+            },
+            min: Math.floor(Math.min.apply(Math, array_humidity.map(function(o){return o[1];}))),
+            max: Math.ceil(Math.max.apply(Math, array_humidity.map(function(o){return o[1];})))
           },
           series: [{
             type: 'area',
@@ -132,16 +128,15 @@
             text: "Volume"
           },
           xAxis: {
-            type: 'category',
-            allowDecimals: false,
-            title: {
-              text: ""
-            }
+            type: 'datetime',
+            pointInterval: 1000 * 60 * 60
           },
           yAxis: {
             title: {
               text: "titleYtext"
-            }
+            },
+            min: Math.floor(Math.min.apply(Math, array_volume.map(function(o){return o[1];}))),
+            max: Math.ceil(Math.max.apply(Math, array_volume.map(function(o){return o[1];})))
           },
           series: [{
             type: 'area',
@@ -159,16 +154,15 @@
             text: "PPM"
           },
           xAxis: {
-            type: 'category',
-            allowDecimals: false,
-            title: {
-              text: ""
-            }
+            type: 'datetime',
+            pointInterval: 1000 * 60 * 60
           },
           yAxis: {
             title: {
               text: "titleYtext"
-            }
+            },
+            min: Math.floor(Math.min.apply(Math, array_ppm.map(function(o){return o[1];}))),
+            max: Math.ceil(Math.max.apply(Math, array_ppm.map(function(o){return o[1];})))
           },
           series: [{
             type: 'area',

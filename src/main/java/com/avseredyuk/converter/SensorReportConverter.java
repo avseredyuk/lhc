@@ -2,6 +2,7 @@ package com.avseredyuk.converter;
 
 import com.avseredyuk.dto.SensorReportDto;
 import com.avseredyuk.model.SensorReport;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.context.annotation.Scope;
@@ -17,9 +18,8 @@ public class SensorReportConverter {
     public SensorReportDto toDto(SensorReport r) {
         if (r != null) {
             SensorReportDto dto = new SensorReportDto();
-            
             if (r.getDateTime() != null) {
-                dto.setD(r.getDateTime());
+                dto.setD(Timestamp.valueOf(r.getDateTime()).getTime());
             }
             if (r.getTemperature() != null) {
                 dto.setT(r.getTemperature());

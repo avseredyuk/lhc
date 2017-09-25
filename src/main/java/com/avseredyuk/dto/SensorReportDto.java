@@ -1,7 +1,5 @@
 package com.avseredyuk.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDateTime;
 import lombok.Data;
 
 /**
@@ -9,11 +7,7 @@ import lombok.Data;
  */
 @Data
 public class SensorReportDto {
-    @JsonFormat(
-        shape = JsonFormat.Shape.STRING,
-        pattern = "yyyy-MM-dd HH:mm:ss"
-    )
-    private LocalDateTime d;
+    private Long d;
     private double t;
     private double h;
     private double l;
