@@ -32,6 +32,9 @@ public class BackupService {
     @Value("${gdrive.upload.data.limit}")
     private Integer uploadDataLimit;
     
+    @Value("${gdrive.upload.enabled}")
+    private String gdriveUploadEnabled;
+    
     private SensorReportRepository sensorReportRepository;
     private PumpActionRepository pumpActionRepository;
     private UploaderRepository uploaderRepository;
@@ -45,14 +48,17 @@ public class BackupService {
     }
     
     public void checkAndBackup() {
-        Integer suitableSRForBackupCount = sensorReportRepository.countAllSuitableForBackUp();
-        Integer suitablePARForBackupCount = pumpActionRepository.countAllSuitableForBackUp();
+        boolean enabled = Boolean.parseBoolean(gdriveUploadEnabled);
+        if (enabled) {
+            Integer suitableSRForBackupCount = sensorReportRepository.countAllSuitableForBackUp();
+            Integer suitablePARForBackupCount = pumpActionRepository.countAllSuitableForBackUp();
+    
+            if ((suitableSRForBackupCount + suitablePARForBackupCount) > uploadDataLimit) {
+                List<SensorReport> sensorReports = sensorReportRepository.findAllSuitableForBackup();
+                List<PumpActionReport> pumpActions = pumpActionRepository.findAllSuitableForBackup();
         
-        if ((suitableSRForBackupCount + suitablePARForBackupCount) > uploadDataLimit) {
-            List<SensorReport> sensorReports = sensorReportRepository.findAllSuitableForBackup();
-            List<PumpActionReport> pumpActions = pumpActionRepository.findAllSuitableForBackup();
-            
-            backUp(sensorReports, pumpActions);
+                backUp(sensorReports, pumpActions);
+            }
         }
     }
     
