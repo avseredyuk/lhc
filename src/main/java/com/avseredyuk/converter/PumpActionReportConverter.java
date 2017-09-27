@@ -1,6 +1,7 @@
 package com.avseredyuk.converter;
 
 import com.avseredyuk.dto.PumpActionReportDto;
+import com.avseredyuk.enums.PumpActionType;
 import com.avseredyuk.model.PumpActionReport;
 import java.sql.Timestamp;
 import java.util.List;
@@ -15,14 +16,24 @@ import org.springframework.stereotype.Component;
 @Scope("singleton")
 public class PumpActionReportConverter {
     
+    public PumpActionReport fromDto(PumpActionReportDto dto) {
+        if (dto != null) {
+            PumpActionReport report = new PumpActionReport();
+            report.setActionType(PumpActionType.valueOf(dto.getA()));
+            return report;
+        } else {
+            throw new IllegalArgumentException("PumpActionReportDto can not be null");
+        }
+    }
+    
     public PumpActionReportDto toDto(PumpActionReport r) {
         if (r != null) {
             PumpActionReportDto dto = new PumpActionReportDto();
             if (r.getActionType() != null) {
-                dto.setActionType(r.getActionType().toString());
+                dto.setA(r.getActionType().toString());
             }
             if (r.getDateTime() != null) {
-                dto.setTimestamp(Timestamp.valueOf(r.getDateTime()).getTime());
+                dto.setT(Timestamp.valueOf(r.getDateTime()).getTime());
             }
             return dto;
         } else {

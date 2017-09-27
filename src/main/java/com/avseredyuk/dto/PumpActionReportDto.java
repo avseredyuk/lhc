@@ -7,6 +7,6 @@ import lombok.Data;
  */
 @Data
 public class PumpActionReportDto {
-    private Long timestamp;
-    private String actionType;
+    private Long t;
+    private String a;
 }

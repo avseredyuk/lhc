@@ -59,10 +59,10 @@ public class MainController {
         method = RequestMethod.POST,
         consumes = "application/json"
     )
-    public void newReport(@RequestBody SensorReport report, @RequestHeader(value = "AuthToken", required = false) String authToken) {
+    public void newReport(@RequestBody SensorReportDto reportDto, @RequestHeader(value = "AuthToken", required = false) String authToken) {
         if (espAuthToken.equals(authToken)) {
             backupService.checkAndBackup();
-            sensorReportService.save(report);
+            sensorReportService.save(sensorReportConverter.fromDto(reportDto));
         } else {
             throw new AccessDeniedException();
         }
@@ -81,9 +81,9 @@ public class MainController {
         method = RequestMethod.POST,
         consumes = "application/json"
     )
-    public void newPumpAction(@RequestBody PumpActionReport actionReport, @RequestHeader(value = "AuthToken", required = false) String authToken) {
+    public void newPumpAction(@RequestBody PumpActionReportDto actionReportDto, @RequestHeader(value = "AuthToken", required = false) String authToken) {
         if (espAuthToken.equals(authToken)) {
-            pumpActionService.save(actionReport);
+            pumpActionService.save(pumpActionReportConverter.fromDto(actionReportDto));
         } else {
             throw new AccessDeniedException();
         }

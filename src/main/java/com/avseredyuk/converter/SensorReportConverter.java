@@ -15,6 +15,20 @@ import org.springframework.stereotype.Component;
 @Scope("singleton")
 public class SensorReportConverter {
     
+    public SensorReport fromDto(SensorReportDto dto) {
+        if (dto != null) {
+            SensorReport report = new SensorReport();
+            report.setTemperature(dto.getT());
+            report.setWaterTemperature(dto.getW());
+            report.setHumidity(dto.getH());
+            report.setPpm(dto.getP());
+            report.setVolume(dto.getV());
+            return report;
+        } else {
+            throw new IllegalArgumentException("SensorReportDto can not be null");
+        }
+    }
+    
     public SensorReportDto toDto(SensorReport r) {
         if (r != null) {
             SensorReportDto dto = new SensorReportDto();
@@ -26,9 +40,6 @@ public class SensorReportConverter {
             }
             if (r.getHumidity() != null) {
                 dto.setH(r.getHumidity());
-            }
-            if (r.getLuminosity() != null) {
-                dto.setL(r.getLuminosity());
             }
             if (r.getVolume() != null) {
                 dto.setV(r.getVolume());

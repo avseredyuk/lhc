@@ -12,7 +12,6 @@ public class SensorReport extends IdentifiableEntity {
     private Double temperature;
     private Double waterTemperature;
     private Double humidity;
-    private Double luminosity;
     private Double volume;
     private Double ppm;
 }
