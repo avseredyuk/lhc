@@ -17,6 +17,7 @@
       var tzOffset = new Date().getTimezoneOffset();
 
       var array_temperature = [];
+      var array_water_temperature = [];
       var array_humidity = [];
       var array_volume = [];
       var array_ppm = [];
@@ -63,6 +64,7 @@
       $.getJSON('/lastReports?tz=' + tzOffset, function(data) {
         for (i = data.length - 1; i >= 0; i--){
           array_temperature.push([data[i].d, data[i].t]);
+          array_water_temperature.push([data[i].d, data[i].w]);
           array_humidity.push([data[i].d, data[i].h]);
           array_volume.push([data[i].d, data[i].v]);
           array_ppm.push([data[i].d, data[i].p]);
@@ -83,15 +85,25 @@
             title: {
               text: "titleYtext"
             },
-            min: Math.floor(Math.min.apply(Math, array_temperature.map(function(o){return o[1];}))),
+            /*
+              //todo: we need better solution to calculate man & max from both temperature arrays
+            */
+            min: Math.floor(Math.min.apply(Math, array_water_temperature.map(function(o){return o[1];}))),
             max: Math.ceil(Math.max.apply(Math, array_temperature.map(function(o){return o[1];})))
           },
-          series: [{
-            type: 'area',
-            name: 'Temperature',
-            color: '#bf4000',
-            data: array_temperature
-          }]
+          series: [
+            {
+              type: 'area',
+              name: 'Air Temperature',
+              color: '#bf4000',
+              data: array_temperature
+            },
+            {
+              type: 'area',
+              name: 'Water Temperature',
+              color: '#bf4000',
+              data: array_water_temperature
+            }]
         });
 
         $('#container_humidity').highcharts({

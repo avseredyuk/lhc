@@ -38,7 +38,7 @@ public class SensorReportRepository implements BackupableRepository<SensorReport
         List<SensorReport> result = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM reports WHERE date_time >= NOW() - '1 day'::INTERVAL ORDER BY date_time DESC;")) {
+            ResultSet rs = stmt.executeQuery("SELECT * FROM reports WHERE date_time >= now() - '1 day'::INTERVAL ORDER BY date_time DESC;")) {
             
             result.addAll(parseResultSet(rs));
             
@@ -51,14 +51,15 @@ public class SensorReportRepository implements BackupableRepository<SensorReport
     public void persist(SensorReport report) {
         try (Connection connection = dataSource.getConnection();
             PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO reports (temperature, humidity, luminosity, volume, ppm, date_time) VALUES (?, ?, ?, ?, ?, now());",
+                "INSERT INTO reports (temperature, water_temperature, humidity, luminosity, volume, ppm, date_time) VALUES (?, ?, ?, ?, ?, ?, now());",
                 Statement.RETURN_GENERATED_KEYS)) {
             
             statement.setDouble(1, report.getTemperature());
-            statement.setDouble(2, report.getHumidity());
-            statement.setDouble(3, report.getLuminosity());
-            statement.setDouble(4, report.getVolume());
-            statement.setDouble(5, report.getPpm());
+            statement.setDouble(2, report.getWaterTemperature());
+            statement.setDouble(3, report.getHumidity());
+            statement.setDouble(4, report.getLuminosity());
+            statement.setDouble(5, report.getVolume());
+            statement.setDouble(6, report.getPpm());
             statement.executeUpdate();
             
         } catch (SQLException e) {
@@ -74,6 +75,7 @@ public class SensorReportRepository implements BackupableRepository<SensorReport
                 SensorReport sr = new SensorReport();
                 sr.setId(rs.getLong("id"));
                 sr.setTemperature(rs.getDouble("temperature"));
+                sr.setWaterTemperature(rs.getDouble("water_temperature"));
                 sr.setHumidity(rs.getDouble("humidity"));
                 sr.setLuminosity(rs.getDouble("luminosity"));
                 sr.setVolume(rs.getDouble("volume"));

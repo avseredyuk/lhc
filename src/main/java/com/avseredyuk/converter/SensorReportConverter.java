@@ -36,6 +36,9 @@ public class SensorReportConverter {
             if (r.getPpm() != null) {
                 dto.setP(r.getPpm());
             }
+            if (r.getWaterTemperature() != null) {
+                dto.setW(r.getWaterTemperature());
+            }
             
             return dto;
         } else {

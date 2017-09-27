@@ -10,6 +10,7 @@ import lombok.Data;
 public class SensorReport extends IdentifiableEntity {
     private LocalDateTime dateTime;
     private Double temperature;
+    private Double waterTemperature;
     private Double humidity;
     private Double luminosity;
     private Double volume;
