@@ -50,7 +50,7 @@ public class MainController {
         value = "/lastReports",
         method = RequestMethod.GET
     )
-    public List<SensorReportDto> getLastReports(@RequestParam(name="tz") Integer tzOffset) {
+    public List<SensorReportDto> getLastReports(@RequestParam(name="tz", defaultValue = "-180") Integer tzOffset) {
         return sensorReportConverter.toDtoList(sensorReportService.getLastReports(tzOffset));
     }
     
@@ -72,7 +72,7 @@ public class MainController {
         value = "/lastPumpActions",
         method = RequestMethod.GET
     )
-    public List<PumpActionReportDto> getLastPumpActions(@RequestParam(name="tz") Integer tzOffset) {
+    public List<PumpActionReportDto> getLastPumpActions(@RequestParam(name="tz", defaultValue = "-180") Integer tzOffset) {
         return pumpActionReportConverter.toDtoList(pumpActionService.getLastReports(tzOffset));
     }
     
