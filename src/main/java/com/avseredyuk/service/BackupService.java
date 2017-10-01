@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BackupService {
-    private static final String SR_REPORT_FORMAT = "%d,%f,%f,%f,%f,%f|";
-    private static final String PAR_REPORT_FORMAT = "%d,%d|";
+    private static final String SR_REPORT_FORMAT = "%s,%s,%s,%s,%s,%s|";
+    private static final String PAR_REPORT_FORMAT = "%s,%d|";
     
     private SensorReportRepository sensorReportRepository;
     private PumpActionRepository pumpActionRepository;
@@ -80,12 +80,12 @@ public class BackupService {
     private String printPumpReport(PumpActionReport par, PumpActionReport prevPar) {
         if (prevPar == null) {
             return String.format(PAR_REPORT_FORMAT,
-                Timestamp.valueOf(par.getDateTime()).getTime(),
+                Long.toHexString(Timestamp.valueOf(par.getDateTime()).getTime()),
                 par.getActionType().ordinal()
             );
         } else {
             return String.format(PAR_REPORT_FORMAT,
-                Timestamp.valueOf(par.getDateTime()).getTime() - Timestamp.valueOf(prevPar.getDateTime()).getTime(),
+                Long.toHexString(Timestamp.valueOf(par.getDateTime()).getTime() - Timestamp.valueOf(prevPar.getDateTime()).getTime()),
                 par.getActionType().ordinal()
             );
         }
@@ -94,21 +94,21 @@ public class BackupService {
     private String printSensorReport(SensorReport sr, SensorReport prevSr) {
         if (prevSr == null) {
             return String.format(SR_REPORT_FORMAT,
-                Timestamp.valueOf(sr.getDateTime()).getTime(),
-                sr.getHumidity(),
-                sr.getPpm(),
-                sr.getTemperature(),
-                sr.getVolume(),
-                sr.getWaterTemperature()
+                Long.toHexString(Timestamp.valueOf(sr.getDateTime()).getTime()),
+                Double.toString(sr.getHumidity()),
+                Double.toString(sr.getPpm()),
+                Double.toString(sr.getTemperature()),
+                Double.toString(sr.getVolume()),
+                Double.toString(sr.getWaterTemperature())
             );
         } else {
             return String.format(SR_REPORT_FORMAT,
-                Timestamp.valueOf(sr.getDateTime()).getTime() - Timestamp.valueOf(prevSr.getDateTime()).getTime(),
-                sr.getHumidity() - prevSr.getHumidity(),
-                sr.getPpm() - prevSr.getPpm(),
-                sr.getTemperature() - prevSr.getTemperature(),
-                sr.getVolume() - prevSr.getVolume(),
-                sr.getWaterTemperature() - prevSr.getWaterTemperature()
+                Long.toHexString(Timestamp.valueOf(sr.getDateTime()).getTime() - Timestamp.valueOf(prevSr.getDateTime()).getTime()),
+                Double.toString(sr.getHumidity() - prevSr.getHumidity()),
+                Double.toString(sr.getPpm() - prevSr.getPpm()),
+                Double.toString(sr.getTemperature() - prevSr.getTemperature()),
+                Double.toString(sr.getVolume() - prevSr.getVolume()),
+                Double.toString(sr.getWaterTemperature() - prevSr.getWaterTemperature())
             );
         }
     }
