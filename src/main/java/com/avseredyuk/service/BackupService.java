@@ -23,11 +23,10 @@ public class BackupService {
     private PumpActionRepository pumpActionRepository;
     private BackupRepository backupRepository;
     
-    @Value("${gdrive.upload.data.limit}")
-    private Integer uploadDataLimit;
-    //todo: rename envvar
-    @Value("${gdrive.upload.enabled}")
-    private String backupEnabled;
+    @Value("${backup.threshold}")
+    private Integer backupThreshold;
+    @Value("${backup.enabled}")
+    private boolean backupEnabled;
     
     @Autowired
     public BackupService(SensorReportRepository sensorReportRepository,
@@ -38,14 +37,17 @@ public class BackupService {
     }
     
     public synchronized void checkAndBackup() {
-        boolean enabled = Boolean.parseBoolean(backupEnabled);
-        if (enabled) {
+        if (backupEnabled) {
             Integer suitableSRForBackupCount = sensorReportRepository.countAllSuitableForBackUp();
+            System.out.println("SR 4 BU: " + suitableSRForBackupCount);
             Integer suitablePARForBackupCount = pumpActionRepository.countAllSuitableForBackUp();
+            System.out.println("PAR 4 BU: " + suitablePARForBackupCount);
     
-            if ((suitableSRForBackupCount + suitablePARForBackupCount) > uploadDataLimit) {
+            if ((suitableSRForBackupCount + suitablePARForBackupCount) > backupThreshold) {
                 List<SensorReport> sensorReports = sensorReportRepository.findAllSuitableForBackup();
+                System.out.println("SIZE OF SR LIST: " + sensorReports.size());
                 List<PumpActionReport> pumpActions = pumpActionRepository.findAllSuitableForBackup();
+                System.out.println("SIZE OF PAR LIST: " + pumpActions.size());
         
                 backUp(sensorReports, pumpActions);
                 
@@ -68,6 +70,9 @@ public class BackupService {
             PumpActionReport prevPar = i > 0 ? pumpActions.get(i - 1) : null;
             pumpSB.append(printPumpReport(par, prevPar));
         }
+    
+        System.out.println("SR BU: " + sensorSB.toString());
+        System.out.println("PAR BU: " + pumpSB.toString());
         
         backupRepository.persist(sensorSB.toString(), pumpSB.toString());
     }
