@@ -6,10 +6,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by lenfer on 9/29/17.
  */
+@Repository
 public class BackupRepository {
     private DataSource dataSource;
     
