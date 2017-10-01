@@ -36,7 +36,7 @@ public interface BackupableRepository<T> {
         ArrayList<T> result = new ArrayList<>();
         try (Connection connection = getDataSource().getConnection();
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(String.format("SELECT * FROM %s WHERE date_time >= NOW() - '1 day'::INTERVAL ORDER BY date_time DESC;", getTableName()))) {
+            ResultSet rs = stmt.executeQuery(String.format("SELECT * FROM %s WHERE date_time >= NOW() - '1 day'::INTERVAL ORDER BY date_time ASC;", getTableName()))) {
             
             result.addAll(parseResultSet(rs));
             

@@ -85,11 +85,8 @@
             title: {
               text: "titleYtext"
             },
-            /*
-              //todo: we need better solution to calculate man & max from both temperature arrays
-            */
-            min: Math.floor(Math.min.apply(Math, array_water_temperature.map(function(o){return o[1];}))),
-            max: Math.ceil(Math.max.apply(Math, array_temperature.map(function(o){return o[1];})))
+            min: Math.min(Math.floor(Math.min.apply(Math, array_water_temperature.map(function(o){return o[1];}))), Math.floor(Math.min.apply(Math, array_temperature.map(function(o){return o[1];})))),
+            max: Math.max(Math.ceil(Math.max.apply(Math, array_water_temperature.map(function(o){return o[1];}))), Math.ceil(Math.max.apply(Math, array_temperature.map(function(o){return o[1];}))))
           },
           series: [
             {
