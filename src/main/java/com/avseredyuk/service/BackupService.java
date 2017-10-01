@@ -85,7 +85,7 @@ public class BackupService {
             );
         } else {
             return String.format(PAR_REPORT_FORMAT,
-                Long.toHexString(Timestamp.valueOf(par.getDateTime()).getTime() - Timestamp.valueOf(prevPar.getDateTime()).getTime() / 10),
+                Long.toHexString((Timestamp.valueOf(par.getDateTime()).getTime() - Timestamp.valueOf(prevPar.getDateTime()).getTime()) / 10),
                 par.getActionType().ordinal()
             );
         }
@@ -103,7 +103,7 @@ public class BackupService {
             );
         } else {
             return String.format(SR_REPORT_FORMAT,
-                Long.toHexString(Timestamp.valueOf(sr.getDateTime()).getTime() - Timestamp.valueOf(prevSr.getDateTime()).getTime() / 10),
+                Long.toHexString((Timestamp.valueOf(sr.getDateTime()).getTime() - Timestamp.valueOf(prevSr.getDateTime()).getTime()) / 10),
                 formatDouble(sr.getHumidity() - prevSr.getHumidity()),
                 formatDouble(sr.getPpm() - prevSr.getPpm()),
                 formatDouble(sr.getTemperature() - prevSr.getTemperature()),
