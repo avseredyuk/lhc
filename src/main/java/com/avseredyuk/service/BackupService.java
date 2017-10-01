@@ -6,7 +6,10 @@ import com.avseredyuk.repository.BackupRepository;
 import com.avseredyuk.repository.PumpActionRepository;
 import com.avseredyuk.repository.SensorReportRepository;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
+import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -70,9 +73,6 @@ public class BackupService {
             PumpActionReport prevPar = i > 0 ? pumpActions.get(i - 1) : null;
             pumpSB.append(printPumpReport(par, prevPar));
         }
-    
-        System.out.println("SR BU: " + sensorSB.toString());
-        System.out.println("PAR BU: " + pumpSB.toString());
         
         backupRepository.persist(sensorSB.toString(), pumpSB.toString());
     }
@@ -80,12 +80,12 @@ public class BackupService {
     private String printPumpReport(PumpActionReport par, PumpActionReport prevPar) {
         if (prevPar == null) {
             return String.format(PAR_REPORT_FORMAT,
-                Long.toHexString(Timestamp.valueOf(par.getDateTime()).getTime()),
+                Long.toHexString(Timestamp.valueOf(par.getDateTime()).getTime() / 10),
                 par.getActionType().ordinal()
             );
         } else {
             return String.format(PAR_REPORT_FORMAT,
-                Long.toHexString(Timestamp.valueOf(par.getDateTime()).getTime() - Timestamp.valueOf(prevPar.getDateTime()).getTime()),
+                Long.toHexString(Timestamp.valueOf(par.getDateTime()).getTime() - Timestamp.valueOf(prevPar.getDateTime()).getTime() / 10),
                 par.getActionType().ordinal()
             );
         }
@@ -94,23 +94,27 @@ public class BackupService {
     private String printSensorReport(SensorReport sr, SensorReport prevSr) {
         if (prevSr == null) {
             return String.format(SR_REPORT_FORMAT,
-                Long.toHexString(Timestamp.valueOf(sr.getDateTime()).getTime()),
-                Double.toString(sr.getHumidity()),
-                Double.toString(sr.getPpm()),
-                Double.toString(sr.getTemperature()),
-                Double.toString(sr.getVolume()),
-                Double.toString(sr.getWaterTemperature())
+                Long.toHexString(Timestamp.valueOf(sr.getDateTime()).getTime() / 10),
+                formatDouble(sr.getHumidity()),
+                formatDouble(sr.getPpm()),
+                formatDouble(sr.getTemperature()),
+                formatDouble(sr.getVolume()),
+                formatDouble(sr.getWaterTemperature())
             );
         } else {
             return String.format(SR_REPORT_FORMAT,
-                Long.toHexString(Timestamp.valueOf(sr.getDateTime()).getTime() - Timestamp.valueOf(prevSr.getDateTime()).getTime()),
-                Double.toString(sr.getHumidity() - prevSr.getHumidity()),
-                Double.toString(sr.getPpm() - prevSr.getPpm()),
-                Double.toString(sr.getTemperature() - prevSr.getTemperature()),
-                Double.toString(sr.getVolume() - prevSr.getVolume()),
-                Double.toString(sr.getWaterTemperature() - prevSr.getWaterTemperature())
+                Long.toHexString(Timestamp.valueOf(sr.getDateTime()).getTime() - Timestamp.valueOf(prevSr.getDateTime()).getTime() / 10),
+                formatDouble(sr.getHumidity() - prevSr.getHumidity()),
+                formatDouble(sr.getPpm() - prevSr.getPpm()),
+                formatDouble(sr.getTemperature() - prevSr.getTemperature()),
+                formatDouble(sr.getVolume() - prevSr.getVolume()),
+                formatDouble(sr.getWaterTemperature() - prevSr.getWaterTemperature())
             );
         }
+    }
+    
+    private String formatDouble(Double d) {
+        return new DecimalFormat("#.##", DecimalFormatSymbols.getInstance( Locale.ENGLISH )).format(d);
     }
     
 }
