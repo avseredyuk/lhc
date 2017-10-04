@@ -13,8 +13,8 @@
   <script src="http://code.highcharts.com/highcharts.js"></script>
   <script type="text/javascript">
     $(function () {
-
-      var tzOffset = new Date().getTimezoneOffset();
+      var currentTime = new Date();
+      var tzOffset = currentTime.getTimezoneOffset();
 
       var array_temperature = [];
       var array_water_temperature = [];
@@ -45,7 +45,8 @@
           },
           xAxis: {
             type: 'datetime',
-            pointInterval: 1000 * 60 * 60
+            pointInterval: 1000 * 60 * 60,
+            max: currentTime.getTime()
           },
           yAxis: {
             title: {
@@ -81,7 +82,8 @@
           },
           xAxis: {
             type: 'datetime',
-            pointInterval: 1000 * 60 * 60
+            pointInterval: 1000 * 60 * 60,
+            max: currentTime.getTime()
           },
           yAxis: {
             title: {
@@ -114,7 +116,8 @@
           },
           xAxis: {
             type: 'datetime',
-            pointInterval: 1000 * 60 * 60
+            pointInterval: 1000 * 60 * 60,
+            max: currentTime.getTime()
           },
           yAxis: {
             title: {
@@ -140,7 +143,8 @@
           },
           xAxis: {
             type: 'datetime',
-            pointInterval: 1000 * 60 * 60
+            pointInterval: 1000 * 60 * 60,
+            max: currentTime.getTime()
           },
           yAxis: {
             title: {
@@ -166,7 +170,8 @@
           },
           xAxis: {
             type: 'datetime',
-            pointInterval: 1000 * 60 * 60
+            pointInterval: 1000 * 60 * 60,
+            max: currentTime.getTime()
           },
           yAxis: {
             title: {
