@@ -41,21 +41,24 @@ public class BackupService {
     
     public synchronized void checkAndBackup() {
         if (backupEnabled) {
+            long buStart = System.currentTimeMillis();
+            
             Integer suitableSRForBackupCount = sensorReportRepository.countAllSuitableForBackUp();
-            System.out.println("SR 4 BU: " + suitableSRForBackupCount);
             Integer suitablePARForBackupCount = pumpActionRepository.countAllSuitableForBackUp();
-            System.out.println("PAR 4 BU: " + suitablePARForBackupCount);
-    
+            
             if ((suitableSRForBackupCount + suitablePARForBackupCount) > backupThreshold) {
                 List<SensorReport> sensorReports = sensorReportRepository.findAllSuitableForBackup();
-                System.out.println("SIZE OF SR LIST: " + sensorReports.size());
                 List<PumpActionReport> pumpActions = pumpActionRepository.findAllSuitableForBackup();
-                System.out.println("SIZE OF PAR LIST: " + pumpActions.size());
         
                 backUp(sensorReports, pumpActions);
                 
-                //todo: remove persisted items from usual tables
+                sensorReports.forEach(sensorReportRepository::delete);
+                pumpActions.forEach(pumpActionRepository::delete);
             }
+            
+            long buEnd = System.currentTimeMillis();
+            System.out.println(String.format("Total items backed up: %d", suitableSRForBackupCount + suitablePARForBackupCount));
+            System.out.println(String.format("Time took: %s", buEnd - buStart));
         }
     }
     
@@ -114,7 +117,8 @@ public class BackupService {
     }
     
     private String formatDouble(Double d) {
-        return new DecimalFormat("#.##", DecimalFormatSymbols.getInstance( Locale.ENGLISH )).format(d);
+        String formattedDouble = new DecimalFormat("#.##", DecimalFormatSymbols.getInstance( Locale.ENGLISH )).format(d);
+        return "0".equals(formattedDouble) ? "" : formattedDouble;
     }
     
 }
