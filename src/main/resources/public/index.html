@@ -25,6 +25,12 @@
 
       var delta = 0.5;
 
+      Highcharts.setOptions({
+        global: {
+          timezoneOffset: tzOffset
+        }
+      });
+
       $.getJSON('/lastPumpActions?tz=' + tzOffset, function(data) {
         for (i = data.length - 1; i >= 0; i--){
           var pump_value;
@@ -50,7 +56,7 @@
           },
           yAxis: {
             title: {
-              text: "titleYtext"
+              text: "Status"
             }
           },
           series: [{
@@ -87,7 +93,7 @@
           },
           yAxis: {
             title: {
-              text: "titleYtext"
+              text: "&#8451;"
             },
             min: Math.min(Math.floor(Math.min.apply(Math, array_water_temperature.map(function(o){return o[1];})) - delta), Math.floor(Math.min.apply(Math, array_temperature.map(function(o){return o[1];})) - delta)),
             max: Math.max(Math.ceil(Math.max.apply(Math, array_water_temperature.map(function(o){return o[1];})) + delta), Math.ceil(Math.max.apply(Math, array_temperature.map(function(o){return o[1];})) + delta))
@@ -121,10 +127,10 @@
           },
           yAxis: {
             title: {
-              text: "titleYtext"
+              text: "%"
             },
-            min: Math.floor(Math.min.apply(Math, array_humidity.map(function(o){return o[1];}))),
-            max: Math.ceil(Math.max.apply(Math, array_humidity.map(function(o){return o[1];})))
+            min: Math.floor(Math.min.apply(Math, array_humidity.map(function(o){return o[1];})) - delta),
+            max: Math.ceil(Math.max.apply(Math, array_humidity.map(function(o){return o[1];})) + delta)
           },
           series: [{
             type: 'area',
@@ -148,10 +154,10 @@
           },
           yAxis: {
             title: {
-              text: "titleYtext"
+              text: "L"
             },
-            min: Math.floor(Math.min.apply(Math, array_volume.map(function(o){return o[1];}))),
-            max: Math.ceil(Math.max.apply(Math, array_volume.map(function(o){return o[1];})))
+            min: Math.floor(Math.min.apply(Math, array_volume.map(function(o){return o[1];})) - delta),
+            max: Math.ceil(Math.max.apply(Math, array_volume.map(function(o){return o[1];})) + delta)
           },
           series: [{
             type: 'area',
@@ -175,10 +181,10 @@
           },
           yAxis: {
             title: {
-              text: "titleYtext"
+              text: "PPM"
             },
-            min: Math.floor(Math.min.apply(Math, array_ppm.map(function(o){return o[1];}))),
-            max: Math.ceil(Math.max.apply(Math, array_ppm.map(function(o){return o[1];})))
+            min: Math.floor(Math.min.apply(Math, array_ppm.map(function(o){return o[1];})) - delta),
+            max: Math.ceil(Math.max.apply(Math, array_ppm.map(function(o){return o[1];})) + delta)
           },
           series: [{
             type: 'area',
