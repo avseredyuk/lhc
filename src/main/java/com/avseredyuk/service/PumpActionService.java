@@ -19,14 +19,8 @@ public class PumpActionService {
         this.pumpActionRepository = pumpActionRepository;
     }
     
-    public List<PumpActionReport> getLastReports(Integer tzOffset) {
-        return pumpActionRepository.getLastReports()
-            .stream()
-            .map(r -> {
-                r.setDateTime(r.getDateTime().minusMinutes(tzOffset));
-                return r;
-            })
-            .collect(Collectors.toList());
+    public List<PumpActionReport> getLastReports() {
+        return pumpActionRepository.getLastReports();
     }
     
     public void save(PumpActionReport pumpActionReport) {

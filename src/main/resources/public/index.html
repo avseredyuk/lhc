@@ -31,7 +31,7 @@
         }
       });
 
-      $.getJSON('/lastPumpActions?tz=' + tzOffset, function(data) {
+      $.getJSON('/lastPumpActions', function(data) {
         for (i = data.length - 1; i >= 0; i--){
           var pump_value;
           if (data[i].a == 'ENABLED') {
@@ -70,7 +70,7 @@
 
       });
 
-      $.getJSON('/lastReports?tz=' + tzOffset, function(data) {
+      $.getJSON('/lastReports', function(data) {
         for (i = data.length - 1; i >= 0; i--){
           array_temperature.push([data[i].d, data[i].t]);
           array_water_temperature.push([data[i].d, data[i].w]);

@@ -19,14 +19,8 @@ public class SensorReportService {
         this.sensorReportRepository = sensorReportRepository;
     }
     
-    public List<SensorReport> getLastReports(Integer tzOffset) {
-        return sensorReportRepository.getLastReports()
-            .stream()
-            .map(r -> {
-                r.setDateTime(r.getDateTime().minusMinutes(tzOffset));
-                return r;
-            })
-            .collect(Collectors.toList());
+    public List<SensorReport> getLastReports() {
+        return sensorReportRepository.getLastReports();
     }
     
     public void save(SensorReport report) {

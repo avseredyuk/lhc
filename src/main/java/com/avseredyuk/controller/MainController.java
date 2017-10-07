@@ -5,8 +5,6 @@ import com.avseredyuk.converter.SensorReportConverter;
 import com.avseredyuk.dto.PumpActionReportDto;
 import com.avseredyuk.dto.SensorReportDto;
 import com.avseredyuk.exception.AccessDeniedException;
-import com.avseredyuk.model.PumpActionReport;
-import com.avseredyuk.model.SensorReport;
 import com.avseredyuk.service.BackupService;
 import com.avseredyuk.service.PumpActionService;
 import com.avseredyuk.service.SensorReportService;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -50,8 +47,8 @@ public class MainController {
         value = "/lastReports",
         method = RequestMethod.GET
     )
-    public List<SensorReportDto> getLastReports(@RequestParam(name="tz", defaultValue = "-180") Integer tzOffset) {
-        return sensorReportConverter.toDtoList(sensorReportService.getLastReports(tzOffset));
+    public List<SensorReportDto> getLastReports() {
+        return sensorReportConverter.toDtoList(sensorReportService.getLastReports());
     }
     
     @RequestMapping(
@@ -72,8 +69,8 @@ public class MainController {
         value = "/lastPumpActions",
         method = RequestMethod.GET
     )
-    public List<PumpActionReportDto> getLastPumpActions(@RequestParam(name="tz", defaultValue = "-180") Integer tzOffset) {
-        return pumpActionReportConverter.toDtoList(pumpActionService.getLastReports(tzOffset));
+    public List<PumpActionReportDto> getLastPumpActions() {
+        return pumpActionReportConverter.toDtoList(pumpActionService.getLastReports());
     }
     
     @RequestMapping(
