@@ -68,6 +68,10 @@ public class MainController {
         return pumpActionReportConverter.toDtoList(pumpActionService.getLastReports());
     }
     
+    @RequestMapping(
+        value = "/lastBootups",
+        method = RequestMethod.GET
+    )
     public List<BootupReportDto> getLastBootups() {
         return bootupReportConverter.toDtoList(bootupService.getLastReports());
     }
