@@ -1,11 +1,14 @@
 package com.avseredyuk.controller;
 
+import com.avseredyuk.converter.BootupReportConverter;
 import com.avseredyuk.converter.PumpActionReportConverter;
 import com.avseredyuk.converter.SensorReportConverter;
+import com.avseredyuk.dto.BootupReportDto;
 import com.avseredyuk.dto.PumpActionReportDto;
 import com.avseredyuk.dto.SensorReportDto;
 import com.avseredyuk.exception.AccessDeniedException;
 import com.avseredyuk.service.BackupService;
+import com.avseredyuk.service.BootupService;
 import com.avseredyuk.service.PumpActionService;
 import com.avseredyuk.service.SensorReportService;
 import java.util.List;
@@ -22,25 +25,31 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class MainController {
-    private SensorReportService sensorReportService;
-    private PumpActionService pumpActionService;
-    private BackupService backupService;
-    private PumpActionReportConverter pumpActionReportConverter;
-    private SensorReportConverter sensorReportConverter;
+    private final SensorReportService sensorReportService;
+    private final PumpActionService pumpActionService;
+    private final BootupService bootupService;
+    private final BackupService backupService;
+    private final PumpActionReportConverter pumpActionReportConverter;
+    private final SensorReportConverter sensorReportConverter;
+    private final BootupReportConverter bootupReportConverter;
     
     @Value("${esp.auth-token}")
     private String espAuthToken;
     
     @Autowired
     public MainController(SensorReportService sensorReportService,
-        PumpActionService pumpActionService, BackupService backupService,
+        PumpActionService pumpActionService, BootupService bootupService,
+        BackupService backupService,
         PumpActionReportConverter pumpActionReportConverter,
-        SensorReportConverter sensorReportConverter) {
+        SensorReportConverter sensorReportConverter,
+        BootupReportConverter bootupReportConverter) {
         this.sensorReportService = sensorReportService;
         this.pumpActionService = pumpActionService;
+        this.bootupService = bootupService;
         this.backupService = backupService;
         this.pumpActionReportConverter = pumpActionReportConverter;
         this.sensorReportConverter = sensorReportConverter;
+        this.bootupReportConverter = bootupReportConverter;
     }
     
     @RequestMapping(
@@ -49,6 +58,18 @@ public class MainController {
     )
     public List<SensorReportDto> getLastReports() {
         return sensorReportConverter.toDtoList(sensorReportService.getLastReports());
+    }
+    
+    @RequestMapping(
+        value = "/lastPumpActions",
+        method = RequestMethod.GET
+    )
+    public List<PumpActionReportDto> getLastPumpActions() {
+        return pumpActionReportConverter.toDtoList(pumpActionService.getLastReports());
+    }
+    
+    public List<BootupReportDto> getLastBootups() {
+        return bootupReportConverter.toDtoList(bootupService.getLastReports());
     }
     
     @RequestMapping(
@@ -66,14 +87,6 @@ public class MainController {
     }
     
     @RequestMapping(
-        value = "/lastPumpActions",
-        method = RequestMethod.GET
-    )
-    public List<PumpActionReportDto> getLastPumpActions() {
-        return pumpActionReportConverter.toDtoList(pumpActionService.getLastReports());
-    }
-    
-    @RequestMapping(
         value = "/pump",
         method = RequestMethod.POST,
         consumes = "application/json"
@@ -81,6 +94,18 @@ public class MainController {
     public void newPumpAction(@RequestBody PumpActionReportDto actionReportDto, @RequestHeader(value = "AuthToken", required = false) String authToken) {
         if (espAuthToken.equals(authToken)) {
             pumpActionService.save(pumpActionReportConverter.fromDto(actionReportDto));
+        } else {
+            throw new AccessDeniedException();
+        }
+    }
+    
+    @RequestMapping(
+        value = "/bootup",
+        method = RequestMethod.POST
+    )
+    public void newBoot(@RequestHeader(value = "AuthToken", required = false) String authToken) {
+        if (espAuthToken.equals(authToken)) {
+            bootupService.create();
         } else {
             throw new AccessDeniedException();
         }
