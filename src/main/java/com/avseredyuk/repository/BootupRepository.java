@@ -38,7 +38,7 @@ public class BootupRepository implements BackupableRepository<BootupReport> {
         List<BootupReport> result = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM bootup LIMIT 5 ORDER BY date_time DESC;")) {
+            ResultSet rs = stmt.executeQuery("SELECT * FROM bootup ORDER BY date_time DESC LIMIT 5;")) {
         
             result.addAll(parseResultSet(rs));
         
