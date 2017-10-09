@@ -4,9 +4,25 @@
   <meta charset="utf-8" />
   <title>Hydro-Collider in Action</title>
   <style>
-    body{
-      margin-top: 30px;
-      margin-left:40px;
+    .left {
+      position: absolute;
+      left:0; top:0; bottom: 0;
+      width: 200px;
+    }
+    .main {
+      position: absolute;
+      left:200px; top:0; right:0; bottom:0;
+    }
+    .left { background: #dbdbdb; }
+    .main {}
+    .left h2 {
+      text-align: center
+    }
+    .list_style li {
+      color: #9c9c9c;
+    }
+    .list_style span {
+      color: #555555;
     }
   </style>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -23,7 +39,10 @@
       var array_ppm = [];
       var array_pump = [];
 
-      var delta = 0.5;
+      var tempDelta = 0.5;
+      var humidDelta = 1.0;
+      var volDelta = 1.0;
+      var ppmDelta = 10.0;
 
       Highcharts.setOptions({
         global: {
@@ -31,8 +50,19 @@
         }
       });
 
+      $.getJSON('/lastBootups', function(data) {
+        var items = [];
+        for (i = data.length - 1; i >= 0; i--) {
+          var date = new Date(data[i].d);
+          var item = '<li><span>' + date.toLocaleString('uk-UA') + '</span></li>';
+          items.push(item);
+        }
+
+        $('#last_bootups_list ul').append(items.join(''));
+      });
+
       $.getJSON('/lastPumpActions', function(data) {
-        for (i = data.length - 1; i >= 0; i--){
+        for (i = data.length - 1; i >= 0; i--) {
           var pump_value;
           if (data[i].a == 'ENABLED') {
             pump_value = 1;
@@ -43,9 +73,6 @@
         }
 
         $('#container_pump').highcharts({
-          chart: {
-            zoomType: 'x'
-          },
           title: {
             text: "Pump Actions"
           },
@@ -55,9 +82,6 @@
             max: currentTime.getTime()
           },
           yAxis: {
-            title: {
-              text: "Status"
-            }
           },
           series: [{
             type: 'area',
@@ -71,7 +95,7 @@
       });
 
       $.getJSON('/lastReports', function(data) {
-        for (i = data.length - 1; i >= 0; i--){
+        for (i = data.length - 1; i >= 0; i--) {
           array_temperature.push([data[i].d, data[i].t]);
           array_water_temperature.push([data[i].d, data[i].w]);
           array_humidity.push([data[i].d, data[i].h]);
@@ -80,9 +104,6 @@
         }
 
         $('#container_temperature').highcharts({
-          chart: {
-            zoomType: 'x'
-          },
           title: {
             text: "Temperature"
           },
@@ -92,11 +113,8 @@
             max: currentTime.getTime()
           },
           yAxis: {
-            title: {
-              text: "&#8451;"
-            },
-            min: Math.min(Math.floor(Math.min.apply(Math, array_water_temperature.map(function(o){return o[1];})) - delta), Math.floor(Math.min.apply(Math, array_temperature.map(function(o){return o[1];})) - delta)),
-            max: Math.max(Math.ceil(Math.max.apply(Math, array_water_temperature.map(function(o){return o[1];})) + delta), Math.ceil(Math.max.apply(Math, array_temperature.map(function(o){return o[1];})) + delta))
+            min: Math.min(Math.floor(Math.min.apply(Math, array_water_temperature.map(function(o){return o[1];})) - tempDelta), Math.floor(Math.min.apply(Math, array_temperature.map(function(o){return o[1];})) - tempDelta)),
+            max: Math.max(Math.ceil(Math.max.apply(Math, array_water_temperature.map(function(o){return o[1];})) + tempDelta), Math.ceil(Math.max.apply(Math, array_temperature.map(function(o){return o[1];})) + tempDelta))
           },
           series: [
             {
@@ -114,9 +132,6 @@
         });
 
         $('#container_humidity').highcharts({
-          chart: {
-            zoomType: 'x'
-          },
           title: {
             text: "Humidity"
           },
@@ -126,11 +141,8 @@
             max: currentTime.getTime()
           },
           yAxis: {
-            title: {
-              text: "%"
-            },
-            min: Math.floor(Math.min.apply(Math, array_humidity.map(function(o){return o[1];})) - delta),
-            max: Math.ceil(Math.max.apply(Math, array_humidity.map(function(o){return o[1];})) + delta)
+            min: Math.floor(Math.min.apply(Math, array_humidity.map(function(o){return o[1];})) - humidDelta),
+            max: Math.ceil(Math.max.apply(Math, array_humidity.map(function(o){return o[1];})) + humidDelta)
           },
           series: [{
             type: 'area',
@@ -141,9 +153,6 @@
         });
 
         $('#container_volume').highcharts({
-          chart: {
-            zoomType: 'x'
-          },
           title: {
             text: "Volume"
           },
@@ -153,11 +162,8 @@
             max: currentTime.getTime()
           },
           yAxis: {
-            title: {
-              text: "L"
-            },
-            min: Math.floor(Math.min.apply(Math, array_volume.map(function(o){return o[1];})) - delta),
-            max: Math.ceil(Math.max.apply(Math, array_volume.map(function(o){return o[1];})) + delta)
+            min: Math.floor(Math.min.apply(Math, array_volume.map(function(o){return o[1];})) - volDelta),
+            max: Math.ceil(Math.max.apply(Math, array_volume.map(function(o){return o[1];})) + volDelta)
           },
           series: [{
             type: 'area',
@@ -168,9 +174,6 @@
         });
 
         $('#container_ppm').highcharts({
-          chart: {
-            zoomType: 'x'
-          },
           title: {
             text: "PPM"
           },
@@ -180,11 +183,8 @@
             max: currentTime.getTime()
           },
           yAxis: {
-            title: {
-              text: "PPM"
-            },
-            min: Math.floor(Math.min.apply(Math, array_ppm.map(function(o){return o[1];})) - delta),
-            max: Math.ceil(Math.max.apply(Math, array_ppm.map(function(o){return o[1];})) + delta)
+            min: Math.floor(Math.min.apply(Math, array_ppm.map(function(o){return o[1];})) - ppmDelta),
+            max: Math.ceil(Math.max.apply(Math, array_ppm.map(function(o){return o[1];})) + ppmDelta)
           },
           series: [{
             type: 'area',
@@ -198,9 +198,15 @@
   </script>
 </head>
 <body>
-<div id="container_temperature" style="height: 300px; width: 50%; float: left;"></div><div id="container_humidity" style="height: 300px; width: 50%; float: left;"></div>
-<div id="container_volume" style="height: 300px; width: 50%; float: left;"></div><div id="container_ppm" style="height: 300px; width: 50%; float: left;"></div>
-<div id="container_pump" style="height: 300px; width: 100%; float: left;"></div>
+<div class="left" id="last_bootups_list">
+  <h2>Last boot-ups</h2>
+  <ul class="list_style"></ul>
+</div>
+<div class="main">
+  <div id="container_temperature" style="height: 300px; width: 50%; float: left;"></div><div id="container_humidity" style="height: 300px; width: 50%; float: left;"></div>
+  <div id="container_volume" style="height: 300px; width: 50%; float: left;"></div><div id="container_ppm" style="height: 300px; width: 50%; float: left;"></div>
+  <div id="container_pump" style="height: 300px; width: 100%; float: left;"></div>
+</div>
 
 </body>
 </html>
