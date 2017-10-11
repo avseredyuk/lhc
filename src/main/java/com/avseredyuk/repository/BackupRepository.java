@@ -20,15 +20,14 @@ public class BackupRepository {
         this.dataSource = dataSource;
     }
     
-    public void persist(String reportString, String pumpString, String bootString) {
+    public void persist(String reportString, String pumpString) {
         try (Connection connection = dataSource.getConnection();
             PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO backup (date_time, report_data, pump_data, boot_data) VALUES (now(), ?, ?, ?);",
+                "INSERT INTO backup (date_time, report_data, pump_data) VALUES (now(), ?, ?);",
                 Statement.RETURN_GENERATED_KEYS)) {
         
             statement.setString(1, reportString);
             statement.setString(2, pumpString);
-            statement.setString(3, bootString);
             statement.executeUpdate();
         
         } catch (SQLException e) {

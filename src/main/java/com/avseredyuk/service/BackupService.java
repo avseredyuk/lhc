@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 public class BackupService {
     private static final String SR_REPORT_FORMAT = "%s,%s,%s,%s,%s,%s|";
     private static final String PAR_REPORT_FORMAT = "%s,%d|";
-    private static final String BR_REPORT_FORMAT = "%s|";
     
     private final SensorReportRepository sensorReportRepository;
     private final PumpActionRepository pumpActionRepository;
@@ -51,30 +50,26 @@ public class BackupService {
             
             Integer suitableSRForBackupCount = sensorReportRepository.countAllSuitableForBackUp();
             Integer suitablePARForBackupCount = pumpActionRepository.countAllSuitableForBackUp();
-            Integer suitableBRForBackupCount = bootupRepository.countAllSuitableForBackUp();
             
-            if ((suitableSRForBackupCount + suitablePARForBackupCount + suitableBRForBackupCount) > backupThreshold) {
+            if ((suitableSRForBackupCount + suitablePARForBackupCount) > backupThreshold) {
                 List<SensorReport> sensorReports = sensorReportRepository.findAllSuitableForBackup();
                 List<PumpActionReport> pumpActions = pumpActionRepository.findAllSuitableForBackup();
-                List<BootupReport> bootupReports = bootupRepository.findAllSuitableForBackup();
         
-                backUp(sensorReports, pumpActions, bootupReports);
+                backUp(sensorReports, pumpActions);
                 
                 sensorReports.forEach(sensorReportRepository::delete);
                 pumpActions.forEach(pumpActionRepository::delete);
-                bootupReports.forEach(bootupRepository::delete);
             }
             
             long buEnd = System.currentTimeMillis();
             System.out.println(String.format("Total items backed up: %d",
                 suitableSRForBackupCount
-                    + suitablePARForBackupCount
-                    + suitableBRForBackupCount));
+                    + suitablePARForBackupCount));
             System.out.println(String.format("Time took: %s", buEnd - buStart));
         }
     }
     
-    private void backUp(List<SensorReport> sensorReports, List<PumpActionReport> pumpActions, List<BootupReport> bootupReports) {
+    private void backUp(List<SensorReport> sensorReports, List<PumpActionReport> pumpActions) {
         StringBuilder sensorSB = new StringBuilder(160000);
         for (int i = 0; i < sensorReports.size(); i++) {
             SensorReport sr = sensorReports.get(i);
@@ -88,15 +83,8 @@ public class BackupService {
             PumpActionReport prevPar = i > 0 ? pumpActions.get(i - 1) : null;
             pumpSB.append(printPumpReport(par, prevPar));
         }
-    
-        StringBuilder bootSB = new StringBuilder(4000);
-        for (int i = 0; i < bootupReports.size(); i++) {
-            BootupReport br = bootupReports.get(i);
-            BootupReport prevBr = i > 0 ? bootupReports.get(i - 1) : null;
-            bootSB.append(printBootReport(br, prevBr));
-        }
         
-        backupRepository.persist(sensorSB.toString(), pumpSB.toString(), bootSB.toString());
+        backupRepository.persist(sensorSB.toString(), pumpSB.toString());
     }
     
     private String printPumpReport(PumpActionReport par, PumpActionReport prevPar) {
@@ -109,16 +97,6 @@ public class BackupService {
             return String.format(PAR_REPORT_FORMAT,
                 Long.toHexString((Timestamp.valueOf(par.getDateTime()).getTime() - Timestamp.valueOf(prevPar.getDateTime()).getTime()) / 10),
                 par.getActionType().ordinal()
-            );
-        }
-    }
-    
-    private String printBootReport(BootupReport br, BootupReport prevBr) {
-        if (prevBr == null) {
-            return String.format(BR_REPORT_FORMAT, Long.toHexString(Timestamp.valueOf(br.getDateTime()).getTime() / 10));
-        } else {
-            return String.format(BR_REPORT_FORMAT,
-                Long.toHexString((Timestamp.valueOf(br.getDateTime()).getTime() - Timestamp.valueOf(prevBr.getDateTime()).getTime()) / 10)
             );
         }
     }

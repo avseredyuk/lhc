@@ -16,22 +16,12 @@ import org.springframework.stereotype.Repository;
  * Created by lenfer on 10/9/17.
  */
 @Repository
-public class BootupRepository implements BackupableRepository<BootupReport> {
+public class BootupRepository {
     private DataSource dataSource;
     
     @Autowired
     public BootupRepository(DataSource dataSource) {
         this.dataSource = dataSource;
-    }
-    
-    @Override
-    public DataSource getDataSource() {
-        return dataSource;
-    }
-    
-    @Override
-    public String getTableName() {
-        return "bootup";
     }
     
     public List<BootupReport> getLastReports() {
@@ -61,7 +51,6 @@ public class BootupRepository implements BackupableRepository<BootupReport> {
         }
     }
     
-    @Override
     public List<BootupReport> parseResultSet(ResultSet rs) {
         List<BootupReport> result = new ArrayList<>();
         try {
