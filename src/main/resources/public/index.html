@@ -50,7 +50,7 @@
         }
       });
 
-      $.getJSON('/lastBootups', function(data) {
+      $.getJSON('/bootup/history', function(data) {
         var items = [];
         for (i = data.length - 1; i >= 0; i--) {
           var date = new Date(data[i].d);
@@ -61,7 +61,7 @@
         $('#last_bootups_list ul').append(items.join(''));
       });
 
-      $.getJSON('/lastPumpActions', function(data) {
+      $.getJSON('/pump/history', function(data) {
         for (i = data.length - 1; i >= 0; i--) {
           var pump_value;
           if (data[i].a == 'ENABLED') {
@@ -82,6 +82,9 @@
             max: currentTime.getTime()
           },
           yAxis: {
+            title: {
+              text: ""
+            }
           },
           series: [{
             type: 'area',
@@ -94,7 +97,7 @@
 
       });
 
-      $.getJSON('/lastReports', function(data) {
+      $.getJSON('/report/history', function(data) {
         for (i = data.length - 1; i >= 0; i--) {
           array_temperature.push([data[i].d, data[i].t]);
           array_water_temperature.push([data[i].d, data[i].w]);
@@ -114,7 +117,10 @@
           },
           yAxis: {
             min: Math.min(Math.floor(Math.min.apply(Math, array_water_temperature.map(function(o){return o[1];})) - tempDelta), Math.floor(Math.min.apply(Math, array_temperature.map(function(o){return o[1];})) - tempDelta)),
-            max: Math.max(Math.ceil(Math.max.apply(Math, array_water_temperature.map(function(o){return o[1];})) + tempDelta), Math.ceil(Math.max.apply(Math, array_temperature.map(function(o){return o[1];})) + tempDelta))
+            max: Math.max(Math.ceil(Math.max.apply(Math, array_water_temperature.map(function(o){return o[1];})) + tempDelta), Math.ceil(Math.max.apply(Math, array_temperature.map(function(o){return o[1];})) + tempDelta)),
+            title: {
+              text: ""
+            }
           },
           series: [
             {
@@ -142,7 +148,10 @@
           },
           yAxis: {
             min: Math.floor(Math.min.apply(Math, array_humidity.map(function(o){return o[1];})) - humidDelta),
-            max: Math.ceil(Math.max.apply(Math, array_humidity.map(function(o){return o[1];})) + humidDelta)
+            max: Math.ceil(Math.max.apply(Math, array_humidity.map(function(o){return o[1];})) + humidDelta),
+            title: {
+              text: ""
+            }
           },
           series: [{
             type: 'area',
@@ -163,7 +172,10 @@
           },
           yAxis: {
             min: Math.floor(Math.min.apply(Math, array_volume.map(function(o){return o[1];})) - volDelta),
-            max: Math.ceil(Math.max.apply(Math, array_volume.map(function(o){return o[1];})) + volDelta)
+            max: Math.ceil(Math.max.apply(Math, array_volume.map(function(o){return o[1];})) + volDelta),
+            title: {
+              text: ""
+            }
           },
           series: [{
             type: 'area',
@@ -184,7 +196,10 @@
           },
           yAxis: {
             min: Math.floor(Math.min.apply(Math, array_ppm.map(function(o){return o[1];})) - ppmDelta),
-            max: Math.ceil(Math.max.apply(Math, array_ppm.map(function(o){return o[1];})) + ppmDelta)
+            max: Math.ceil(Math.max.apply(Math, array_ppm.map(function(o){return o[1];})) + ppmDelta),
+            title: {
+              text: ""
+            }
           },
           series: [{
             type: 'area',
