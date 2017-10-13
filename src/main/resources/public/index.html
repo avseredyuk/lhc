@@ -52,7 +52,7 @@
 
       $.getJSON('/bootup/history', function(data) {
         var items = [];
-        for (i = data.length - 1; i >= 0; i--) {
+        for (i = 0; i < data.length; i++) {
           var date = new Date(data[i].d);
           var item = '<li><span>' + date.toLocaleString('uk-UA') + '</span></li>';
           items.push(item);
