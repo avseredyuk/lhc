@@ -1,16 +1,15 @@
-package com.avseredyuk.repository;
+package com.avseredyuk.service;
 
 import com.avseredyuk.converter.BootupReportConverter;
 import com.avseredyuk.converter.PumpActionReportConverter;
 import com.avseredyuk.converter.SensorReportConverter;
 import com.avseredyuk.dto.HistoryDto;
-import com.avseredyuk.service.BootupService;
-import com.avseredyuk.service.PumpActionService;
-import com.avseredyuk.service.SensorReportService;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by lenfer on 10/18/17.
  */
+@Service
 public class HistoryService {
     private final SensorReportService sensorReportService;
     private final PumpActionService pumpActionService;

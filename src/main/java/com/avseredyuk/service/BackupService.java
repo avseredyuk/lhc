@@ -1,6 +1,5 @@
 package com.avseredyuk.service;
 
-import com.avseredyuk.model.BootupReport;
 import com.avseredyuk.model.PumpActionReport;
 import com.avseredyuk.model.SensorReport;
 import com.avseredyuk.repository.BackupRepository;
