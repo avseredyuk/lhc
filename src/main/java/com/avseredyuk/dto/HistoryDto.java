@@ -23,8 +23,8 @@ public class HistoryDto {
         long lastReportTime = reports.get(0).getD();
         long lastBootupTime = bootups.get(0).getD();
         long lastDataFromLHC = (lastPumpTime > lastReportTime) ? lastPumpTime : lastReportTime;
-        LocalDateTime from = LocalDateTime.ofInstant(Instant.ofEpochMilli(lastDataFromLHC), ZoneId.of("UTC"));
-        LocalDateTime to = LocalDateTime.ofInstant(Instant.ofEpochMilli(lastBootupTime), ZoneId.of("UTC"));
+        LocalDateTime from = LocalDateTime.ofInstant(Instant.ofEpochMilli(lastBootupTime), ZoneId.of("UTC"));
+        LocalDateTime to = LocalDateTime.ofInstant(Instant.ofEpochMilli(lastDataFromLHC), ZoneId.of("UTC"));
     
         long diffInSeconds = ChronoUnit.SECONDS.between(from, to);
         long diffInMinutes = ChronoUnit.MINUTES.between(from, to);

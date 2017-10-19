@@ -26,7 +26,6 @@ public class BackupService {
     private final SensorReportRepository sensorReportRepository;
     private final PumpActionRepository pumpActionRepository;
     private final BackupRepository backupRepository;
-    private final BootupRepository bootupRepository;
     
     @Value("${backup.threshold}")
     private Integer backupThreshold;
@@ -36,11 +35,10 @@ public class BackupService {
     @Autowired
     public BackupService(SensorReportRepository sensorReportRepository,
         PumpActionRepository pumpActionRepository,
-        BackupRepository backupRepository, BootupRepository bootupRepository) {
+        BackupRepository backupRepository) {
         this.sensorReportRepository = sensorReportRepository;
         this.pumpActionRepository = pumpActionRepository;
         this.backupRepository = backupRepository;
-        this.bootupRepository = bootupRepository;
     }
     
     public synchronized void checkAndBackup() {
