@@ -4,6 +4,10 @@ import com.avseredyuk.converter.BootupReportConverter;
 import com.avseredyuk.converter.PumpActionReportConverter;
 import com.avseredyuk.converter.SensorReportConverter;
 import com.avseredyuk.dto.HistoryDto;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import org.springframework.stereotype.Service;
 
 /**
@@ -36,8 +40,24 @@ public class HistoryService {
         h.getReports().addAll(sensorReportConverter.toDtoList(sensorReportService.getLastReports()));
         h.getPumps().addAll(pumpActionReportConverter.toDtoList(pumpActionService.getLastReports()));
         h.getBootups().addAll(bootupReportConverter.toDtoList(bootupService.getLastReports()));
-        h.calculateUptime();
+        setUptime(h);
         return h;
+    }
+    
+    public void setUptime(HistoryDto h) {
+        long lastPumpTime = h.getPumps().get(0).getT();
+        long lastReportTime = h.getReports().get(0).getD();
+        long lastBootupTime = h.getBootups().get(0).getD();
+        long lastDataFromLHC = (lastPumpTime > lastReportTime) ? lastPumpTime : lastReportTime;
+        LocalDateTime from = LocalDateTime.ofInstant(Instant.ofEpochMilli(lastBootupTime), ZoneId.of("UTC"));
+        LocalDateTime to = LocalDateTime.ofInstant(Instant.ofEpochMilli(lastDataFromLHC), ZoneId.of("UTC"));
+    
+        long diffInSeconds = ChronoUnit.SECONDS.between(from, to);
+        long diffInMinutes = ChronoUnit.MINUTES.between(from, to);
+        long diffInHours = ChronoUnit.HOURS.between(from, to);
+        long diffInDays = ChronoUnit.DAYS.between(from, to);
+    
+        h.setUptime(String.format("%02d days %02d:%02d:%02d", diffInDays, diffInHours, diffInMinutes, diffInSeconds));
     }
     
 }
