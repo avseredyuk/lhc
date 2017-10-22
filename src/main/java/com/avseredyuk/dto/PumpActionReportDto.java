@@ -7,6 +7,6 @@ import lombok.Data;
  */
 @Data
 public class PumpActionReportDto {
-    private Long t;
+    private Long d;
     private String a;
 }

@@ -39,7 +39,7 @@ $(function () {
             } else {
               pump_value = 0;
             }
-            array_pump.push([data[i].t, pump_value]);
+            array_pump.push([data[i].d, pump_value]);
           }
 
           $('#container_pump').highcharts({
