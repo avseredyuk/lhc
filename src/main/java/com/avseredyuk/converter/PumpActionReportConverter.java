@@ -33,7 +33,7 @@ public class PumpActionReportConverter {
                 dto.setA(r.getActionType().toString());
             }
             if (r.getDateTime() != null) {
-                dto.setT(Timestamp.valueOf(r.getDateTime()).getTime());
+                dto.setD(Timestamp.valueOf(r.getDateTime()).getTime());
             }
             return dto;
         } else {
