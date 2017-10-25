@@ -12,5 +12,4 @@ public class HistoryDto {
     List<BootupReportDto> bootups = new ArrayList<>();
     List<PumpActionReportDto> pumps = new ArrayList<>();
     List<SensorReportDto> reports = new ArrayList<>();
-    String uptime;
 }

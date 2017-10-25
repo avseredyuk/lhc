@@ -32,14 +32,19 @@
 <body>
 <div class="left" id="last_bootups_list">
   <h2>Uptime</h2>
-  <div style="text-align: center; color: #555555;" id="uptime">text</div>
+  <div style="text-align: center; color: #555555;" id="uptime"></div>
+  <h2>Last report</h2>
+  <div style="text-align: center; color: #555555;" id="lastReport"></div>
+  <h2>Last pump</h2>
+  <div style="text-align: center; color: #555555;" id="lastPump"></div>
   <h2>Last boot-ups</h2>
   <ul class="list_style"></ul>
+
 </div>
 <div class="main">
-  <div id="container_temperature" style="height: 300px; width: 50%; float: left;"></div><div id="container_humidity" style="height: 300px; width: 50%; float: left;"></div>
-  <div id="container_volume" style="height: 300px; width: 50%; float: left;"></div><div id="container_ppm" style="height: 300px; width: 50%; float: left;"></div>
-  <div id="container_pump" style="height: 300px; width: 100%; float: left;"></div>
+  <div id="uptimeChart" style="height: 20%; width: 100%;"></div>
+  <br/>
+  <div id="mainChart" style="height: 60%; width: 100%;"></div>
 </div>
 </body>
 </html>
