@@ -140,19 +140,18 @@ String getSensorsReport() {
 }
 
 float getWaterTemp() {
-  float temp;
+  float temp = 0.0;
+  long i = 0;
   do {
     DS18B20.requestTemperatures();
     temp = DS18B20.getTempCByIndex(0);
-  } while (temp == 85.0 || temp == (-127.0));
+    i++;
+  } while ((temp == 85.0 || temp == (-127.0)) && (i < 10));
   return temp;
 }
 
 void connectWiFi() {
-  Serial.println();
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
+  Serial.println("Connecting to " + String(ssid));
 
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
@@ -161,10 +160,9 @@ void connectWiFi() {
     delay(500);
     Serial.print(".");
   }
-
   Serial.println("");
+  
   Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
+  Serial.println("IP address: " + WiFi.localIP());
 }
 
