@@ -53,7 +53,7 @@ void loop() {
 
 void SEND_REPORT() {
   reportSendingLastTime = millis();
-  sendToHost("/report/add", getSensorsReport());
+  sendToHost("/report/add?heap=" + String(ESP.getFreeHeap()), getSensorsReport());
 }
 
 void PUMP_ENABLE() {
@@ -143,6 +143,7 @@ float getWaterTemp() {
   float temp = 0.0;
   long i = 0;
   do {
+    Serial.println("Retry #" + String(i) + ": get water temperature");
     DS18B20.requestTemperatures();
     temp = DS18B20.getTempCByIndex(0);
     i++;
