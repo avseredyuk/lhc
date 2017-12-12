@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <DHT.h>
 #include <DallasTemperature.h>
+#include <ArduinoOTA.h>
 #include "credentials.h"
 
 long REBOOT_INTERVAL_MS = 1000 * 60 * 60 * 24; // reboot every 24 hours
@@ -20,12 +21,38 @@ const int DHTPin = D2;
 DHT dht(DHTPin, DHT22);
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature DS18B20(&oneWire);
+WiFiServer TelnetServer(8266);
 
 void setup() {
+  TelnetServer.begin();
+  
   Serial.begin(115200);
   delay(10);
 
   connectWiFi();
+
+  ArduinoOTA.setPort(OTA_PORT);
+  ArduinoOTA.setHostname(OTA_HOSTNAME);
+  ArduinoOTA.setPassword(OTA_PASSWORD);
+  ArduinoOTA.onStart([]() {
+    Serial.println("OTA Start");
+  });
+  ArduinoOTA.onEnd([]() {
+    Serial.println("OTA End");
+    Serial.println("Rebooting...");
+  });
+  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+    Serial.printf("Progress: %u%%\r\n", (progress / (total / 100)));
+  });
+  ArduinoOTA.onError([](ota_error_t error) {
+    Serial.printf("Error[%u]: ", error);
+    if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+    else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+    else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+    else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+    else if (error == OTA_END_ERROR) Serial.println("End Failed");
+  });
+  ArduinoOTA.begin();  
 
   dht.begin();
 
@@ -34,12 +61,13 @@ void setup() {
   switchPump(false);
   switchLed(false);
 
-  sendToHost("/bootup/add", "");
+  SEND_BOOTUP();
   SEND_REPORT();
   PUMP_ENABLE();
 }
 
 void loop() {
+  ArduinoOTA.handle();
   if ((millis() - reportSendingLastTime) > (reportSendingFrequency * 60000)) {
     SEND_REPORT();
   }
@@ -51,9 +79,13 @@ void loop() {
   }
 }
 
+void SEND_BOOTUP() {
+  sendToHost("/bootup/add", "");
+}
+
 void SEND_REPORT() {
   reportSendingLastTime = millis();
-  sendToHost("/report/add?heap=" + String(ESP.getFreeHeap()), getSensorsReport());
+  sendToHost("/report/add", getSensorsReport());
 }
 
 void PUMP_ENABLE() {
@@ -83,7 +115,13 @@ void switchLed(boolean enableParam) {
   digitalWrite(BUILTIN_LED_PIN, enableParam ? LOW : HIGH);
 }
 
+String concatLogToUri(String resourceUri) {
+  return resourceUri + "?heap=" + String(ESP.getFreeHeap()) + "&millis=" + millis();
+}
+
 void sendToHost(String resourceUri, String content) {
+  String uriWithLogs = concatLogToUri(resourceUri);
+  
   switchLed(true);
   Serial.println("connecting to " + String(host));
 
@@ -95,9 +133,9 @@ void sendToHost(String resourceUri, String content) {
     return;
   }
 
-  Serial.println("Requesting URL: " + String(resourceUri));
+  Serial.println("Requesting URL: " + String(uriWithLogs));
 
-  client.println("POST " + resourceUri + " HTTP/1.1");
+  client.println("POST " + uriWithLogs + " HTTP/1.1");
   client.println("Host: " + String(host));
   client.println("Content-Length: " + String(content.length()));
   client.println("Content-Type: application/json");
