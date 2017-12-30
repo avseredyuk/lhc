@@ -4,6 +4,7 @@ import com.avseredyuk.converter.BootupReportConverter;
 import com.avseredyuk.converter.PumpActionReportConverter;
 import com.avseredyuk.converter.SensorReportConverter;
 import com.avseredyuk.dto.HistoryDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,6 +19,7 @@ public class HistoryService {
     private final SensorReportConverter sensorReportConverter;
     private final BootupReportConverter bootupReportConverter;
     
+    @Autowired
     public HistoryService(SensorReportService sensorReportService,
         PumpActionService pumpActionService, BootupService bootupService,
         PumpActionReportConverter pumpActionReportConverter,

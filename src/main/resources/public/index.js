@@ -7,11 +7,11 @@ $(function () {
   var array_temperature = [];
   var array_water_temperature = [];
   var array_humidity = [];
+  var array_absolute_humidity = [];
   var array_pump = [];
   var array_bootup = [];
 
   var tempDelta = 0.5;
-  var humidDelta = 0.5;
 
   Highcharts.setOptions({
     global: {
@@ -46,6 +46,7 @@ $(function () {
       array_temperature.push([data[i].d, data[i].t]);
       array_water_temperature.push([data[i].d, data[i].w]);
       array_humidity.push([data[i].d, data[i].h]);
+      array_absolute_humidity.push([data[i].d, calcAbsH(data[i].t, data[i].h)])
     }
 
     var lastDataFromLHC = calculateLastActionTime();
@@ -125,6 +126,9 @@ $(function () {
       title: {
         text: ""
       },
+      legend: {
+        useHTML: true
+      },
       xAxis: [{
         type: 'datetime',
         max: currentTime.getTime(),
@@ -154,18 +158,12 @@ $(function () {
         title: {
           text: ""
         },
+        opposite: true,
         tickInterval: 1
       }, {
-        min: Math.floor(Math.min.apply(Math, array_humidity.map(function (o) {
-              return o[1];
-            })) - humidDelta),
-        max: Math.ceil(Math.max.apply(Math, array_humidity.map(function (o) {
-              return o[1];
-            })) + humidDelta),
         title: {
           text: ""
         },
-        opposite: true,
         tickInterval: 1
       }, {
         min: 0,
@@ -182,6 +180,11 @@ $(function () {
         gridLineColor: 'transparent',
         minorTickLength: 0,
         tickLength: 0
+      }, {
+        title: {
+          text: ""
+        },
+        tickInterval: 1
       }],
       series: [
         {
@@ -193,20 +196,26 @@ $(function () {
           step: 'left'
         }, {
           type: 'line',
-          name: 'Air Temperature',
+          name: 'Air Temperature, C',
           color: Highcharts.getOptions().colors[2],
           data: array_temperature
         }, {
           type: 'line',
-          name: 'Water Temperature',
+          name: 'Water Temperature, C',
           color: Highcharts.getOptions().colors[4],
           data: array_water_temperature
         }, {
           yAxis: 1,
           type: 'line',
-          name: 'Humidity',
+          name: 'Humidity, %',
           color: Highcharts.getOptions().colors[5],
           data: array_humidity
+        }, {
+          yAxis: 3,
+          type: 'line',
+          name: 'Abs. Humidity, g/m<sup>3</sup>',
+          color: Highcharts.getOptions().colors[6],
+          data: array_absolute_humidity
         }]
     });
 
@@ -275,6 +284,14 @@ $(function () {
     function pad(num, size) {
       var s = "000000000" + num;
       return s.substr(s.length-size);
+    }
+
+    function calcAbsH(t, h) {
+      var tmp;
+      var absHumid;
+      tmp = Math.pow(2.718281828,(17.67*t)/(t+243.5));
+      absHumid = (6.112*tmp*h*2.1674)/(273.15+t);
+      return Math.round(absHumid * 100) / 100;
     }
 
   });

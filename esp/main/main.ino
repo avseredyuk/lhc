@@ -1,60 +1,40 @@
 #include <ESP8266WiFi.h>
-#include <DHT.h>
-#include <DallasTemperature.h>
-#include <ArduinoOTA.h>
+#include "context.h"
 #include "credentials.h"
+#include "service.h"
+#include "led.h"
+#include "ntp.h"
+#include "ota.h"
+#include "pins.h"
+#include "report_gen.h"
+#include "spiffser.h"
 
-long REBOOT_INTERVAL_MS = 1000 * 60 * 60 * 24; // reboot every 24 hours
-long reportSendingLastTime = 0;
-long reportSendingFrequency = 5; // every X minutes per hour
-long pumpEnableLastTime = 0;
-long pumpEnableFrequency = 60 * 60 * 2;   // seconds, every 2 hours
-long pumpRunningTime = 180;          // seconds   3:00
-boolean pumpEnabled = false;
+const long WIFI_CONNECTION_TIMEOUT = 30 * 1000; // 30 seconds
 
-const int CONNECTION_TIMEOUT = 5000;
-const int ONE_WIRE_BUS = D5;
-const int BUILTIN_LED_PIN = D0;
-const int RELAY_PIN = D3;
-const int DHTPin = D2;
-
-DHT dht(DHTPin, DHT22);
-OneWire oneWire(ONE_WIRE_BUS);
-DallasTemperature DS18B20(&oneWire);
-WiFiServer TelnetServer(8266);
+unsigned long REBOOT_INTERVAL_MS = 1000 * 60 * 60 * 24; // reboot every 24 hours
+unsigned long reportSendingLastTime = 0;
+unsigned long reportSendingFrequency = 5; // every X minutes per hour
+unsigned long pumpEnableLastTime = 0;
+unsigned long pumpEnableFrequency = 60 * 60 * 2;   // seconds, every 2 hours
+unsigned long pumpRunningTime = 180;          // seconds   3:00
+unsigned long ntpPullLastTime = 0;
+unsigned long ntpPullingFrequency = 1; // every 1 minute
 
 void setup() {
-  TelnetServer.begin();
-  
   Serial.begin(115200);
   delay(10);
 
   connectWiFi();
 
-  ArduinoOTA.setPort(OTA_PORT);
-  ArduinoOTA.setHostname(OTA_HOSTNAME);
-  ArduinoOTA.setPassword(OTA_PASSWORD);
-  ArduinoOTA.onStart([]() {
-    Serial.println("OTA Start");
-  });
-  ArduinoOTA.onEnd([]() {
-    Serial.println("OTA End");
-    Serial.println("Rebooting...");
-  });
-  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-    Serial.printf("Progress: %u%%\r\n", (progress / (total / 100)));
-  });
-  ArduinoOTA.onError([](ota_error_t error) {
-    Serial.printf("Error[%u]: ", error);
-    if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
-    else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
-    else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
-    else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
-    else if (error == OTA_END_ERROR) Serial.println("End Failed");
-  });
-  ArduinoOTA.begin();  
+  ota_config();
 
-  dht.begin();
+  ntp_init();
+
+  report_gen_init();
+
+  spiffs_init();
+
+  hasSavedData = has_saved_data();
 
   pinMode(BUILTIN_LED_PIN, OUTPUT);
   pinMode(RELAY_PIN, OUTPUT);
@@ -67,7 +47,8 @@ void setup() {
 }
 
 void loop() {
-  ArduinoOTA.handle();
+  ota_handle();
+  
   if ((millis() - reportSendingLastTime) > (reportSendingFrequency * 60000)) {
     SEND_REPORT();
   }
@@ -77,130 +58,59 @@ void loop() {
   if (((millis() - pumpEnableLastTime) > (pumpRunningTime * 1000) && pumpEnabled)) {
     PUMP_DISABLE();
   }
+  if ((millis() > REBOOT_INTERVAL_MS) && !pumpEnabled) {
+    ESP.restart();
+  }
+  if (((millis() - ntpPullLastTime) > (ntpPullingFrequency * 60000)) && !pumpEnabled) {
+    NTP_HANDLE();
+  }
+}
+
+void NTP_HANDLE() {
+  ntpPullLastTime = millis();
+  service_ntp();
 }
 
 void SEND_BOOTUP() {
-  sendToHost("/bootup/add", "");
+  service_bootup();
 }
 
 void SEND_REPORT() {
   reportSendingLastTime = millis();
-  sendToHost("/report/add", getSensorsReport());
+  service_sensor();
 }
 
 void PUMP_ENABLE() {
-  // reboot every day stuff
-  // done at pre-pump-enable stage to make sure that container is empty and we won't have solution overflow
-  // so it'll have discretion of the pump enable frequency
-  if (millis() > REBOOT_INTERVAL_MS) {
-    ESP.restart();
-  }
   pumpEnableLastTime = millis();
   pumpEnabled = true;
   switchPump(pumpEnabled);
-  sendToHost("/pump/add", getPumpReport(pumpEnabled));
+  service_pump();
 }
 
 void PUMP_DISABLE() {
   pumpEnabled = false;
   switchPump(pumpEnabled);
-  sendToHost("/pump/add", getPumpReport(pumpEnabled));
+  service_pump();
 }
 
 void switchPump(boolean enableParam) {
   digitalWrite(RELAY_PIN, enableParam ? LOW : HIGH);
 }
 
-void switchLed(boolean enableParam) {
-  digitalWrite(BUILTIN_LED_PIN, enableParam ? LOW : HIGH);
-}
-
-String concatLogToUri(String resourceUri) {
-  return resourceUri + "?heap=" + String(ESP.getFreeHeap()) + "&millis=" + millis();
-}
-
-void sendToHost(String resourceUri, String content) {
-  String uriWithLogs = concatLogToUri(resourceUri);
-  
-  switchLed(true);
-  Serial.println("connecting to " + String(host));
-
-  WiFiClient client;
-  const int httpPort = 80;
-  if (!client.connect(host, httpPort)) {
-    Serial.println("connection failed");
-    switchLed(false);
-    return;
-  }
-
-  Serial.println("Requesting URL: " + String(uriWithLogs));
-
-  client.println("POST " + uriWithLogs + " HTTP/1.1");
-  client.println("Host: " + String(host));
-  client.println("Content-Length: " + String(content.length()));
-  client.println("Content-Type: application/json");
-  client.println("AuthToken: " + String(ESP_AUTH_TOKEN));
-  client.println();
-  client.println(content);
-
-  unsigned long timeout = millis();
-  while (client.available() == 0) {
-    if (millis() - timeout > CONNECTION_TIMEOUT) {
-      Serial.println(">>> Client Timeout !");
-      client.stop();
-      switchLed(false);
-      return;
-    }
-  }
-
-  while (client.available()) {
-    String line = client.readStringUntil('\r');
-    Serial.print(line);
-  }
-
-  Serial.println("closing connection");
-  switchLed(false);
-}
-
-String getPumpReport(boolean isOn) {
-  String result = "{\"a\": \"" + String(isOn ? "ENABLED" : "DISABLED") + "\"}";
-  Serial.println(result);
-  return result;
-}
-
-String getSensorsReport() {
-  float humidity = dht.readHumidity();
-  float temperature = dht.readTemperature();
-  float waterTemp = getWaterTemp();
-  String result = "{\"t\":" + String(temperature) + ",\"h\":" + String(humidity) + ",\"v\":" + random(30, 100) + ",\"p\":" + random(100, 500) + ",\"w\":" + String(waterTemp) + "}";
-  Serial.println(result);
-  return result;
-}
-
-float getWaterTemp() {
-  float temp = 0.0;
-  long i = 0;
-  do {
-    Serial.println("Retry #" + String(i) + ": get water temperature");
-    DS18B20.requestTemperatures();
-    temp = DS18B20.getTempCByIndex(0);
-    i++;
-  } while ((temp == 85.0 || temp == (-127.0)) && (i < 10));
-  return temp;
-}
-
 void connectWiFi() {
-  Serial.println("Connecting to " + String(ssid));
+  Serial.println("Connecting to " + String(WIFI_SSID));
 
   WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
-  while (WiFi.status() != WL_CONNECTED) {
+  int connCount = 1;
+  long connAttemptStarted = millis();
+  while ((WiFi.status() != WL_CONNECTED) && 
+         (millis() < (connAttemptStarted + WIFI_CONNECTION_TIMEOUT))) {
     delay(500);
-    Serial.print(".");
+    Serial.println("  -> waiting: #" + String(connCount));
+    connCount++;
   }
-  Serial.println("");
-  
   Serial.println("WiFi connected");
   Serial.println("IP address: " + WiFi.localIP());
 }

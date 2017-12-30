@@ -9,7 +9,7 @@ import lombok.Data;
  */
 @Data
 public class HistoryDto {
-    List<BootupReportDto> bootups = new ArrayList<>();
-    List<PumpActionReportDto> pumps = new ArrayList<>();
-    List<SensorReportDto> reports = new ArrayList<>();
+    private List<BootupReportDto> bootups = new ArrayList<>();
+    private List<PumpActionReportDto> pumps = new ArrayList<>();
+    private List<SensorReportDto> reports = new ArrayList<>();
 }
