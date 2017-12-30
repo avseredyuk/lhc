@@ -16,22 +16,12 @@ import org.springframework.stereotype.Repository;
  * Created by lenfer on 9/9/17.
  */
 @Repository
-public class SensorReportRepository implements BackupableRepository<SensorReport> {
+public class SensorReportRepository {
     private DataSource dataSource;
     
     @Autowired
     public SensorReportRepository(DataSource dataSource) {
         this.dataSource = dataSource;
-    }
-    
-    @Override
-    public DataSource getDataSource() {
-        return dataSource;
-    }
-    
-    @Override
-    public String getTableName() {
-        return "reports";
     }
     
     public List<SensorReport> getLastReports() {
@@ -66,7 +56,6 @@ public class SensorReportRepository implements BackupableRepository<SensorReport
         }
     }
     
-    @Override
     public List<SensorReport> parseResultSet(ResultSet rs) {
         List<SensorReport> result = new ArrayList<>();
         try {

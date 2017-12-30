@@ -18,22 +18,12 @@ import org.springframework.stereotype.Repository;
  * Created by lenfer on 9/13/17.
  */
 @Repository
-public class PumpActionRepository implements BackupableRepository<PumpActionReport> {
+public class PumpActionRepository {
     private DataSource dataSource;
     
     @Autowired
     public PumpActionRepository(DataSource dataSource) {
         this.dataSource = dataSource;
-    }
-    
-    @Override
-    public DataSource getDataSource() {
-        return dataSource;
-    }
-    
-    @Override
-    public String getTableName() {
-        return "pump_actions";
     }
     
     public List<PumpActionReport> getLastReports() {
@@ -64,7 +54,6 @@ public class PumpActionRepository implements BackupableRepository<PumpActionRepo
         }
     }
     
-    @Override
     public List<PumpActionReport> parseResultSet(ResultSet rs) {
         List<PumpActionReport> result = new ArrayList<>();
         try {
