@@ -5,7 +5,6 @@ import com.avseredyuk.converter.SensorReportConverter;
 import com.avseredyuk.dto.PumpActionReportDto;
 import com.avseredyuk.dto.SensorReportDto;
 import com.avseredyuk.exception.AccessDeniedException;
-import com.avseredyuk.service.BackupService;
 import com.avseredyuk.service.BootupService;
 import com.avseredyuk.service.PumpActionService;
 import com.avseredyuk.service.SensorReportService;
@@ -27,7 +26,6 @@ public class EspController {
     private final SensorReportService sensorReportService;
     private final PumpActionService pumpActionService;
     private final BootupService bootupService;
-    private final BackupService backupService;
     private final PumpActionReportConverter pumpActionReportConverter;
     private final SensorReportConverter sensorReportConverter;
     
@@ -37,13 +35,11 @@ public class EspController {
     @Autowired
     public EspController(SensorReportService sensorReportService,
         PumpActionService pumpActionService, BootupService bootupService,
-        BackupService backupService,
         PumpActionReportConverter pumpActionReportConverter,
         SensorReportConverter sensorReportConverter) {
         this.sensorReportService = sensorReportService;
         this.pumpActionService = pumpActionService;
         this.bootupService = bootupService;
-        this.backupService = backupService;
         this.pumpActionReportConverter = pumpActionReportConverter;
         this.sensorReportConverter = sensorReportConverter;
     }
@@ -55,7 +51,6 @@ public class EspController {
     )
     public void newReport(@RequestBody SensorReportDto reportDto, @RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String authToken) {
         if (espAuthToken.equals(authToken)) {
-            backupService.checkAndBackup();
             sensorReportService.save(sensorReportConverter.fromDto(reportDto));
         } else {
             throw new AccessDeniedException();
