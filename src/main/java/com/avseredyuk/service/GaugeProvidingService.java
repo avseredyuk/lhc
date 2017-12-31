@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
  * Created by lenfer on 12/31/17.
  */
 @Service
-public class GaugeService {
+public class GaugeProvidingService {
     private static final int tableSize = 150;
     private static final String T_WAT = "T WAT";
     private static final String T_AIR = "T AIR";
@@ -33,7 +33,7 @@ public class GaugeService {
     private final SensorReportService sensorReportService;
     
     @Autowired
-    public GaugeService(SensorReportService sensorReportService) {
+    public GaugeProvidingService(SensorReportService sensorReportService) {
         this.sensorReportService = sensorReportService;
     }
     

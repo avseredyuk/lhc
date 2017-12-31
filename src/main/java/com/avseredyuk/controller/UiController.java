@@ -1,9 +1,8 @@
 package com.avseredyuk.controller;
 
 import com.avseredyuk.dto.HistoryDto;
-import com.avseredyuk.service.GaugeService;
+import com.avseredyuk.service.GaugeProvidingService;
 import com.avseredyuk.service.HistoryService;
-import java.awt.PageAttributes.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UiController {
     private final HistoryService historyService;
-    private final GaugeService gaugeService;
+    private final GaugeProvidingService gaugeProvidingService;
     
     @Autowired
-    public UiController(HistoryService historyService, GaugeService gaugeService) {
+    public UiController(HistoryService historyService, GaugeProvidingService gaugeProvidingService) {
         this.historyService = historyService;
-        this.gaugeService = gaugeService;
+        this.gaugeProvidingService = gaugeProvidingService;
     }
     
     @RequestMapping(
@@ -39,7 +38,7 @@ public class UiController {
         produces = "image/png"
     )
     public byte[] getGauge() {
-        return gaugeService.getGauge();
+        return gaugeProvidingService.getGauge();
     }
     
 }
