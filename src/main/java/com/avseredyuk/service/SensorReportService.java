@@ -23,6 +23,10 @@ public class SensorReportService {
         return sensorReportRepository.getLastReports();
     }
     
+    public SensorReport getLastReport() {
+        return sensorReportRepository.getLastReport();
+    }
+    
     public void save(SensorReport report) {
         sensorReportRepository.persist(report);
     }

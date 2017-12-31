@@ -6,6 +6,7 @@
 
 extern boolean pumpEnabled;
 extern boolean hasSavedData;
+extern boolean hasHappenedNetworkFailFromBootup;
 extern TimeSyncPackage timeSync;
 
 #endif

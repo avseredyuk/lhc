@@ -38,6 +38,18 @@ public class SensorReportRepository {
         return result;
     }
     
+    public SensorReport getLastReport() {
+        try (Connection connection = dataSource.getConnection();
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM reports ORDER BY date_time DESC LIMIT 1;")) {
+            return parseResultSet(rs).get(0);
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        //todo: it stinks
+        return null;
+    }
+    
     public void persist(SensorReport report) {
         try (Connection connection = dataSource.getConnection();
             PreparedStatement statement = connection.prepareStatement(
