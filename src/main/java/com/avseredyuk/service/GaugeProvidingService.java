@@ -108,8 +108,8 @@ public class GaugeProvidingService {
             
             ge.registerFont(font);
             
-        } catch (Exception ex) {
-            System.out.println("Can't load font");
+        } catch (Exception e) {
+            System.out.println(e);
         }
         return font;
     }
