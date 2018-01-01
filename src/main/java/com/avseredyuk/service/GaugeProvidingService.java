@@ -101,11 +101,13 @@ public class GaugeProvidingService {
         try {
             
             URL dir_url = ClassLoader.getSystemResource("5069.ttf");
+            System.out.println(dir_url);
             File fontFile = new File(dir_url.toURI());
-            
+            System.out.println(fontFile);
             font = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(size);
+            System.out.println(font);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            
+            System.out.println(ge);
             ge.registerFont(font);
             
         } catch (Exception e) {
