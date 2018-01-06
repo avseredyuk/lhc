@@ -5,15 +5,18 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
+import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,40 +24,58 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class GaugeProvidingService {
-    private static final int tableSize = 150;
+    private static final int IMG_SIZE = 150;
     private static final String T_WAT = "T WAT";
     private static final String T_AIR = "T AIR";
     private static final String HUM_ABS = "HUM ABS";
     private static final String HUM_REL = "HUM REL";
-    private static final Color T_WAT_COLOR = new Color(128, 133, 233);
-    private static final Color T_AIR_COLOR = new Color(144, 237, 125);
-    private static final Color HUM_ABS_COLOR = new Color(228, 211, 84);
-    private static final Color HUM_REL_COLOR = new Color(241, 92, 128);
+    private static final float VALUE_FONT_SIZE = 34f;
+    private static final float NAME_FONT_SIZE = 22f;
     private final SensorReportService sensorReportService;
+    private Font loadedFont;
+    private Resource res;
+    private Color waterColor;
+    private Color airColor;
+    private Color humidityAbsoluteColor;
+    private Color humidityRelativeColor;
     
     @Autowired
-    public GaugeProvidingService(SensorReportService sensorReportService) {
+    public GaugeProvidingService(SensorReportService sensorReportService,
+                                 @Value("classpath:5069.ttf") Resource res,
+                                 @Value("${gauge.color.temperature.water}") String waterColor,
+                                 @Value("${gauge.color.temperature.air}") String airColor,
+                                 @Value("${gauge.color.humidity.absolute}") String humidityAbsoluteColor,
+                                 @Value("${gauge.color.humidity.relative}") String humidityRelativeColor) {
         this.sensorReportService = sensorReportService;
+        this.res = res;
+        this.waterColor = Color.decode(waterColor);
+        this.airColor = Color.decode(airColor);
+        this.humidityAbsoluteColor = Color.decode(humidityAbsoluteColor);
+        this.humidityRelativeColor = Color.decode(humidityRelativeColor);
     }
     
+    @Cacheable("Gauge")
     public byte[] getGauge() {
         SensorReport r = sensorReportService.getLastReport();
-        BufferedImage image = new BufferedImage(tableSize, tableSize, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage image = new BufferedImage(IMG_SIZE, IMG_SIZE, BufferedImage.TYPE_INT_ARGB);
     
-        Font valueFont = getFont(34f);
-        Font nameFont = getFont(22f);
+        Font valueFont = getFont(VALUE_FONT_SIZE);
+        Font nameFont = getFont(NAME_FONT_SIZE);
     
-        Graphics valueGraphics = image.getGraphics();
+        Graphics2D valueGraphics = (Graphics2D) image.getGraphics();
         valueGraphics.setFont(valueFont);
         FontMetrics valueFontMetrics = valueGraphics.getFontMetrics();
     
-        Graphics nameGraphics = image.getGraphics();
+        Graphics2D nameGraphics = (Graphics2D) image.getGraphics();
         nameGraphics.setFont(nameFont);
+    
+        valueGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        nameGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         
-        drawStr(valueFontMetrics, valueGraphics, nameGraphics, T_WAT, formatValue(r.getWaterTemperature()), 30, T_WAT_COLOR);
-        drawStr(valueFontMetrics, valueGraphics, nameGraphics, T_AIR, formatValue(r.getTemperature()), 70, T_AIR_COLOR);
-        drawStr(valueFontMetrics, valueGraphics, nameGraphics, HUM_ABS, formatValue(calcAbsHumidity(r)), 110, HUM_ABS_COLOR);
-        drawStr(valueFontMetrics, valueGraphics, nameGraphics, HUM_REL, formatValue(r.getHumidity()), 150, HUM_REL_COLOR);
+        drawStr(valueFontMetrics, valueGraphics, nameGraphics, T_WAT, formatValue(r.getWaterTemperature()), 30, waterColor);
+        drawStr(valueFontMetrics, valueGraphics, nameGraphics, T_AIR, formatValue(r.getTemperature()), 70, airColor);
+        drawStr(valueFontMetrics, valueGraphics, nameGraphics, HUM_ABS, formatValue(calcAbsHumidity(r)), 110, humidityAbsoluteColor);
+        drawStr(valueFontMetrics, valueGraphics, nameGraphics, HUM_REL, formatValue(r.getHumidity()), 150, humidityRelativeColor);
     
         valueGraphics.dispose();
     
@@ -63,7 +84,7 @@ public class GaugeProvidingService {
             ImageIO.write(image, "png", baos);
             return  baos.toByteArray();
         } catch (IOException e) {
-            System.out.println(e.toString() + "some i/o exception");
+            e.printStackTrace();
         }
         
         //todo: this is fucking disgusting
@@ -71,16 +92,9 @@ public class GaugeProvidingService {
     }
     
     private double calcAbsHumidity(SensorReport r) {
-        double Dv = 0d;
-        double m = 17.62d;
-        double Tn = 243.12d;
-        double Ta = 216.7d;
-        double Rh = r.getHumidity();
-        double Tc = r.getTemperature();
-        double A = 6.112d;
-        double K = 273.15d;
-        Dv = (Ta * (Rh/100) * A * Math.exp(m*Tc/(Tn+Tc)) / (K + Tc));
-        return Dv;
+        double hum = r.getHumidity();
+        double temp = r.getTemperature();
+        return 216.7d * (hum / 100) * 6.112d * Math.exp(17.62d * temp / (243.12d + temp)) / (273.15d + temp);
     }
     
     private String formatValue(Double d) {
@@ -91,7 +105,7 @@ public class GaugeProvidingService {
         g.setColor(color);
         ng.setColor(color);
         Rectangle2D bounds = fm.getStringBounds(val, g);
-        int x = tableSize - (int) bounds.getWidth();
+        int x = IMG_SIZE - (int) bounds.getWidth();
         g.drawString(val, x, y);
         ng.drawString(name, 0, y);
     }
@@ -99,19 +113,14 @@ public class GaugeProvidingService {
     private Font getFont(Float size) {
         Font font = null;
         try {
-            
-            URL dir_url = ClassLoader.getSystemResource("5069.ttf");
-            System.out.println(dir_url);
-            File fontFile = new File(dir_url.toURI());
-            System.out.println(fontFile);
-            font = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(size);
-            System.out.println(font);
+            if (loadedFont == null) {
+                loadedFont = Font.createFont(Font.TRUETYPE_FONT, res.getInputStream());
+            }
+            font = loadedFont.deriveFont(size);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            System.out.println(ge);
             ge.registerFont(font);
-            
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         return font;
     }

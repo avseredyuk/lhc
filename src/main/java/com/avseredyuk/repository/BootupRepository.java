@@ -16,12 +16,22 @@ import org.springframework.stereotype.Repository;
  * Created by lenfer on 10/9/17.
  */
 @Repository
-public class BootupRepository {
+public class BootupRepository implements CleanableRepository {
     private DataSource dataSource;
     
     @Autowired
     public BootupRepository(DataSource dataSource) {
         this.dataSource = dataSource;
+    }
+    
+    @Override
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+    
+    @Override
+    public String getTableName() {
+        return "bootup";
     }
     
     public List<BootupReport> getLastReports() {

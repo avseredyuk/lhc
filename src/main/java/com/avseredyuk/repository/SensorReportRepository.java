@@ -16,12 +16,22 @@ import org.springframework.stereotype.Repository;
  * Created by lenfer on 9/9/17.
  */
 @Repository
-public class SensorReportRepository {
+public class SensorReportRepository implements CleanableRepository {
     private DataSource dataSource;
     
     @Autowired
     public SensorReportRepository(DataSource dataSource) {
         this.dataSource = dataSource;
+    }
+    
+    @Override
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+    
+    @Override
+    public String getTableName() {
+        return "reports";
     }
     
     public List<SensorReport> getLastReports() {

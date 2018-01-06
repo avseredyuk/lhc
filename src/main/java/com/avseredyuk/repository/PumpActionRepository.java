@@ -18,12 +18,22 @@ import org.springframework.stereotype.Repository;
  * Created by lenfer on 9/13/17.
  */
 @Repository
-public class PumpActionRepository {
+public class PumpActionRepository implements CleanableRepository {
     private DataSource dataSource;
     
     @Autowired
     public PumpActionRepository(DataSource dataSource) {
         this.dataSource = dataSource;
+    }
+    
+    @Override
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+    
+    @Override
+    public String getTableName() {
+        return "pump_actions";
     }
     
     public List<PumpActionReport> getLastReports() {

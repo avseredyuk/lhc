@@ -49,7 +49,8 @@ public class EspController {
         method = RequestMethod.POST,
         consumes = "application/json"
     )
-    public void newReport(@RequestBody SensorReportDto reportDto, @RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String authToken) {
+    public void newReport(@RequestBody SensorReportDto reportDto,
+                          @RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String authToken) {
         if (espAuthToken.equals(authToken)) {
             sensorReportService.save(sensorReportConverter.fromDto(reportDto));
         } else {
@@ -62,7 +63,8 @@ public class EspController {
         method = RequestMethod.POST,
         consumes = "application/json"
     )
-    public void newPumpAction(@RequestBody PumpActionReportDto actionReportDto, @RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String authToken) {
+    public void newPumpAction(@RequestBody PumpActionReportDto actionReportDto,
+                              @RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String authToken) {
         if (espAuthToken.equals(authToken)) {
             pumpActionService.save(pumpActionReportConverter.fromDto(actionReportDto));
         } else {
