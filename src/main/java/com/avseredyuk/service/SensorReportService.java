@@ -15,15 +15,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class SensorReportService {
     private SensorReportRepository sensorReportRepository;
+    private ConfigService configService;
     
     @Autowired
-    public SensorReportService(SensorReportRepository sensorReportRepository) {
+    public SensorReportService(SensorReportRepository sensorReportRepository,
+        ConfigService configService) {
         this.sensorReportRepository = sensorReportRepository;
+        this.configService = configService;
     }
     
     @Cacheable("SensorReport")
     public List<SensorReport> getLastReports() {
-        return sensorReportRepository.getLastReports();
+        return sensorReportRepository.getLastReports(configService.getHoursCount());
     }
     
     public SensorReport getLastReport() {
@@ -35,7 +38,7 @@ public class SensorReportService {
         @CacheEvict(value = "SensorReport", allEntries = true)
     })
     public void save(SensorReport report) {
-        sensorReportRepository.cleanUp();
-        sensorReportRepository.persist(report);
+        sensorReportRepository.cleanUp(configService.getCleanupIntervalDays());
+        sensorReportRepository.save(report);
     }
 }

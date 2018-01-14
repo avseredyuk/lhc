@@ -1,15 +1,15 @@
 package com.avseredyuk.controller;
 
-import com.avseredyuk.converter.PumpActionReportConverter;
-import com.avseredyuk.converter.SensorReportConverter;
+import com.avseredyuk.mapper.PumpActionReportMapper;
 import com.avseredyuk.dto.PumpActionReportDto;
 import com.avseredyuk.dto.SensorReportDto;
 import com.avseredyuk.exception.AccessDeniedException;
+import com.avseredyuk.mapper.SensorReportMapper;
 import com.avseredyuk.service.BootupService;
+import com.avseredyuk.service.ConfigService;
 import com.avseredyuk.service.PumpActionService;
 import com.avseredyuk.service.SensorReportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,22 +26,22 @@ public class EspController {
     private final SensorReportService sensorReportService;
     private final PumpActionService pumpActionService;
     private final BootupService bootupService;
-    private final PumpActionReportConverter pumpActionReportConverter;
-    private final SensorReportConverter sensorReportConverter;
-    
-    @Value("${esp.auth-token}")
-    private String espAuthToken;
+    private final ConfigService configService;
+    private final PumpActionReportMapper pumpActionReportMapper;
+    private final SensorReportMapper sensorReportMapper;
     
     @Autowired
     public EspController(SensorReportService sensorReportService,
         PumpActionService pumpActionService, BootupService bootupService,
-        PumpActionReportConverter pumpActionReportConverter,
-        SensorReportConverter sensorReportConverter) {
+        ConfigService configService,
+        PumpActionReportMapper pumpActionReportMapper,
+        SensorReportMapper sensorReportMapper) {
         this.sensorReportService = sensorReportService;
         this.pumpActionService = pumpActionService;
         this.bootupService = bootupService;
-        this.pumpActionReportConverter = pumpActionReportConverter;
-        this.sensorReportConverter = sensorReportConverter;
+        this.configService = configService;
+        this.pumpActionReportMapper = pumpActionReportMapper;
+        this.sensorReportMapper = sensorReportMapper;
     }
     
     @RequestMapping(
@@ -51,8 +51,8 @@ public class EspController {
     )
     public void newReport(@RequestBody SensorReportDto reportDto,
                           @RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String authToken) {
-        if (espAuthToken.equals(authToken)) {
-            sensorReportService.save(sensorReportConverter.fromDto(reportDto));
+        if (configService.getEspAuthToken().equals(authToken)) {
+            sensorReportService.save(sensorReportMapper.fromDto(reportDto));
         } else {
             throw new AccessDeniedException();
         }
@@ -65,8 +65,8 @@ public class EspController {
     )
     public void newPumpAction(@RequestBody PumpActionReportDto actionReportDto,
                               @RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String authToken) {
-        if (espAuthToken.equals(authToken)) {
-            pumpActionService.save(pumpActionReportConverter.fromDto(actionReportDto));
+        if (configService.getEspAuthToken().equals(authToken)) {
+            pumpActionService.save(pumpActionReportMapper.fromDto(actionReportDto));
         } else {
             throw new AccessDeniedException();
         }
@@ -77,7 +77,7 @@ public class EspController {
         method = RequestMethod.POST
     )
     public void newBoot(@RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String authToken) {
-        if (espAuthToken.equals(authToken)) {
+        if (configService.getEspAuthToken().equals(authToken)) {
             bootupService.create();
         } else {
             throw new AccessDeniedException();

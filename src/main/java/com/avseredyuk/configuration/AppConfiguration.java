@@ -29,4 +29,6 @@ public class AppConfiguration {
             return new HikariDataSource(config);
         }
     }
+    
+    //todo: some confg consistency check at startup ???
 }

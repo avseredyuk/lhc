@@ -14,20 +14,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class PumpActionService {
     private PumpActionRepository pumpActionRepository;
+    private ConfigService configService;
     
     @Autowired
-    public PumpActionService(PumpActionRepository pumpActionRepository) {
+    public PumpActionService(PumpActionRepository pumpActionRepository,
+        ConfigService configService) {
         this.pumpActionRepository = pumpActionRepository;
+        this.configService = configService;
     }
     
     @Cacheable("PumpAction")
     public List<PumpActionReport> getLastReports() {
-        return pumpActionRepository.getLastReports();
+        return pumpActionRepository.getLastReports(configService.getHoursCount());
     }
     
     @CacheEvict(value = "PumpAction", allEntries = true)
     public void save(PumpActionReport pumpActionReport) {
-        pumpActionRepository.cleanUp();
-        pumpActionRepository.persist(pumpActionReport);
+        pumpActionRepository.cleanUp(configService.getCleanupIntervalDays());
+        pumpActionRepository.save(pumpActionReport);
     }
 }
