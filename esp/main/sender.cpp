@@ -4,23 +4,31 @@
 #include "context.h"
 #include "credentials.h"
 #include "led.h"
-#include "spiffser.h"
 
 const int CONNECTION_TIMEOUT = 5000;
 
+String getToken() {
+  String token = String(WiFi.macAddress());
+  token.replace(':','0');
+  return token;
+}
+
 String concatLogToUri(String resourceUri) {
-  return resourceUri + "?heap=" + String(ESP.getFreeHeap()) + "&millis=" + millis() + "&saved=" + saved_data_size();
+  return resourceUri + "?heap=" + String(ESP.getFreeHeap()) + "&millis=" + millis() + "&token=" + getToken() ;
 }
 
 boolean sendToHost(String resourceUri, String content) {
   String uriWithLogs = concatLogToUri(resourceUri);
   
   switchLed(true);
+  
   Serial.println("connecting to " + String(LHC_HOST));
 
   WiFiClient client;
   if (!client.connect(LHC_HOST, 80)) {
+    
     Serial.println("connection failed");
+    
     switchLed(false);
     return false;
   }
@@ -31,14 +39,16 @@ boolean sendToHost(String resourceUri, String content) {
   client.println("Host: " + String(LHC_HOST));
   client.println("Content-Length: " + String(content.length()));
   client.println("Content-Type: application/json");
-  client.println("AuthToken: " + String(ESP_AUTH_TOKEN));
+  client.println("AuthToken: " + getToken());
   client.println();
   client.println(content);
 
   unsigned long timeout = millis();
   while (client.available() == 0) {
     if (millis() - timeout > CONNECTION_TIMEOUT) {
+      
       Serial.println(">>> Client Timeout !");
+        
       client.stop();
       switchLed(false);
       return false;
@@ -47,10 +57,12 @@ boolean sendToHost(String resourceUri, String content) {
 
   while (client.available()) {
     String line = client.readStringUntil('\r');
+    
     Serial.print(line);
   }
 
   Serial.println("closing connection");
+    
   switchLed(false);
 
   return true;

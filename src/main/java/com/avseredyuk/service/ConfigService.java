@@ -44,8 +44,4 @@ public class ConfigService {
         return Long.parseLong(this.getByKey(ConfigKey.CLEANUP_INTERVAL_DAYS.toString()).getValue());
     }
     
-    public String getEspAuthToken() {
-        return this.getByKey(ConfigKey.ESP_AUTH_TOKEN.toString()).getValue();
-    }
-    
 }

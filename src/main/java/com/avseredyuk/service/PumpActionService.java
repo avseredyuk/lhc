@@ -1,5 +1,7 @@
 package com.avseredyuk.service;
 
+import com.avseredyuk.exception.AccessDeniedException;
+import com.avseredyuk.model.EspDevice;
 import com.avseredyuk.model.PumpActionReport;
 import com.avseredyuk.repository.PumpActionRepository;
 import java.util.List;
@@ -15,12 +17,14 @@ import org.springframework.stereotype.Service;
 public class PumpActionService {
     private PumpActionRepository pumpActionRepository;
     private ConfigService configService;
+    private EspAuthService espAuthService;
     
     @Autowired
     public PumpActionService(PumpActionRepository pumpActionRepository,
-        ConfigService configService) {
+        ConfigService configService, EspAuthService espAuthService) {
         this.pumpActionRepository = pumpActionRepository;
         this.configService = configService;
+        this.espAuthService = espAuthService;
     }
     
     @Cacheable("PumpAction")
@@ -29,8 +33,14 @@ public class PumpActionService {
     }
     
     @CacheEvict(value = "PumpAction", allEntries = true)
-    public void save(PumpActionReport pumpActionReport) {
-        pumpActionRepository.cleanUp(configService.getCleanupIntervalDays());
-        pumpActionRepository.save(pumpActionReport);
+    public void save(PumpActionReport report) {
+        if (espAuthService.isTrustedDevice(report.getEspDevice())) {
+            pumpActionRepository.cleanUp(configService.getCleanupIntervalDays());
+            report.setEspDevice(espAuthService.findByToken(report.getEspDevice().getToken()));
+            pumpActionRepository.save(report);
+        } else {
+            throw new AccessDeniedException();
+        }
+        
     }
 }

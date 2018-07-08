@@ -31,13 +31,4 @@ typedef union BootupPackage {
   } record;
 };
 
-typedef union TimeSyncPackage {
-  byte data[9];
-  struct __attribute((__packed__)) {
-    byte type;
-    long datetime;
-    long remote_datetime;
-  } record;
-};
-
 #endif

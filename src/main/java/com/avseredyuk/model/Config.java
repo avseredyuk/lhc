@@ -32,6 +32,6 @@ public class Config {
     }
     
     public enum ConfigKey {
-        HISTORY_SIZE_HOURS, CLEANUP_INTERVAL_DAYS, ESP_AUTH_TOKEN
+        HISTORY_SIZE_HOURS, CLEANUP_INTERVAL_DAYS
     }
 }

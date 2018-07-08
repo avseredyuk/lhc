@@ -8,6 +8,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import lombok.Data;
@@ -33,6 +35,10 @@ public class PumpActionReport {
     @Enumerated(EnumType.STRING)
     @Column(name = "action_type")
     private PumpActionType actionType;
+    
+    @ManyToOne
+    @JoinColumn(name = "device_id")
+    private EspDevice espDevice;
     
     @PrePersist
     public void initDateTime() {

@@ -4,14 +4,19 @@
 #include "pins.h"
 #include "struct.h"
 
-DHT dht(DHTPin, DHT22);
-OneWire oneWire(ONE_WIRE_BUS);
-DallasTemperature DS18B20(&oneWire);
+#if defined(LHC_BIG)
+  DHT dht(DHTPin, DHT22);
+  OneWire oneWire(ONE_WIRE_BUS);
+  DallasTemperature DS18B20(&oneWire);
+#endif
 
 void report_gen_init() {
-  dht.begin();
+  #if defined(LHC_BIG)
+    dht.begin();
+  #endif
 }
 
+#if defined(LHC_BIG)
 float getWaterTemp() {
   float temp = 0.0;
   long i = 0;
@@ -23,6 +28,7 @@ float getWaterTemp() {
   } while ((temp == 85.0 || temp == (-127.0)) && (i < 10));
   return temp;
 }
+#endif
 
 BootupPackage getBootupReport() {
   BootupPackage p;
@@ -43,9 +49,13 @@ SensorPackage getSensorsReport() {
   SensorPackage p;
   p.record.type = 3;
   p.record.datetime = millis();
-  p.record.humidity = dht.readHumidity();
-  p.record.temperature = dht.readTemperature();
-  p.record.water_temperature = getWaterTemp();
+  
+  #if defined(LHC_BIG)
+    p.record.humidity = dht.readHumidity();
+    p.record.temperature = dht.readTemperature();
+    p.record.water_temperature = getWaterTemp();
+  #endif
+    
   return p;
 }
 

@@ -3,11 +3,9 @@
 #include "credentials.h"
 #include "service.h"
 #include "led.h"
-#include "ntp.h"
 #include "ota.h"
 #include "pins.h"
 #include "report_gen.h"
-#include "spiffser.h"
 
 const long WIFI_CONNECTION_TIMEOUT = 30 * 1000; // 30 seconds
 
@@ -15,10 +13,16 @@ unsigned long REBOOT_INTERVAL_MS = 1000 * 60 * 60 * 24; // reboot every 24 hours
 unsigned long reportSendingLastTime = 0;
 unsigned long reportSendingFrequency = 5; // every X minutes per hour
 unsigned long pumpEnableLastTime = 0;
-unsigned long pumpEnableFrequency = 60 * 60 * 2;   // seconds, every 2 hours
-unsigned long pumpRunningTime = 180;          // seconds   3:00
-unsigned long ntpPullLastTime = 0;
-unsigned long ntpPullingFrequency = 1; // every 1 minute
+
+#if defined(LHC_BIG)
+  unsigned long pumpEnableFrequency = 60 * 60 * 2;   // seconds, every 2 hours
+  unsigned long pumpRunningTime = 180;          // seconds   3:00
+#else
+  unsigned long pumpEnableFrequency = 60 * 60 * 2;   // seconds, every 2 hours
+  unsigned long pumpRunningTime = 60;          // seconds   1:00
+#endif
+
+//todo: store times & frequencies at host. download it at bootup time. store updated configs in spiffs
 
 void setup() {
   Serial.begin(115200);
@@ -28,16 +32,10 @@ void setup() {
 
   ota_config();
 
-  ntp_init();
-
   report_gen_init();
-
-  spiffs_init();
-
-  hasSavedData = has_saved_data();
-
+  
   pinMode(BUILTIN_LED_PIN, OUTPUT);
-  pinMode(RELAY_PIN, OUTPUT);
+  pinMode(RELAY_PIN, OUTPUT); 
   switchPump(false);
   switchLed(false);
 
@@ -61,14 +59,6 @@ void loop() {
   if ((millis() > REBOOT_INTERVAL_MS) && !pumpEnabled) {
     ESP.restart();
   }
-  if (((millis() - ntpPullLastTime) > (ntpPullingFrequency * 60000)) && !pumpEnabled) {
-    NTP_HANDLE();
-  }
-}
-
-void NTP_HANDLE() {
-  ntpPullLastTime = millis();
-  service_ntp();
 }
 
 void SEND_BOOTUP() {
@@ -99,7 +89,7 @@ void switchPump(boolean enableParam) {
 
 void connectWiFi() {
   Serial.println("Connecting to " + String(WIFI_SSID));
-
+  
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
@@ -111,7 +101,8 @@ void connectWiFi() {
     Serial.println("  -> waiting: #" + String(connCount));
     connCount++;
   }
+
   Serial.println("WiFi connected");
-  Serial.println("IP address: " + WiFi.localIP());
+  Serial.println("IP address: " + String(WiFi.localIP()));
 }
 

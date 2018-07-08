@@ -1,5 +1,7 @@
 package com.avseredyuk.service;
 
+import com.avseredyuk.exception.AccessDeniedException;
+import com.avseredyuk.model.EspDevice;
 import com.avseredyuk.model.SensorReport;
 import com.avseredyuk.repository.SensorReportRepository;
 import java.util.List;
@@ -16,12 +18,14 @@ import org.springframework.stereotype.Service;
 public class SensorReportService {
     private SensorReportRepository sensorReportRepository;
     private ConfigService configService;
+    private EspAuthService espAuthService;
     
     @Autowired
     public SensorReportService(SensorReportRepository sensorReportRepository,
-        ConfigService configService) {
+        ConfigService configService, EspAuthService espAuthService) {
         this.sensorReportRepository = sensorReportRepository;
         this.configService = configService;
+        this.espAuthService = espAuthService;
     }
     
     @Cacheable("SensorReport")
@@ -38,7 +42,13 @@ public class SensorReportService {
         @CacheEvict(value = "SensorReport", allEntries = true)
     })
     public void save(SensorReport report) {
-        sensorReportRepository.cleanUp(configService.getCleanupIntervalDays());
-        sensorReportRepository.save(report);
+        if (espAuthService.isTrustedDevice(report.getEspDevice())) {
+            sensorReportRepository.cleanUp(configService.getCleanupIntervalDays());
+            report.setEspDevice(espAuthService.findByToken(report.getEspDevice().getToken()));
+            sensorReportRepository.save(report);
+        } else {
+            throw new AccessDeniedException();
+        }
+        
     }
 }

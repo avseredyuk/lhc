@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import lombok.Data;
@@ -43,6 +45,10 @@ public class SensorReport {
     
     @Column(name = "ppm")
     private Double ppm;
+    
+    @ManyToOne
+    @JoinColumn(name = "device_id")
+    private EspDevice espDevice;
     
     @PrePersist
     public void initDateTime() {

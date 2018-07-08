@@ -1,9 +1,14 @@
 package com.avseredyuk.service;
 
+import com.avseredyuk.dto.SensorReportDto;
 import com.avseredyuk.mapper.BootupReportMapper;
 import com.avseredyuk.mapper.PumpActionReportMapper;
 import com.avseredyuk.dto.HistoryDto;
 import com.avseredyuk.mapper.SensorReportMapper;
+import com.avseredyuk.model.SensorReport;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +40,44 @@ public class HistoryService {
     
     public HistoryDto getHistory() {
         HistoryDto h = new HistoryDto();
-        h.getReports().addAll(sensorReportMapper.toDtoList(sensorReportService.getLastReports()));
-        h.getPumps().addAll(pumpActionReportMapper.toDtoList(pumpActionService.getLastReports()));
-        h.getBootups().addAll(bootupReportMapper.toDtoList(bootupService.getLastReports()));
+        h.setReports(sensorReportService.getLastReports()
+            .stream()
+            .collect(
+                Collectors.groupingBy(r -> r.getEspDevice().getName())
+            )
+            .entrySet()
+            .stream()
+            .collect(
+                Collectors.toMap(Map.Entry::getKey,
+                    e -> sensorReportMapper.toDtoList(e.getValue()))
+            )
+        );
+        h.setPumps(
+            pumpActionService.getLastReports()
+                .stream()
+                .collect(
+                    Collectors.groupingBy(r -> r.getEspDevice().getName())
+                )
+                .entrySet()
+                .stream()
+                .collect(
+                    Collectors.toMap(Map.Entry::getKey,
+                        e -> pumpActionReportMapper.toDtoList(e.getValue()))
+                )
+        );
+        h.setBootups(
+            bootupService.getLastReports()
+                .stream()
+                .collect(
+                    Collectors.groupingBy(r -> r.getEspDevice().getName())
+                )
+                .entrySet()
+                .stream()
+                .collect(
+                    Collectors.toMap(Map.Entry::getKey,
+                        e -> bootupReportMapper.toDtoList(e.getValue()))
+                )
+        );
         return h;
     }
     
