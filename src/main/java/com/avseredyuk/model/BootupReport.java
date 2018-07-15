@@ -32,7 +32,7 @@ public class BootupReport {
     
     @ManyToOne
     @JoinColumn(name = "device_id")
-    private EspDevice espDevice;
+    private Device device;
     
     @PrePersist
     public void initDateTime() {

@@ -16,10 +16,10 @@ unsigned long pumpEnableLastTime = 0;
 
 #if defined(LHC_BIG)
   unsigned long pumpEnableFrequency = 60 * 60 * 2;   // seconds, every 2 hours
-  unsigned long pumpRunningTime = 180;          // seconds   3:00
+  unsigned long pumpRunningTime = 180;          // seconds   03:00
 #else
   unsigned long pumpEnableFrequency = 60 * 60 * 2;   // seconds, every 2 hours
-  unsigned long pumpRunningTime = 60;          // seconds   1:00
+  unsigned long pumpRunningTime = 45;          // seconds   00:45
 #endif
 
 //todo: store times & frequencies at host. download it at bootup time. store updated configs in spiffs

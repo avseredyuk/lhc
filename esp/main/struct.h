@@ -4,18 +4,16 @@
 #define H_STRUCT
 
 typedef union PumpPackage {
-  byte data[6];
+  byte data[5];
   struct __attribute((__packed__)) {
-    byte type;
     long datetime;
     boolean enabled;
   } record;  
 };
 
 typedef union SensorPackage {
-  byte data[17];
+  byte data[16];
   struct __attribute((__packed__)) {
-    byte type;
     long datetime;
     float temperature;
     float humidity;
@@ -24,9 +22,8 @@ typedef union SensorPackage {
 };
 
 typedef union BootupPackage {
-  byte data[5];
+  byte data[4];
   struct __attribute((__packed__)) {
-    byte type;
     long datetime;
   } record;
 };

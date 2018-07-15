@@ -1,6 +1,5 @@
 package com.avseredyuk.model;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,7 +47,7 @@ public class SensorReport {
     
     @ManyToOne
     @JoinColumn(name = "device_id")
-    private EspDevice espDevice;
+    private Device device;
     
     @PrePersist
     public void initDateTime() {

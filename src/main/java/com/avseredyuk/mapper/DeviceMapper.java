@@ -1,6 +1,6 @@
 package com.avseredyuk.mapper;
 
-import com.avseredyuk.model.EspDevice;
+import com.avseredyuk.model.Device;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Mapper(componentModel = "spring")
-public interface EspDeviceMapper {
+public interface DeviceMapper {
     
     @Mapping(target = "token", source = "authToken")
-    EspDevice toModel(String authToken);
+    Device toModel(String authToken);
     
 }

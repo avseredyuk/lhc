@@ -2,9 +2,8 @@ package com.avseredyuk.service;
 
 import com.avseredyuk.exception.AccessDeniedException;
 import com.avseredyuk.model.BootupReport;
-import com.avseredyuk.model.EspDevice;
+import com.avseredyuk.model.Device;
 import com.avseredyuk.repository.BootupRepository;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -18,26 +17,26 @@ import org.springframework.stereotype.Service;
 public class BootupService {
     private BootupRepository bootupRepository;
     private ConfigService configService;
-    private EspAuthService espAuthService;
+    private DeviceService deviceService;
     
     @Autowired
     public BootupService(BootupRepository bootupRepository,
-        ConfigService configService, EspAuthService espAuthService) {
+        ConfigService configService, DeviceService deviceService) {
         this.bootupRepository = bootupRepository;
         this.configService = configService;
-        this.espAuthService = espAuthService;
+        this.deviceService = deviceService;
     }
     
     @Cacheable("BootupReport")
-    public List<BootupReport> getLastReports() {
-        return bootupRepository.getLastReports();
+    public List<BootupReport> getLastReportsByDevice(Device device) {
+        return bootupRepository.getLastReports(device.getId());
     }
     
     @CacheEvict(value = "BootupReport", allEntries = true)
     public void create(BootupReport report) {
-        if (espAuthService.isTrustedDevice(report.getEspDevice())) {
+        if (deviceService.isTrustedDevice(report.getDevice())) {
             bootupRepository.cleanUp(configService.getCleanupIntervalDays());
-            report.setEspDevice(espAuthService.findByToken(report.getEspDevice().getToken()));
+            report.setDevice(deviceService.findByToken(report.getDevice().getToken()));
             bootupRepository.save(report);
         } else {
             throw new AccessDeniedException();

@@ -32,14 +32,12 @@ float getWaterTemp() {
 
 BootupPackage getBootupReport() {
   BootupPackage p;
-  p.record.type = 1;
   p.record.datetime = millis();
   return p;
 }
 
 PumpPackage getPumpReport() {
   PumpPackage p;
-  p.record.type = 2;
   p.record.datetime = millis();
   p.record.enabled = pumpEnabled;
   return p;
@@ -47,13 +45,15 @@ PumpPackage getPumpReport() {
 
 SensorPackage getSensorsReport() {
   SensorPackage p;
-  p.record.type = 3;
   p.record.datetime = millis();
-  
   #if defined(LHC_BIG)
     p.record.humidity = dht.readHumidity();
     p.record.temperature = dht.readTemperature();
     p.record.water_temperature = getWaterTemp();
+  else
+    p.record.humidity = 0.0;
+    p.record.temperature = 0.0;
+    p.record.water_temperature = 0.0;  
   #endif
     
   return p;

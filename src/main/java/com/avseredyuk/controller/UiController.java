@@ -3,6 +3,7 @@ package com.avseredyuk.controller;
 import com.avseredyuk.dto.HistoryDto;
 import com.avseredyuk.service.GaugeProvidingService;
 import com.avseredyuk.service.HistoryService;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,7 +28,7 @@ public class UiController {
         value = "/history",
         method = RequestMethod.GET
     )
-    public HistoryDto getHistory() {
+    public Map<String, HistoryDto> getHistory() {
         return historyService.getHistory();
     }
     

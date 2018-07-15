@@ -1,14 +1,13 @@
 package com.avseredyuk.service;
 
-import com.avseredyuk.dto.SensorReportDto;
 import com.avseredyuk.mapper.BootupReportMapper;
 import com.avseredyuk.mapper.PumpActionReportMapper;
 import com.avseredyuk.dto.HistoryDto;
 import com.avseredyuk.mapper.SensorReportMapper;
-import com.avseredyuk.model.SensorReport;
+import com.avseredyuk.model.Device;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,62 +22,34 @@ public class HistoryService {
     private final PumpActionReportMapper pumpActionReportMapper;
     private final SensorReportMapper sensorReportMapper;
     private final BootupReportMapper bootupReportMapper;
+    private final DeviceService deviceService;
     
     @Autowired
     public HistoryService(SensorReportService sensorReportService,
         PumpActionService pumpActionService, BootupService bootupService,
         PumpActionReportMapper pumpActionReportMapper,
-        SensorReportMapper sensorReportMapper,
-        BootupReportMapper bootupReportMapper) {
+        SensorReportMapper sensorReportMapper, BootupReportMapper bootupReportMapper,
+        DeviceService deviceService) {
         this.sensorReportService = sensorReportService;
         this.pumpActionService = pumpActionService;
         this.bootupService = bootupService;
         this.pumpActionReportMapper = pumpActionReportMapper;
         this.sensorReportMapper = sensorReportMapper;
         this.bootupReportMapper = bootupReportMapper;
+        this.deviceService = deviceService;
     }
     
-    public HistoryDto getHistory() {
-        HistoryDto h = new HistoryDto();
-        h.setReports(sensorReportService.getLastReports()
-            .stream()
-            .collect(
-                Collectors.groupingBy(r -> r.getEspDevice().getName())
-            )
-            .entrySet()
-            .stream()
-            .collect(
-                Collectors.toMap(Map.Entry::getKey,
-                    e -> sensorReportMapper.toDtoList(e.getValue()))
-            )
-        );
-        h.setPumps(
-            pumpActionService.getLastReports()
-                .stream()
-                .collect(
-                    Collectors.groupingBy(r -> r.getEspDevice().getName())
-                )
-                .entrySet()
-                .stream()
-                .collect(
-                    Collectors.toMap(Map.Entry::getKey,
-                        e -> pumpActionReportMapper.toDtoList(e.getValue()))
-                )
-        );
-        h.setBootups(
-            bootupService.getLastReports()
-                .stream()
-                .collect(
-                    Collectors.groupingBy(r -> r.getEspDevice().getName())
-                )
-                .entrySet()
-                .stream()
-                .collect(
-                    Collectors.toMap(Map.Entry::getKey,
-                        e -> bootupReportMapper.toDtoList(e.getValue()))
-                )
-        );
-        return h;
+    public Map<String, HistoryDto> getHistory() {
+        Map<String, HistoryDto> history = new HashMap<>();
+        List<Device> devices = deviceService.findAllActive();
+        for (Device device : devices) {
+            HistoryDto dto = new HistoryDto();
+            dto.setReports(sensorReportMapper.toDtoList(sensorReportService.getLastReportsByDevice(device)));
+            dto.setPumps(pumpActionReportMapper.toDtoList(pumpActionService.getLastReportsByDevice(device)));
+            dto.setBootups(bootupReportMapper.toDtoList(bootupService.getLastReportsByDevice(device)));
+            history.put(device.getName(), dto);
+        }
+        return history;
     }
     
 }

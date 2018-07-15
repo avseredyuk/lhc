@@ -1,7 +1,7 @@
 package com.avseredyuk.service;
 
 import com.avseredyuk.exception.AccessDeniedException;
-import com.avseredyuk.model.EspDevice;
+import com.avseredyuk.model.Device;
 import com.avseredyuk.model.SensorReport;
 import com.avseredyuk.repository.SensorReportRepository;
 import java.util.List;
@@ -18,19 +18,19 @@ import org.springframework.stereotype.Service;
 public class SensorReportService {
     private SensorReportRepository sensorReportRepository;
     private ConfigService configService;
-    private EspAuthService espAuthService;
+    private DeviceService deviceService;
     
     @Autowired
     public SensorReportService(SensorReportRepository sensorReportRepository,
-        ConfigService configService, EspAuthService espAuthService) {
+        ConfigService configService, DeviceService deviceService) {
         this.sensorReportRepository = sensorReportRepository;
         this.configService = configService;
-        this.espAuthService = espAuthService;
+        this.deviceService = deviceService;
     }
     
     @Cacheable("SensorReport")
-    public List<SensorReport> getLastReports() {
-        return sensorReportRepository.getLastReports(configService.getHoursCount());
+    public List<SensorReport> getLastReportsByDevice(Device device) {
+        return sensorReportRepository.getLastReports(device.getId(), configService.getHoursCount());
     }
     
     public SensorReport getLastReport() {
@@ -42,13 +42,12 @@ public class SensorReportService {
         @CacheEvict(value = "SensorReport", allEntries = true)
     })
     public void save(SensorReport report) {
-        if (espAuthService.isTrustedDevice(report.getEspDevice())) {
+        if (deviceService.isTrustedDevice(report.getDevice())) {
             sensorReportRepository.cleanUp(configService.getCleanupIntervalDays());
-            report.setEspDevice(espAuthService.findByToken(report.getEspDevice().getToken()));
+            report.setDevice(deviceService.findByToken(report.getDevice().getToken()));
             sensorReportRepository.save(report);
         } else {
             throw new AccessDeniedException();
         }
-        
     }
 }

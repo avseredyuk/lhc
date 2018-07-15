@@ -19,7 +19,7 @@ public interface PumpActionRepository extends CrudRepository<PumpActionReport, L
     @Query(nativeQuery = true, value = "DELETE FROM pump_actions WHERE date_time < NOW() - CAST(?1 || ' days' as INTERVAL)")
     void cleanUp(long daysCount);
     
-    @Query(nativeQuery = true, value = "SELECT * FROM pump_actions WHERE date_time >= NOW() - CAST(?1 || ' hours' as INTERVAL) ORDER BY date_time DESC")
-    List<PumpActionReport> getLastReports(long hoursCount);
+    @Query(nativeQuery = true, value = "SELECT * FROM pump_actions WHERE device_id = ?1 AND date_time >= NOW() - CAST(?2 || ' hours' as INTERVAL) ORDER BY date_time DESC")
+    List<PumpActionReport> getLastReports(Long id, long hoursCount);
     
 }

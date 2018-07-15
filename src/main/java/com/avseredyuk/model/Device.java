@@ -14,19 +14,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "esp_device")
-public class EspDevice {
-    
-    //todo: does persist works???
-    
-    //todo: remove esp token row from config table in 'prod'
-    
-    //todo: clean bootup, reports, pump_actions bbefore running new version
-    
-    //todo: how it should be looking on UI ??? several charts ??? -- one chart because second esp won't have sensors ???
-    
-    //todo: group all data in history by device id
-    
-    //todo: set ServerToken to each esp to verify that server is trustable
+public class Device {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,4 +29,5 @@ public class EspDevice {
     
     @Column(name = "enabled")
     private Boolean enabled;
+
 }

@@ -1,9 +1,7 @@
 package com.avseredyuk.dto;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import lombok.Data;
 
 /**
@@ -11,7 +9,7 @@ import lombok.Data;
  */
 @Data
 public class HistoryDto {
-    private Map<String, List<BootupReportDto>> bootups = new HashMap<>();
-    private Map<String, List<PumpActionReportDto>> pumps = new HashMap<>();
-    private Map<String, List<SensorReportDto>> reports = new HashMap<>();
+    private List<BootupReportDto> bootups = new ArrayList<>();
+    private List<PumpActionReportDto> pumps = new ArrayList<>();
+    private List<SensorReportDto> reports = new ArrayList<>();
 }

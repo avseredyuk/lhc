@@ -19,7 +19,7 @@ public interface BootupRepository extends CrudRepository<BootupReport, Long> {
     @Query(nativeQuery = true, value = "DELETE FROM bootup WHERE date_time < NOW() - CAST(?1 || ' days' as INTERVAL)")
     void cleanUp(long daysCount);
     
-    @Query(nativeQuery = true, value = "SELECT * FROM bootup ORDER BY date_time DESC LIMIT 5")
-    List<BootupReport> getLastReports();
+    @Query(nativeQuery = true, value = "SELECT * FROM bootup WHERE device_id = ?1 ORDER BY date_time DESC LIMIT 5")
+    List<BootupReport> getLastReports(Long id);
 
 }

@@ -1,7 +1,7 @@
 package com.avseredyuk.service;
 
 import com.avseredyuk.exception.AccessDeniedException;
-import com.avseredyuk.model.EspDevice;
+import com.avseredyuk.model.Device;
 import com.avseredyuk.model.PumpActionReport;
 import com.avseredyuk.repository.PumpActionRepository;
 import java.util.List;
@@ -17,26 +17,26 @@ import org.springframework.stereotype.Service;
 public class PumpActionService {
     private PumpActionRepository pumpActionRepository;
     private ConfigService configService;
-    private EspAuthService espAuthService;
+    private DeviceService deviceService;
     
     @Autowired
     public PumpActionService(PumpActionRepository pumpActionRepository,
-        ConfigService configService, EspAuthService espAuthService) {
+        ConfigService configService, DeviceService deviceService) {
         this.pumpActionRepository = pumpActionRepository;
         this.configService = configService;
-        this.espAuthService = espAuthService;
+        this.deviceService = deviceService;
     }
     
     @Cacheable("PumpAction")
-    public List<PumpActionReport> getLastReports() {
-        return pumpActionRepository.getLastReports(configService.getHoursCount());
+    public List<PumpActionReport> getLastReportsByDevice(Device device) {
+        return pumpActionRepository.getLastReports(device.getId(), configService.getHoursCount());
     }
     
     @CacheEvict(value = "PumpAction", allEntries = true)
     public void save(PumpActionReport report) {
-        if (espAuthService.isTrustedDevice(report.getEspDevice())) {
+        if (deviceService.isTrustedDevice(report.getDevice())) {
             pumpActionRepository.cleanUp(configService.getCleanupIntervalDays());
-            report.setEspDevice(espAuthService.findByToken(report.getEspDevice().getToken()));
+            report.setDevice(deviceService.findByToken(report.getDevice().getToken()));
             pumpActionRepository.save(report);
         } else {
             throw new AccessDeniedException();
