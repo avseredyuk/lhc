@@ -5,6 +5,7 @@ import com.avseredyuk.service.GaugeProvidingService;
 import com.avseredyuk.service.HistoryService;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,12 +35,12 @@ public class UiController {
     
     @ResponseBody
     @RequestMapping(
-        value = "/gauge",
+        value = "/gauge/{deviceId}",
         method = RequestMethod.GET,
         produces = "image/png"
     )
-    public byte[] getGauge() {
-        return gaugeProvidingService.getGauge();
+    public byte[] getGauge(@PathVariable Long deviceId) {
+        return gaugeProvidingService.getGauge(deviceId);
     }
     
 }

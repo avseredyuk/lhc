@@ -1,5 +1,6 @@
 package com.avseredyuk.service;
 
+import com.avseredyuk.model.Device;
 import com.avseredyuk.model.SensorReport;
 import java.awt.Color;
 import java.awt.Font;
@@ -32,6 +33,7 @@ public class GaugeProvidingService {
     private static final float VALUE_FONT_SIZE = 34f;
     private static final float NAME_FONT_SIZE = 22f;
     private final SensorReportService sensorReportService;
+    private final DeviceService deviceService;
     private Font loadedFont;
     private Resource res;
     private Color waterColor;
@@ -39,14 +41,16 @@ public class GaugeProvidingService {
     private Color humidityAbsoluteColor;
     private Color humidityRelativeColor;
     
+    //todo: colours from config ???
     @Autowired
-    public GaugeProvidingService(SensorReportService sensorReportService,
+    public GaugeProvidingService(SensorReportService sensorReportService, DeviceService deviceService,
                                  @Value("classpath:5069.ttf") Resource res,
                                  @Value("${gauge.color.temperature.water}") String waterColor,
                                  @Value("${gauge.color.temperature.air}") String airColor,
                                  @Value("${gauge.color.humidity.absolute}") String humidityAbsoluteColor,
                                  @Value("${gauge.color.humidity.relative}") String humidityRelativeColor) {
         this.sensorReportService = sensorReportService;
+        this.deviceService = deviceService;
         this.res = res;
         this.waterColor = Color.decode(waterColor);
         this.airColor = Color.decode(airColor);
@@ -55,8 +59,9 @@ public class GaugeProvidingService {
     }
     
     @Cacheable("Gauge")
-    public byte[] getGauge() {
-        SensorReport r = sensorReportService.getLastReport();
+    public byte[] getGauge(Long deviceId) {
+        Device device = deviceService.findById(deviceId);
+        SensorReport r = sensorReportService.getLastReportByDevice(device);
         BufferedImage image = new BufferedImage(IMG_SIZE, IMG_SIZE, BufferedImage.TYPE_INT_ARGB);
     
         Font valueFont = getFont(VALUE_FONT_SIZE);
@@ -82,7 +87,7 @@ public class GaugeProvidingService {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(image, "png", baos);
-            return  baos.toByteArray();
+            return baos.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
         }

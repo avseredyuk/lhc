@@ -29,12 +29,12 @@ public class SensorReportService {
     }
     
     @Cacheable("SensorReport")
-    public List<SensorReport> getLastReportsByDevice(Device device) {
+    List<SensorReport> getLastReportsByDevice(Device device) {
         return sensorReportRepository.getLastReports(device.getId(), configService.getHoursCount());
     }
     
-    public SensorReport getLastReport() {
-        return sensorReportRepository.getLastReport();
+    SensorReport getLastReportByDevice(Device device) {
+        return sensorReportRepository.getLastReport(device.getId());
     }
     
     @Caching(evict = {

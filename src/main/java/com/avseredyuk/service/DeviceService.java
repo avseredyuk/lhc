@@ -19,6 +19,15 @@ public class DeviceService {
         this.deviceRepository = deviceRepository;
     }
     
+    public Device findById(long id) {
+        Device device = deviceRepository.findById(id);
+        if (device == null) {
+            //todo: error handling ???
+            throw new IllegalArgumentException();
+        }
+        return device;
+    }
+    
     public boolean isTrustedDevice(Device device) {
         if (device != null && device.getToken() != null) {
             Device deviceFromDatabase = deviceRepository.findByToken(device.getToken());

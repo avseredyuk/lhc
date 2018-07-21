@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface DeviceRepository extends CrudRepository<Device, String> {
+    Device findById(long id);
     Device findByToken(String token);
     List<Device> findByEnabledTrue();
 }
