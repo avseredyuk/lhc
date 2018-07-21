@@ -50,7 +50,7 @@ SensorPackage getSensorsReport() {
     p.record.humidity = dht.readHumidity();
     p.record.temperature = dht.readTemperature();
     p.record.water_temperature = getWaterTemp();
-  else
+  #else
     p.record.humidity = 0.0;
     p.record.temperature = 0.0;
     p.record.water_temperature = 0.0;  

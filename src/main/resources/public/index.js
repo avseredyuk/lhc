@@ -150,7 +150,6 @@ $(function () {
       }
     }
 
-    //todo: fix main chart because all data is in arrays from all devices
     var mainChart = Highcharts.chart('mainChart', {
       title: {
         text: ""

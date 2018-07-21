@@ -14,12 +14,12 @@ String getToken() {
 }
 
 String concatLogToUri(String resourceUri) {
-  return resourceUri + "?heap=" + String(ESP.getFreeHeap()) + "&millis=" + millis() + "&token=" + getToken() ;
+  return resourceUri + "?heap=" + String(ESP.getFreeHeap()) + "&millis=" + millis() + "&token=" + getToken();
 }
 
 boolean sendToHost(String resourceUri, String content) {
   String uriWithLogs = concatLogToUri(resourceUri);
-  
+
   switchLed(true);
   
   Serial.println("connecting to " + String(LHC_HOST));
