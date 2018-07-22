@@ -10,6 +10,6 @@ String to_string_pump(PumpPackage p) {
 }
 
 String to_string_sensor(SensorPackage p) {
-  return "{\"t\":" + String(p.record.temperature) + ",\"h\":" + String(p.record.humidity) + ",\"v\":" + random(30, 100) + ",\"p\":" + random(100, 500) + ",\"w\":" + String(p.record.water_temperature) + "}";
+  return "{\"t\":" + String(p.record.temperature) + ",\"h\":" + String(p.record.humidity) + ",\"w\":" + String(p.record.water_temperature) + "}";
 }
 

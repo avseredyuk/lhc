@@ -34,6 +34,7 @@ public class GaugeProvidingService {
     private static final float NAME_FONT_SIZE = 22f;
     private final SensorReportService sensorReportService;
     private final DeviceService deviceService;
+    private final DeviceReportDataExclusionService deviceReportDataExclusionService;
     private Font loadedFont;
     private Resource res;
     private Color waterColor;
@@ -41,9 +42,9 @@ public class GaugeProvidingService {
     private Color humidityAbsoluteColor;
     private Color humidityRelativeColor;
     
-    //todo: colours from config ???
     @Autowired
     public GaugeProvidingService(SensorReportService sensorReportService, DeviceService deviceService,
+                                 DeviceReportDataExclusionService deviceReportDataExclusionService,
                                  @Value("classpath:5069.ttf") Resource res,
                                  @Value("${gauge.color.temperature.water}") String waterColor,
                                  @Value("${gauge.color.temperature.air}") String airColor,
@@ -51,6 +52,7 @@ public class GaugeProvidingService {
                                  @Value("${gauge.color.humidity.relative}") String humidityRelativeColor) {
         this.sensorReportService = sensorReportService;
         this.deviceService = deviceService;
+        this.deviceReportDataExclusionService = deviceReportDataExclusionService;
         this.res = res;
         this.waterColor = Color.decode(waterColor);
         this.airColor = Color.decode(airColor);
@@ -61,7 +63,7 @@ public class GaugeProvidingService {
     @Cacheable("Gauge")
     public byte[] getGauge(Long deviceId) {
         Device device = deviceService.findById(deviceId);
-        SensorReport r = sensorReportService.getLastReportByDevice(device);
+        SensorReport r = deviceReportDataExclusionService.filterByDeviceReportDataExclusion(device, sensorReportService.getLastReportByDevice(device));
         BufferedImage image = new BufferedImage(IMG_SIZE, IMG_SIZE, BufferedImage.TYPE_INT_ARGB);
     
         Font valueFont = getFont(VALUE_FONT_SIZE);
@@ -96,14 +98,17 @@ public class GaugeProvidingService {
         return null;
     }
     
-    private double calcAbsHumidity(SensorReport r) {
+    private Double calcAbsHumidity(SensorReport r) {
+        if ((r.getHumidity() == null) || (r.getTemperature() == null)) {
+            return null;
+        }
         double hum = r.getHumidity();
         double temp = r.getTemperature();
         return 216.7d * (hum / 100) * 6.112d * Math.exp(17.62d * temp / (243.12d + temp)) / (273.15d + temp);
     }
     
     private String formatValue(Double d) {
-        return String.format("%.1f", d);
+        return d == null ? "X" : String.format("%.1f", d);
     }
     
     private void drawStr(FontMetrics fm, Graphics g, Graphics ng, String name, String val, int y, Color color) {

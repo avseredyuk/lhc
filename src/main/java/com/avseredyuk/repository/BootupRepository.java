@@ -20,6 +20,6 @@ public interface BootupRepository extends CrudRepository<BootupReport, Long> {
     void cleanUp(long daysCount);
     
     @Query(nativeQuery = true, value = "SELECT * FROM bootup WHERE device_id = ?1 ORDER BY date_time DESC LIMIT 5")
-    List<BootupReport> getLastReports(Long id);
+    List<BootupReport> getLastReports(Long deviceId);
 
 }

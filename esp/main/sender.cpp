@@ -14,7 +14,7 @@ String getToken() {
 }
 
 String concatLogToUri(String resourceUri) {
-  return resourceUri + "?heap=" + String(ESP.getFreeHeap()) + "&millis=" + millis() + "&token=" + getToken();
+  return resourceUri + "?heap=" + String(ESP.getFreeHeap()) + "&millis=" + millis();
 }
 
 boolean sendToHost(String resourceUri, String content) {

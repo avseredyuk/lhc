@@ -270,6 +270,9 @@ $(function () {
   }
 
   function calcAbsH(t, h) {
+    if ((t == null) || (h == null)) {
+      return null;
+    }
     var tmp;
     var absHumid;
     tmp = Math.pow(2.718281828,(17.67*t)/(t+243.5));

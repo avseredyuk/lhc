@@ -23,13 +23,14 @@ public class HistoryService {
     private final SensorReportMapper sensorReportMapper;
     private final BootupReportMapper bootupReportMapper;
     private final DeviceService deviceService;
+    private final DeviceReportDataExclusionService deviceReportDataExclusionService;
     
     @Autowired
     public HistoryService(SensorReportService sensorReportService,
         PumpActionService pumpActionService, BootupService bootupService,
         PumpActionReportMapper pumpActionReportMapper,
         SensorReportMapper sensorReportMapper, BootupReportMapper bootupReportMapper,
-        DeviceService deviceService) {
+        DeviceService deviceService, DeviceReportDataExclusionService deviceReportDataExclusionService) {
         this.sensorReportService = sensorReportService;
         this.pumpActionService = pumpActionService;
         this.bootupService = bootupService;
@@ -37,6 +38,7 @@ public class HistoryService {
         this.sensorReportMapper = sensorReportMapper;
         this.bootupReportMapper = bootupReportMapper;
         this.deviceService = deviceService;
+        this.deviceReportDataExclusionService = deviceReportDataExclusionService;
     }
     
     public Map<String, HistoryDto> getHistory() {
@@ -44,7 +46,8 @@ public class HistoryService {
         List<Device> devices = deviceService.findAllActive();
         for (Device device : devices) {
             HistoryDto dto = new HistoryDto();
-            dto.setReports(sensorReportMapper.toDtoList(sensorReportService.getLastReportsByDevice(device)));
+            dto.setReports(sensorReportMapper.toDtoList(
+                deviceReportDataExclusionService.filterByDeviceReportDataExclusion(device, sensorReportService.getLastReportsByDevice(device))));
             dto.setPumps(pumpActionReportMapper.toDtoList(pumpActionService.getLastReportsByDevice(device)));
             dto.setBootups(bootupReportMapper.toDtoList(bootupService.getLastReportsByDevice(device)));
             history.put(device.getName(), dto);

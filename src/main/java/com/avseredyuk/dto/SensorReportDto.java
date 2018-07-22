@@ -8,9 +8,7 @@ import lombok.Data;
 @Data
 public class SensorReportDto {
     private Long d;
-    private double t;
-    private double w;
-    private double h;
-    private double v;
-    private double p;
+    private Double t;
+    private Double w;
+    private Double h;
 }
