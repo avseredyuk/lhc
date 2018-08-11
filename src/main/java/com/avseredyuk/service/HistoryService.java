@@ -46,7 +46,7 @@ public class HistoryService {
         List<Device> devices = deviceService.findAllActive();
         for (Device device : devices) {
             HistoryDto dto = new HistoryDto();
-            dto.setReports(sensorReportMapper.toDtoList(
+            dto.setReports(sensorReportMapper.toDtoStrippedList(
                 deviceReportDataExclusionService.filterByDeviceReportDataExclusion(device, sensorReportService.getLastReportsByDevice(device))));
             dto.setPumps(pumpActionReportMapper.toDtoList(pumpActionService.getLastReportsByDevice(device)));
             dto.setBootups(bootupReportMapper.toDtoList(bootupService.getLastReportsByDevice(device)));

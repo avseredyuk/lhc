@@ -2,6 +2,7 @@ package com.avseredyuk.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import lombok.Data;
 
 /**
@@ -11,5 +12,5 @@ import lombok.Data;
 public class HistoryDto {
     private List<BootupReportDto> bootups = new ArrayList<>();
     private List<PumpActionReportDto> pumps = new ArrayList<>();
-    private List<SensorReportDto> reports = new ArrayList<>();
+    private List<Map<String, Number>> reports = new ArrayList<>();
 }

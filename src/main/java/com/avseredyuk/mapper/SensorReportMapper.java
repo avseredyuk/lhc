@@ -2,7 +2,10 @@ package com.avseredyuk.mapper;
 
 import com.avseredyuk.dto.SensorReportDto;
 import com.avseredyuk.model.SensorReport;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
@@ -26,5 +29,22 @@ public interface SensorReportMapper {
     SensorReportDto toDto(SensorReport r);
     
     List<SensorReportDto> toDtoList(List<SensorReport> list);
+    
+    default Map<String, Number> toDtoStripped(SensorReport r) {
+        Map<String, Number> map = new HashMap<>();
+        if (r.getTemperature() != null) {
+            map.put("t", r.getTemperature());
+        }
+        if (r.getHumidity() != null) {
+            map.put("h", r.getHumidity());
+        }
+        if (r.getWaterTemperature() != null) {
+            map.put("w", r.getWaterTemperature());
+        }
+        map.put("d", r.getDateTime().getTime());
+        return map;
+    }
+    
+    List<Map<String, Number>> toDtoStrippedList(List<SensorReport> r);
     
 }

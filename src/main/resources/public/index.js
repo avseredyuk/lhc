@@ -10,10 +10,10 @@ $(function () {
     }
   });
 
-  var array_temperature_global = [];
-  var array_water_temperature_global = [];
-  var array_humidity_global = [];
-  var array_absolute_humidity_global = [];
+  var array_temperature_global = new Object();
+  var array_water_temperature_global = new Object();
+  var array_humidity_global = new Object();
+  var array_absolute_humidity_global = new Object();
   var array_pump_global = [];
   var array_bootup_global = [];
   var array_keys_global = [];
@@ -22,10 +22,10 @@ $(function () {
 
     for (var key in history) {
       array_keys_global.push(key);
-      var array_temperature = [];
-      var array_water_temperature = [];
-      var array_humidity = [];
-      var array_absolute_humidity = [];
+      var array_temperature = undefined;
+      var array_water_temperature = undefined;
+      var array_humidity = undefined;
+      var array_absolute_humidity = undefined;
       var array_pump = [];
       var array_bootup = [];
 
@@ -53,21 +53,44 @@ $(function () {
       array_pump_global.push(array_pump);
 
       data = history[key].reports;
+      var lastTimestampFromReport;
       for (i = data.length - 1; i >= 0; i--) {
-        array_temperature.push([data[i].d, data[i].t]);
-        array_water_temperature.push([data[i].d, data[i].w]);
-        array_humidity.push([data[i].d, data[i].h]);
-        array_absolute_humidity.push([data[i].d, calcAbsH(data[i].t, data[i].h)])
+        if (data[i].t !== undefined) {
+          if (array_temperature === undefined) {
+            array_temperature = [];
+          }
+          array_temperature.push([data[i].d, data[i].t]);
+        }
+        if (data[i].w !== undefined) {
+          if (array_water_temperature === undefined) {
+            array_water_temperature = [];
+          }
+          array_water_temperature.push([data[i].d, data[i].w]);
+        }
+        if (data[i].h !== undefined) {
+          if (array_humidity === undefined) {
+            array_humidity = [];
+          }
+          array_humidity.push([data[i].d, data[i].h]);
+        }
+        if ((data[i].t !== undefined) && (data[i].h !== undefined)) {
+          if (array_absolute_humidity === undefined) {
+            array_absolute_humidity = [];
+          }
+          array_absolute_humidity.push([data[i].d, calcAbsH(data[i].t, data[i].h)]);
+        }
+        lastTimestampFromReport = data[i].d;
       }
-      array_temperature_global.push(array_temperature);
-      array_water_temperature_global.push(array_water_temperature);
-      array_humidity_global.push(array_humidity);
-      array_absolute_humidity_global.push(array_absolute_humidity);
 
-      var lastDataFromLHC = calculateLastActionTime(array_pump, array_temperature);
+      array_temperature_global[key] = array_temperature;
+      array_water_temperature_global[key] = array_water_temperature;
+      array_humidity_global[key] = array_humidity;
+      array_absolute_humidity_global[key] = array_absolute_humidity;
+
+      var lastDataFromLHC = calculateLastActionTime(array_pump, lastTimestampFromReport);
       var uptime = calculateUptime(array_bootup, lastDataFromLHC);
       $('#uptime').append("<b>" + key + "</b>").append("<br/>").append(uptime).append("<br/>").append("<br/>");
-      $('#lastReport').append("<b>" + key + "</b>").append("<br/>").append(timestampFormat(array_temperature[array_temperature.length - 1][0])).append("<br/>").append("<br/>");
+      $('#lastReport').append("<b>" + key + "</b>").append("<br/>").append(timestampFormat(lastTimestampFromReport)).append("<br/>").append("<br/>");
       $('#lastPump').append("<b>" + key + "</b>").append("<br/>").append(timestampFormat(array_pump[array_pump.length - 1][0])).append("<br/>").append("<br/>");
 
       //todo: uptime chart works only for last device
@@ -154,7 +177,7 @@ $(function () {
       title: {
         text: ""
       },
-      legend: {
+      legenxd: {
         useHTML: true
       },
       xAxis: [{
@@ -203,35 +226,45 @@ $(function () {
     });
 
     for (i = 0; i < array_keys_global.length; i++) {
+      var k = array_keys_global[i];
       mainChart.addSeries({
         yAxis: 2,
         type: 'area',
-        name: 'Pump (' + array_keys_global[i] + ')',
+        name: 'Pump (' + k + ')',
         data: array_pump_global[i],
         step: 'left'
       });
-      mainChart.addSeries({
-        type: 'line',
-        name: 'Air Temperature, C (' + array_keys_global[i] + ')',
-        data: array_temperature_global[i]
-      });
-      mainChart.addSeries({
-        type: 'line',
-        name: 'Water Temperature, C (' + array_keys_global[i] + ')',
-        data: array_water_temperature_global[i]
-      });
-      mainChart.addSeries({
-        yAxis: 1,
-        type: 'line',
-        name: 'Humidity, % (' + array_keys_global[i] + ')',
-        data: array_humidity_global[i]
-      });
-      mainChart.addSeries({
-        yAxis: 3,
-        type: 'line',
-        name: 'Abs. Humidity, g/m<sup>3</sup> (' + array_keys_global[i] + ')',
-        data: array_absolute_humidity_global[i]
-      });
+      if (array_temperature_global[k] !== undefined) {
+        mainChart.addSeries({
+          type: 'line',
+          name: 'Air Temperature, C (' + k + ')',
+          data: array_temperature_global[k]
+        });
+      }
+      if (array_water_temperature_global[k] !== undefined) {
+        mainChart.addSeries({
+          type: 'line',
+          name: 'Water Temperature, C (' + k + ')',
+          data: array_water_temperature_global[k]
+        });
+      }
+      if (array_humidity_global[k] !== undefined) {
+        mainChart.addSeries({
+          yAxis: 1,
+          type: 'line',
+          name: 'Humidity, % (' + k + ')',
+          data: array_humidity_global[k]
+        });
+      }
+      if (array_absolute_humidity_global[k] !== undefined) {
+        mainChart.addSeries({
+          yAxis: 3,
+          type: 'line',
+          name: 'Abs. Humidity, g/m<sup>3</sup> (' + k + ')',
+          data: array_absolute_humidity_global[k]
+        });
+      }
+
     }
 
   });
@@ -291,8 +324,8 @@ $(function () {
     return formatInterval(getIntervalDifference(lastBootupTime, lastDataFromLHC_local));
   }
 
-  function calculateLastActionTime(array_pump_local, array_temperature_local) {
-    return Math.max(array_pump_local[array_pump_local.length - 1][0], array_temperature_local[array_temperature_local.length - 1][0]);
+  function calculateLastActionTime(array_pump_local, lastReportTimestamp) {
+    return Math.max(array_pump_local[array_pump_local.length - 1][0], lastReportTimestamp);
   }
 
   function timestampFormat(timestamp) {
