@@ -20,12 +20,7 @@ public class DeviceService {
     }
     
     public Device findById(long id) {
-        Device device = deviceRepository.findById(id);
-        if (device == null) {
-            //todo: error handling ???
-            throw new IllegalArgumentException();
-        }
-        return device;
+        return deviceRepository.findById(id);
     }
     
     public boolean isTrustedDevice(Device device) {

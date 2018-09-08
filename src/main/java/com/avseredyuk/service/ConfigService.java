@@ -2,12 +2,9 @@ package com.avseredyuk.service;
 
 import com.avseredyuk.model.Config;
 import com.avseredyuk.model.Config.ConfigKey;
-import com.avseredyuk.model.Config.ConfigType;
 import com.avseredyuk.repository.ConfigRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,8 +25,8 @@ public class ConfigService {
         return configRepository.findOne(key);
     }
     
-    public List<Config> getAllByType(ConfigType type) {
-        return configRepository.findAllByType(type);
+    public List<Config> findAll() {
+        return configRepository.findAll();
     }
     
     public Config save(Config config) {

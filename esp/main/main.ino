@@ -22,8 +22,6 @@ unsigned long pumpEnableLastTime = 0;
   unsigned long pumpRunningTime = 45;          // seconds   00:45
 #endif
 
-//todo: store times & frequencies at host. download it at bootup time. store updated configs in spiffs
-
 void setup() {
   Serial.begin(115200);
   delay(10);

@@ -41,6 +41,5 @@ public class BootupService {
         } else {
             throw new AccessDeniedException();
         }
-        
     }
 }

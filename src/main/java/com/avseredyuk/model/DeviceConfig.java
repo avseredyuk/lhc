@@ -1,6 +1,5 @@
 package com.avseredyuk.model;
 
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,43 +7,33 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
- * Created by lenfer on 9/8/17.
+ * Created by lenfer on 8/12/18.
  */
 @Data
-@NoArgsConstructor
 @Entity
-@Table(name = "sensor_report")
-public class SensorReport {
+@Table(name = "device_cfg")
+public class DeviceConfig {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     
-    @Column(name = "date_time")
-    private Date dateTime;
+    @Column(name = "cfg_key")
+    private String key;
     
-    @Column(name = "temperature")
-    private Double temperature;
-    
-    @Column(name = "water_temperature")
-    private Double waterTemperature;
-    
-    @Column(name = "humidity")
-    private Double humidity;
+    @Column(name = "cfg_value")
+    private String value;
     
     @ManyToOne
     @JoinColumn(name = "device_id")
     private Device device;
     
-    @PrePersist
-    public void initDateTime() {
-        this.dateTime = new Date();
+    public enum DeviceConfigKey {
+        PUMP_ENABLE_FREQUENCY, PUMP_DURATION, REPORT_SEND_FREQUENCY
     }
 }

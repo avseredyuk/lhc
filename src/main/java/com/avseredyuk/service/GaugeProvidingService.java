@@ -1,5 +1,6 @@
 package com.avseredyuk.service;
 
+import com.avseredyuk.exception.AccessDeniedException;
 import com.avseredyuk.model.Device;
 import com.avseredyuk.model.SensorReport;
 import java.awt.Color;
@@ -63,6 +64,9 @@ public class GaugeProvidingService {
     @Cacheable("Gauge")
     public byte[] getGauge(Long deviceId) {
         Device device = deviceService.findById(deviceId);
+        if (device == null) {
+            throw new AccessDeniedException();
+        }
         SensorReport r = deviceReportDataExclusionService.filterByDeviceReportDataExclusion(device, sensorReportService.getLastReportByDevice(device));
         BufferedImage image = new BufferedImage(IMG_SIZE, IMG_SIZE, BufferedImage.TYPE_INT_ARGB);
     

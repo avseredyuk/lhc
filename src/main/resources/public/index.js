@@ -38,7 +38,13 @@ $(function () {
       }
       array_bootup_global.push(array_bootup);
 
-      $('#last_bootups_list ul').append("<b>" + key + "</b>").append(items.join(''));
+      var itemContent;
+      if (items.length == 0) {
+        itemContent = '</br>' + 'no data' + '</br>';
+      } else {
+        itemContent = items.join('');
+      }
+      $('#last_bootups_list').append("<b>" + key + "</b>").append(itemContent).append('</br>');
 
       data = history[key].pumps;
       for (i = data.length - 1; i >= 0; i--) {
@@ -91,7 +97,14 @@ $(function () {
       var uptime = calculateUptime(array_bootup, lastDataFromLHC);
       $('#uptime').append("<b>" + key + "</b>").append("<br/>").append(uptime).append("<br/>").append("<br/>");
       $('#lastReport').append("<b>" + key + "</b>").append("<br/>").append(timestampFormat(lastTimestampFromReport)).append("<br/>").append("<br/>");
-      $('#lastPump').append("<b>" + key + "</b>").append("<br/>").append(timestampFormat(array_pump[array_pump.length - 1][0])).append("<br/>").append("<br/>");
+
+      var lastPump;
+      if (array_pump.length == 0) {
+        lastPump = "no data";
+      } else {
+        lastPump = timestampFormat(array_pump[array_pump.length - 1][0]);
+      }
+      $('#lastPump').append("<b>" + key + "</b>").append("<br/>").append(lastPump).append("<br/>").append("<br/>");
 
       //todo: uptime chart works only for last device
       var uptimeChart = Highcharts.chart('uptimeChart', {
@@ -314,6 +327,7 @@ $(function () {
   }
 
   function calculateUptime(array_bootup_local, lastDataFromLHC_local) {
+    if (array_bootup_local.length == 0) return "no data";
     var lastBootupTime = array_bootup_local[0][0];
     if ((lastDataFromLHC_local == 0) || (lastBootupTime == 0)) {
       return "no data";
@@ -325,6 +339,7 @@ $(function () {
   }
 
   function calculateLastActionTime(array_pump_local, lastReportTimestamp) {
+    if (array_pump_local.length == 0) return 0;
     return Math.max(array_pump_local[array_pump_local.length - 1][0], lastReportTimestamp);
   }
 

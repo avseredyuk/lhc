@@ -1,7 +1,6 @@
 package com.avseredyuk.repository;
 
 import com.avseredyuk.model.Device;
-import com.avseredyuk.model.Device;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

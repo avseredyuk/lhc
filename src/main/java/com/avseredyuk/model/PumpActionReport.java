@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "pump_actions")
+@Table(name = "pump_action")
 public class PumpActionReport {
     
     @Id

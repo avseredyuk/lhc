@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Mapper(componentModel = "spring")
 public interface DeviceMapper {
     
-    @Mapping(target = "token", source = "authToken")
-    Device toModel(String authToken);
+    @Mapping(target = "token", source = "deviceToken")
+    Device toModel(String deviceToken);
     
 }
