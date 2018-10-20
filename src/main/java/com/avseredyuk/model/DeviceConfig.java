@@ -34,6 +34,6 @@ public class DeviceConfig {
     private Device device;
     
     public enum DeviceConfigKey {
-        PUMP_ENABLE_FREQUENCY, PUMP_DURATION, REPORT_SEND_FREQUENCY
+        PUMP_ENABLE_FREQUENCY, PUMP_DURATION, REPORT_SEND_FREQUENCY, RUN_PUMP_ONCE
     }
 }
