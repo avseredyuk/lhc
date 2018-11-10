@@ -8,6 +8,7 @@ import com.avseredyuk.repository.DeviceConfigRepository;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DeviceConfigService {
+    private static final String CONFIG_HASH = "CONFIG_HASH";
     private final DeviceService deviceService;
     private final DeviceConfigRepository deviceConfigRepository;
     
@@ -26,13 +28,19 @@ public class DeviceConfigService {
         this.deviceService = deviceService;
     }
     
-    public Map<String,String> getConfig(Device device) {
+    public Map<String, String> getConfig(Device device) {
         if (deviceService.isTrustedDevice(device)) {
             List<DeviceConfig> deviceConfigList = deviceConfigRepository.findAllByDeviceToken(device.getToken());
     
-            Map<String,String> result = deviceConfigList
+            Map<String, String> result = deviceConfigList
                 .stream()
                 .collect(Collectors.toMap(DeviceConfig::getKey, DeviceConfig::getValue));
+            
+            String configHash = DigestUtils.sha1Hex(result.entrySet()
+                .stream()
+                .map(entry -> entry.getKey() + entry.getValue())
+                .collect(Collectors.joining()));
+            result.put(CONFIG_HASH, configHash);
             
             deviceConfigList.stream()
                 .filter(deviceConfig ->

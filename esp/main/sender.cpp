@@ -7,12 +7,6 @@
 
 const int CONNECTION_TIMEOUT = 5000;
 
-String getToken() {
-  String token = String(WiFi.macAddress());
-  token.replace(':','0');
-  return token;
-}
-
 String concatLogToUri(String resourceUri) {
   return resourceUri + "?heap=" + String(ESP.getFreeHeap()) + "&millis=" + millis();
 }
@@ -39,7 +33,7 @@ boolean sendToHost(String resourceUri, String content) {
   client.println("Host: " + String(LHC_HOST));
   client.println("Content-Length: " + String(content.length()));
   client.println("Content-Type: application/json");
-  client.println("AuthToken: " + getToken());
+  client.println("AuthToken: " + String(AUTH_TOKEN));
   client.println();
   client.println(content);
 

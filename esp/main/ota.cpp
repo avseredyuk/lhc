@@ -3,7 +3,7 @@
 
 WiFiServer TelnetServer(8266);
 
-void ota_config() {
+void ota_init() {
   TelnetServer.begin();
   
   ArduinoOTA.setPort(OTA_PORT);

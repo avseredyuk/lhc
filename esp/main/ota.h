@@ -1,2 +1,2 @@
-void ota_config();
+void ota_init();
 void ota_handle();

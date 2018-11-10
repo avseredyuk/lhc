@@ -28,4 +28,14 @@ typedef union BootupPackage {
   } record;
 };
 
+const int CONFIG_VERSION = 1;
+
+typedef struct Config {
+  unsigned int pumpEnableFrequency;
+  unsigned int pumpDuration;
+  unsigned int reportSendingFrequency;
+  String hash;
+  boolean __runPumpOnce;
+};
+
 #endif
