@@ -9,15 +9,16 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Created by lenfer on 9/8/17.
- */
 @Configuration
 @EnableCaching
 public class AppConfiguration {
 
     @Value("${spring.datasource.url}")
     private String dbUrl;
+    @Value("${spring.datasource.username}")
+    private String dbUsername;
+    @Value("${spring.datasource.password}")
+    private String dbPassword;
     
     @Bean
     public DataSource dataSource() throws SQLException {
@@ -26,9 +27,9 @@ public class AppConfiguration {
         } else {
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl(dbUrl);
+            config.setUsername(dbUsername);
+            config.setPassword(dbPassword);
             return new HikariDataSource(config);
         }
     }
-    
-    //todo: some confg consistency check at startup ???
 }

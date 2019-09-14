@@ -1,10 +1,10 @@
 package com.avseredyuk.controller;
 
-import com.avseredyuk.mapper.DeviceMapper;
-import com.avseredyuk.mapper.PumpActionReportMapper;
 import com.avseredyuk.dto.PumpActionReportDto;
 import com.avseredyuk.dto.SensorReportDto;
+import com.avseredyuk.mapper.PumpActionReportMapper;
 import com.avseredyuk.mapper.SensorReportMapper;
+import com.avseredyuk.mapper.internal.DeviceMapper;
 import com.avseredyuk.model.BootupReport;
 import com.avseredyuk.model.PumpActionReport;
 import com.avseredyuk.model.SensorReport;
@@ -20,9 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Created by lenfer on 10/11/17.
- */
 @RestController
 public class DeviceController {
     private static final String AUTH_TOKEN_PARAM_NAME = "AuthToken";
@@ -58,7 +55,7 @@ public class DeviceController {
     public void newReport(@RequestBody SensorReportDto reportDto,
                           @RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String deviceToken) {
         SensorReport report = sensorReportMapper.fromDto(reportDto);
-        report.setDevice(deviceMapper.toModel(deviceToken));
+        report.setDevice(deviceMapper.toModelFromToken(deviceToken));
         sensorReportService.save(report);
     }
     
@@ -70,7 +67,7 @@ public class DeviceController {
     public void newPumpAction(@RequestBody PumpActionReportDto actionReportDto,
                               @RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String deviceToken) {
         PumpActionReport report = pumpActionReportMapper.fromDto(actionReportDto);
-        report.setDevice(deviceMapper.toModel(deviceToken));
+        report.setDevice(deviceMapper.toModelFromToken(deviceToken));
         pumpActionService.save(report);
     }
     
@@ -80,7 +77,7 @@ public class DeviceController {
     )
     public void newBoot(@RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String deviceToken) {
         BootupReport report = new BootupReport();
-        report.setDevice(deviceMapper.toModel(deviceToken));
+        report.setDevice(deviceMapper.toModelFromToken(deviceToken));
         bootupService.create(report);
     }
     
@@ -89,6 +86,6 @@ public class DeviceController {
         method = RequestMethod.GET
     )
     public Map<String,String> getDeviceConfig(@RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String deviceToken) {
-        return deviceConfigService.getConfig(deviceMapper.toModel(deviceToken));
+        return deviceConfigService.getConfig(deviceMapper.toModelFromToken(deviceToken));
     }
 }

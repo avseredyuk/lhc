@@ -1,0 +1,32 @@
+<div *ngIf="hasNotifications()">
+	<div *ngFor="let notification of notifications" role="alert" class="alert" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+		{{ notification.message }}
+	</div>
+</div>
+
+<div class="panel panel-info">
+	<div class="panel-heading"><h1>Add Device</h1></div>
+	<div class="panel-body">
+		<form class="form" [formGroup]="addForm" (ngSubmit)="onSubmit()">
+			<div class="form-row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="col-lg-5">
+						<input type="text" [formControl]="nameCtrl" placeholder="Name" name="name" class="form-control" id="name">
+						<div class="error" *ngIf="nameCtrl.hasError('required') && nameCtrl.touched">Name is required</div>
+					</div>
+					<div class="col-lg-6">
+						<input type="text" [formControl]="tokenCtrl" placeholder="Token" name="token" class="form-control" id="token">
+						<div class="error" *ngIf="tokenCtrl.hasError('required') && tokenCtrl.touched">Token is required</div>
+					</div>
+					<div class="col-lg-1">
+						<button class="btn btn-success btn-md" [disabled]="!addForm.valid">Add</button>
+					</div>
+				</div>
+			</div>
+		</form>
+
+	</div>
+</div>
+
+
+

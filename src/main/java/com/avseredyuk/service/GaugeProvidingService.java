@@ -21,9 +21,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by lenfer on 12/31/17.
- */
 @Service
 public class GaugeProvidingService {
     private static final int IMG_SIZE = 150;
@@ -63,10 +60,7 @@ public class GaugeProvidingService {
     
     @Cacheable("Gauge")
     public byte[] getGauge(Long deviceId) {
-        Device device = deviceService.findById(deviceId);
-        if (device == null) {
-            throw new AccessDeniedException();
-        }
+        Device device = deviceService.findActiveById(deviceId).orElseThrow(AccessDeniedException::new);
         SensorReport r = deviceReportDataExclusionService.filterByDeviceReportDataExclusion(device, sensorReportService.getLastReportByDevice(device));
         BufferedImage image = new BufferedImage(IMG_SIZE, IMG_SIZE, BufferedImage.TYPE_INT_ARGB);
     
@@ -83,10 +77,10 @@ public class GaugeProvidingService {
         valueGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         nameGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         
-        drawStr(valueFontMetrics, valueGraphics, nameGraphics, T_WAT, formatValue(r.getWaterTemperature()), 30, waterColor);
-        drawStr(valueFontMetrics, valueGraphics, nameGraphics, T_AIR, formatValue(r.getTemperature()), 70, airColor);
-        drawStr(valueFontMetrics, valueGraphics, nameGraphics, HUM_ABS, formatValue(calcAbsHumidity(r)), 110, humidityAbsoluteColor);
-        drawStr(valueFontMetrics, valueGraphics, nameGraphics, HUM_REL, formatValue(r.getHumidity()), 150, humidityRelativeColor);
+        drawStr(valueFontMetrics, valueGraphics, nameGraphics, T_WAT, r == null ? "X" : formatValue(r.getWaterTemperature()), 30, waterColor);
+        drawStr(valueFontMetrics, valueGraphics, nameGraphics, T_AIR, r == null ? "X" : formatValue(r.getTemperature()), 70, airColor);
+        drawStr(valueFontMetrics, valueGraphics, nameGraphics, HUM_ABS, r == null ? "X" : formatValue(r.getAbsoluteHumidity()), 110, humidityAbsoluteColor);
+        drawStr(valueFontMetrics, valueGraphics, nameGraphics, HUM_REL, r == null ? "X" : formatValue(r.getHumidity()), 150, humidityRelativeColor);
     
         valueGraphics.dispose();
     
@@ -100,15 +94,6 @@ public class GaugeProvidingService {
         
         //todo: this is fucking disgusting
         return null;
-    }
-    
-    private Double calcAbsHumidity(SensorReport r) {
-        if ((r.getHumidity() == null) || (r.getTemperature() == null)) {
-            return null;
-        }
-        double hum = r.getHumidity();
-        double temp = r.getTemperature();
-        return 216.7d * (hum / 100) * 6.112d * Math.exp(17.62d * temp / (243.12d + temp)) / (273.15d + temp);
     }
     
     private String formatValue(Double d) {

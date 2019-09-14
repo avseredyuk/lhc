@@ -1,0 +1,29 @@
+<div class="panel panel-info">
+	<div class="panel-heading"><h1>Login</h1></div>
+	<div class="panel-body">
+		<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+			<div class="form-row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="col-lg-5">
+						<input type="text" [formControl]="usernameCtrl" placeholder="username" name="username" class="form-control" id="username">
+						<div class="error" *ngIf="usernameCtrl.hasError('required') && usernameCtrl.touched">Username is required</div>
+					</div>
+					<div class="col-lg-6">
+						<input type="password" [formControl]="passwordCtrl" placeholder="password" name="password" class="form-control" id="password">
+						<div class="error" *ngIf="passwordCtrl.hasError('required') && passwordCtrl.touched">Password is required</div>
+					</div>
+					<div class="col-lg-1">
+						<button class="btn btn-success btn-md" [disabled]="!loginForm.valid">Login</button>
+					</div>
+				</div>	
+			</div>
+			<div class="col-lg-8 col-lg-offset-2">
+				<br/>
+				<div *ngIf="invalidLogin" class="alert alert-warning" role="alert">
+					Invalid credentials
+				</div>
+			</div>
+			
+		</form>
+	</div>
+</div>

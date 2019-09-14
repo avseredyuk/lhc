@@ -1,16 +1,15 @@
 package com.avseredyuk.model;
 
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Data;
 
-/**
- * Created by lenfer on 6/16/18.
- */
 @Data
 @Entity
 @Table(name = "device")
@@ -29,5 +28,11 @@ public class Device {
     
     @Column(name = "enabled")
     private Boolean enabled;
-
+    
+    @OneToMany(mappedBy = "device")
+    private List<DeviceConfig> config;
+    
+    @OneToMany(mappedBy = "device")
+    private List<DeviceReportDataExclusion> exclusions;
+    
 }

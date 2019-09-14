@@ -1,37 +1,25 @@
 package com.avseredyuk.controller;
 
-import com.avseredyuk.dto.HistoryDto;
+import com.avseredyuk.dto.internal.StatusDto;
 import com.avseredyuk.service.GaugeProvidingService;
-import com.avseredyuk.service.HistoryService;
-import java.util.Map;
+import com.avseredyuk.service.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Created by lenfer on 10/11/17.
- */
+@CrossOrigin(origins = "*")
 @RestController
 public class UiController {
-    private final HistoryService historyService;
-    private final GaugeProvidingService gaugeProvidingService;
     
     @Autowired
-    public UiController(HistoryService historyService, GaugeProvidingService gaugeProvidingService) {
-        this.historyService = historyService;
-        this.gaugeProvidingService = gaugeProvidingService;
-    }
+    private GaugeProvidingService gaugeProvidingService;
     
-    @RequestMapping(
-        value = "/history",
-        method = RequestMethod.GET
-    )
-    public Map<String, HistoryDto> getHistory() {
-        return historyService.getHistory();
-    }
+    @Autowired
+    private StatusService statusService;
     
     @ResponseBody
     @RequestMapping(
@@ -43,4 +31,11 @@ public class UiController {
         return gaugeProvidingService.getGauge(deviceId);
     }
     
+    @RequestMapping(
+        value = "/status",
+        method = RequestMethod.GET
+    )
+    public StatusDto getStatus() {
+        return statusService.getStatus();
+    }
 }

@@ -11,9 +11,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by lenfer on 9/18/17.
- */
 @Service
 public class SensorReportService {
     private SensorReportRepository sensorReportRepository;
@@ -34,7 +31,7 @@ public class SensorReportService {
     }
     
     SensorReport getLastReportByDevice(Device device) {
-        return sensorReportRepository.getLastReport(device.getId());
+        return sensorReportRepository.findFirstByDeviceIdOrderByIdDesc(device.getId());
     }
     
     @Caching(evict = {
@@ -43,11 +40,20 @@ public class SensorReportService {
     })
     public void save(SensorReport report) {
         if (deviceService.isTrustedDevice(report.getDevice())) {
-            sensorReportRepository.cleanUp(configService.getCleanupIntervalDays());
+            report.setAbsoluteHumidity(calcAbsHumidity(report));
             report.setDevice(deviceService.findByToken(report.getDevice().getToken()));
             sensorReportRepository.save(report);
         } else {
             throw new AccessDeniedException();
         }
+    }
+    
+    private static Double calcAbsHumidity(SensorReport r) {
+        if ((r.getHumidity() == null) || (r.getTemperature() == null)) {
+            return null;
+        }
+        double hum = r.getHumidity();
+        double temp = r.getTemperature();
+        return 216.7d * (hum / 100) * 6.112d * Math.exp(17.62d * temp / (243.12d + temp)) / (273.15d + temp);
     }
 }

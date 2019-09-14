@@ -13,9 +13,6 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Created by lenfer on 9/8/17.
- */
 @Data
 @NoArgsConstructor
 @Entity
@@ -38,6 +35,9 @@ public class SensorReport {
     
     @Column(name = "humidity")
     private Double humidity;
+    
+    @Column(name = "abs_humidity")
+    private Double absoluteHumidity;
     
     @ManyToOne
     @JoinColumn(name = "device_id")

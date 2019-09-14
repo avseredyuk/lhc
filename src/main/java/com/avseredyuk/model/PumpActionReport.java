@@ -15,9 +15,6 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Created by lenfer on 9/13/17.
- */
 @Data
 @NoArgsConstructor
 @Entity

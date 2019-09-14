@@ -13,9 +13,6 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Created by lenfer on 7/22/18.
- */
 @Data
 @NoArgsConstructor
 @Entity
@@ -38,6 +35,8 @@ public class DeviceReportDataExclusion {
     public enum ReportDataType {
         AIR_TEMP,
         WATER_TEMP,
-        HUMIDITY
+        HUMIDITY,
+        PUMP,
+        ABS_HUMIDITY
     }
 }

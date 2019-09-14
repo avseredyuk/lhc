@@ -10,9 +10,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by lenfer on 9/18/17.
- */
 @Service
 public class PumpActionService {
     private PumpActionRepository pumpActionRepository;
@@ -32,15 +29,17 @@ public class PumpActionService {
         return pumpActionRepository.getLastReports(device.getId(), configService.getHoursCount());
     }
     
+    public PumpActionReport getLastReportByDevice(Device device) {
+        return pumpActionRepository.findFirstByDeviceIdOrderByIdDesc(device.getId());
+    }
+    
     @CacheEvict(value = "PumpAction", allEntries = true)
     public void save(PumpActionReport report) {
         if (deviceService.isTrustedDevice(report.getDevice())) {
-            pumpActionRepository.cleanUp(configService.getCleanupIntervalDays());
             report.setDevice(deviceService.findByToken(report.getDevice().getToken()));
             pumpActionRepository.save(report);
         } else {
             throw new AccessDeniedException();
         }
-        
     }
 }

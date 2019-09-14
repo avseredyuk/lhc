@@ -10,32 +10,27 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by lenfer on 10/8/17.
- */
 @Service
 public class BootupService {
     private BootupRepository bootupRepository;
-    private ConfigService configService;
     private DeviceService deviceService;
     
     @Autowired
-    public BootupService(BootupRepository bootupRepository,
-        ConfigService configService, DeviceService deviceService) {
+    public BootupService(BootupRepository bootupRepository, DeviceService deviceService) {
         this.bootupRepository = bootupRepository;
-        this.configService = configService;
         this.deviceService = deviceService;
     }
     
     @Cacheable("BootupReport")
     public List<BootupReport> getLastReportsByDevice(Device device) {
-        return bootupRepository.getLastReports(device.getId());
+        return bootupRepository.findFirst3ByDeviceIdOrderByIdDesc(device.getId());
     }
     
+    //todo: bootup/pump/report creation service methods SUCK DICKS: 3 queries !! ( 2 x getDevice)
+    //todo: make findByToken return optional & do findByToken.orElseThrow(AccessDeniedException::new)
     @CacheEvict(value = "BootupReport", allEntries = true)
     public void create(BootupReport report) {
         if (deviceService.isTrustedDevice(report.getDevice())) {
-            bootupRepository.cleanUp(configService.getCleanupIntervalDays());
             report.setDevice(deviceService.findByToken(report.getDevice().getToken()));
             bootupRepository.save(report);
         } else {

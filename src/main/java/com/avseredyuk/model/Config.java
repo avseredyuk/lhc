@@ -6,9 +6,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Data;
 
-/**
- * Created by lenfer on 1/7/18.
- */
 @Data
 @Entity
 @Table(name = "cfg")
@@ -22,6 +19,6 @@ public class Config {
     private String value;
     
     public enum ConfigKey {
-        HISTORY_SIZE_HOURS, CLEANUP_INTERVAL_DAYS
+        HISTORY_SIZE_HOURS
     }
 }

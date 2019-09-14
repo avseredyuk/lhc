@@ -10,9 +10,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by lenfer on 7/22/18.
- */
+@Deprecated
 @Service
 public class DeviceReportDataExclusionService {
     
@@ -33,16 +31,10 @@ public class DeviceReportDataExclusionService {
     }
     
     public SensorReport filterByDeviceReportDataExclusion(Device device, SensorReport report) {
-        List<DeviceReportDataExclusion> mapping = deviceReportDataExclusionRepository.findByDeviceId(device.getId());
-        return this.filterByDeviceReportDataExclusion(mapping, report);
+        return this.filterByDeviceReportDataExclusion(device.getExclusions(), report);
     }
     
-    public List<SensorReport> filterByDeviceReportDataExclusion(Device device, List<SensorReport> reports) {
-        List<DeviceReportDataExclusion> mapping = deviceReportDataExclusionRepository.findByDeviceId(device.getId());
-        reports.forEach(r -> filterByDeviceReportDataExclusion(mapping, r));
-        return reports;
-    }
-    
+    //todo: handle pump exclusion ???
     private SensorReport filterByDeviceReportDataExclusion(List<DeviceReportDataExclusion> mapping, SensorReport report) {
         mapping.forEach( m -> {
                 switch (m.getMap()) {
@@ -54,6 +46,9 @@ public class DeviceReportDataExclusionService {
                         break;
                     case WATER_TEMP:
                         report.setWaterTemperature(null);
+                        break;
+                    case ABS_HUMIDITY:
+                        report.setAbsoluteHumidity(null);
                         break;
                     default:
                         throw new IllegalArgumentException("Unmapped report data type!");

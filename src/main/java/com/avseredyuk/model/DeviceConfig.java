@@ -10,9 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Data;
 
-/**
- * Created by lenfer on 8/12/18.
- */
 @Data
 @Entity
 @Table(name = "device_cfg")

@@ -1,0 +1,34 @@
+<nav>
+	<ul>
+		<li>
+			<a routerLink="" [class.activated]="currentUrl == '/'">
+				<i class="material-icons">details</i>
+			</a>
+		</li>
+		<li *ngIf="hasToken()">
+			<a routerLink="history" [class.activated]="currentUrl == '/history'">
+				<i class="material-icons">bar_chart</i>
+			</a>
+		</li>
+		<li *ngIf="hasToken()">
+			<a routerLink="devices" [class.activated]="isDeviceGroup()">
+				<i class="material-icons">devices</i>
+			</a>
+		</li>
+		<li *ngIf="hasToken()">
+			<a routerLink="maintenance" [class.activated]="isMaintenanceGroup()">
+				<i class="material-icons">local_florist</i>
+			</a>
+		</li>
+		<li *ngIf="hasToken()">
+			<a routerLink="settings" [class.activated]="currentUrl == '/settings'">
+				<i class="material-icons">settings</i>
+			</a>
+		</li>
+		<li *ngIf="!hasToken()">
+			<a routerLink="login" [class.activated]="currentUrl == '/login'">
+				<i class="material-icons">account_circle</i>
+			</a>
+		</li>
+	</ul>
+</nav>

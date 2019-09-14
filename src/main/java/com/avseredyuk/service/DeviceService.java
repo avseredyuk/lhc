@@ -1,14 +1,14 @@
 package com.avseredyuk.service;
 
+import com.avseredyuk.exception.InconsistentDataException;
 import com.avseredyuk.model.Device;
 import com.avseredyuk.repository.DeviceRepository;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by lenfer on 6/16/18.
- */
 @Service
 public class DeviceService {
     
@@ -19,8 +19,12 @@ public class DeviceService {
         this.deviceRepository = deviceRepository;
     }
     
-    public Device findById(long id) {
+    public Optional<Device> findById(long id) {
         return deviceRepository.findById(id);
+    }
+    
+    public Optional<Device> findActiveById(long id) {
+        return deviceRepository.findByIdAndEnabledTrue(id);
     }
     
     public boolean isTrustedDevice(Device device) {
@@ -31,7 +35,6 @@ public class DeviceService {
             }
         }
         return false;
-            
     }
     
     public Device findByToken(String token) {
@@ -40,5 +43,26 @@ public class DeviceService {
     
     public List<Device> findAllActive() {
         return deviceRepository.findByEnabledTrue();
+    }
+    
+    public List<Device> findAll() {
+        return deviceRepository.findAllByOrderByIdAsc();
+    }
+    
+    public Device saveOrThrow(Device device) throws InconsistentDataException {
+        Device devFromDb = this.findByToken(device.getToken());
+        if (Objects.isNull(devFromDb)) {
+            return deviceRepository.save(device);
+        } else {
+            throw new InconsistentDataException("Token has to be unique");
+        }
+    }
+    
+    public Device update(Device device) {
+        return deviceRepository.save(device);
+    }
+    
+    public void delete(Long deviceId) {
+        deviceRepository.delete(deviceId);
     }
 }

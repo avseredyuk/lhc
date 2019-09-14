@@ -2,15 +2,15 @@ package com.avseredyuk.repository;
 
 import com.avseredyuk.model.Device;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-/**
- * Created by lenfer on 6/16/18.
- */
 @Repository
-public interface DeviceRepository extends CrudRepository<Device, String> {
-    Device findById(long id);
+public interface DeviceRepository extends CrudRepository<Device, Long> {
     Device findByToken(String token);
+    Optional<Device> findById(Long id);
+    Optional<Device> findByIdAndEnabledTrue(Long id);
     List<Device> findByEnabledTrue();
+    List<Device> findAllByOrderByIdAsc();
 }
