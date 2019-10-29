@@ -21,7 +21,7 @@
     <webjars-bootstrap.version>3.3.6</webjars-bootstrap.version>
     <webjars-jquery-ui.version>1.11.4</webjars-jquery-ui.version>
     <webjars-jquery.version>2.2.4</webjars-jquery.version>
-    <jackson.version>2.9.9</jackson.version>
+    <jackson.version>2.10.0</jackson.version>
     <project.http.version>1.19.0</project.http.version>
     <project.oauth.version>1.19.0</project.oauth.version>
     <mapstruct.version>1.2.0.Final</mapstruct.version>
