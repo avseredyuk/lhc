@@ -1,0 +1,18 @@
+.nopadnomargin {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+table, ul {
+  font-size: 1.1em;
+}
+
+.table-details > tbody > tr > td {
+    border: none;
+}
+.table-details {
+	background-color: transparent;
+}
+.detail-key {
+	text-align: right;
+}

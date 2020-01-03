@@ -1,0 +1,90 @@
+<div *ngIf="hasNotifications()">
+	<div *ngFor="let notification of notifications" role="alert" class="alert" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+		{{ notification.message }}
+	</div>
+</div>
+
+<div class="panel panel-info">
+	<div class="panel-heading"><h1>Edit Plant Maintenance</h1></div>
+	<div class="panel-body">
+
+		<form *ngIf="maintenance" [formGroup]="editForm" (ngSubmit)="onSubmit()">
+
+			<div class="form-row">
+
+				<div class="col-lg-8 col-lg-offset-2">
+
+					<div class="col-lg-3">
+						<input type="text" [formControl]="phCtrl" placeholder="pH" name="ph" class="form-control" id="ph" value="{{maintenance.ph}}">
+					</div>
+
+					<div class="col-lg-3">
+						<input type="text" [formControl]="tdsCtrl" placeholder="TDS" name="tds" class="form-control" id="tds" value="{{maintenance.tds}}">
+					</div>
+
+					<div class="col-lg-2">
+						<select class="custom-select" [formControl]="typeCtrl" name="type" class="form-control" id="type">
+							<option *ngFor="let dataType of dataTypes" value="{{ dataType }}">{{ dataType }}</option>
+						</select>
+					</div>
+
+					<div class="col-lg-3">
+						<select class="custom-select" [formControl]="deviceCtrl" name="device" class="form-control" id="device">
+							<option *ngFor="let device of devices" value="{{ device.id }}">{{ device.name }}</option>
+						</select>
+					</div>
+
+					<div class="col-lg-1">
+						<button class="btn btn-success btn-md" [disabled]="!editForm.valid">Update</button>
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="form-row">
+				<div class="col-lg-12">
+					<br/>
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="col-lg-6 col-lg-offset-3">
+					<div class="col-lg-6">
+						<input type="text" [formControl]="newDetailKeyCtrl" placeholder="key" name="newDetailKey" class="form-control" id="newDetailKey">
+					</div>
+					<div class="col-lg-5">
+						<input type="text" [formControl]="newDetailValueCtrl" placeholder="value" name="newDetailValue" class="form-control" id="newDetailValue">
+					</div>
+					<div class="col-lg-1">
+						<button class="btn btn-success btn-md" type='button' (click)="addDetail()">+</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-row" *ngIf="hasDetails()">
+				<div class="col-lg-12">
+					<br/>
+				</div>
+				<div class="col-lg-6 col-lg-offset-3">
+					<table class="table table-sm table-no-border nopadnomargin">
+						<thead>
+							<tr>
+								<th scope="col">Detail Key</th>
+								<th scope="col">Detail Value</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let detail of maintenance.details">
+								<td>{{ detail.key }}</td>
+								<td>{{ detail.value }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+		</form>
+
+	</div>
+</div>

@@ -1,0 +1,19 @@
+<div class="panel panel-info">
+	<div class="panel-heading"><h1>Settings</h1></div>
+	<div class="panel-body">
+		<table class="table table-sm table-no-border nopadnomargin">
+			<thead>
+				<tr>
+					<th scope="col">Key</th>
+					<th scope="col">Value</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let cfg of configurations">
+					<td>{{ cfg.key }}</td>
+					<td>{{ cfg.value }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
