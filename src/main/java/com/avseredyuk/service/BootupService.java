@@ -5,6 +5,7 @@ import com.avseredyuk.model.BootupReport;
 import com.avseredyuk.model.Device;
 import com.avseredyuk.repository.BootupRepository;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,16 +26,12 @@ public class BootupService {
     public List<BootupReport> getLastReportsByDevice(Device device) {
         return bootupRepository.findFirst3ByDeviceIdOrderByIdDesc(device.getId());
     }
-    
-    //todo: bootup/pump/report creation service methods SUCK DICKS: 3 queries !! ( 2 x getDevice)
-    //todo: make findByToken return optional & do findByToken.orElseThrow(AccessDeniedException::new)
+
     @CacheEvict(value = "BootupReport", allEntries = true)
     public void create(BootupReport report) {
-        if (deviceService.isTrustedDevice(report.getDevice())) {
-            report.setDevice(deviceService.findByToken(report.getDevice().getToken()));
-            bootupRepository.save(report);
-        } else {
-            throw new AccessDeniedException();
-        }
+        Device fetchedDevice = deviceService.findTrustedDevice(report.getDevice())
+                .orElseThrow(AccessDeniedException::new);
+        report.setDevice(fetchedDevice);
+        bootupRepository.save(report);
     }
 }

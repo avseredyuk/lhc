@@ -39,13 +39,11 @@ public class SensorReportService {
         @CacheEvict(value = "SensorReport", allEntries = true)
     })
     public void save(SensorReport report) {
-        if (deviceService.isTrustedDevice(report.getDevice())) {
-            report.setAbsoluteHumidity(calcAbsHumidity(report));
-            report.setDevice(deviceService.findByToken(report.getDevice().getToken()));
-            sensorReportRepository.save(report);
-        } else {
-            throw new AccessDeniedException();
-        }
+        Device fetchedDevice = deviceService.findTrustedDevice(report.getDevice())
+                .orElseThrow(AccessDeniedException::new);
+        report.setAbsoluteHumidity(calcAbsHumidity(report));
+        report.setDevice(fetchedDevice);
+        sensorReportRepository.save(report);
     }
     
     private static Double calcAbsHumidity(SensorReport r) {

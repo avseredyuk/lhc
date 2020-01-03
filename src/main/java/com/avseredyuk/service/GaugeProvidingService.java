@@ -14,6 +14,13 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,42 +37,49 @@ public class GaugeProvidingService {
     private static final String HUM_REL = "HUM REL";
     private static final float VALUE_FONT_SIZE = 34f;
     private static final float NAME_FONT_SIZE = 22f;
-    private final SensorReportService sensorReportService;
-    private final DeviceService deviceService;
-    private final DeviceReportDataExclusionService deviceReportDataExclusionService;
-    private Font loadedFont;
-    private Resource res;
-    private Color waterColor;
-    private Color airColor;
-    private Color humidityAbsoluteColor;
-    private Color humidityRelativeColor;
-    
+
     @Autowired
-    public GaugeProvidingService(SensorReportService sensorReportService, DeviceService deviceService,
-                                 DeviceReportDataExclusionService deviceReportDataExclusionService,
-                                 @Value("classpath:5069.ttf") Resource res,
-                                 @Value("${gauge.color.temperature.water}") String waterColor,
-                                 @Value("${gauge.color.temperature.air}") String airColor,
-                                 @Value("${gauge.color.humidity.absolute}") String humidityAbsoluteColor,
-                                 @Value("${gauge.color.humidity.relative}") String humidityRelativeColor) {
-        this.sensorReportService = sensorReportService;
-        this.deviceService = deviceService;
-        this.deviceReportDataExclusionService = deviceReportDataExclusionService;
-        this.res = res;
-        this.waterColor = Color.decode(waterColor);
-        this.airColor = Color.decode(airColor);
-        this.humidityAbsoluteColor = Color.decode(humidityAbsoluteColor);
-        this.humidityRelativeColor = Color.decode(humidityRelativeColor);
+    private SensorReportService sensorReportService;
+    @Autowired
+    private DeviceService deviceService;
+    @Autowired
+    private DeviceReportDataExclusionService deviceReportDataExclusionService;
+    @Value("classpath:5069.ttf")
+    private Resource fontResource;
+    @Value("classpath:gauge_placeholder.png")
+    private Resource gaugePlaceholderResource;
+    @Value("#{T(java.awt.Color).decode('${gauge.color.temperature.water}')}")
+    private Color waterColor;
+    @Value("#{T(java.awt.Color).decode('${gauge.color.temperature.air}')}")
+    private Color airColor;
+    @Value("#{T(java.awt.Color).decode('${gauge.color.humidity.absolute}')}")
+    private Color humidityAbsoluteColor;
+    @Value("#{T(java.awt.Color).decode('${gauge.color.humidity.relative}')}")
+    private Color humidityRelativeColor;
+
+    private List<Font> fonts;
+    private byte[] gaugePlaceholderData;
+
+    @PostConstruct
+    private void postConstruct() throws IOException {
+        fonts = initFonts();
+        gaugePlaceholderData = Files.readAllBytes(Paths.get(gaugePlaceholderResource.getURI()));
     }
-    
+
     @Cacheable("Gauge")
     public byte[] getGauge(Long deviceId) {
-        Device device = deviceService.findActiveById(deviceId).orElseThrow(AccessDeniedException::new);
+        if (fonts.isEmpty()) {
+            return gaugePlaceholderData;
+        }
+
+        Device device = deviceService.findActiveById(deviceId)
+                .orElseThrow(AccessDeniedException::new);
+
         SensorReport r = deviceReportDataExclusionService.filterByDeviceReportDataExclusion(device, sensorReportService.getLastReportByDevice(device));
         BufferedImage image = new BufferedImage(IMG_SIZE, IMG_SIZE, BufferedImage.TYPE_INT_ARGB);
-    
-        Font valueFont = getFont(VALUE_FONT_SIZE);
-        Font nameFont = getFont(NAME_FONT_SIZE);
+
+        Font valueFont = fonts.get(0);
+        Font nameFont = fonts.get(1);
     
         Graphics2D valueGraphics = (Graphics2D) image.getGraphics();
         valueGraphics.setFont(valueFont);
@@ -84,16 +98,14 @@ public class GaugeProvidingService {
     
         valueGraphics.dispose();
     
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             ImageIO.write(image, "png", baos);
             return baos.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        //todo: this is fucking disgusting
-        return null;
+
+        return gaugePlaceholderData;
     }
     
     private String formatValue(Double d) {
@@ -109,18 +121,17 @@ public class GaugeProvidingService {
         ng.drawString(name, 0, y);
     }
     
-    private Font getFont(Float size) {
-        Font font = null;
+    private List<Font> initFonts() {
         try {
-            if (loadedFont == null) {
-                loadedFont = Font.createFont(Font.TRUETYPE_FONT, res.getInputStream());
-            }
-            font = loadedFont.deriveFont(size);
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(font);
+            Font createdFont = Font.createFont(Font.TRUETYPE_FONT, fontResource.getInputStream());
+            return Stream.of(VALUE_FONT_SIZE, NAME_FONT_SIZE)
+                    .map(createdFont::deriveFont)
+                    .peek(font -> GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font))
+                    .collect(Collectors.toList());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return font;
+        return Collections.emptyList();
     }
 }

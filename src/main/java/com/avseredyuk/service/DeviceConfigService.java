@@ -28,41 +28,34 @@ public class DeviceConfigService {
     }
     
     public Map<String, String> getConfig(Device device) {
-        if (deviceService.isTrustedDevice(device)) {
-            List<DeviceConfig> deviceConfigList = deviceConfigRepository.findAllByDeviceToken(device.getToken());
-    
-            Map<String, String> result = deviceConfigList
+        Device fetchedDevice = deviceService.findTrustedDevice(device)
+                .orElseThrow(AccessDeniedException::new);
+
+        Map<String, String> result = fetchedDevice.getConfig()
                 .stream()
                 .collect(Collectors.toMap(DeviceConfig::getKey, DeviceConfig::getValue));
-            
-            String configHash = DigestUtils.sha1Hex(result.entrySet()
+
+        String configHash = DigestUtils.sha1Hex(result.entrySet()
                 .stream()
                 .map(entry -> entry.getKey() + entry.getValue())
                 .collect(Collectors.joining()));
-            result.put(CONFIG_HASH, configHash);
-            
-            deviceConfigList.stream()
+        result.put(CONFIG_HASH, configHash);
+
+        fetchedDevice.getConfig().stream()
                 .filter(deviceConfig ->
-                    deviceConfig.getKey().equals(DeviceConfigKey.RUN_PUMP_ONCE.toString())
-                        && Boolean.valueOf(deviceConfig.getValue()))
+                        deviceConfig.getKey().equals(DeviceConfigKey.RUN_PUMP_ONCE.toString())
+                                && Boolean.valueOf(deviceConfig.getValue()))
                 .findFirst()
                 .ifPresent(deviceConfig -> deviceConfigRepository.disablePumpRunOnce(deviceConfig.getId()));
-            
-            return result;
-        } else {
-            throw new AccessDeniedException();
-        }
+
+        return result;
     }
     
     public boolean enableRunPumpOnceOrThrow(Long deviceId) throws InconsistentDataException {
-        Optional<DeviceConfig> config = deviceConfigRepository.findByDeviceIdAndKey(deviceId, DeviceConfigKey.RUN_PUMP_ONCE.toString());
-        if (config.isPresent()) {
-            DeviceConfig deviceConfig = config.get();
-            deviceConfig.setValue("TRUE");
-            deviceConfigRepository.save(deviceConfig);
-            return true;
-        } else {
-            throw new InconsistentDataException("No DeviceConfig to update");
-        }
+        DeviceConfig config = deviceConfigRepository.findByDeviceIdAndKey(deviceId, DeviceConfigKey.RUN_PUMP_ONCE.toString())
+                .orElseThrow(() -> new InconsistentDataException("No DeviceConfig to update"));
+        config.setValue("TRUE");
+        deviceConfigRepository.save(config);
+        return true;
     }
 }

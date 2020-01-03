@@ -35,11 +35,9 @@ public class PumpActionService {
     
     @CacheEvict(value = "PumpAction", allEntries = true)
     public void save(PumpActionReport report) {
-        if (deviceService.isTrustedDevice(report.getDevice())) {
-            report.setDevice(deviceService.findByToken(report.getDevice().getToken()));
-            pumpActionRepository.save(report);
-        } else {
-            throw new AccessDeniedException();
-        }
+        Device fetchedDevice = deviceService.findTrustedDevice(report.getDevice())
+                .orElseThrow(AccessDeniedException::new);
+        report.setDevice(fetchedDevice);
+        pumpActionRepository.save(report);
     }
 }

@@ -11,14 +11,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DeviceService {
-    
-    private final DeviceRepository deviceRepository;
-    
+
     @Autowired
-    public DeviceService(DeviceRepository deviceRepository) {
-        this.deviceRepository = deviceRepository;
-    }
-    
+    private DeviceRepository deviceRepository;
+
     public Optional<Device> findById(long id) {
         return deviceRepository.findById(id);
     }
@@ -26,19 +22,15 @@ public class DeviceService {
     public Optional<Device> findActiveById(long id) {
         return deviceRepository.findByIdAndEnabledTrue(id);
     }
-    
-    public boolean isTrustedDevice(Device device) {
+
+    public Optional<Device> findTrustedDevice(Device device) {
         if (device != null && device.getToken() != null) {
             Device deviceFromDatabase = deviceRepository.findByToken(device.getToken());
             if ((deviceFromDatabase != null) && deviceFromDatabase.getEnabled()) {
-                return true;
+                return Optional.of(deviceFromDatabase);
             }
         }
-        return false;
-    }
-    
-    public Device findByToken(String token) {
-        return deviceRepository.findByToken(token);
+        return Optional.empty();
     }
     
     public List<Device> findAllActive() {
@@ -50,7 +42,7 @@ public class DeviceService {
     }
     
     public Device saveOrThrow(Device device) throws InconsistentDataException {
-        Device devFromDb = this.findByToken(device.getToken());
+        Device devFromDb = deviceRepository.findByToken(device.getToken());
         if (Objects.isNull(devFromDb)) {
             return deviceRepository.save(device);
         } else {
