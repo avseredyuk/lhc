@@ -43,7 +43,18 @@ public class PumpActionReport {
     }
     
     public enum PumpActionType {
-        ENABLED, DISABLED
+        ENABLED(1),
+        DISABLED(0);
+
+        private int representation;
+
+        PumpActionType(int representation) {
+            this.representation = representation;
+        }
+
+        public int getRepresentation() {
+            return representation;
+        }
     }
     
 }

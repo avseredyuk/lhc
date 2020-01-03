@@ -25,10 +25,7 @@ public class DeviceService {
 
     public Optional<Device> findTrustedDevice(Device device) {
         if (device != null && device.getToken() != null) {
-            Device deviceFromDatabase = deviceRepository.findByToken(device.getToken());
-            if ((deviceFromDatabase != null) && deviceFromDatabase.getEnabled()) {
-                return Optional.of(deviceFromDatabase);
-            }
+            return deviceRepository.findByTokenAndEnabledTrue(device.getToken());
         }
         return Optional.empty();
     }

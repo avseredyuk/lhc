@@ -115,14 +115,9 @@ public class HistoryService {
             .reportDataType(PUMP.toString())
             .data(pumpActionService.getLastReportsByDevice(device)
                 .stream()
-                .map(r -> new HistoryChartPoint(r.getDateTime().getTime(), mapPumpActionType(r.getActionType())))
+                .map(r -> new HistoryChartPoint(r.getDateTime().getTime(), r.getActionType().getRepresentation()))
                 .collect(Collectors.toList())
             )
             .build();
     }
-    
-    private static int mapPumpActionType(PumpActionType actionType) {
-        return actionType == PumpActionType.ENABLED ? 1 : 0;
-    }
-    
 }
