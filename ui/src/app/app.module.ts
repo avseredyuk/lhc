@@ -7,6 +7,7 @@ import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
 import {TokenInterceptor} from "./core/interceptor";
 import {ReactiveFormsModule} from "@angular/forms";
 import {LoginComponent} from "./login/login.component";
+import {LogoutComponent} from "./logout/logout.component";
 import {DataService} from "./data.service";
 import {DevicesComponent} from "./devices/devices.component";
 import {DeviceComponent} from "./device/device.component";
@@ -23,6 +24,7 @@ import {EditPlantMaintenanceComponent} from "./edit-plant-maintenance/edit-plant
     AppComponent,
     SidebarComponent,
     LoginComponent,
+    LogoutComponent,
     DevicesComponent,
     DeviceComponent,
     AddDeviceComponent,

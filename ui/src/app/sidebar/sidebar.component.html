@@ -25,6 +25,11 @@
 				<i class="material-icons">settings</i>
 			</a>
 		</li>
+		<li *ngIf="hasToken()">
+			<a routerLink="logout" [class.activated]="currentUrl == '/logout'">
+				<i class="material-icons">exit_to_app</i>
+			</a>
+		</li>
 		<li *ngIf="!hasToken()">
 			<a routerLink="login" [class.activated]="currentUrl == '/login'">
 				<i class="material-icons">account_circle</i>
