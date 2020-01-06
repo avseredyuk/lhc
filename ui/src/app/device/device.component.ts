@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Device, DeviceReportDataExclusion} from "../model/device";
 import {ApiResult} from "../model/api-result";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-device',
@@ -16,7 +17,8 @@ export class DeviceComponent implements OnInit {
   notifications: Array<AppNotification> = [];
   device: Device;
 
-  constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService, private route: ActivatedRoute) {
+  constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService, 
+    private route: ActivatedRoute, private location: Location) {
     this.route.params.subscribe(params => this.device = params.id)
   }
 
@@ -55,6 +57,10 @@ export class DeviceComponent implements OnInit {
         }
       );
     }
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   hasNotifications(): Boolean {
