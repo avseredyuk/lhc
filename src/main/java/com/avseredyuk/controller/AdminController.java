@@ -204,32 +204,10 @@ public class AdminController {
         plantMaintenanceService.delete(plantMaintenanceId);
     }
     
-    //todo: FE/BE: maintenance chart: ph, tds, volume (not as component but as pop-up?)
-    //todo: FE/BE: maintenance pagination
     //todo: BE: set up proper logging via log4j
-    //todo: FE: add current timestamp as last point or max tick of history chart
-    //todo: FE/BE: store getConfig ping from devices and show it instead of last reports at Status ?
-    
-    //todo: FE: at mobile charts fucked, looks ~OK at horizontal layout
-    
     //todo: FE: routing protection to login via guard
-    //todo: FE: issue [1]load with expired token [2]it shows sidebar authenticated [3]click on protected route(ex. devices) [4]shows login (i.e.) no auth [5] sidebar shows admin icon
-    //todo: FE: logout functionality/button
-    
-    //todo: FE: make device page more compact  ?list->table layout?
-    
-    //todo: ??: add column to device_cfg table for distinction between ui config for device & esp config for device -- FOR storing COLORS for for each chart line for each device
-    
     //todo: FE: replace confirm() calls with something more beautiful
-    
     //todo: move from handmade security for DeviceController->service to some spring security stuff
-    
-    //todo: i18n in angular
-    
-    //todo: FE/BE: live update of history chart
-    
-    //todo: BE/FE: admin component of last reports by device ?? -- via some tabs view
-    
     //todo: edit device
     //todo: edit device  ? device_cfg ?
     //todo: edit device  ? report_exclusions ?
@@ -239,8 +217,5 @@ public class AdminController {
     //todo: delete device  ? report_exclusions ? -- remove with device
     //todo: edit config  -- in place ?
     //todo: delete config w/confirmation
-    //todo: edit plant_maintenance & its details
-    
-    //todo: TechDebt: add not null constraint to device_id of pump_action, sensor_report, bootup
-    
+    //todo: ~edit plant_maintenance & its details
 }

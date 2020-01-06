@@ -1,0 +1,23 @@
+.contentul {
+    list-style-type: none;
+    margin:0;padding:0;
+
+    li {
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 8px;
+
+        a {
+            font-size: 1.5em;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    }
+}
+.device-enabled {
+	color:#00A8FF;
+}
+.device-disabled {
+	color:#9F9F9F;
+}

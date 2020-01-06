@@ -8,13 +8,11 @@
 	<div class="panel-body">
 		<ul class="contentul">
 			<li *ngFor="let device of devices">
-				<a routerLink="/devices/{{device.id}}">{{ device.name }}</a>
+				<a [ngClass]="(device.enabled==true)?'device-enabled':'device-disabled'" routerLink="/devices/{{device.id}}">{{ device.name }}</a>
 			</li>
 		</ul>
-
 		<div class="col-md-12">
 			<a routerLink="/add-device" class="btn btn-info btn-lg" role="button">Add</a>	
 		</div>
-
 	</div>
 </div>

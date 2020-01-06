@@ -5,6 +5,11 @@ export class Device {
   enabled: boolean;
   config: Array<DeviceConfig>;
   exclusions: Array<DeviceReportDataExclusion>;
+
+  isDeviceActive(): Boolean {
+    console.log(this);
+    return this.enabled;
+  }
 }
 
 export class DeviceConfig {
