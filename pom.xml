@@ -186,7 +186,7 @@
             <phase>generate-sources</phase>
             <configuration>
               <workingDirectory>${project.basedir}/ui</workingDirectory>
-              <executable>ng</executable>
+              <executable>ng.cmd</executable>
               <arguments>
                 <argument>build</argument>
                 <argument>--prod</argument>
