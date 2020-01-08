@@ -15,9 +15,6 @@
 
 		<div class="tab-content" *ngFor="let deviceName of objectKeys(plantMaintenances); index as i">
 			<div #actualTab id="{{ deviceName }}" class="tab-pane" [ngClass]="{'active': i == 0}">
-				<div class="col-md-12">
-					<a routerLink='/add-plant-maintenance/{{plantMaintenances[deviceName].deviceId}}' class="btn btn-info btn-lg" role="button">Add</a>	
-				</div>
 				<table class="table">
 					<thead>
 						<tr>

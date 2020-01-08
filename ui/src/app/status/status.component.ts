@@ -13,6 +13,7 @@ export class StatusComponent implements OnInit {
 	status: Status;
 	gaugeObjects: Array<Gauge> = [];
 	gaugesInitialized: Boolean = false;
+	timer: any;
 
 	@ViewChildren('gauges') gauges: QueryList<any>;
 
@@ -42,9 +43,15 @@ export class StatusComponent implements OnInit {
 		this.dataService.getStatus().subscribe(
 			data => this.status = data
 			);
-		setInterval(() => {
+		this.timer = setInterval(() => {
 			this.updateGauges();
 		}, 60000);
+	}
+
+	ngOnDestroy() {
+		if (this.timer) {
+			clearInterval(this.timer);
+		}
 	}
 
 	ngAfterViewInit() {
