@@ -12,7 +12,6 @@ public class CacheService {
 
     public boolean clearCache() {
         for (String name : cacheManager.getCacheNames()) {
-            System.out.println(name);
             cacheManager.getCache(name).clear();
         }
         return true;
