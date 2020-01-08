@@ -1,11 +1,5 @@
 package com.avseredyuk.service;
 
-import static com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType.ABS_HUMIDITY;
-import static com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType.AIR_TEMP;
-import static com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType.HUMIDITY;
-import static com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType.PUMP;
-import static com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType.WATER_TEMP;
-
 import com.avseredyuk.dto.internal.StatusDto;
 import com.avseredyuk.dto.internal.StatusDto.GaugeDto;
 import com.avseredyuk.model.BootupReport;
@@ -13,7 +7,9 @@ import com.avseredyuk.model.Device;
 import com.avseredyuk.model.DeviceReportDataExclusion;
 import com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType;
 import com.avseredyuk.model.PumpActionReport;
-import com.avseredyuk.model.SensorReport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,8 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
+import static com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType.ABS_HUMIDITY;
+import static com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType.AIR_TEMP;
+import static com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType.HUMIDITY;
+import static com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType.PUMP;
+import static com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType.WATER_TEMP;
 
 @Service
 public class StatusService {
@@ -31,6 +31,8 @@ public class StatusService {
     private DeviceService deviceService;
     @Autowired
     private SensorReportService sensorReportService;
+    @Autowired
+    private PingService pingService;
     @Autowired
     private BootupService bootupService;
     @Autowired
@@ -117,16 +119,11 @@ public class StatusService {
         });
         statusDto.setLastPumps(pumps);
     
-        Map<String, Long> reports = new HashMap<>();
-        activeDevices.forEach(d -> {
-            SensorReport sensorReport = sensorReportService.getLastReportByDevice(d);
-            if (sensorReport != null) {
-                reports.put(d.getName(),
-                    sensorReport.getDateTime().getTime()
-                );
-            }
-        });
-        statusDto.setLastReports(reports);
+        Map<String, Long> pings = new HashMap<>();
+        activeDevices.forEach(d ->
+                pingService.getLastPingByDeviceId(d.getId())
+                        .ifPresent(ping -> pings.put(d.getName(), ping.getDateTime().getTime())));
+        statusDto.setLastPings(pings);
         
         return statusDto;
     }

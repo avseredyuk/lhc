@@ -6,30 +6,29 @@ import com.avseredyuk.model.Device;
 import com.avseredyuk.model.DeviceConfig;
 import com.avseredyuk.model.DeviceConfig.DeviceConfigKey;
 import com.avseredyuk.repository.DeviceConfigRepository;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
 public class DeviceConfigService {
     private static final String CONFIG_HASH = "CONFIG_HASH";
-    private final DeviceService deviceService;
-    private final DeviceConfigRepository deviceConfigRepository;
-    
+
     @Autowired
-    public DeviceConfigService(DeviceConfigRepository deviceConfigRepository,
-        DeviceService deviceService) {
-        this.deviceConfigRepository = deviceConfigRepository;
-        this.deviceService = deviceService;
-    }
+    private DeviceService deviceService;
+    @Autowired
+    private DeviceConfigRepository deviceConfigRepository;
+    @Autowired
+    private PingService pingService;
     
     public Map<String, String> getConfig(Device device) {
         Device fetchedDevice = deviceService.findTrustedDevice(device)
                 .orElseThrow(AccessDeniedException::new);
+
+        pingService.createPing(fetchedDevice.getId());
 
         Map<String, String> result = fetchedDevice.getConfig()
                 .stream()

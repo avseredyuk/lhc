@@ -1,9 +1,10 @@
 package com.avseredyuk.dto.internal;
 
-import java.util.List;
-import java.util.Map;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
+import java.util.Map;
 
 @Data
 public class StatusDto {
@@ -11,7 +12,7 @@ public class StatusDto {
     private List<GaugeDto> gauges;
     private Map<String, List<Long>> lastBootups;
     private Map<String, Long> lastPumps;
-    private Map<String, Long> lastReports;
+    private Map<String, Long> lastPings;
     
     
     @Data

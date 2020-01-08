@@ -1,6 +1,6 @@
 export class Status {
   gauges: Array<GaugeData>;
-  lastReports: Array<Object>;
+  lastPings: Array<Object>;
   lastPumps: Array<Object>;
   lastBootups: Array<Object>;
 }

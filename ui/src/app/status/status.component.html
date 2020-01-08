@@ -12,14 +12,14 @@
 	<div *ngIf="status">
 		<div class="col-xs-12 col-sm-8 col-md-4 col-lg-4">
 			<div class="panel panel-info">
-				<div class="panel-heading">Last reports</div>
+				<div class="panel-heading">Last pings</div>
 				<div class="panel-body">
-					<div *ngIf="!hasReports()">
+					<div *ngIf="!hasPings()">
 						No data
 					</div>
-					<ul class="list-group" *ngFor="let lastReport of objectKeys(status.lastReports)">
-						<li class="list-group-item active">{{ lastReport }}</li>
-						<li class="list-group-item">{{ formatTimestamp(status.lastReports[lastReport]) }}</li>
+					<ul class="list-group" *ngFor="let lastPing of objectKeys(status.lastPings)">
+						<li class="list-group-item active">{{ lastPing }}</li>
+						<li class="list-group-item">{{ formatTimestamp(status.lastPings[lastPing]) }}</li>
 					</ul>
 				</div>
 			</div>

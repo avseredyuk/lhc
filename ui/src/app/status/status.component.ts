@@ -83,7 +83,7 @@ export class StatusComponent implements OnInit {
 				gauge.set(originalValue);
 				gauge.canvas.nextElementSibling.innerText = String(roundedValue) + this.formatGaugeMeasureUnit(data.gauges[i].dataType);
 			});
-			this.status.lastReports = data.lastReports;
+			this.status.lastPings = data.lastPings;
 			this.status.lastPumps = data.lastPumps;
 			this.status.lastBootups = data.lastBootups;
 		});
@@ -144,8 +144,8 @@ export class StatusComponent implements OnInit {
 
 	}
 
-	hasReports(): Boolean {
-		return this.status.lastReports && Object.keys(this.status.lastReports).length > 0;
+	hasPings(): Boolean {
+		return this.status.lastPings && Object.keys(this.status.lastPings).length > 0;
 	}
 
 	hasPumps(): Boolean {
