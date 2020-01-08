@@ -10,7 +10,7 @@ import java.util.Map;
 public class StatusDto {
     
     private List<GaugeDto> gauges;
-    private Map<String, List<Long>> lastBootups;
+    private Map<String, Long> lastBootups;
     private Map<String, Long> lastPumps;
     private Map<String, Long> lastPings;
     

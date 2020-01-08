@@ -1,13 +1,14 @@
 package com.avseredyuk.repository;
 
 import com.avseredyuk.model.BootupReport;
-import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public interface BootupRepository extends CrudRepository<BootupReport, Long> {
     
-    List<BootupReport> findFirst3ByDeviceIdOrderByIdDesc(Long deviceId);
+    Optional<BootupReport> findFirstByDeviceIdOrderByIdDesc(Long deviceId);
 
 }

@@ -2,7 +2,6 @@ package com.avseredyuk.service;
 
 import com.avseredyuk.dto.internal.StatusDto;
 import com.avseredyuk.dto.internal.StatusDto.GaugeDto;
-import com.avseredyuk.model.BootupReport;
 import com.avseredyuk.model.Device;
 import com.avseredyuk.model.DeviceReportDataExclusion;
 import com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,19 +88,10 @@ public class StatusService {
             .collect(Collectors.toList())
         );
         
-        Map<String, List<Long>> bootups = new HashMap<>();
-        activeDevices.forEach(d -> {
-            List<BootupReport> bootupReports = bootupService.getLastReportsByDevice(d);
-            if (bootupReports.size() > 0) {
-                bootups.put(d.getName(),
-                    bootupReports
-                        .stream()
-                        .map(BootupReport::getDateTime)
-                        .map(Date::getTime)
-                        .collect(Collectors.toList())
-                );
-            }
-        });
+        Map<String, Long> bootups = new HashMap<>();
+        activeDevices.forEach(d -> bootupService.getLastReportByDevice(d)
+                .ifPresent(bootup -> bootups.put(d.getName(), bootup.getDateTime().getTime())
+        ));
         statusDto.setLastBootups(bootups);
     
         Map<String, Long> pumps = new HashMap<>();

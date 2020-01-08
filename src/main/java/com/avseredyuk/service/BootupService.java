@@ -4,12 +4,12 @@ import com.avseredyuk.exception.AccessDeniedException;
 import com.avseredyuk.model.BootupReport;
 import com.avseredyuk.model.Device;
 import com.avseredyuk.repository.BootupRepository;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class BootupService {
@@ -23,8 +23,8 @@ public class BootupService {
     }
     
     @Cacheable("BootupReport")
-    public List<BootupReport> getLastReportsByDevice(Device device) {
-        return bootupRepository.findFirst3ByDeviceIdOrderByIdDesc(device.getId());
+    public Optional<BootupReport> getLastReportByDevice(Device device) {
+        return bootupRepository.findFirstByDeviceIdOrderByIdDesc(device.getId());
     }
 
     @CacheEvict(value = "BootupReport", allEntries = true)
