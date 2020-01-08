@@ -45,7 +45,7 @@ export class DeviceComponent implements OnInit {
   enableRunPumpOnce() {
   	if (confirm('Are you sure you want to run pump for device "' + this.device.name + '" ?')) {
       this.dataService.enableRunPumpOnce(this.device).subscribe(
-        (data: ApiResult<Device>) => {
+        (data: ApiResult<Boolean>) => {
           this.notifications = [new AppNotification('Pump enabled', AppNotificationType.SUCCESS)];
         },
         error => { // HttpErrorResponse

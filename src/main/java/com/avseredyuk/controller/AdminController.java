@@ -21,6 +21,8 @@ import com.avseredyuk.service.HistoryService;
 import com.avseredyuk.service.PlantMaintenanceService;
 import java.util.List;
 import java.util.Map;
+
+import com.avseredyuk.service.internal.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -61,6 +63,8 @@ public class AdminController {
     private PlantMaintenanceMapper plantMaintenanceMapper;
     @Autowired
     private PlantMaintenanceService plantMaintenanceService;
+    @Autowired
+    private CacheService cacheService;
     
     @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
     public ResponseEntity generate(@RequestBody LoginDto loginDto) {
@@ -202,6 +206,14 @@ public class AdminController {
     )
     public void deleteMaintenance(@PathVariable Long plantMaintenanceId) {
         plantMaintenanceService.delete(plantMaintenanceId);
+    }
+
+    @RequestMapping(
+            value = "/clearcache",
+            method = RequestMethod.POST
+    )
+    public ResponseEntity<ApiResult<Boolean>> clearCache() {
+        return ResponseEntity.ok(new ApiResult<>(cacheService.clearCache()));
     }
     
     //todo: BE: set up proper logging via log4j

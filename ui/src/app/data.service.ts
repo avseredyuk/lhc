@@ -45,8 +45,8 @@ export class DataService {
     return this.http.post<ApiResult<Device>>(environment.apiUrl + 'admin/devices', device);
   }
 
-  enableRunPumpOnce(device: Device): Observable<ApiResult<Device>> {
-    return this.http.put<ApiResult<Device>>(environment.apiUrl + 'admin/devices/' + device.id + '/runPumpOnce', '');
+  enableRunPumpOnce(device: Device): Observable<ApiResult<Boolean>> {
+    return this.http.put<ApiResult<Boolean>>(environment.apiUrl + 'admin/devices/' + device.id + '/runPumpOnce', '');
   }
 
   getHistory(): Observable<History[]> {
@@ -69,5 +69,11 @@ export class DataService {
 
   deletePlantMaintenance(plantMaintenance: PlantMaintenance) {
     return this.http.delete(environment.apiUrl + 'admin/maintenance/' + plantMaintenance.id);
+  }
+
+  /* System */
+
+  clearCache(): Observable<ApiResult<Boolean>> {
+    return this.http.post<ApiResult<Boolean>>(environment.apiUrl + 'admin/clearcache', '');
   }
 }
