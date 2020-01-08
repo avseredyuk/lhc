@@ -19,7 +19,7 @@
 					</div>
 					<ul class="list-group" *ngFor="let lastPing of objectKeys(status.lastPings)">
 						<li class="list-group-item active">{{ lastPing }}</li>
-						<li class="list-group-item">{{ formatTimestamp(status.lastPings[lastPing]) }}</li>
+						<li class="list-group-item">{{ formatTimeInterval(status.lastPings[lastPing]) }} / {{ formatTimestamp(status.lastPings[lastPing]) }}</li>
 					</ul>
 				</div>
 			</div>
@@ -33,7 +33,7 @@
 					</div>
 					<ul class="list-group" *ngFor="let lastPump of objectKeys(status.lastPumps)">
 						<li class="list-group-item active">{{ lastPump }}</li>
-						<li class="list-group-item">{{ formatTimestamp(status.lastPumps[lastPump]) }}</li>
+						<li class="list-group-item">{{ formatTimeInterval(status.lastPumps[lastPump]) }} / {{ formatTimestamp(status.lastPumps[lastPump]) }}</li>
 					</ul>
 				</div>
 			</div>
@@ -47,7 +47,7 @@
 					</div>
 					<ul class="list-group" *ngFor="let lastBootup of objectKeys(status.lastBootups)">
 						<li class="list-group-item active">{{ lastBootup }}</li>
-						<li class="list-group-item" *ngFor="let timestamp of status.lastBootups[lastBootup]">{{ formatTimestamp(timestamp) }}</li>
+						<li class="list-group-item" *ngFor="let timestamp of status.lastBootups[lastBootup]">{{ formatTimeInterval(timestamp) }} / {{ formatTimestamp(timestamp) }}</li>
 					</ul>
 				</div>
 			</div>
