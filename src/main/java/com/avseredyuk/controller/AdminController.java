@@ -6,7 +6,6 @@ import com.avseredyuk.dto.internal.ConfigDto;
 import com.avseredyuk.dto.internal.DeviceDto;
 import com.avseredyuk.dto.internal.LoginDto;
 import com.avseredyuk.dto.internal.PlantMaintenanceDto;
-import com.avseredyuk.dto.internal.PlantMaintenanceWrapperDto;
 import com.avseredyuk.exception.InconsistentDataException;
 import com.avseredyuk.mapper.internal.ConfigMapper;
 import com.avseredyuk.mapper.internal.DeviceMapper;
@@ -19,11 +18,10 @@ import com.avseredyuk.service.DeviceConfigService;
 import com.avseredyuk.service.DeviceService;
 import com.avseredyuk.service.HistoryService;
 import com.avseredyuk.service.PlantMaintenanceService;
-import java.util.List;
-import java.util.Map;
-
 import com.avseredyuk.service.internal.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,6 +35,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
+
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -173,13 +174,14 @@ public class AdminController {
         plantMaintenance.getDetails().forEach(d -> d.setPlantMaintenance(plantMaintenance));
         return ResponseEntity.ok(new ApiResult<>(plantMaintenanceMapper.toDto(plantMaintenanceService.saveOrThrow(plantMaintenance))));
     }
-    
+
     @RequestMapping(
-        value = "/maintenance",
+        value = "/device/{deviceId}/maintenance",
         method = RequestMethod.GET
     )
-    public Map<String, PlantMaintenanceWrapperDto> getAllMaintenance() {
-        return plantMaintenanceService.findAllByActiveDevices();
+    public Page<PlantMaintenanceDto> getAllMaintenancesByDevice(@PathVariable Long deviceId,
+                                                                @NotNull final Pageable pageable) {
+        return plantMaintenanceService.findAllByDeviceIdPaginated(deviceId, pageable);
     }
     
     @RequestMapping(

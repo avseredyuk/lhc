@@ -8,34 +8,27 @@
 	<div class="panel-heading"><h1>Add Plant Maintenance</h1></div>
 	<div class="panel-body">
 
-		<form *ngIf="devices" [formGroup]="addForm" (ngSubmit)="onSubmit()">
+		<form [formGroup]="addForm" (ngSubmit)="onSubmit()">
 
 			<div class="form-row">
 
 				<div class="col-lg-8 col-lg-offset-2">
 
-					<div class="col-lg-3">
+					<div class="col-lg-4">
 						<input type="text" [formControl]="phCtrl" placeholder="pH" name="ph" class="form-control" id="ph">
 						<div class="error" *ngIf="phCtrl.hasError('required') && phCtrl.touched">pH is required</div>
 					</div>
 
-					<div class="col-lg-3">
+					<div class="col-lg-4">
 						<input type="text" [formControl]="tdsCtrl" placeholder="TDS" name="tds" class="form-control" id="tds">
 						<div class="error" *ngIf="tdsCtrl.hasError('required') && tdsCtrl.touched">TDS is required</div>
 					</div>
 
-					<div class="col-lg-2">
+					<div class="col-lg-3">
 						<select class="custom-select" [formControl]="typeCtrl" name="type" class="form-control" id="type">
 							<option *ngFor="let dataType of dataTypes" value="{{ dataType }}">{{ dataType }}</option>
 						</select>
 						<div class="error" *ngIf="typeCtrl.hasError('required') && typeCtrl.touched">Type is required</div>
-					</div>
-
-					<div class="col-lg-3">
-						<select class="custom-select" [formControl]="deviceCtrl" name="device" class="form-control" id="device">
-							<option *ngFor="let device of devices" value="{{ device.id }}">{{ device.name }}</option>
-						</select>
-						<div class="error" *ngIf="deviceCtrl.hasError('required') && deviceCtrl.touched">Device is required</div>
 					</div>
 
 					<div class="col-lg-1">

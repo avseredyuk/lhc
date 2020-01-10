@@ -16,11 +16,6 @@
 			</a>
 		</li>
 		<li *ngIf="hasToken()">
-			<a routerLink="maintenance" [class.activated]="isMaintenanceGroup()">
-				<i class="material-icons">local_florist</i>
-			</a>
-		</li>
-		<li *ngIf="hasToken()">
 			<a routerLink="settings" [class.activated]="currentUrl == '/settings'">
 				<i class="material-icons">settings</i>
 			</a>

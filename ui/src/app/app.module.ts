@@ -15,7 +15,7 @@ import {AddDeviceComponent} from "./add-device/add-device.component";
 import {HistoryComponent} from "./history/history.component";
 import {SettingsComponent} from "./settings/settings.component";
 import {StatusComponent} from "./status/status.component";
-import {PlantMaintenancesComponent} from "./plant-maintenances/plant-maintenances.component";
+import {PlantMaintenanceComponent} from "./plant-maintenance/plant-maintenance.component";
 import {AddPlantMaintenanceComponent} from "./add-plant-maintenance/add-plant-maintenance.component";
 import {EditPlantMaintenanceComponent} from "./edit-plant-maintenance/edit-plant-maintenance.component";
 
@@ -31,7 +31,7 @@ import {EditPlantMaintenanceComponent} from "./edit-plant-maintenance/edit-plant
     HistoryComponent,
     SettingsComponent,
     StatusComponent,
-    PlantMaintenancesComponent,
+    PlantMaintenanceComponent,
     AddPlantMaintenanceComponent,
     EditPlantMaintenanceComponent,
   ],

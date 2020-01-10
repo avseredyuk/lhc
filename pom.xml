@@ -21,7 +21,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <jackson.version>2.10.1</jackson.version>
     <mapstruct.version>1.2.0.Final</mapstruct.version>
-    <lombok.version>1.16.18</lombok.version>
+    <lombok.version>1.18.10</lombok.version>
     <commons-codec.version>1.11</commons-codec.version>
     <jsonwebtoken.version>0.9.1</jsonwebtoken.version>
     <jaxb.version>2.2.11</jaxb.version>

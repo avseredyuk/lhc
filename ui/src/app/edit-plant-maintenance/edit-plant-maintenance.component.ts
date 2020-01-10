@@ -19,12 +19,10 @@ export class EditPlantMaintenanceComponent implements OnInit {
   notifications: Array<AppNotification> = [];
   //todo: same list as in add maintenance - export it to somewhere
   dataTypes: Array<string> = ['FULL', 'SAMPLE', 'PARTIAL'];
-  devices: Array<Device>;
   editForm: FormGroup;
   phCtrl: FormControl;
   tdsCtrl: FormControl;
   typeCtrl: FormControl;
-  deviceCtrl: FormControl;
   newDetailKeyCtrl: FormControl;
   newDetailValueCtrl: FormControl;
 
@@ -32,6 +30,7 @@ export class EditPlantMaintenanceComponent implements OnInit {
   	private componentCommunicationService: ComponentCommunicationService) {
   	this.route.params.subscribe(params => this.maintenance = params.id)
   }
+//todo: update button not working when value is untouched but actually present
 
   ngOnInit() {
   	if (!window.localStorage.getItem('token')) {
@@ -42,7 +41,6 @@ export class EditPlantMaintenanceComponent implements OnInit {
     this.phCtrl = this.formBuilder.control('', [Validators.required]);
     this.tdsCtrl = this.formBuilder.control('', [Validators.required]);
     this.typeCtrl = this.formBuilder.control('', [Validators.required]);
-    this.deviceCtrl = this.formBuilder.control('', [Validators.required]);
     this.newDetailKeyCtrl = this.formBuilder.control('', []);
     this.newDetailValueCtrl = this.formBuilder.control('', []);
 
@@ -50,7 +48,6 @@ export class EditPlantMaintenanceComponent implements OnInit {
     	ph: this.phCtrl,
     	tds: this.tdsCtrl,
     	type: this.typeCtrl,
-    	device: this.deviceCtrl,
     	newDetailKey: this.newDetailKeyCtrl,
     	newDetailValue: this.newDetailValueCtrl
     });
@@ -58,14 +55,7 @@ export class EditPlantMaintenanceComponent implements OnInit {
     this.dataService.getPlantMaintenance(this.maintenance).subscribe(
       (data: ApiResult<PlantMaintenance>) => {
         this.maintenance = data.data;
-
-		this.editForm.controls['type'].setValue(this.maintenance.maintenanceType);
-
-		this.dataService.getActiveDevices().subscribe(data => {
-    		this.devices = data;
-    		this.editForm.controls['device'].setValue(this.maintenance.deviceId);
-    	});
-
+        this.editForm.controls['type'].setValue(this.maintenance.maintenanceType);
       },
       error => { // HttpErrorResponse
         if (error.status === 404) {
@@ -75,7 +65,7 @@ export class EditPlantMaintenanceComponent implements OnInit {
         }
         this.router.navigate(['maintenance']);
       }
-    );
+      );
   }
 
   hasNotifications(): Boolean {

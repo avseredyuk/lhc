@@ -7,6 +7,7 @@ import {History} from "./model/history";
 import {Configuration} from "./model/configuration";
 import {ApiResult} from "./model/api-result";
 import {Status} from "./model/status";
+import {Page} from "./model/page";
 import {PlantMaintenance} from "./model/plant-maintenance";
 import {environment} from "../environments/environment";
 
@@ -55,8 +56,8 @@ export class DataService {
 
   /* Plant Maintenance */
 
-  getPlantMaintenances(): Observable<any> { //todo: why here any?
-    return this.http.get<any>(environment.apiUrl + 'admin/maintenance');
+  getPlantMaintenancesByDeviceId(deviceId, page): Observable<Page<PlantMaintenance[]>> {
+    return this.http.get<Page<PlantMaintenance[]>>(environment.apiUrl + 'admin/device/' + deviceId + '/maintenance?size=10&page=' + page);
   }
 
   getPlantMaintenance(plantMaintenanceId): Observable<ApiResult<PlantMaintenance>> {

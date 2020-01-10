@@ -1,14 +1,14 @@
 package com.avseredyuk.service;
 
-import com.avseredyuk.dto.internal.PlantMaintenanceWrapperDto;
+import com.avseredyuk.dto.internal.PlantMaintenanceDto;
 import com.avseredyuk.exception.DeviceNotFoundException;
 import com.avseredyuk.mapper.internal.PlantMaintenanceMapper;
 import com.avseredyuk.model.PlantMaintenance;
 import com.avseredyuk.repository.PlantMaintenanceRepository;
-import java.util.Map;
-import java.util.stream.Collectors;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,13 +32,10 @@ public class PlantMaintenanceService {
     public PlantMaintenance findOne(Long plantMaintenanceId) {
         return plantMaintenanceRepository.findOne(plantMaintenanceId);
     }
-    
-    public Map<String, PlantMaintenanceWrapperDto> findAllByActiveDevices() {
-        return deviceService.findAllActive().stream()
-            .map(d -> Pair.of(
-                d.getName(),
-                new PlantMaintenanceWrapperDto(d.getId(), plantMaintenanceMapper.toDtoList(plantMaintenanceRepository.findAllByDeviceIdOrderByDateTimeDesc(d.getId())))))
-            .collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
+
+    public Page<PlantMaintenanceDto> findAllByDeviceIdPaginated(Long deviceId, Pageable pageable) {
+        Page<PlantMaintenance> page =  plantMaintenanceRepository.findAllByDeviceIdOrderByDateTimeDesc(deviceId, pageable);
+        return new PageImpl<>(plantMaintenanceMapper.toDtoList(page.getContent()), pageable, page.getTotalElements());
     }
     
     public void update(PlantMaintenance plantMaintenance) {

@@ -14,20 +14,18 @@ import {PlantMaintenance, PlantMaintenanceDetail} from "../model/plant-maintenan
 export class AddPlantMaintenanceComponent implements OnInit {
 
   dataTypes: Array<string> = ['FULL', 'SAMPLE', 'PARTIAL'];
-  devices: Array<Device>;
   notifications: Array<AppNotification> = [];
   addForm: FormGroup;
   phCtrl: FormControl;
   tdsCtrl: FormControl;
   typeCtrl: FormControl;
-  deviceCtrl: FormControl;
   newDetailKeyCtrl: FormControl;
   newDetailValueCtrl: FormControl;
   newDetails: Array<PlantMaintenanceDetail> = [];
-  deviceIdToAddTo: number;
+  deviceId: number;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService, private route: ActivatedRoute) {
-  	this.route.params.subscribe(params => this.deviceIdToAddTo = params.id)
+  	this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit() {
@@ -39,7 +37,6 @@ export class AddPlantMaintenanceComponent implements OnInit {
     this.phCtrl = this.formBuilder.control('', [Validators.required]);
     this.tdsCtrl = this.formBuilder.control('', [Validators.required]);
     this.typeCtrl = this.formBuilder.control(this.dataTypes[1], [Validators.required]);
-    this.deviceCtrl = this.formBuilder.control('', [Validators.required]);
     this.newDetailKeyCtrl = this.formBuilder.control('', []);
     this.newDetailValueCtrl = this.formBuilder.control('', []);
 
@@ -47,14 +44,8 @@ export class AddPlantMaintenanceComponent implements OnInit {
     	ph: this.phCtrl,
     	tds: this.tdsCtrl,
     	type: this.typeCtrl,
-    	device: this.deviceCtrl,
     	newDetailKey: this.newDetailKeyCtrl,
     	newDetailValue: this.newDetailValueCtrl
-    });
-
-    this.dataService.getActiveDevices().subscribe(data => {
-    	this.devices = data;
-    	this.addForm.controls['device'].setValue(this.deviceIdToAddTo);
     });
   }
 
@@ -72,15 +63,15 @@ export class AddPlantMaintenanceComponent implements OnInit {
     }
 
     let newPm = new PlantMaintenance();
-    newPm.deviceId = parseInt(this.addForm.controls['device'].value);
+    newPm.deviceId = this.deviceId;
     newPm.maintenanceType = this.addForm.controls['type'].value;
-    newPm.ph = parseFloat(this.addForm.controls['ph'].value);
+    newPm.ph = parseFloat(this.addForm.controls['ph'].value);//todo: it parses string into null, it should validate it or at BE
     newPm.tds = parseFloat(this.addForm.controls['tds'].value);
     newPm.details = this.newDetails;
 
     this.dataService.createPlantMaintenance(newPm)
       .subscribe( data => {
-        this.router.navigate(['maintenance']);
+        this.router.navigate(['devices/' + this.deviceId + '/maintenance']);
       });
   }
 

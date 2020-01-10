@@ -6,7 +6,7 @@ import {DevicesComponent} from "./devices/devices.component";
 import {DeviceComponent} from "./device/device.component";
 import {AddDeviceComponent} from "./add-device/add-device.component";
 import {HistoryComponent} from "./history/history.component";
-import {PlantMaintenancesComponent} from "./plant-maintenances/plant-maintenances.component";
+import {PlantMaintenanceComponent} from "./plant-maintenance/plant-maintenance.component";
 import {AddPlantMaintenanceComponent} from "./add-plant-maintenance/add-plant-maintenance.component";
 import {EditPlantMaintenanceComponent} from "./edit-plant-maintenance/edit-plant-maintenance.component";
 import {SettingsComponent} from "./settings/settings.component";
@@ -42,8 +42,8 @@ const routes: Routes = [
 		component: HistoryComponent
 	},
 	{
-		path: 'maintenance',
-		component: PlantMaintenancesComponent
+		path: 'devices/:id/maintenance',
+		component: PlantMaintenanceComponent
 	},
 	{
 		path: 'add-plant-maintenance/:id',

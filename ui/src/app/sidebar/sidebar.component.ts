@@ -36,21 +36,4 @@ export class SidebarComponent implements OnInit {
     }
     return false;
   }
-
-  isMaintenanceGroup(): Boolean {
-    let arr = [
-    "/maintenance", // list
-    "/add-plant-maintenance", // add maintenance
-    "/edit-plant-maintenance/" // edit maintenance
-    ];
-    if (this.currentUrl) {
-      for (var i = 0, len = arr.length; i < len; i++) {
-        if (this.currentUrl.includes(arr[i])) {
-          return true;
-        }
-      }
-    }
-
-    return false;
-  }
 }

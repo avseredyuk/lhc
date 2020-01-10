@@ -6,15 +6,8 @@
 <div class="panel panel-info">
 	<div class="panel-heading"><h1>Plant Maintenance</h1></div>
 	<div class="panel-body">
-
-		<ul class="nav nav-tabs">
-			<li #tabHeader id="{{ deviceName }}" [ngClass]="{'active': i == 0}" *ngFor="let deviceName of objectKeys(plantMaintenances); index as i">
-				<a id="{{ deviceName }}" (click)="onTabHeadClick($event)" style="cursor: pointer"> {{ deviceName }}</a>
-			</li>
-		</ul>
-
-		<div class="tab-content" *ngFor="let deviceName of objectKeys(plantMaintenances); index as i">
-			<div #actualTab id="{{ deviceName }}" class="tab-pane" [ngClass]="{'active': i == 0}">
+		<div class="tab-content">
+			<div>
 				<table class="table">
 					<thead>
 						<tr>
@@ -27,7 +20,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr *ngFor="let m of plantMaintenances[deviceName].maintenances">
+						<tr *ngFor="let m of plantMaintenancesForDevice">
 							<td>{{ formatTimestamp(m.d) }}</td>
 							<td>{{ m.ph }}</td>
 							<td>{{ m.tds }}</td>
@@ -41,12 +34,20 @@
 								</table>
 							</td>
 							<td><a class="btn btn-warning btn-md" type="button" routerLink="/edit-plant-maintenance/{{m.id}}"><i class="material-icons md-18">edit</i></a>
-								&nbsp;<button class="btn btn-danger btn-md" type="button" (click)="deleteMaintenance(deviceName, m)"><i class="material-icons md-18">delete</i></button></td>
+								&nbsp;<button class="btn btn-danger btn-md" type="button" (click)="deleteMaintenance(m)"><i class="material-icons md-18">delete</i></button></td>
 						</tr>
 					</tbody>
 				</table>
 				<div class="col-md-12">
-					<a routerLink='/add-plant-maintenance/{{plantMaintenances[deviceName].deviceId}}' class="btn btn-info btn-lg" role="button">Add</a>	
+					<nav aria-label="...">
+						<ul class="pagination pagination-lg">
+							<li *ngFor="let p of pages" class="page-item" [ngClass]="{'disabled': isCurrentPage(p)}">
+								<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
+							</li>
+						</ul>
+					</nav>
+					&nbsp;
+					<a routerLink='/add-plant-maintenance/{{ deviceId }}' class="btn btn-info btn-lg" role="button">Add</a>
 				</div>
 			</div>
 		</div>
