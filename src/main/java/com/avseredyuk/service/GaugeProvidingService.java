@@ -14,14 +14,13 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -63,7 +62,7 @@ public class GaugeProvidingService {
     @PostConstruct
     private void postConstruct() throws IOException {
         fonts = initFonts();
-        gaugePlaceholderData = Files.readAllBytes(Paths.get(gaugePlaceholderResource.getURI()));
+        gaugePlaceholderData = IOUtils.toByteArray(gaugePlaceholderResource.getInputStream());
     }
 
     @Cacheable("Gauge")
