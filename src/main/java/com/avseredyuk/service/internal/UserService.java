@@ -23,12 +23,10 @@ public class UserService implements UserDetailsService {
         if (user == null){
             throw new UsernameNotFoundException("Invalid username or password.");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority());
-    }
-    
-    private Set<SimpleGrantedAuthority> getAuthority() {
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        return authorities;
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getUsername())
+                .password(user.getPassword())
+                .roles(new String[] {"ACTUATOR"})
+                .build();
     }
 }
