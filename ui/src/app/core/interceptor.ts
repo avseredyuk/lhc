@@ -1,4 +1,4 @@
-import {
+  import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
@@ -10,18 +10,18 @@ import {Observable} from "rxjs/internal/Observable";
 import {Injectable} from "@angular/core";
 import {tap} from "rxjs/operators";
 import {Router} from "@angular/router";
+import {TokenCheckService} from "../token-check.service";
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private tokenCheckService: TokenCheckService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let token = window.localStorage.getItem('token');
-    if (token) {
+    if (!this.tokenCheckService.isExpiredToken()) {
       request = request.clone({
         setHeaders: {
-          Authorization: 'Bearer ' + token
+          Authorization: 'Bearer ' + this.tokenCheckService.getToken()
         }
       });
     }

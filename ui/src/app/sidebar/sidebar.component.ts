@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Router, NavigationEnd} from "@angular/router";
+import {TokenCheckService} from "../token-check.service";
 
 @Component({
   selector: 'app-sidebar',
@@ -10,7 +11,7 @@ export class SidebarComponent implements OnInit {
 
   currentUrl: string;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private tokenCheckService: TokenCheckService) {
     router.events.subscribe((_: NavigationEnd) => this.currentUrl = this.router.url)
   }
 
@@ -18,7 +19,7 @@ export class SidebarComponent implements OnInit {
   }
 
   hasToken() {
-    return window.localStorage.getItem('token');
+    return !this.tokenCheckService.isExpiredToken();
   }
 
   isDeviceGroup(): Boolean {

@@ -2,6 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {DataService} from "../data.service";
+import {TokenCheckService} from "../token-check.service";
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ export class LoginComponent implements OnInit {
 
   invalidLogin: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService) { }
+  constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
+    private tokenCheckService: TokenCheckService) { }
 
   ngOnInit() {
     window.localStorage.removeItem('token');
@@ -38,7 +40,7 @@ export class LoginComponent implements OnInit {
       password: this.loginForm.controls.password.value
     }
     this.dataService.login(loginPayload).subscribe(data => {
-      window.localStorage.setItem('token', data.token);
+      this.tokenCheckService.saveToken(data);
       this.router.navigate(['/']);
     }, error => {
       this.invalidLogin = true;
