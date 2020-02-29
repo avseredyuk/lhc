@@ -11,6 +11,7 @@ export class DeviceConfig {
   id: number;
   key: string;
   value: string;
+  type: string;
 }
 
 export class DeviceReportDataExclusion {

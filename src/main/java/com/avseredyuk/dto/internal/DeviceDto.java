@@ -17,6 +17,7 @@ public class DeviceDto {
         private Long id;
         private String key;
         private String value;
+        private String type;
     }
     
     @Data

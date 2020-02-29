@@ -11,6 +11,7 @@ public class HistoryDto {
     private String chartName;
     private List<HistoryChartPoint> data;
     private String reportDataType;
+    private String color;
     
     @Data
     @AllArgsConstructor

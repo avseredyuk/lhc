@@ -9,8 +9,8 @@ import static com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType.WATE
 import com.avseredyuk.dto.HistoryDto;
 import com.avseredyuk.dto.HistoryDto.HistoryChartPoint;
 import com.avseredyuk.model.Device;
+import com.avseredyuk.model.DeviceConfig;
 import com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType;
-import com.avseredyuk.model.PumpActionReport.PumpActionType;
 import com.avseredyuk.model.SensorReport;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +58,7 @@ public class HistoryService {
                 .builder()
                 .chartName(String.format("Temperature (%s)", device.getName()))
                 .reportDataType(AIR_TEMP.toString())
+                .color(device.getDeviceConfigByKey(DeviceConfig.DeviceConfigKey.TEMPERATURE_COLOR.name()))
                 .data(
                     reports
                         .stream()
@@ -71,6 +72,7 @@ public class HistoryService {
                 .builder()
                 .chartName(String.format("Water Temperature (%s)", device.getName()))
                 .reportDataType(WATER_TEMP.toString())
+                .color(device.getDeviceConfigByKey(DeviceConfig.DeviceConfigKey.WATER_TEMPERATURE_COLOR.name()))
                 .data(
                     reports
                         .stream()
@@ -84,6 +86,7 @@ public class HistoryService {
                 .builder()
                 .chartName(String.format("Humidity (%s)",device.getName()))
                 .reportDataType(HUMIDITY.toString())
+                .color(device.getDeviceConfigByKey(DeviceConfig.DeviceConfigKey.HUMIDITY_COLOR.name()))
                 .data(
                     reports
                         .stream()
@@ -97,6 +100,7 @@ public class HistoryService {
                 .builder()
                 .chartName(String.format("Abs Humidity (%s)", device.getName()))
                 .reportDataType(ABS_HUMIDITY.toString())
+                .color(device.getDeviceConfigByKey(DeviceConfig.DeviceConfigKey.ABS_HUMIDITY_COLOR.name()))
                 .data(
                     reports
                         .stream()
@@ -113,6 +117,7 @@ public class HistoryService {
             .builder()
             .chartName(String.format("Pump (%s)", device.getName()))
             .reportDataType(PUMP.toString())
+            .color(device.getDeviceConfigByKey(DeviceConfig.DeviceConfigKey.PUMP_COLOR.name()))
             .data(pumpActionService.getLastReportsByDevice(device)
                 .stream()
                 .map(r -> new HistoryChartPoint(r.getDateTime().getTime(), r.getActionType().getRepresentation()))

@@ -31,12 +31,14 @@
 				<tr>
 					<th scope="col">Key</th>
 					<th scope="col">Value</th>
+					<th scope="col">Config type</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr *ngFor="let cfg of device.config">
 					<td>{{ cfg.key }}</td>
 					<td>{{ cfg.value }}</td>
+					<td>{{ cfg.type }}</td>
 				</tr>
 			</tbody>
 		</table>

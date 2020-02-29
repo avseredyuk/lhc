@@ -17,7 +17,8 @@ import org.mapstruct.MappingTarget;
 import org.springframework.stereotype.Component;
 
 @Component
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        uses = DeviceConfigMapper.class)
 public interface DeviceMapper {
     
     @Mapping(target = "id", source = "id")

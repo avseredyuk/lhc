@@ -32,6 +32,7 @@ public class DeviceConfigService {
 
         Map<String, String> result = fetchedDevice.getConfig()
                 .stream()
+                .filter(deviceConfig -> deviceConfig.getDeviceConfigType() == DeviceConfig.DeviceConfigType.DEVICE)
                 .collect(Collectors.toMap(DeviceConfig::getKey, DeviceConfig::getValue));
 
         String configHash = DigestUtils.sha1Hex(result.entrySet()

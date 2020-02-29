@@ -2,6 +2,8 @@ package com.avseredyuk.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,12 +27,23 @@ public class DeviceConfig {
     
     @Column(name = "cfg_value")
     private String value;
+
+    @Column(name = "cfg_type")
+    @Enumerated(EnumType.STRING)
+    private DeviceConfigType deviceConfigType;
     
     @ManyToOne
     @JoinColumn(name = "device_id")
     private Device device;
     
     public enum DeviceConfigKey {
-        PUMP_ENABLE_FREQUENCY, PUMP_DURATION, REPORT_SEND_FREQUENCY, RUN_PUMP_ONCE
+        // DEVICE-related config keys
+        PUMP_ENABLE_FREQUENCY, PUMP_DURATION, REPORT_SEND_FREQUENCY, RUN_PUMP_ONCE,
+        // UI-related config keys
+        PUMP_COLOR, WATER_TEMPERATURE_COLOR, TEMPERATURE_COLOR, HUMIDITY_COLOR, ABS_HUMIDITY_COLOR
+    }
+
+    public enum DeviceConfigType {
+        UI, DEVICE
     }
 }

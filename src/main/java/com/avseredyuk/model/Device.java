@@ -34,5 +34,14 @@ public class Device {
     
     @OneToMany(mappedBy = "device")
     private List<DeviceReportDataExclusion> exclusions;
+
+    public String getDeviceConfigByKey(String key) {
+        return this.config
+                .stream()
+                .filter(deviceConfig -> deviceConfig.getKey().equals(key))
+                .map(DeviceConfig::getValue)
+                .findFirst()
+                .orElse(null);
+    }
     
 }

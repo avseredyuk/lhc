@@ -77,9 +77,6 @@ export class HistoryComponent implements OnInit {
 					}
 				});
 
-
-				var colors = ['#77a1e5', '#8bbc21', '#f28f43', '#a6d0ff', '#ffaeae'];
-
 				this.histories.forEach( (history, index, a) => {
 
 					var yAxisIdMap;
@@ -117,8 +114,8 @@ export class HistoryComponent implements OnInit {
 						pointRadius: 1,
 						fill: false,
 						showLine: true,
-						backgroundColor: colors[index],
-						borderColor: colors[index],
+						backgroundColor: history.color,
+						borderColor: history.color,
 						data: history.data
 					});
 				})
