@@ -21,7 +21,7 @@ public class BootupService {
         this.bootupRepository = bootupRepository;
         this.deviceService = deviceService;
     }
-    
+
     @Cacheable("BootupReport")
     public Optional<BootupReport> getLastReportByDevice(Device device) {
         return bootupRepository.findFirstByDeviceIdOrderByIdDesc(device.getId());

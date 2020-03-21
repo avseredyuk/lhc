@@ -54,6 +54,10 @@ export class DataService {
     return this.http.get<History[]>(environment.apiUrl + 'admin/history');
   }
 
+  getHistorySince(sinceTimestamp): Observable<History[]> {
+    return this.http.get<History[]>(environment.apiUrl + 'admin/history?sinceTimestamp=' + sinceTimestamp);
+  }
+
   /* Plant Maintenance */
 
   getPlantMaintenancesByDeviceId(deviceId, page): Observable<Page<PlantMaintenance[]>> {

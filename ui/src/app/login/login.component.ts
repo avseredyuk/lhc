@@ -21,7 +21,8 @@ export class LoginComponent implements OnInit {
     private tokenCheckService: TokenCheckService) { }
 
   ngOnInit() {
-    window.localStorage.removeItem('token');
+    this.tokenCheckService.removeToken();
+
     this.usernameCtrl = this.formBuilder.control('', [Validators.required]);
     this.passwordCtrl = this.formBuilder.control('', [Validators.required]);
 

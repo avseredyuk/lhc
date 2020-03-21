@@ -10,6 +10,7 @@ import {TokenCheckService} from "../token-check.service";
 export class SidebarComponent implements OnInit {
 
   currentUrl: string;
+  hasToken: Boolean = false;
 
   constructor(private router: Router, private tokenCheckService: TokenCheckService) {
     router.events.subscribe((_: NavigationEnd) => this.currentUrl = this.router.url)
@@ -18,8 +19,8 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
   }
 
-  hasToken() {
-    return !this.tokenCheckService.isExpiredToken();
+  ngAfterViewChecked() {
+    this.hasToken = !this.tokenCheckService.isExpiredToken();
   }
 
   isDeviceGroup(): Boolean {

@@ -4,10 +4,11 @@ import com.avseredyuk.exception.AccessDeniedException;
 import com.avseredyuk.model.Device;
 import com.avseredyuk.model.PumpActionReport;
 import com.avseredyuk.repository.PumpActionRepository;
+
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,10 +24,15 @@ public class PumpActionService {
         this.configService = configService;
         this.deviceService = deviceService;
     }
-    
-    @Cacheable("PumpAction")
-    public List<PumpActionReport> getLastReportsByDevice(Device device) {
-        return pumpActionRepository.getLastReports(device.getId(), configService.getHoursCount());
+
+    public List<PumpActionReport> getLastReportsByDevice(Device device, Long sinceTimestamp) {
+        if (sinceTimestamp == null) {
+            // use cached version to load all pump actions for history endpoint
+            return pumpActionRepository.getLastReports(device.getId(), configService.getHoursCount());
+        } else {
+            // use non-cached version to load all pump actions since provided timestamp
+            return pumpActionRepository.findByDeviceIdAndDateTimeGreaterThan(device.getId(), new Date(sinceTimestamp));
+        }
     }
     
     public PumpActionReport getLastReportByDevice(Device device) {

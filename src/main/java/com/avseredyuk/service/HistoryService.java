@@ -13,6 +13,7 @@ import com.avseredyuk.model.DeviceConfig;
 import com.avseredyuk.model.DeviceReportDataExclusion.ReportDataType;
 import com.avseredyuk.model.SensorReport;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,26 +33,33 @@ public class HistoryService {
         this.deviceService = deviceService;
     }
     
-    public List<HistoryDto> getHistory() {
+    public List<HistoryDto> getHistory(Long sinceTimestamp) {
         List<HistoryDto> result = new ArrayList<>();
         
         List<Device> devices = deviceService.findAllActive();
         for (Device device : devices) {
-            result.addAll(getReportDataList(device));
+            result.addAll(getReportDataList(device, sinceTimestamp));
             
             List<ReportDataType> mapping = StatusService.getMappingTypesByDevice(device);
             if (!mapping.contains(PUMP)) {
-                result.add(getPumpData(device));
+                result.add(getPumpData(device, sinceTimestamp));
             }
         }
+
+        setGeneratedTimestamp(result);
         
         return result;
     }
+
+    private void setGeneratedTimestamp(List<HistoryDto> histories) {
+        Long generatedTimestamp = new Date().getTime();
+        histories.forEach(historyDto -> historyDto.setGeneratedTimestamp(generatedTimestamp));
+    }
     
-    private List<HistoryDto> getReportDataList(Device device) {
+    private List<HistoryDto> getReportDataList(Device device, Long sinceTimestamp) {
         List<HistoryDto> dtoList = new ArrayList<>();
         List<ReportDataType> mapping = StatusService.getMappingTypesByDevice(device);
-        List<SensorReport> reports = sensorReportService.getLastReportsByDevice(device);
+        List<SensorReport> reports = sensorReportService.getLastReportsByDevice(device, sinceTimestamp);
         
         if (!mapping.contains(AIR_TEMP)) {
             dtoList.add(HistoryDto
@@ -112,13 +120,13 @@ public class HistoryService {
         return dtoList;
     }
     
-    private HistoryDto getPumpData(Device device) {
+    private HistoryDto getPumpData(Device device, Long sinceTimestamp) {
         return HistoryDto
             .builder()
             .chartName(String.format("Pump (%s)", device.getName()))
             .reportDataType(PUMP.toString())
             .color(device.getDeviceConfigByKey(DeviceConfig.DeviceConfigKey.PUMP_COLOR.name()))
-            .data(pumpActionService.getLastReportsByDevice(device)
+            .data(pumpActionService.getLastReportsByDevice(device, sinceTimestamp)
                 .stream()
                 .map(r -> new HistoryChartPoint(r.getDateTime().getTime(), r.getActionType().getRepresentation()))
                 .collect(Collectors.toList())

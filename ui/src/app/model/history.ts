@@ -3,4 +3,5 @@ export class History {
   reportDataType: string;
   data: Array<any>;
   color: string;
+  generatedTimestamp: number;
 }

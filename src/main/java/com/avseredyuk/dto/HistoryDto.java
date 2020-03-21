@@ -12,6 +12,7 @@ public class HistoryDto {
     private List<HistoryChartPoint> data;
     private String reportDataType;
     private String color;
+    private Long generatedTimestamp;
     
     @Data
     @AllArgsConstructor

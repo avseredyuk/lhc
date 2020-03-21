@@ -42,7 +42,7 @@ export class StatusComponent implements OnInit {
 	ngOnInit() {
 		this.dataService.getStatus().subscribe(
 			data => this.status = data
-			);
+		);
 		this.timer = setInterval(() => {
 			this.updateGauges();
 		}, 60000);

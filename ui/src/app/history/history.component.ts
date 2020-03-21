@@ -11,20 +11,80 @@ import {Chart} from "chart.js";
 export class HistoryComponent implements OnInit {
 
 	chart: any;
-
-	histories: History[];
+	timer: any;
+	lastGeneratedTimestamp: any = null;
 
 	constructor(private dataService: DataService) { }
+
+	getChartDataSetByChartName(chartName): any {
+		return this.chart.data.datasets.filter(function(dataset, i, ar) {
+			return dataset.label === chartName; 
+		});
+	}
+
+	updateHistory() {
+		this.dataService.getHistorySince(this.lastGeneratedTimestamp == null ? '' : this.lastGeneratedTimestamp).subscribe(
+			historiesSince => {
+				historiesSince.forEach( (historySince, index, a) => {
+					if (historySince.data.length > 0) {	
+						historySince.data = historySince.data.map(function (p) {
+							p.x = new Date(p.x);
+							return p;
+						});
+						if (historySince.reportDataType === 'PUMP') {
+							historySince.data = this.preprocessPumpData(historySince.data);
+						}
+
+						var dataset = this.getChartDataSetByChartName(historySince.chartName);
+
+						dataset[0].data.push(...historySince.data);
+						dataset[0].data.splice(0, historySince.data.length);
+
+					} 
+				});
+
+				this.lastGeneratedTimestamp = historiesSince[0].generatedTimestamp;
+
+    			let squashedData = [];
+    			this.chart.data.datasets.forEach( (dataset, index, a) => {
+    				squashedData.push(...dataset.data);
+    			});
+    			squashedData.sort((a,b) => b.x.getTime() - a.x.getTime());
+
+    			this.chart.options.scales.xAxes[0].ticks.max = squashedData[0].x;
+    			this.chart.update();
+		});
+	}
+
+	findLatestTimestamp(histories: History[]): any {
+		return Math.max.apply(Math, 
+			histories
+				.filter(function(o, i, ar) { 
+					return o.data.length > 0; 
+				})
+				.map(function(o) { 
+					return o.data[0].x; 
+				}));
+	}
+
+	findEarliestTimestamp(histories: History[]): any {
+		return Math.min.apply(Math, 
+			histories
+				.filter(function(o, i, ar) {
+					return o.data.length > 0; 
+				})
+				.map(function(o) { 
+					return o.data[o.data.length - 1].x; 
+				}));
+	}
 
 	ngOnInit() {
 		this.dataService.getHistory().subscribe(
 			data => {
-				this.histories = data;
-				this.histories.sort((a,b) => (a.reportDataType == 'PUMP') ? 1 : -1);
+				data.sort((a,b) => (a.reportDataType == 'PUMP') ? 1 : -1);
 
-
-				var latestTimestamp = Math.max.apply(Math, this.histories.filter(function(o, i, ar) { return o.data.length > 0; }).map(function(o) { return o.data[0].x; }))
-				var earliestTimestamp = Math.min.apply(Math, this.histories.filter(function(o, i, ar) { return o.data.length > 0; }).map(function(o) { return o.data[o.data.length - 1].x; }))
+				var latestTimestamp = this.findLatestTimestamp(data);
+				var earliestTimestamp = this.findEarliestTimestamp(data);
 
 				this.chart = new Chart(document.getElementById("lineChart"), {
 					type: 'scatter',
@@ -77,7 +137,7 @@ export class HistoryComponent implements OnInit {
 					}
 				});
 
-				this.histories.forEach( (history, index, a) => {
+				data.forEach( (history, index, a) => {
 
 					var yAxisIdMap;
 					var lineTensionMap = 0.4;
@@ -106,7 +166,6 @@ export class HistoryComponent implements OnInit {
 						return p;
 					});
 
-
 					this.chart.data.datasets.push({
 						label: history.chartName,
 						yAxisID: yAxisIdMap,
@@ -121,7 +180,16 @@ export class HistoryComponent implements OnInit {
 				})
 				this.chart.update();
 			}
-			);
+		);
+		this.timer = setInterval(() => {
+			this.updateHistory();
+		}, 60000);
+	}
+
+	ngOnDestroy() {
+		if (this.timer) {
+			clearInterval(this.timer);
+		}
 	}
 
 	preprocessPumpData(sourceData: Array<any>): Array<any> {
