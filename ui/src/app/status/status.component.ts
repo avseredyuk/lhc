@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChildren, QueryList} from "@angular/core";
 import {Status} from "../model/status";
 import {DataService} from "../data.service";
 import {Gauge} from "src/assets/gauge.min.js";
+import {UtilService} from "../util.service";
 
 @Component({
 	selector: 'app-status',
@@ -37,7 +38,7 @@ export class StatusComponent implements OnInit {
 		staticZones: []
 	};
 
-	constructor(private dataService: DataService) {}
+	constructor(private dataService: DataService, private utilService: UtilService) {}
 
 	ngOnInit() {
 		this.dataService.getStatus().subscribe(
@@ -66,27 +67,22 @@ export class StatusComponent implements OnInit {
 		Object.keys(status.lastPings).forEach((ping, i, array) => {
 			let unprocessedObject = status.lastPings[ping];
 			status.lastPings[ping] = new Object();
-			status.lastPings[ping].timestamp = this.formatTimestamp(unprocessedObject);
+			status.lastPings[ping].timestamp = this.utilService.formatTimestamp(unprocessedObject);
 			status.lastPings[ping].interval = this.formatTimeInterval(unprocessedObject);
 		});
 		Object.keys(status.lastBootups).forEach((bootup, i, array) => {
 			let unprocessedObject = status.lastBootups[bootup];
 			status.lastBootups[bootup] = new Object();
-			status.lastBootups[bootup].timestamp = this.formatTimestamp(unprocessedObject);
+			status.lastBootups[bootup].timestamp = this.utilService.formatTimestamp(unprocessedObject);
 			status.lastBootups[bootup].interval = this.formatTimeInterval(unprocessedObject);
 		});
 		Object.keys(status.lastPumps).forEach((pump, i, array) => {
 			let unprocessedObject = status.lastPumps[pump];
 			status.lastPumps[pump] = new Object();
-			status.lastPumps[pump].timestamp = this.formatTimestamp(unprocessedObject);
+			status.lastPumps[pump].timestamp = this.utilService.formatTimestamp(unprocessedObject);
 			status.lastPumps[pump].interval = this.formatTimeInterval(unprocessedObject);
 		});
 		return status;
-	}
-
-	formatTimestamp(timestamp: number): string {
-		var localeId = 'uk-UA';
-		return new Date(timestamp).toLocaleString(localeId);
 	}
 
 	formatTimeInterval(timestampOld: number): string {

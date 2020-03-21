@@ -8,18 +8,17 @@ import {Device} from "../model/device";
 import {ComponentCommunicationService} from "../component-communication.service";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
 import {TokenCheckService} from "../token-check.service";
+import {UtilService} from "../util.service";
 
 @Component({
   selector: 'app-edit-plant-maintenance',
   templateUrl: './edit-plant-maintenance.component.html',
   styleUrls: ['./edit-plant-maintenance.component.scss']
 })
-export class EditPlantMaintenanceComponent implements OnInit {
+export class EditPlantMaintenanceComponent {
 
   maintenance: PlantMaintenance;
   notifications: Array<AppNotification> = [];
-  //todo: same list as in add maintenance - export it to somewhere
-  dataTypes: Array<string> = ['FULL', 'SAMPLE', 'PARTIAL'];
   editForm: FormGroup;
   phCtrl: FormControl;
   tdsCtrl: FormControl;
@@ -28,7 +27,7 @@ export class EditPlantMaintenanceComponent implements OnInit {
   newDetailValueCtrl: FormControl;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService, private route: ActivatedRoute,
-  	private componentCommunicationService: ComponentCommunicationService, private tokenCheckService: TokenCheckService) {
+  	private componentCommunicationService: ComponentCommunicationService, private tokenCheckService: TokenCheckService, private utilService: UtilService) {
   	this.route.params.subscribe(params => this.maintenance = params.id)
   }
 //todo: update button not working when value is untouched but actually present

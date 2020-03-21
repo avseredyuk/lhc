@@ -7,6 +7,7 @@ import {Device} from "../model/device";
 import {ComponentCommunicationService} from "../component-communication.service";
 import {tap} from "rxjs/operators";
 import {TokenCheckService} from "../token-check.service";
+import {UtilService} from "../util.service";
 
 @Component({
   selector: 'app-plant-maintenance',
@@ -17,17 +18,15 @@ export class PlantMaintenanceComponent implements OnInit {
 
   notifications: Array<AppNotification> = [];
   pages: Array<number> = [];
-  // plantMaintenances: Map<number, Array<PlantMaintenance>> = new Map();
   plantMaintenancesForDevice: Array<PlantMaintenance> = [];
   deviceId: number;
-  // activeDevice: Device = new Device();
   pageNumber: number = 1;
   @ViewChildren('tabHeader') tabHeaders: QueryList<any>;
   deviceName: string;
 
   constructor(private router: Router, private dataService: DataService, private renderer: Renderer,
     private route: ActivatedRoute, private componentCommunicationService: ComponentCommunicationService,
-    private tokenCheckService: TokenCheckService) {
+    private tokenCheckService: TokenCheckService, private utilService: UtilService) {
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
@@ -71,12 +70,6 @@ export class PlantMaintenanceComponent implements OnInit {
         this.loadPageForDevice();
       }
     );
-  }
-
-  //todo: same as in status component!
-  formatTimestamp(timestamp: number): string {
-		var localeId = 'uk-UA';
-		return new Date(timestamp).toLocaleString(localeId);
   }
 
   hasNotifications(): Boolean {

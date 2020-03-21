@@ -6,15 +6,15 @@ import {AppNotification} from "../model/app-notification";
 import {Device} from "../model/device";
 import {PlantMaintenance, PlantMaintenanceDetail} from "../model/plant-maintenance";
 import {TokenCheckService} from "../token-check.service";
+import {UtilService} from "../util.service";
 
 @Component({
   selector: 'app-add-plant-maintenance',
   templateUrl: './add-plant-maintenance.component.html',
   styleUrls: ['./add-plant-maintenance.component.scss']
 })
-export class AddPlantMaintenanceComponent implements OnInit {
+export class AddPlantMaintenanceComponent {
 
-  dataTypes: Array<string> = ['FULL', 'SAMPLE', 'PARTIAL'];
   notifications: Array<AppNotification> = [];
   addForm: FormGroup;
   phCtrl: FormControl;
@@ -26,7 +26,7 @@ export class AddPlantMaintenanceComponent implements OnInit {
   deviceId: number;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
-    private route: ActivatedRoute, private tokenCheckService: TokenCheckService) {
+    private route: ActivatedRoute, private tokenCheckService: TokenCheckService, private utilService: UtilService) {
   	this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
@@ -38,7 +38,7 @@ export class AddPlantMaintenanceComponent implements OnInit {
 
     this.phCtrl = this.formBuilder.control('', [Validators.required]);
     this.tdsCtrl = this.formBuilder.control('', [Validators.required]);
-    this.typeCtrl = this.formBuilder.control(this.dataTypes[1], [Validators.required]);
+    this.typeCtrl = this.formBuilder.control(this.utilService.dataTypes[1], [Validators.required]);
     this.newDetailKeyCtrl = this.formBuilder.control('', []);
     this.newDetailValueCtrl = this.formBuilder.control('', []);
 

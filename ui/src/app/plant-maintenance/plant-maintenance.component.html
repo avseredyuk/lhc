@@ -24,7 +24,7 @@
 							</thead>
 							<tbody>
 								<tr *ngFor="let m of plantMaintenancesForDevice">
-									<td>{{ formatTimestamp(m.d) }}</td>
+									<td>{{ this.utilService.formatTimestamp(m.d) }}</td>
 									<td>{{ m.ph }}</td>
 									<td>{{ m.tds }}</td>
 									<td>{{ m.maintenanceType }}</td>
