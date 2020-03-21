@@ -32,7 +32,7 @@
 							</div>
 
 							<div class="col-lg-1">
-								<button class="btn btn-success btn-md" [disabled]="!editForm.valid">Update</button>
+								<button class="btn btn-success btn-md">Update</button>
 							</div>
 
 						</div>
@@ -69,12 +69,14 @@
 									<tr>
 										<th scope="col">Detail Key</th>
 										<th scope="col">Detail Value</th>
+										<th class="col-md-1" scope="col"></th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr *ngFor="let detail of maintenance.details">
 										<td>{{ detail.key }}</td>
 										<td>{{ detail.value }}</td>
+										<td><button class="btn btn-danger btn-md material-icons" type='button' (click)="removeDetail(detail)">delete</button></td>
 									</tr>
 								</tbody>
 							</table>

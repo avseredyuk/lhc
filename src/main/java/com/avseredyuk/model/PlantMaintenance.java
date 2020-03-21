@@ -41,7 +41,8 @@ public class PlantMaintenance {
     @Column(name = "tds")
     private Double tds;
     
-    @OneToMany(mappedBy = "plantMaintenance", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "plantMaintenance", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE},
+            orphanRemoval = true)
     @OrderBy(clause = "key ASC")
     private List<PlantMaintenanceDetail> details;
     

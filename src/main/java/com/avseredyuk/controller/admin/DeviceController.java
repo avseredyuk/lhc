@@ -94,7 +94,7 @@ public class DeviceController {
     )
     public ResponseEntity<ApiResult<PlantMaintenanceDto>> createMaintenance(@PathVariable Long deviceId,
                                                                             @RequestBody PlantMaintenanceDto plantMaintenanceDto) {
-        PlantMaintenance plantMaintenance = plantMaintenanceMapper.toModel(plantMaintenanceDto);
+        PlantMaintenance plantMaintenance = plantMaintenanceMapper.toModelCreate(plantMaintenanceDto);
         plantMaintenance.setDevice(deviceMapper.toModelFromId(deviceId));
         plantMaintenance.getDetails().forEach(d -> d.setPlantMaintenance(plantMaintenance));
         return ResponseEntity.ok(new ApiResult<>(plantMaintenanceMapper.toDto(plantMaintenanceService.saveOrThrow(plantMaintenance))));
@@ -113,12 +113,15 @@ public class DeviceController {
     }
 
     @PutMapping(
-            value = "/{deviceId}/maintenance",
+            value = "/{deviceId}/maintenance/{plantMaintenanceId}",
             consumes = "application/json"
     )
-    public void updateMaintenance(@PathVariable Long deviceId, @RequestBody PlantMaintenanceDto plantMaintenanceDto) {
-        PlantMaintenance plantMaintenance = plantMaintenanceMapper.toModel(plantMaintenanceDto);
-        plantMaintenanceService.update(plantMaintenance);
+    public void updateMaintenance(@PathVariable Long deviceId, @PathVariable Long plantMaintenanceId,
+                                  @RequestBody PlantMaintenanceDto plantMaintenanceDto) {
+        PlantMaintenance plantMaintenance = plantMaintenanceMapper.toModelUpdate(plantMaintenanceDto);
+        plantMaintenance.setDevice(deviceMapper.toModelFromId(deviceId));
+        plantMaintenance.getDetails().forEach(d -> d.setPlantMaintenance(plantMaintenance));
+        plantMaintenanceService.saveOrThrow(plantMaintenance);
     }
 
     @DeleteMapping(value = "/{deviceId}/maintenance/{plantMaintenanceId}")

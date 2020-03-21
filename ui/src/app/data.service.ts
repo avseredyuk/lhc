@@ -71,6 +71,10 @@ export class DataService {
     return this.http.post<ApiResult<PlantMaintenance>>(environment.apiUrl + 'admin/devices/' + plantMaintenance.deviceId + '/maintenance', plantMaintenance);
   }
 
+  updatePlantMaintenance(plantMaintenance: PlantMaintenance): Observable<ApiResult<PlantMaintenance>> {
+    return this.http.put<ApiResult<PlantMaintenance>>(environment.apiUrl + 'admin/devices/' + plantMaintenance.deviceId + '/maintenance/' + plantMaintenance.id, plantMaintenance);
+  }
+
   deletePlantMaintenance(plantMaintenance: PlantMaintenance) {
     return this.http.delete(environment.apiUrl + 'admin/devices/' + plantMaintenance.deviceId + '/maintenance/' + plantMaintenance.id);
   }

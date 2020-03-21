@@ -2,7 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../data.service";
-import {PlantMaintenance} from "../model/plant-maintenance";
+import {PlantMaintenance, PlantMaintenanceDetail} from "../model/plant-maintenance";
 import {ApiResult} from "../model/api-result";
 import {Device} from "../model/device";
 import {ComponentCommunicationService} from "../component-communication.service";
@@ -35,7 +35,6 @@ export class EditPlantMaintenanceComponent {
       this.deviceId = params.deviceId;
     })
   }
-//todo: update button not working when value is untouched but actually present, it's now working right now at all
 
   ngOnInit() {
   	if (!this.tokenCheckService.getRawToken()) {
@@ -43,9 +42,9 @@ export class EditPlantMaintenanceComponent {
       return;
     }
 
-    this.phCtrl = this.formBuilder.control('', [Validators.required]);
-    this.tdsCtrl = this.formBuilder.control('', [Validators.required]);
-    this.typeCtrl = this.formBuilder.control('', [Validators.required]);
+    this.phCtrl = this.formBuilder.control('', []);
+    this.tdsCtrl = this.formBuilder.control('', []);
+    this.typeCtrl = this.formBuilder.control('', []);
     this.newDetailKeyCtrl = this.formBuilder.control('', []);
     this.newDetailValueCtrl = this.formBuilder.control('', []);
 
@@ -61,6 +60,8 @@ export class EditPlantMaintenanceComponent {
       (data: ApiResult<PlantMaintenance>) => {
         this.maintenance = data.data;
         this.editForm.controls['type'].setValue(this.maintenance.maintenanceType);
+        this.editForm.controls['ph'].setValue(this.maintenance.ph)
+        this.editForm.controls['tds'].setValue(this.maintenance.tds);
       },
       error => { // HttpErrorResponse
         if (error.status === 404) {
@@ -71,6 +72,28 @@ export class EditPlantMaintenanceComponent {
         this.router.navigate(['maintenance']);
       }
       );
+  }
+
+  addDetail() {
+    if (this.editForm.controls['newDetailKey'].value !== '' && this.editForm.controls['newDetailValue'].value !== '') {
+      this.maintenance.details.push(new PlantMaintenanceDetail(this.editForm.controls['newDetailKey'].value, this.editForm.controls['newDetailValue'].value));
+      this.editForm.controls['newDetailKey'].setValue('');
+      this.editForm.controls['newDetailValue'].setValue('');
+    }
+  }
+
+  onSubmit() {
+    this.maintenance.maintenanceType = this.editForm.controls['type'].value;
+    this.maintenance.ph = parseFloat(this.editForm.controls['ph'].value);//todo: it parses string into null, it should validate it or at BE
+    this.maintenance.tds = parseFloat(this.editForm.controls['tds'].value);
+    this.dataService.updatePlantMaintenance(this.maintenance)
+      .subscribe( data => {
+        this.router.navigate(['devices/' + this.deviceId + '/maintenance']);
+      });
+  }
+
+  removeDetail(detail: PlantMaintenanceDetail) {
+    this.maintenance.details = this.maintenance.details.filter(d => d.key != detail.key);
   }
 
   hasNotifications(): Boolean {

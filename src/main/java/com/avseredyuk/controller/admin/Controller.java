@@ -96,7 +96,6 @@ public class Controller {
     //todo: delete device  ? report_exclusions ? -- remove with device
     //todo: edit config  -- in place ?
     //todo: delete config w/confirmation
-    //todo: ~edit plant_maintenance & its details
 
     //todo: ticket: do smth in FE with navigation & deviceName in header - it should get it via rest and not as a route->route param
         //but it actually works in plant mainenance list page - clean it up before using new approach

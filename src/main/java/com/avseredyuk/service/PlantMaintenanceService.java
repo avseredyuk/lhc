@@ -37,11 +37,7 @@ public class PlantMaintenanceService {
         Page<PlantMaintenance> page = plantMaintenanceRepository.findAllByDeviceIdOrderByDateTimeDesc(deviceId, pageable);
         return new PageImpl<>(plantMaintenanceMapper.toDtoList(page.getContent()), pageable, page.getTotalElements());
     }
-    
-    public void update(PlantMaintenance plantMaintenance) {
-        plantMaintenanceRepository.save(plantMaintenance);
-    }
-    
+
     public void delete(Long plantMaintenanceId) {
         plantMaintenanceRepository.delete(plantMaintenanceId);
     }
