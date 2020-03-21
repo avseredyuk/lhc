@@ -5,6 +5,7 @@ import {DataService} from "../data.service";
 import {AppNotification} from "../model/app-notification";
 import {Device} from "../model/device";
 import {PlantMaintenance, PlantMaintenanceDetail} from "../model/plant-maintenance";
+import {TokenCheckService} from "../token-check.service";
 
 @Component({
   selector: 'app-add-plant-maintenance',
@@ -24,12 +25,13 @@ export class AddPlantMaintenanceComponent implements OnInit {
   newDetails: Array<PlantMaintenanceDetail> = [];
   deviceId: number;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService, private route: ActivatedRoute) {
+  constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
+    private route: ActivatedRoute, private tokenCheckService: TokenCheckService) {
   	this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit() {
-  	if (!window.localStorage.getItem('token')) {
+  	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
     }

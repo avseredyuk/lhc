@@ -16,6 +16,10 @@ export class TokenCheckService {
     return nowDate.getTime() > tokenDate.getTime();
   }
 
+  getRawToken(): string {
+    return window.localStorage.getItem('token');
+  }
+
   getToken(): string {
 	  let tokenObject = JSON.parse(localStorage.getItem("token"));
 	  return tokenObject.token;

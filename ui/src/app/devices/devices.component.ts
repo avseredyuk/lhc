@@ -4,6 +4,7 @@ import {ComponentCommunicationService} from "../component-communication.service"
 import {Router} from "@angular/router";
 import {Device} from "../model/device";
 import {AppNotification} from "../model/app-notification";
+import {TokenCheckService} from "../token-check.service";
 
 @Component({
   selector: 'app-devices',
@@ -15,10 +16,11 @@ export class DevicesComponent implements OnInit {
   notifications: Array<AppNotification> = [];
   devices: Device[];
 
-  constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService) { }
+  constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService,
+    private tokenCheckService: TokenCheckService) { }
 
   ngOnInit() {
-    if (!window.localStorage.getItem('token')) {
+    if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
     }
@@ -27,12 +29,11 @@ export class DevicesComponent implements OnInit {
   		data => this.devices = data
   	);
 
-    this.notifications = this.componentCommunicationService.data;
-    this.componentCommunicationService.data = [];
+    this.notifications = this.componentCommunicationService.getValue("notification");
   }
 
   hasNotifications(): Boolean {
-    return this.notifications.length > 0;
+    return typeof this.notifications !== 'undefined' && this.notifications.length > 0;
   }
 
 }

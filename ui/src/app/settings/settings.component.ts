@@ -4,6 +4,7 @@ import {Configuration} from "../model/configuration";
 import {DataService} from "../data.service";
 import {ApiResult} from "../model/api-result";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
+import {TokenCheckService} from "../token-check.service";
 
 @Component({
   selector: 'app-settings',
@@ -15,10 +16,10 @@ export class SettingsComponent implements OnInit {
   configurations: Configuration[];
   notifications: Array<AppNotification> = [];
 
-  constructor(private router: Router, private dataService: DataService) { }
+  constructor(private router: Router, private dataService: DataService, private tokenCheckService: TokenCheckService) { }
 
   ngOnInit() {
-    if (!window.localStorage.getItem('token')) {
+    if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
     }

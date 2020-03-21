@@ -6,6 +6,7 @@ import {AppNotification} from "../model/app-notification";
 import {Device} from "../model/device";
 import {ComponentCommunicationService} from "../component-communication.service";
 import {tap} from "rxjs/operators";
+import {TokenCheckService} from "../token-check.service";
 
 @Component({
   selector: 'app-plant-maintenance',
@@ -22,22 +23,24 @@ export class PlantMaintenanceComponent implements OnInit {
   // activeDevice: Device = new Device();
   pageNumber: number = 1;
   @ViewChildren('tabHeader') tabHeaders: QueryList<any>;
+  deviceName: string;
 
   constructor(private router: Router, private dataService: DataService, private renderer: Renderer,
-    private route: ActivatedRoute, private componentCommunicationService: ComponentCommunicationService) {
-    this.route.params.subscribe(params => this.deviceId = params.id) 
+    private route: ActivatedRoute, private componentCommunicationService: ComponentCommunicationService,
+    private tokenCheckService: TokenCheckService) {
+    this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit() {
-    if (!window.localStorage.getItem('token')) {
+    if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
     }
 
     this.loadPageForDevice();
 
-  	this.notifications = this.componentCommunicationService.data;
-  	this.componentCommunicationService.data = [];
+  	this.notifications = this.componentCommunicationService.getValue("notification");
+    this.deviceName = this.componentCommunicationService.getValue("deviceName");
   }
 
   loadPageForDevice() {
@@ -77,6 +80,6 @@ export class PlantMaintenanceComponent implements OnInit {
   }
 
   hasNotifications(): Boolean {
-    return this.notifications.length > 0;
+    return typeof this.notifications !== 'undefined' && this.notifications.length > 0;
   }
 }

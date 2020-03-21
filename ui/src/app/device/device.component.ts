@@ -6,6 +6,7 @@ import {Device, DeviceReportDataExclusion} from "../model/device";
 import {ApiResult} from "../model/api-result";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
 import {Location} from '@angular/common';
+import {TokenCheckService} from "../token-check.service";
 
 @Component({
   selector: 'app-device',
@@ -17,25 +18,26 @@ export class DeviceComponent implements OnInit {
   notifications: Array<AppNotification> = [];
   device: Device;
 
-  constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService, 
-    private route: ActivatedRoute, private location: Location) {
+  constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService,
+    private route: ActivatedRoute, private location: Location, private tokenCheckService: TokenCheckService) {
     this.route.params.subscribe(params => this.device = params.id)
   }
 
   ngOnInit() {
-    if (!window.localStorage.getItem('token')) {
+    if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
     }
     this.dataService.getDevice(this.device).subscribe(
       (data: ApiResult<Device>) => {
         this.device = data.data;
+        this.componentCommunicationService.setValue("deviceName", this.device.name);
       },
       error => { // HttpErrorResponse
         if (error.status === 404) {
-          this.componentCommunicationService.data.push(new AppNotification('Device not found', AppNotificationType.ERROR));
+          this.componentCommunicationService.setValue("notification", new AppNotification('Device not found', AppNotificationType.ERROR));
         } else {
-          this.componentCommunicationService.data.push(new AppNotification('Unknown error', AppNotificationType.ERROR));
+          this.componentCommunicationService.setValue("notification", new AppNotification('Unknown error', AppNotificationType.ERROR));
         }
         this.router.navigate(['devices']);
       }

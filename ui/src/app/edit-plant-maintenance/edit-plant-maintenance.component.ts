@@ -7,6 +7,7 @@ import {ApiResult} from "../model/api-result";
 import {Device} from "../model/device";
 import {ComponentCommunicationService} from "../component-communication.service";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
+import {TokenCheckService} from "../token-check.service";
 
 @Component({
   selector: 'app-edit-plant-maintenance',
@@ -27,13 +28,13 @@ export class EditPlantMaintenanceComponent implements OnInit {
   newDetailValueCtrl: FormControl;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService, private route: ActivatedRoute,
-  	private componentCommunicationService: ComponentCommunicationService) {
+  	private componentCommunicationService: ComponentCommunicationService, private tokenCheckService: TokenCheckService) {
   	this.route.params.subscribe(params => this.maintenance = params.id)
   }
 //todo: update button not working when value is untouched but actually present
 
   ngOnInit() {
-  	if (!window.localStorage.getItem('token')) {
+  	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
     }
@@ -59,9 +60,9 @@ export class EditPlantMaintenanceComponent implements OnInit {
       },
       error => { // HttpErrorResponse
         if (error.status === 404) {
-          this.componentCommunicationService.data.push(new AppNotification('Plant Maintenance not found', AppNotificationType.ERROR));
+          this.componentCommunicationService.setValue("notification", new AppNotification('Plant Maintenance not found', AppNotificationType.ERROR));
         } else {
-          this.componentCommunicationService.data.push(new AppNotification('Unknown error', AppNotificationType.ERROR));
+          this.componentCommunicationService.setValue("notification", new AppNotification('Unknown error', AppNotificationType.ERROR));
         }
         this.router.navigate(['maintenance']);
       }

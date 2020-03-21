@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {DataService} from "../data.service";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
+import {TokenCheckService} from "../token-check.service";
 
 @Component({
   selector: 'app-add-device',
@@ -16,10 +17,11 @@ export class AddDeviceComponent implements OnInit {
   nameCtrl: FormControl;
   tokenCtrl: FormControl;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService) { }
+  constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
+    private tokenCheckService: TokenCheckService) { }
 
   ngOnInit() {
-  	if (!window.localStorage.getItem('token')) {
+  	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
     }

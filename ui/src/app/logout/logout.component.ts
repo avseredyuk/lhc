@@ -2,6 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {DataService} from "../data.service";
+import {TokenCheckService} from "../token-check.service";
 
 @Component({
   selector: 'app-logout',
@@ -10,10 +11,10 @@ import {DataService} from "../data.service";
 })
 export class LogoutComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private tokenCheckService: TokenCheckService) { }
 
   ngOnInit() {
-    window.localStorage.removeItem('token');
+    this.tokenCheckService.removeToken();
     this.router.navigate(['/']);
   }
 
