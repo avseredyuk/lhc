@@ -18,6 +18,7 @@ import {StatusComponent} from "./status/status.component";
 import {PlantMaintenanceComponent} from "./plant-maintenance/plant-maintenance.component";
 import {AddPlantMaintenanceComponent} from "./add-plant-maintenance/add-plant-maintenance.component";
 import {EditPlantMaintenanceComponent} from "./edit-plant-maintenance/edit-plant-maintenance.component";
+import { PingsComponent } from './pings/pings.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import {EditPlantMaintenanceComponent} from "./edit-plant-maintenance/edit-plant
     PlantMaintenanceComponent,
     AddPlantMaintenanceComponent,
     EditPlantMaintenanceComponent,
+    PingsComponent,
   ],
   imports: [
     BrowserModule,

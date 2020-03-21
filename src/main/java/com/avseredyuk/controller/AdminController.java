@@ -5,6 +5,7 @@ import com.avseredyuk.dto.HistoryDto;
 import com.avseredyuk.dto.internal.ConfigDto;
 import com.avseredyuk.dto.internal.DeviceDto;
 import com.avseredyuk.dto.internal.LoginDto;
+import com.avseredyuk.dto.internal.PingDto;
 import com.avseredyuk.dto.internal.PlantMaintenanceDto;
 import com.avseredyuk.exception.InconsistentDataException;
 import com.avseredyuk.mapper.internal.ConfigMapper;
@@ -17,6 +18,7 @@ import com.avseredyuk.service.ConfigService;
 import com.avseredyuk.service.DeviceConfigService;
 import com.avseredyuk.service.DeviceService;
 import com.avseredyuk.service.HistoryService;
+import com.avseredyuk.service.PingService;
 import com.avseredyuk.service.PlantMaintenanceService;
 import com.avseredyuk.service.internal.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/admin")
 public class AdminController {
-    
+
+    //todo: split this shitty controller into several ones
     @Autowired
     private DeviceMapper deviceMapper;
     @Autowired
@@ -65,6 +68,8 @@ public class AdminController {
     private PlantMaintenanceMapper plantMaintenanceMapper;
     @Autowired
     private PlantMaintenanceService plantMaintenanceService;
+    @Autowired
+    private PingService pingService;
     @Autowired
     private CacheService cacheService;
     
@@ -209,6 +214,15 @@ public class AdminController {
     )
     public void deleteMaintenance(@PathVariable Long plantMaintenanceId) {
         plantMaintenanceService.delete(plantMaintenanceId);
+    }
+
+    @RequestMapping(
+            value = "/device/{deviceId}/pings",
+            method = RequestMethod.GET
+    )
+    public Page<PingDto> getAllPingsByDevice(@PathVariable Long deviceId,
+                                             @NotNull final Pageable pageable) {
+        return pingService.findAllByDeviceIdPaginated(deviceId, pageable);
     }
 
     @RequestMapping(

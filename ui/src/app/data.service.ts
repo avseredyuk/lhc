@@ -9,6 +9,7 @@ import {ApiResult} from "./model/api-result";
 import {Status} from "./model/status";
 import {Page} from "./model/page";
 import {PlantMaintenance} from "./model/plant-maintenance";
+import {Ping} from "./model/ping";
 import {environment} from "../environments/environment";
 
 @Injectable({
@@ -74,6 +75,12 @@ export class DataService {
 
   deletePlantMaintenance(plantMaintenance: PlantMaintenance) {
     return this.http.delete(environment.apiUrl + 'admin/maintenance/' + plantMaintenance.id);
+  }
+
+  /* Pings */
+
+  getPingsByDeviceId(deviceId, page): Observable<Page<Ping[]>> {
+    return this.http.get<Page<Ping[]>>(environment.apiUrl + 'admin/device/' + deviceId + '/pings?size=10&page=' + page);
   }
 
   /* System */
