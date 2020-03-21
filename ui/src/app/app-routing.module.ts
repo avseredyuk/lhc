@@ -52,7 +52,7 @@ const routes: Routes = [
 		component: AddPlantMaintenanceComponent
 	},
 	{
-		path: 'edit-plant-maintenance/:id',
+		path: 'edit-plant-maintenance/:id/:deviceId',
 		component: EditPlantMaintenanceComponent
 	},
 	{

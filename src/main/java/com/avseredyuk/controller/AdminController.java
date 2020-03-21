@@ -166,19 +166,20 @@ public class AdminController {
     }
     
     @RequestMapping(
-        value = "/maintenance",
+        value = "/devices/{deviceId}/maintenance",
         method = RequestMethod.POST,
         consumes = "application/json"
     )
-    public ResponseEntity<ApiResult<PlantMaintenanceDto>> createMaintenance(@RequestBody PlantMaintenanceDto plantMaintenanceDto) {
+    public ResponseEntity<ApiResult<PlantMaintenanceDto>> createMaintenance(@PathVariable Long deviceId,
+                                                                            @RequestBody PlantMaintenanceDto plantMaintenanceDto) {
         PlantMaintenance plantMaintenance = plantMaintenanceMapper.toModel(plantMaintenanceDto);
-        plantMaintenance.setDevice(deviceMapper.toModelFromId(plantMaintenanceDto.getDeviceId()));
+        plantMaintenance.setDevice(deviceMapper.toModelFromId(deviceId));
         plantMaintenance.getDetails().forEach(d -> d.setPlantMaintenance(plantMaintenance));
         return ResponseEntity.ok(new ApiResult<>(plantMaintenanceMapper.toDto(plantMaintenanceService.saveOrThrow(plantMaintenance))));
     }
 
     @RequestMapping(
-        value = "/device/{deviceId}/maintenance",
+        value = "/devices/{deviceId}/maintenance",
         method = RequestMethod.GET
     )
     public Page<PlantMaintenanceDto> getAllMaintenancesByDevice(@PathVariable Long deviceId,
@@ -187,33 +188,34 @@ public class AdminController {
     }
     
     @RequestMapping(
-        value = "/maintenance/{plantMaintenanceId}",
+        value = "/devices/{deviceId}/maintenance/{plantMaintenanceId}",
         method = RequestMethod.GET
     )
-    public ResponseEntity<ApiResult<PlantMaintenanceDto>> getMaintenanceById(@PathVariable Long plantMaintenanceId) {
+    public ResponseEntity<ApiResult<PlantMaintenanceDto>> getMaintenanceById(@PathVariable Long deviceId,
+                                                                             @PathVariable Long plantMaintenanceId) {
         return ResponseEntity.ok(new ApiResult<>(plantMaintenanceMapper.toDto(plantMaintenanceService.findOne(plantMaintenanceId))));
     }
     
     @RequestMapping(
-        value = "/maintenance",
+        value = "/devices/{deviceId}/maintenance",
         method = RequestMethod.PUT,
         consumes = "application/json"
     )
-    public void updateMaintenance(@RequestBody PlantMaintenanceDto plantMaintenanceDto) {
+    public void updateMaintenance(@PathVariable Long deviceId, @RequestBody PlantMaintenanceDto plantMaintenanceDto) {
         PlantMaintenance plantMaintenance = plantMaintenanceMapper.toModel(plantMaintenanceDto);
         plantMaintenanceService.update(plantMaintenance);
     }
     
     @RequestMapping(
-        value = "/maintenance/{plantMaintenanceId}",
+        value = "/devices/{deviceId}/maintenance/{plantMaintenanceId}",
         method = RequestMethod.DELETE
     )
-    public void deleteMaintenance(@PathVariable Long plantMaintenanceId) {
+    public void deleteMaintenance(@PathVariable Long deviceId, @PathVariable Long plantMaintenanceId) {
         plantMaintenanceService.delete(plantMaintenanceId);
     }
 
     @RequestMapping(
-            value = "/device/{deviceId}/pings",
+            value = "/devices/{deviceId}/pings",
             method = RequestMethod.GET
     )
     public Page<PingDto> getAllPingsByDevice(@PathVariable Long deviceId,
@@ -222,7 +224,7 @@ public class AdminController {
     }
 
     @RequestMapping(
-            value = "/device/{deviceId}/pumpactions",
+            value = "/devices/{deviceId}/pumpactions",
             method = RequestMethod.GET
     )
     public Page<PumpActionDto> getAllPumpActionsByDevice(@PathVariable Long deviceId,
@@ -252,4 +254,10 @@ public class AdminController {
     //todo: edit config  -- in place ?
     //todo: delete config w/confirmation
     //todo: ~edit plant_maintenance & its details
+
+    //todo: ticket: do smth in FE with navigation & deviceName in header - it should get it via rest and not as a route->route param
+        //but it actually works in plant mainenance list page - clean it up before using new approach
+    //todo: ticket: add "device" to the path of all DeviceController request methods
+        //requires changes in device code
+        //(don't forget to update web security config)
 }

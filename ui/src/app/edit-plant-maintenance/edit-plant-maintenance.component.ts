@@ -17,6 +17,7 @@ import {UtilService} from "../util.service";
 })
 export class EditPlantMaintenanceComponent {
 
+  maintenanceId: number;
   maintenance: PlantMaintenance;
   notifications: Array<AppNotification> = [];
   editForm: FormGroup;
@@ -25,12 +26,16 @@ export class EditPlantMaintenanceComponent {
   typeCtrl: FormControl;
   newDetailKeyCtrl: FormControl;
   newDetailValueCtrl: FormControl;
+  deviceId: number;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService, private route: ActivatedRoute,
   	private componentCommunicationService: ComponentCommunicationService, private tokenCheckService: TokenCheckService, private utilService: UtilService) {
-  	this.route.params.subscribe(params => this.maintenance = params.id)
+  	this.route.params.subscribe(params => {
+      this.maintenanceId = params.id;
+      this.deviceId = params.deviceId;
+    })
   }
-//todo: update button not working when value is untouched but actually present
+//todo: update button not working when value is untouched but actually present, it's now working right now at all
 
   ngOnInit() {
   	if (!this.tokenCheckService.getRawToken()) {
@@ -52,7 +57,7 @@ export class EditPlantMaintenanceComponent {
     	newDetailValue: this.newDetailValueCtrl
     });
 
-    this.dataService.getPlantMaintenance(this.maintenance).subscribe(
+    this.dataService.getPlantMaintenance(this.deviceId, this.maintenanceId).subscribe(
       (data: ApiResult<PlantMaintenance>) => {
         this.maintenance = data.data;
         this.editForm.controls['type'].setValue(this.maintenance.maintenanceType);

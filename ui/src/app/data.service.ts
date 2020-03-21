@@ -59,31 +59,31 @@ export class DataService {
   /* Plant Maintenance */
 
   getPlantMaintenancesByDeviceId(deviceId, page): Observable<Page<PlantMaintenance[]>> {
-    return this.http.get<Page<PlantMaintenance[]>>(environment.apiUrl + 'admin/device/' + deviceId + '/maintenance?size=10&page=' + page);
+    return this.http.get<Page<PlantMaintenance[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/maintenance?size=10&page=' + page);
   }
 
-  getPlantMaintenance(plantMaintenanceId): Observable<ApiResult<PlantMaintenance>> {
-    return this.http.get<ApiResult<PlantMaintenance>>(environment.apiUrl + 'admin/maintenance/' + plantMaintenanceId);
+  getPlantMaintenance(deviceId, plantMaintenanceId): Observable<ApiResult<PlantMaintenance>> {
+    return this.http.get<ApiResult<PlantMaintenance>>(environment.apiUrl + 'admin/devices/' + deviceId + '/maintenance/' + plantMaintenanceId);
   }
 
   createPlantMaintenance(plantMaintenance: PlantMaintenance): Observable<ApiResult<PlantMaintenance>> {
-    return this.http.post<ApiResult<PlantMaintenance>>(environment.apiUrl + 'admin/maintenance', plantMaintenance);
+    return this.http.post<ApiResult<PlantMaintenance>>(environment.apiUrl + 'admin/devices/' + plantMaintenance.deviceId + '/maintenance', plantMaintenance);
   }
 
   deletePlantMaintenance(plantMaintenance: PlantMaintenance) {
-    return this.http.delete(environment.apiUrl + 'admin/maintenance/' + plantMaintenance.id);
+    return this.http.delete(environment.apiUrl + 'admin/devices/' + plantMaintenance.deviceId + '/maintenance/' + plantMaintenance.id);
   }
 
   /* Pings */
 
   getPingsByDeviceId(deviceId, page): Observable<Page<Ping[]>> {
-    return this.http.get<Page<Ping[]>>(environment.apiUrl + 'admin/device/' + deviceId + '/pings?size=10&page=' + page);
+    return this.http.get<Page<Ping[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/pings?size=10&page=' + page);
   }
 
   /* Pump Actions */
 
   getPumpActionsByDeviceId(deviceId, page): Observable<Page<PumpAction[]>> {
-    return this.http.get<Page<PumpAction[]>>(environment.apiUrl + 'admin/device/' + deviceId + '/pumpactions?size=10&page=' + page);
+    return this.http.get<Page<PumpAction[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/pumpactions?size=10&page=' + page);
   }
 
   /* System */
