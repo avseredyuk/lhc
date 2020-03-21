@@ -28,7 +28,7 @@ export class AddPlantMaintenanceComponent {
   deviceName: string;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
-    private route: ActivatedRoute, private tokenCheckService: TokenCheckService, private utilService: UtilService,
+    private route: ActivatedRoute, private tokenCheckService: TokenCheckService, public utilService: UtilService,
     private componentCommunicationService: ComponentCommunicationService) {
   	this.route.params.subscribe(params => this.deviceId = params.id)
   }
