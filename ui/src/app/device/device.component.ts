@@ -31,7 +31,6 @@ export class DeviceComponent implements OnInit {
     this.dataService.getDevice(this.device).subscribe(
       (data: ApiResult<Device>) => {
         this.device = data.data;
-        this.componentCommunicationService.setValue("deviceName", this.device.name);
       },
       error => { // HttpErrorResponse
         if (error.status === 404) {

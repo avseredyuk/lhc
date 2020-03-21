@@ -4,7 +4,6 @@ import {AppNotification} from "../model/app-notification";
 import {DataService} from "../data.service";
 import {TokenCheckService} from "../token-check.service";
 import {UtilService} from "../util.service";
-import {ComponentCommunicationService} from "../component-communication.service";
 import {PumpAction} from "../model/pump-action";
 
 @Component({
@@ -21,7 +20,7 @@ export class PumpActionsComponent {
   deviceName: string;
 
   constructor(private router: Router, private dataService: DataService, private tokenCheckService: TokenCheckService,
-  	private route: ActivatedRoute, private utilService: UtilService, private componentCommunicationService: ComponentCommunicationService) {
+  	private route: ActivatedRoute, private utilService: UtilService) {
   	this.route.params.subscribe(params => this.deviceId = params.id);
   }
 
@@ -31,7 +30,9 @@ export class PumpActionsComponent {
       return;
     }
     this.loadPageForDevice();
-    this.deviceName = this.componentCommunicationService.getValue("deviceName");
+    this.dataService.getDevice(this.deviceId).subscribe(
+    	apiResult => this.deviceName = apiResult.data.name
+    );
   }
 
   loadPageForDevice() {

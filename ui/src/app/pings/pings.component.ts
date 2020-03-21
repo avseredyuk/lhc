@@ -5,7 +5,6 @@ import {AppNotification} from "../model/app-notification";
 import {DataService} from "../data.service";
 import {TokenCheckService} from "../token-check.service";
 import {UtilService} from "../util.service";
-import {ComponentCommunicationService} from "../component-communication.service";
 
 @Component({
   selector: 'app-pings',
@@ -21,7 +20,7 @@ export class PingsComponent implements OnInit {
   deviceName: string;
 
   constructor(private router: Router, private dataService: DataService, private tokenCheckService: TokenCheckService,
-  	private route: ActivatedRoute, private utilService: UtilService, private componentCommunicationService: ComponentCommunicationService) {
+  	private route: ActivatedRoute, private utilService: UtilService) {
   	this.route.params.subscribe(params => this.deviceId = params.id);
   }
 
@@ -31,7 +30,9 @@ export class PingsComponent implements OnInit {
       return;
     }
     this.loadPageForDevice();
-    this.deviceName = this.componentCommunicationService.getValue("deviceName");
+    this.dataService.getDevice(this.deviceId).subscribe(
+    	apiResult => this.deviceName = apiResult.data.name
+    );
   }
 
   loadPageForDevice() {

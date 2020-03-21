@@ -27,6 +27,7 @@ export class EditPlantMaintenanceComponent {
   newDetailKeyCtrl: FormControl;
   newDetailValueCtrl: FormControl;
   deviceId: number;
+  deviceName: string;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService, private route: ActivatedRoute,
   	private componentCommunicationService: ComponentCommunicationService, private tokenCheckService: TokenCheckService, private utilService: UtilService) {
@@ -71,7 +72,10 @@ export class EditPlantMaintenanceComponent {
         }
         this.router.navigate(['maintenance']);
       }
-      );
+    );
+    this.dataService.getDevice(this.deviceId).subscribe(
+      apiResult => this.deviceName = apiResult.data.name
+    );
   }
 
   addDetail() {
