@@ -7,6 +7,7 @@ import com.avseredyuk.dto.internal.DeviceDto;
 import com.avseredyuk.dto.internal.LoginDto;
 import com.avseredyuk.dto.internal.PingDto;
 import com.avseredyuk.dto.internal.PlantMaintenanceDto;
+import com.avseredyuk.dto.internal.PumpActionDto;
 import com.avseredyuk.exception.InconsistentDataException;
 import com.avseredyuk.mapper.internal.ConfigMapper;
 import com.avseredyuk.mapper.internal.DeviceMapper;
@@ -20,6 +21,7 @@ import com.avseredyuk.service.DeviceService;
 import com.avseredyuk.service.HistoryService;
 import com.avseredyuk.service.PingService;
 import com.avseredyuk.service.PlantMaintenanceService;
+import com.avseredyuk.service.PumpActionService;
 import com.avseredyuk.service.internal.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -71,10 +73,12 @@ public class AdminController {
     @Autowired
     private PingService pingService;
     @Autowired
+    private PumpActionService pumpActionService;
+    @Autowired
     private CacheService cacheService;
     
     @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
-    public ResponseEntity generate(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<AuthToken> generate(@RequestBody LoginDto loginDto) {
         
         final Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
@@ -101,14 +105,6 @@ public class AdminController {
     )
     public List<DeviceDto> getAllDevices() {
         return deviceMapper.toDtoList(deviceService.findAll());
-    }
-    
-    @RequestMapping(
-        value = "/devices/active",
-        method = RequestMethod.GET
-    )
-    public List<DeviceDto> getAllActiveDevices() {
-        return deviceMapper.toDtoList(deviceService.findAllActive());
     }
     
     @RequestMapping(
@@ -223,6 +219,15 @@ public class AdminController {
     public Page<PingDto> getAllPingsByDevice(@PathVariable Long deviceId,
                                              @NotNull final Pageable pageable) {
         return pingService.findAllByDeviceIdPaginated(deviceId, pageable);
+    }
+
+    @RequestMapping(
+            value = "/device/{deviceId}/pumpactions",
+            method = RequestMethod.GET
+    )
+    public Page<PumpActionDto> getAllPumpActionsByDevice(@PathVariable Long deviceId,
+                                                         @NotNull final Pageable pageable) {
+        return pumpActionService.findAllByDeviceIdPaginated(deviceId, pageable);
     }
 
     @RequestMapping(

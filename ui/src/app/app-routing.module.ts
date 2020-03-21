@@ -12,6 +12,7 @@ import {EditPlantMaintenanceComponent} from "./edit-plant-maintenance/edit-plant
 import {SettingsComponent} from "./settings/settings.component";
 import {StatusComponent} from "./status/status.component";
 import {PingsComponent} from "./pings/pings.component";
+import {PumpActionsComponent} from "./pump-actions/pump-actions.component";
 
 const routes: Routes = [
 	{
@@ -57,6 +58,10 @@ const routes: Routes = [
 	{
 		path: 'devices/:id/pings',
 		component: PingsComponent
+	},
+	{
+		path: 'devices/:id/pumpactions',
+		component: PumpActionsComponent
 	},
 	{
 		path: '',

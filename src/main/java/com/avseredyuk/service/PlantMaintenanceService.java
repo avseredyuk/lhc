@@ -34,7 +34,7 @@ public class PlantMaintenanceService {
     }
 
     public Page<PlantMaintenanceDto> findAllByDeviceIdPaginated(Long deviceId, Pageable pageable) {
-        Page<PlantMaintenance> page =  plantMaintenanceRepository.findAllByDeviceIdOrderByDateTimeDesc(deviceId, pageable);
+        Page<PlantMaintenance> page = plantMaintenanceRepository.findAllByDeviceIdOrderByDateTimeDesc(deviceId, pageable);
         return new PageImpl<>(plantMaintenanceMapper.toDtoList(page.getContent()), pageable, page.getTotalElements());
     }
     

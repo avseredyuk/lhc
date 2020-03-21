@@ -1,29 +1,32 @@
 package com.avseredyuk.service;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.avseredyuk.dto.internal.PumpActionDto;
 import com.avseredyuk.exception.AccessDeniedException;
+import com.avseredyuk.mapper.internal.PumpActionMapper;
 import com.avseredyuk.model.Device;
 import com.avseredyuk.model.PumpActionReport;
 import com.avseredyuk.repository.PumpActionRepository;
 
-import java.util.Date;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.stereotype.Service;
-
 @Service
 public class PumpActionService {
-    private PumpActionRepository pumpActionRepository;
-    private ConfigService configService;
-    private DeviceService deviceService;
-    
     @Autowired
-    public PumpActionService(PumpActionRepository pumpActionRepository,
-        ConfigService configService, DeviceService deviceService) {
-        this.pumpActionRepository = pumpActionRepository;
-        this.configService = configService;
-        this.deviceService = deviceService;
-    }
+    private PumpActionRepository pumpActionRepository;
+    @Autowired
+    private ConfigService configService;
+    @Autowired
+    private DeviceService deviceService;
+    @Autowired
+    private PumpActionMapper pumpActionMapper;
 
     public List<PumpActionReport> getLastReportsByDevice(Device device, Long sinceTimestamp) {
         if (sinceTimestamp == null) {
@@ -33,6 +36,11 @@ public class PumpActionService {
             // use non-cached version to load all pump actions since provided timestamp
             return pumpActionRepository.findByDeviceIdAndDateTimeGreaterThan(device.getId(), new Date(sinceTimestamp));
         }
+    }
+
+    public Page<PumpActionDto> findAllByDeviceIdPaginated(Long deviceId, Pageable pageable) {
+        Page<PumpActionReport> page = pumpActionRepository.findAllByDeviceIdOrderByDateTimeDesc(deviceId, pageable);
+        return new PageImpl<>(pumpActionMapper.toDtoList(page.getContent()), pageable, page.getTotalElements());
     }
     
     public PumpActionReport getLastReportByDevice(Device device) {

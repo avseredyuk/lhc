@@ -19,6 +19,7 @@ import {PlantMaintenanceComponent} from "./plant-maintenance/plant-maintenance.c
 import {AddPlantMaintenanceComponent} from "./add-plant-maintenance/add-plant-maintenance.component";
 import {EditPlantMaintenanceComponent} from "./edit-plant-maintenance/edit-plant-maintenance.component";
 import { PingsComponent } from './pings/pings.component';
+import { PumpActionsComponent } from './pump-actions/pump-actions.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { PingsComponent } from './pings/pings.component';
     AddPlantMaintenanceComponent,
     EditPlantMaintenanceComponent,
     PingsComponent,
+    PumpActionsComponent,
   ],
   imports: [
     BrowserModule,

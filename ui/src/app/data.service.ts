@@ -10,6 +10,7 @@ import {Status} from "./model/status";
 import {Page} from "./model/page";
 import {PlantMaintenance} from "./model/plant-maintenance";
 import {Ping} from "./model/ping";
+import {PumpAction} from "./model/pump-action";
 import {environment} from "../environments/environment";
 
 @Injectable({
@@ -33,10 +34,6 @@ export class DataService {
 
   getDevices(): Observable<Device[]> {
     return this.http.get<Device[]>(environment.apiUrl + 'admin/devices');
-  }
-
-  getActiveDevices(): Observable<Device[]> {
-    return this.http.get<Device[]>(environment.apiUrl + 'admin/devices/active');
   }
 
   getDevice(deviceId): Observable<ApiResult<Device>> {
@@ -81,6 +78,12 @@ export class DataService {
 
   getPingsByDeviceId(deviceId, page): Observable<Page<Ping[]>> {
     return this.http.get<Page<Ping[]>>(environment.apiUrl + 'admin/device/' + deviceId + '/pings?size=10&page=' + page);
+  }
+
+  /* Pump Actions */
+
+  getPumpActionsByDeviceId(deviceId, page): Observable<Page<PumpAction[]>> {
+    return this.http.get<Page<PumpAction[]>>(environment.apiUrl + 'admin/device/' + deviceId + '/pumpactions?size=10&page=' + page);
   }
 
   /* System */

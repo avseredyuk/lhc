@@ -1,0 +1,42 @@
+<div id="container">
+	<app-sidebar></app-sidebar>
+	<div id="content">
+		<div *ngIf="hasNotifications()">
+			<div *ngFor="let notification of notifications" role="alert" class="alert" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+				{{ notification.message }}
+			</div>
+		</div>
+		<div class="panel panel-info">
+			<div class="panel-heading"><h1>Pump Actions - {{ deviceName }}</h1></div>
+			<div class="panel-body">
+				<div class="tab-content">
+					<div>
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col" class="col-xs-2">Date</th>
+									<th scope="col" class="col-xs-2">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let p of pumpActionsForDevice">
+									<td>{{ this.utilService.formatTimestamp(p.dateTime) }}</td>
+									<td>{{ p.action }}</td>
+								</tr>
+								</tbody>
+							</table>
+							<div class="col-md-12">
+								<nav aria-label="...">
+									<ul class="pagination pagination-lg">
+										<li *ngFor="let p of pages" class="page-item" [ngClass]="{'disabled': isCurrentPage(p)}">
+											<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
+										</li>
+									</ul>
+								</nav>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
