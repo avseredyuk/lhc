@@ -72,12 +72,14 @@
 									<tr>
 										<th scope="col">Detail Key</th>
 										<th scope="col">Detail Value</th>
+										<th class="col-md-1" scope="col"></th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr *ngFor="let detail of newDetails">
 										<td>{{ detail.key }}</td>
 										<td>{{ detail.value }}</td>
+										<td><button class="btn btn-danger btn-md material-icons" type='button' (click)="removeDetail(detail)">delete</button></td>
 									</tr>
 								</tbody>
 							</table>

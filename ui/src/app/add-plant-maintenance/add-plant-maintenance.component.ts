@@ -7,6 +7,7 @@ import {Device} from "../model/device";
 import {PlantMaintenance, PlantMaintenanceDetail} from "../model/plant-maintenance";
 import {TokenCheckService} from "../token-check.service";
 import {UtilService} from "../util.service";
+import {ComponentCommunicationService} from "../component-communication.service";
 
 @Component({
   selector: 'app-add-plant-maintenance',
@@ -26,7 +27,8 @@ export class AddPlantMaintenanceComponent {
   deviceId: number;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
-    private route: ActivatedRoute, private tokenCheckService: TokenCheckService, private utilService: UtilService) {
+    private route: ActivatedRoute, private tokenCheckService: TokenCheckService, private utilService: UtilService,
+    private componentCommunicationService: ComponentCommunicationService) {
   	this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
@@ -36,9 +38,20 @@ export class AddPlantMaintenanceComponent {
       return;
     }
 
-    this.phCtrl = this.formBuilder.control('', [Validators.required]);
-    this.tdsCtrl = this.formBuilder.control('', [Validators.required]);
-    this.typeCtrl = this.formBuilder.control(this.utilService.dataTypes[1], [Validators.required]);
+    let clonedMaintenance = this.componentCommunicationService.getValue("clonedMaintenance");
+    if (clonedMaintenance !== undefined) {
+      this.phCtrl = this.formBuilder.control(clonedMaintenance.ph, [Validators.required]);
+      this.tdsCtrl = this.formBuilder.control(clonedMaintenance.tds, [Validators.required]);
+      this.typeCtrl = this.formBuilder.control(clonedMaintenance.maintenanceType, [Validators.required]);
+      this.newDetails = clonedMaintenance.details;
+      this.newDetails.forEach((detail, index, a) => {
+        detail.id = null;
+      });
+    } else {
+      this.phCtrl = this.formBuilder.control('', [Validators.required]);
+      this.tdsCtrl = this.formBuilder.control('', [Validators.required]);
+      this.typeCtrl = this.formBuilder.control(this.utilService.dataTypes[1], [Validators.required]);
+    }
     this.newDetailKeyCtrl = this.formBuilder.control('', []);
     this.newDetailValueCtrl = this.formBuilder.control('', []);
 
@@ -53,10 +66,14 @@ export class AddPlantMaintenanceComponent {
 
   addDetail() {
   	if (this.addForm.controls['newDetailKey'].value !== '' && this.addForm.controls['newDetailValue'].value !== '') {
-		this.newDetails.push(new PlantMaintenanceDetail(this.addForm.controls['newDetailKey'].value, this.addForm.controls['newDetailValue'].value));
+	  	this.newDetails.push(new PlantMaintenanceDetail(this.addForm.controls['newDetailKey'].value, this.addForm.controls['newDetailValue'].value));
   		this.addForm.controls['newDetailKey'].setValue('');
   		this.addForm.controls['newDetailValue'].setValue('');
   	}
+  }
+
+  removeDetail(detail: PlantMaintenanceDetail) {
+    this.newDetails = this.newDetails.filter(d => d.key != detail.key);
   }
 
   onSubmit() {

@@ -36,8 +36,20 @@
 											</tr>
 										</table>
 									</td>
-									<td class="text-right"><a class="btn btn-warning btn-md" type="button" routerLink="/edit-plant-maintenance/{{m.id}}/{{m.deviceId}}"><i class="material-icons md-18">edit</i></a>
-										&nbsp;<button class="btn btn-danger btn-md" type="button" (click)="deleteMaintenance(m)"><i class="material-icons md-18">delete</i></button></td>
+									<td class="text-right">
+										<a class="btn btn-warning btn-md" type="button"
+											routerLink="/edit-plant-maintenance/{{m.id}}/{{m.deviceId}}">
+											<i class="material-icons md-18">edit</i>
+										</a>
+										&nbsp;
+										<button class="btn btn-info btn-md" type="button" (click)="cloneMaintenance(m)">
+											<i class="material-icons md-18">content_copy</i>
+										</button>
+										&nbsp;
+										<button class="btn btn-danger btn-md" type="button" (click)="deleteMaintenance(m)">
+											<i class="material-icons md-18">delete</i>
+										</button>
+									</td>
 									</tr>
 								</tbody>
 							</table>

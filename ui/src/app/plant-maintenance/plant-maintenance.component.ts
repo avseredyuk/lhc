@@ -8,6 +8,7 @@ import {ComponentCommunicationService} from "../component-communication.service"
 import {tap} from "rxjs/operators";
 import {TokenCheckService} from "../token-check.service";
 import {UtilService} from "../util.service";
+import {ApiResult} from "../model/api-result";
 
 @Component({
   selector: 'app-plant-maintenance',
@@ -70,6 +71,14 @@ export class PlantMaintenanceComponent implements OnInit {
         this.loadPageForDevice();
       }
     );
+  }
+
+  cloneMaintenance(plantMaintenance: PlantMaintenance) {
+    this.dataService.getPlantMaintenance(plantMaintenance.deviceId, plantMaintenance.id).subscribe(
+      (data: ApiResult<PlantMaintenance>) => {
+        this.componentCommunicationService.setValue("clonedMaintenance", data.data);
+        this.router.navigate(['/add-plant-maintenance/' + plantMaintenance.deviceId]);
+      });
   }
 
   hasNotifications(): Boolean {
