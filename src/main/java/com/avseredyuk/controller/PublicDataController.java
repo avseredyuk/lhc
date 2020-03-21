@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
 @RestController
-public class UiController {
+public class PublicDataController {
     
     @Autowired
     private GaugeProvidingService gaugeProvidingService;

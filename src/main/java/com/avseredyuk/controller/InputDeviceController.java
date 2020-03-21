@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class DeviceController {
+public class InputDeviceController {
     private static final String AUTH_TOKEN_PARAM_NAME = "AuthToken";
     
     private final SensorReportService sensorReportService;
@@ -33,11 +33,11 @@ public class DeviceController {
     private final DeviceMapper deviceMapper;
     
     @Autowired
-    public DeviceController(SensorReportService sensorReportService,
-        PumpActionService pumpActionService, BootupService bootupService,
-        DeviceConfigService deviceConfigService,
-        PumpActionReportMapper pumpActionReportMapper, SensorReportMapper sensorReportMapper,
-        DeviceMapper deviceMapper) {
+    public InputDeviceController(SensorReportService sensorReportService,
+                                 PumpActionService pumpActionService, BootupService bootupService,
+                                 DeviceConfigService deviceConfigService,
+                                 PumpActionReportMapper pumpActionReportMapper, SensorReportMapper sensorReportMapper,
+                                 DeviceMapper deviceMapper) {
         this.sensorReportService = sensorReportService;
         this.pumpActionService = pumpActionService;
         this.bootupService = bootupService;
