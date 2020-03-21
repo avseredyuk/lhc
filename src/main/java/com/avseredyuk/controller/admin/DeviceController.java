@@ -22,6 +22,7 @@ import com.avseredyuk.dto.internal.DeviceDto;
 import com.avseredyuk.dto.internal.PingDto;
 import com.avseredyuk.dto.internal.PlantMaintenanceDto;
 import com.avseredyuk.dto.internal.PumpActionDto;
+import com.avseredyuk.dto.internal.SensorDto;
 import com.avseredyuk.mapper.internal.DeviceMapper;
 import com.avseredyuk.mapper.internal.PlantMaintenanceMapper;
 import com.avseredyuk.model.PlantMaintenance;
@@ -31,6 +32,7 @@ import com.avseredyuk.service.DeviceService;
 import com.avseredyuk.service.PingService;
 import com.avseredyuk.service.PlantMaintenanceService;
 import com.avseredyuk.service.PumpActionService;
+import com.avseredyuk.service.SensorReportService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -51,6 +53,8 @@ public class DeviceController {
     private PingService pingService;
     @Autowired
     private PumpActionService pumpActionService;
+    @Autowired
+    private SensorReportService sensorReportService;
 
     @GetMapping
     public List<DeviceDto> getAllDevices() {
@@ -132,6 +136,12 @@ public class DeviceController {
     public Page<PumpActionDto> getAllPumpActionsByDevice(@PathVariable Long deviceId,
                                                          @NotNull final Pageable pageable) {
         return pumpActionService.findAllByDeviceIdPaginated(deviceId, pageable);
+    }
+
+    @GetMapping(value = "/{deviceId}/sensorreports")
+    public Page<SensorDto> getAllSensorReportsByDevice(@PathVariable Long deviceId,
+                                                       @NotNull final Pageable pageable) {
+        return sensorReportService.findAllByDeviceIdPaginated(deviceId, pageable);
     }
 
 }

@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -20,5 +22,7 @@ public interface SensorReportRepository extends CrudRepository<SensorReport, Lon
     List<SensorReport> findByDeviceIdAndDateTimeGreaterThan(Long deviceId, Date sinceDate);
     
     SensorReport findFirstByDeviceIdOrderByIdDesc(Long deviceId);
+
+    Page<SensorReport> findAllByDeviceIdOrderByDateTimeDesc(Long deviceId, Pageable pageable);
 
 }

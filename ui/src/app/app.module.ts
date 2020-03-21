@@ -20,6 +20,7 @@ import {AddPlantMaintenanceComponent} from "./add-plant-maintenance/add-plant-ma
 import {EditPlantMaintenanceComponent} from "./edit-plant-maintenance/edit-plant-maintenance.component";
 import { PingsComponent } from './pings/pings.component';
 import { PumpActionsComponent } from './pump-actions/pump-actions.component';
+import { SensorReportsComponent } from './sensor-reports/sensor-reports.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { PumpActionsComponent } from './pump-actions/pump-actions.component';
     EditPlantMaintenanceComponent,
     PingsComponent,
     PumpActionsComponent,
+    SensorReportsComponent,
   ],
   imports: [
     BrowserModule,

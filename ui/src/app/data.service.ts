@@ -11,6 +11,7 @@ import {Page} from "./model/page";
 import {PlantMaintenance} from "./model/plant-maintenance";
 import {Ping} from "./model/ping";
 import {PumpAction} from "./model/pump-action";
+import {SensorReport} from "./model/sensor-report";
 import {environment} from "../environments/environment";
 
 @Injectable({
@@ -84,6 +85,12 @@ export class DataService {
 
   getPumpActionsByDeviceId(deviceId, page): Observable<Page<PumpAction[]>> {
     return this.http.get<Page<PumpAction[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/pumpactions?size=10&page=' + page);
+  }
+
+  /* Sensor Reports */
+
+  getSensorReportsByDeviceId(deviceId, page): Observable<Page<SensorReport[]>> {
+    return this.http.get<Page<SensorReport[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/sensorreports?size=10&page=' + page);
   }
 
   /* System */

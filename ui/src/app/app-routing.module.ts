@@ -13,6 +13,7 @@ import {SettingsComponent} from "./settings/settings.component";
 import {StatusComponent} from "./status/status.component";
 import {PingsComponent} from "./pings/pings.component";
 import {PumpActionsComponent} from "./pump-actions/pump-actions.component";
+import {SensorReportsComponent} from "./sensor-reports/sensor-reports.component";
 
 const routes: Routes = [
 	{
@@ -62,6 +63,10 @@ const routes: Routes = [
 	{
 		path: 'devices/:id/pumpactions',
 		component: PumpActionsComponent
+	},
+	{
+		path: 'devices/:id/sensorreports',
+		component: SensorReportsComponent
 	},
 	{
 		path: '',
