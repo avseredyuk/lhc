@@ -1,18 +1,23 @@
-<div *ngIf="hasNotifications()">
-	<div *ngFor="let notification of notifications" role="alert" class="alert" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
-		{{ notification.message }}
-	</div>
-</div>
-<div class="panel panel-info">
-	<div class="panel-heading"><h1>Devices</h1></div>
-	<div class="panel-body">
-		<ul class="contentul">
-			<li *ngFor="let device of devices">
-				<a [ngClass]="(device.enabled==true)?'device-enabled':'device-disabled'" routerLink="/devices/{{device.id}}">{{ device.name }}</a>
-			</li>
-		</ul>
-		<div class="col-md-12">
-			<a routerLink="/add-device" class="btn btn-info btn-lg" role="button">Add</a>	
+<div id="container">
+	<app-sidebar></app-sidebar>
+	<div id="content">
+		<div *ngIf="hasNotifications()">
+			<div *ngFor="let notification of notifications" role="alert" class="alert" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+				{{ notification.message }}
+			</div>
+		</div>
+		<div class="panel panel-info">
+			<div class="panel-heading"><h1>Devices</h1></div>
+			<div class="panel-body">
+				<ul class="contentul">
+					<li *ngFor="let device of devices">
+						<a [ngClass]="(device.enabled==true)?'device-enabled':'device-disabled'" routerLink="/devices/{{device.id}}">{{ device.name }}</a>
+					</li>
+				</ul>
+				<div class="col-md-12">
+					<a routerLink="/add-device" class="btn btn-info btn-lg" role="button">Add</a>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

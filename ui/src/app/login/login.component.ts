@@ -9,7 +9,7 @@ import {TokenCheckService} from "../token-check.service";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   loginForm: FormGroup;
   usernameCtrl: FormControl;
@@ -17,8 +17,9 @@ export class LoginComponent implements OnInit {
 
   invalidLogin: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
-    private tokenCheckService: TokenCheckService) { }
+  constructor(private formBuilder: FormBuilder, private dataService: DataService, private router: Router,
+    private tokenCheckService: TokenCheckService) {
+  }
 
   ngOnInit() {
     this.tokenCheckService.removeToken();

@@ -1,32 +1,37 @@
-<div *ngIf="hasNotifications()">
-	<div *ngFor="let notification of notifications" role="alert" class="alert" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
-		{{ notification.message }}
-	</div>
-</div>
-<div class="panel panel-info">
-	<div class="panel-heading"><h1>Settings</h1></div>
-	<div class="panel-body">
-        <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Action <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a (click)="clearCache()">Clear Cache</a></li>
-            </ul>
-        </div>
-		<table class="table table-sm table-no-border nopadnomargin">
-			<thead>
-				<tr>
-					<th scope="col">Key</th>
-					<th scope="col">Value</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr *ngFor="let cfg of configurations">
-					<td>{{ cfg.key }}</td>
-					<td>{{ cfg.value }}</td>
-				</tr>
-			</tbody>
-		</table>
+<div id="container">
+	<app-sidebar></app-sidebar>
+	<div id="content">
+		<div *ngIf="hasNotifications()">
+			<div *ngFor="let notification of notifications" role="alert" class="alert" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+				{{ notification.message }}
+			</div>
+		</div>
+		<div class="panel panel-info">
+			<div class="panel-heading"><h1>Settings</h1></div>
+			<div class="panel-body">
+				<div class="btn-group">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Action <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a (click)="clearCache()">Clear Cache</a></li>
+					</ul>
+				</div>
+				<table class="table table-sm table-no-border nopadnomargin">
+					<thead>
+						<tr>
+							<th scope="col">Key</th>
+							<th scope="col">Value</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let cfg of configurations">
+							<td>{{ cfg.key }}</td>
+							<td>{{ cfg.value }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 </div>

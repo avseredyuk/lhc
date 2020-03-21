@@ -1,55 +1,60 @@
-<div *ngIf="hasNotifications()">
-	<div *ngFor="let notification of notifications" role="alert" class="alert" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
-		{{ notification.message }}
-	</div>
-</div>
-<div class="panel panel-info">
-	<div class="panel-heading"><h1>Plant Maintenance</h1></div>
-	<div class="panel-body">
-		<div class="tab-content">
-			<div>
-				<table class="table">
-					<thead>
-						<tr>
-							<th scope="col" class="col-xs-2">Date</th>
-							<th scope="col" class="col-xs-2">pH</th>
-							<th scope="col" class="col-xs-2">TDS</th>
-							<th scope="col" class="col-xs-2">Maintenance type</th>
-							<th scope="col" class="col-xs-3">Details</th>
-							<th scope="col" class="col-xs-1">Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr *ngFor="let m of plantMaintenancesForDevice">
-							<td>{{ formatTimestamp(m.d) }}</td>
-							<td>{{ m.ph }}</td>
-							<td>{{ m.tds }}</td>
-							<td>{{ m.maintenanceType }}</td>
-							<td>
-								<table class="table table-details nopadnomargin">
-									<tr *ngFor="let detail of m.details">
-										<td class="col-xs-4 nopadnomargin detail-key">{{ detail.key }}: &nbsp;</td>
-										<td class="col-xs-8 nopadnomargin">{{ detail.value }}</td>
+<div id="container">
+	<app-sidebar></app-sidebar>
+	<div id="content">
+		<div *ngIf="hasNotifications()">
+			<div *ngFor="let notification of notifications" role="alert" class="alert" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+				{{ notification.message }}
+			</div>
+		</div>
+		<div class="panel panel-info">
+			<div class="panel-heading"><h1>Plant Maintenance</h1></div>
+			<div class="panel-body">
+				<div class="tab-content">
+					<div>
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col" class="col-xs-2">Date</th>
+									<th scope="col" class="col-xs-2">pH</th>
+									<th scope="col" class="col-xs-2">TDS</th>
+									<th scope="col" class="col-xs-2">Maintenance type</th>
+									<th scope="col" class="col-xs-3">Details</th>
+									<th scope="col" class="col-xs-1">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let m of plantMaintenancesForDevice">
+									<td>{{ formatTimestamp(m.d) }}</td>
+									<td>{{ m.ph }}</td>
+									<td>{{ m.tds }}</td>
+									<td>{{ m.maintenanceType }}</td>
+									<td>
+										<table class="table table-details nopadnomargin">
+											<tr *ngFor="let detail of m.details">
+												<td class="col-xs-4 nopadnomargin detail-key">{{ detail.key }}: &nbsp;</td>
+												<td class="col-xs-8 nopadnomargin">{{ detail.value }}</td>
+											</tr>
+										</table>
+									</td>
+									<td><a class="btn btn-warning btn-md" type="button" routerLink="/edit-plant-maintenance/{{m.id}}"><i class="material-icons md-18">edit</i></a>
+										&nbsp;<button class="btn btn-danger btn-md" type="button" (click)="deleteMaintenance(m)"><i class="material-icons md-18">delete</i></button></td>
 									</tr>
-								</table>
-							</td>
-							<td><a class="btn btn-warning btn-md" type="button" routerLink="/edit-plant-maintenance/{{m.id}}"><i class="material-icons md-18">edit</i></a>
-								&nbsp;<button class="btn btn-danger btn-md" type="button" (click)="deleteMaintenance(m)"><i class="material-icons md-18">delete</i></button></td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="col-md-12">
-					<nav aria-label="...">
-						<ul class="pagination pagination-lg">
-							<li *ngFor="let p of pages" class="page-item" [ngClass]="{'disabled': isCurrentPage(p)}">
-								<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
-							</li>
-						</ul>
-					</nav>
-					&nbsp;
-					<a routerLink='/add-plant-maintenance/{{ deviceId }}' class="btn btn-info btn-lg" role="button">Add</a>
+								</tbody>
+							</table>
+							<div class="col-md-12">
+								<nav aria-label="...">
+									<ul class="pagination pagination-lg">
+										<li *ngFor="let p of pages" class="page-item" [ngClass]="{'disabled': isCurrentPage(p)}">
+											<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
+										</li>
+									</ul>
+								</nav>
+								&nbsp;
+								<a routerLink='/add-plant-maintenance/{{ deviceId }}' class="btn btn-info btn-lg" role="button">Add</a>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>

@@ -1,8 +1,8 @@
 export class Status {
   gauges: Array<GaugeData>;
-  lastPings: Array<Object>;
-  lastPumps: Array<Object>;
-  lastBootups: Array<Object>;
+  lastPings: Object;
+  lastPumps: Object;
+  lastBootups: Object;
 }
 
 export class GaugeData {

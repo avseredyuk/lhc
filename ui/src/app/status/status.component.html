@@ -1,54 +1,59 @@
-<h1>Status</h1>
-<div class="container">
-	<div *ngIf="status">
-		<div #gauges *ngFor="let gauge of status.gauges; let i = index" class="col-xs-12 col-sm-8 col-md-4 col-lg-4">
-			<canvas class="gauge" id="gauge{{ i }}"></canvas>
-			<span class="gaugeText" id="gaugeText{{ i }}"></span>
-		</div>
-	</div>
-</div>
-<br/>
-<div class="container" id="statuscont">
-	<div *ngIf="status">
-		<div class="col-xs-12 col-sm-8 col-md-4 col-lg-4">
-			<div class="panel panel-info">
-				<div class="panel-heading">Last pings</div>
-				<div class="panel-body">
-					<div *ngIf="!hasPings()">
-						No data
-					</div>
-					<ul class="list-group" *ngFor="let lastPing of objectKeys(status.lastPings)">
-						<li class="list-group-item active">{{ lastPing }}</li>
-						<li class="list-group-item">{{ formatTimeInterval(status.lastPings[lastPing]) }} / {{ formatTimestamp(status.lastPings[lastPing]) }}</li>
-					</ul>
+<div id="container">
+	<app-sidebar></app-sidebar>
+	<div id="content">
+		<h1>Status</h1>
+		<div class="container">
+			<div *ngIf="status">
+				<div #gauges *ngFor="let gauge of status.gauges; let i = index" class="col-xs-12 col-sm-8 col-md-4 col-lg-4">
+					<canvas class="gauge" id="gauge{{ i }}"></canvas>
+					<span class="gaugeText" id="gaugeText{{ i }}"></span>
 				</div>
 			</div>
 		</div>
-		<div class="col-xs-12 col-sm-8 col-md-4 col-lg-4">
-			<div class="panel panel-info">
-				<div class="panel-heading">Last pumps</div>
-				<div class="panel-body">
-					<div *ngIf="!hasPumps()">
-						No data
+		<br/>
+		<div class="container" id="statuscont">
+			<div *ngIf="status">
+				<div class="col-xs-12 col-sm-8 col-md-4 col-lg-4">
+					<div class="panel panel-info">
+						<div class="panel-heading">Last pings</div>
+						<div class="panel-body">
+							<div *ngIf="!hasPings()">
+								No data
+							</div>
+							<ul class="list-group" *ngFor="let lastPing of objectKeys(status.lastPings)">
+								<li class="list-group-item active">{{ lastPing }}</li>
+								<li class="list-group-item">{{ status.lastPings[lastPing].interval }} / {{ status.lastPings[lastPing].timestamp }}</li>
+							</ul>
+						</div>
 					</div>
-					<ul class="list-group" *ngFor="let lastPump of objectKeys(status.lastPumps)">
-						<li class="list-group-item active">{{ lastPump }}</li>
-						<li class="list-group-item">{{ formatTimeInterval(status.lastPumps[lastPump]) }} / {{ formatTimestamp(status.lastPumps[lastPump]) }}</li>
-					</ul>
 				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-sm-8 col-md-4 col-lg-4">
-			<div class="panel panel-info">
-				<div class="panel-heading">Last bootups</div>
-				<div class="panel-body">
-					<div *ngIf="!hasBootups()">
-						No data
+				<div class="col-xs-12 col-sm-8 col-md-4 col-lg-4">
+					<div class="panel panel-info">
+						<div class="panel-heading">Last pumps</div>
+						<div class="panel-body">
+							<div *ngIf="!hasPumps()">
+								No data
+							</div>
+							<ul class="list-group" *ngFor="let lastPump of objectKeys(status.lastPumps)">
+								<li class="list-group-item active">{{ lastPump }}</li>
+								<li class="list-group-item">{{ status.lastPumps[lastPump].interval }} / {{ status.lastPumps[lastPump].timestamp }}</li>
+							</ul>
+						</div>
 					</div>
-					<ul class="list-group" *ngFor="let lastBootup of objectKeys(status.lastBootups)">
-						<li class="list-group-item active">{{ lastBootup }}</li>
-						<li class="list-group-item">{{ formatTimeInterval(status.lastBootups[lastBootup]) }} / {{ formatTimestamp(status.lastBootups[lastBootup]) }}</li>
-					</ul>
+				</div>
+				<div class="col-xs-12 col-sm-8 col-md-4 col-lg-4">
+					<div class="panel panel-info">
+						<div class="panel-heading">Last bootups</div>
+						<div class="panel-body">
+							<div *ngIf="!hasBootups()">
+								No data
+							</div>
+							<ul class="list-group" *ngFor="let lastBootup of objectKeys(status.lastBootups)">
+								<li class="list-group-item active">{{ lastBootup }}</li>
+								<li class="list-group-item">{{ status.lastBootups[lastBootup].interval }} / {{ status.lastBootups[lastBootup].timestamp }}</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

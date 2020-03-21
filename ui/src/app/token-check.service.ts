@@ -5,7 +5,7 @@ import {Injectable} from "@angular/core";
 })
 export class TokenCheckService {
 
-  isExpiredToken(): Boolean {//todo: being called thousands times
+  isExpiredToken(): Boolean {
   	let tokenObject = JSON.parse(localStorage.getItem("token"));
   	if (!tokenObject) {
   	  return true;

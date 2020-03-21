@@ -41,7 +41,9 @@ export class StatusComponent implements OnInit {
 
 	ngOnInit() {
 		this.dataService.getStatus().subscribe(
-			data => this.status = data
+			data => {
+				this.status = this.postProcessStatus(data);
+			}
 		);
 		this.timer = setInterval(() => {
 			this.updateGauges();
@@ -58,6 +60,28 @@ export class StatusComponent implements OnInit {
 		this.gauges.changes.subscribe(t => {
 			this.initGauges();
 		})
+	}
+
+	postProcessStatus(status: Status): Status {
+		Object.keys(status.lastPings).forEach((ping, i, array) => {
+			let unprocessedObject = status.lastPings[ping];
+			status.lastPings[ping] = new Object();
+			status.lastPings[ping].timestamp = this.formatTimestamp(unprocessedObject);
+			status.lastPings[ping].interval = this.formatTimeInterval(unprocessedObject);
+		});
+		Object.keys(status.lastBootups).forEach((bootup, i, array) => {
+			let unprocessedObject = status.lastBootups[bootup];
+			status.lastBootups[bootup] = new Object();
+			status.lastBootups[bootup].timestamp = this.formatTimestamp(unprocessedObject);
+			status.lastBootups[bootup].interval = this.formatTimeInterval(unprocessedObject);
+		});
+		Object.keys(status.lastPumps).forEach((pump, i, array) => {
+			let unprocessedObject = status.lastPumps[pump];
+			status.lastPumps[pump] = new Object();
+			status.lastPumps[pump].timestamp = this.formatTimestamp(unprocessedObject);
+			status.lastPumps[pump].interval = this.formatTimeInterval(unprocessedObject);
+		});
+		return status;
 	}
 
 	formatTimestamp(timestamp: number): string {
@@ -103,6 +127,7 @@ export class StatusComponent implements OnInit {
 				gauge.set(originalValue);
 				gauge.canvas.nextElementSibling.innerText = String(roundedValue) + this.formatGaugeMeasureUnit(data.gauges[i].dataType);
 			});
+			data = this.postProcessStatus(data);
 			this.status.lastPings = data.lastPings;
 			this.status.lastPumps = data.lastPumps;
 			this.status.lastBootups = data.lastBootups;

@@ -1,68 +1,72 @@
-<div *ngIf="hasNotifications()">
-	<div *ngFor="let notification of notifications" role="alert" class="alert" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
-		{{ notification.message }}
-	</div>
-</div>
-<div class="block-back">
-	<a (click)="goBack()">
-		<i class="material-icons">arrow_back</i>
-	</a>
-	<a routerLink="/devices/{{device.id}}/maintenance">
-		<i class="material-icons">local_florist</i>
-	</a>
-</div>
-<h1>{{ device.name }}</h1>
-<ul class="contentul">
-	<li>
-		<strong>Id:</strong> {{device.id}}
-	</li>
-	<li>
-		<strong>Name:</strong> {{device.name}}
-	</li>
-	<li>
-		<strong>Token:</strong> {{device.token}}
-	</li>
-	<li>
-		<strong>Enabled:</strong> <input class="form-check-input" type="checkbox" [checked]="device.enabled" disabled>
-	</li>
-	<li *ngIf="hasConfig()">
-		<table class="table table-sm table-no-border nopadnomargin">
-			<thead>
-				<tr>
-					<th scope="col">Key</th>
-					<th scope="col">Value</th>
-					<th scope="col">Config type</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr *ngFor="let cfg of device.config">
-					<td>{{ cfg.key }}</td>
-					<td>{{ cfg.value }}</td>
-					<td>{{ cfg.type }}</td>
-				</tr>
-			</tbody>
-		</table>
-	</li>
-	<li *ngIf="hasExclusions()">
-		<table class="table table-condensed">
-			<thead>
-				<tr>
-					<th scope="col">Mapping</th>
-					<th scope="col">Status</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr *ngFor="let exclusion of device.exclusions" >
-					<td >
-						{{ exclusion.map }}
-					</td>
-					<td>
-						<i class="material-icons" [ngClass]="{'toggleOff': checkExcluded(exclusion), 'toggleOn': !checkExcluded(exclusion)}"> {{ checkExcluded(exclusion) ? 'toggle_off' : 'toggle_on' }} </i>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</li>
-</ul>
+<div id="container">
+	<app-sidebar></app-sidebar>
+	<div id="content">
+		<div *ngIf="hasNotifications()">
+			<div *ngFor="let notification of notifications" role="alert" class="alert" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+				{{ notification.message }}
+			</div>
+		</div>
+		<div class="block-back">
+			<a (click)="goBack()">
+				<i class="material-icons">arrow_back</i>
+			</a>
+			<a routerLink="/devices/{{device.id}}/maintenance">
+				<i class="material-icons">local_florist</i>
+			</a>
+		</div>
+		<h1>{{ device.name }}</h1>
+		<ul class="contentul">
+			<li>
+				<strong>Id:</strong> {{device.id}}
+			</li>
+			<li>
+				<strong>Name:</strong> {{device.name}}
+			</li>
+			<li>
+				<strong>Token:</strong> {{device.token}}
+			</li>
+			<li>
+				<strong>Enabled:</strong> <input class="form-check-input" type="checkbox" [checked]="device.enabled" disabled>
+			</li>
+			<li *ngIf="hasConfig()">
+				<table class="table table-sm table-no-border nopadnomargin">
+					<thead>
+						<tr>
+							<th scope="col">Key</th>
+							<th scope="col">Value</th>
+							<th scope="col">Config type</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let cfg of device.config">
+							<td>{{ cfg.key }}</td>
+							<td>{{ cfg.value }}</td>
+							<td>{{ cfg.type }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			<li *ngIf="hasExclusions()">
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th scope="col">Mapping</th>
+							<th scope="col">Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let exclusion of device.exclusions" >
+							<td >
+								{{ exclusion.map }}
+							</td>
+							<td>
+								<i class="material-icons" [ngClass]="{'toggleOff': checkExcluded(exclusion), 'toggleOn': !checkExcluded(exclusion)}"> {{ checkExcluded(exclusion) ? 'toggle_off' : 'toggle_on' }} </i>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+		</ul>
 
-<button class="material-icons md-36" (click)="enableRunPumpOnce()">local_drink</button>
+		<button class="material-icons md-36" (click)="enableRunPumpOnce()">local_drink</button>
+	</div></div>
