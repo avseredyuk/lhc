@@ -14,29 +14,29 @@
 						<table class="table">
 							<thead>
 								<tr>
-									<th scope="col" class="col-xs-2">Date</th>
-									<th scope="col" class="col-xs-2">pH</th>
-									<th scope="col" class="col-xs-2">TDS</th>
-									<th scope="col" class="col-xs-2">Maintenance type</th>
-									<th scope="col" class="col-xs-3">Details</th>
-									<th scope="col" class="col-xs-1">Actions</th>
+									<th scope="col" class="col-xs-3 text-left">Date</th>
+									<th scope="col" class="col-xs-1 text-center">pH</th>
+									<th scope="col" class="col-xs-1 text-center">TDS</th>
+									<th scope="col" class="col-xs-2 text-center">Maintenance type</th>
+									<th scope="col" class="col-xs-3 text-center">Details</th>
+									<th scope="col" class="col-xs-2 text-right">Actions</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr *ngFor="let m of plantMaintenancesForDevice">
-									<td>{{ this.utilService.formatTimestamp(m.d) }}</td>
-									<td>{{ m.ph }}</td>
-									<td>{{ m.tds }}</td>
-									<td>{{ m.maintenanceType }}</td>
-									<td>
+									<td class="text-left">{{ this.utilService.formatTimestamp(m.d) }}</td>
+									<td class="text-center">{{ m.ph }}</td>
+									<td class="text-center">{{ m.tds }}</td>
+									<td class="text-center">{{ m.maintenanceType }}</td>
+									<td class="text-center">
 										<table class="table table-details nopadnomargin">
 											<tr *ngFor="let detail of m.details">
-												<td class="col-xs-4 nopadnomargin detail-key">{{ detail.key }}: &nbsp;</td>
-												<td class="col-xs-8 nopadnomargin">{{ detail.value }}</td>
+												<td class="col-xs-6 nopadnomargin text-right">{{ detail.key }}: &nbsp;</td>
+												<td class="col-xs-6 nopadnomargin text-left">{{ detail.value }}</td>
 											</tr>
 										</table>
 									</td>
-									<td><a class="btn btn-warning btn-md" type="button" routerLink="/edit-plant-maintenance/{{m.id}}/{{m.deviceId}}"><i class="material-icons md-18">edit</i></a>
+									<td class="text-right"><a class="btn btn-warning btn-md" type="button" routerLink="/edit-plant-maintenance/{{m.id}}/{{m.deviceId}}"><i class="material-icons md-18">edit</i></a>
 										&nbsp;<button class="btn btn-danger btn-md" type="button" (click)="deleteMaintenance(m)"><i class="material-icons md-18">delete</i></button></td>
 									</tr>
 								</tbody>
