@@ -14,7 +14,7 @@ import {PumpAction} from "../model/pump-action";
 export class PumpActionsComponent {
   pumpActionsForDevice: Array<PumpAction> = [];
   notifications: Array<AppNotification> = [];
-  pages: Array<number> = [];
+  totalPages: number;
   pageNumber: number = 1;
   deviceId: number;
   deviceName: string;
@@ -39,17 +39,9 @@ export class PumpActionsComponent {
     this.dataService.getPumpActionsByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(
       pumpActions => {
         this.pumpActionsForDevice = pumpActions.content;
-
-        this.pages = [];
-        for (var i = 1; i <= pumpActions.totalPages; i++) {
-          this.pages.push(i);
-        }
+        this.totalPages = pumpActions.totalPages;
       }
     );
-  }
-
-  isCurrentPage(p) {
-    return p == this.pageNumber;
   }
 
   loadPage(p) {

@@ -18,10 +18,10 @@ import {ApiResult} from "../model/api-result";
 export class PlantMaintenanceComponent implements OnInit {
 
   notifications: Array<AppNotification> = [];
-  pages: Array<number> = [];
   plantMaintenancesForDevice: Array<PlantMaintenance> = [];
   deviceId: number;
   pageNumber: number = 1;
+  totalPages: number;
   @ViewChildren('tabHeader') tabHeaders: QueryList<any>;
   deviceName: string;
 
@@ -49,17 +49,9 @@ export class PlantMaintenanceComponent implements OnInit {
     this.dataService.getPlantMaintenancesByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(
       maintenances => {
         this.plantMaintenancesForDevice = maintenances.content;
-
-        this.pages = [];
-        for (var i = 1; i <= maintenances.totalPages; i++) {
-          this.pages.push(i);
-        }
+        this.totalPages = maintenances.totalPages;
       }
     );
-  }
-
-  isCurrentPage(p) {
-    return p == this.pageNumber;
   }
 
   loadPage(p) {

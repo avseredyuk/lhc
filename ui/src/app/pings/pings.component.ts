@@ -14,7 +14,7 @@ import {UtilService} from "../util.service";
 export class PingsComponent implements OnInit {
   pingsForDevice: Array<Ping> = [];
   notifications: Array<AppNotification> = [];
-  pages: Array<number> = [];
+  totalPages: number;
   pageNumber: number = 1;
   deviceId: number;
   deviceName: string;
@@ -39,17 +39,9 @@ export class PingsComponent implements OnInit {
     this.dataService.getPingsByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(
       pings => {
         this.pingsForDevice = pings.content;
-
-        this.pages = [];
-        for (var i = 1; i <= pings.totalPages; i++) {
-          this.pages.push(i);
-        }
+        this.totalPages = pings.totalPages;
       }
     );
-  }
-
-  isCurrentPage(p) {
-    return p == this.pageNumber;
   }
 
   loadPage(p) {

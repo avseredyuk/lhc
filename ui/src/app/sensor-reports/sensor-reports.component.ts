@@ -14,7 +14,7 @@ import {SensorReport} from "../model/sensor-report";
 export class SensorReportsComponent {
   sensorReportsForDevice: Array<SensorReport> = [];
   notifications: Array<AppNotification> = [];
-  pages: Array<number> = [];
+  totalPages: number;
   pageNumber: number = 1;
   deviceId: number;
   deviceName: string;
@@ -39,17 +39,9 @@ export class SensorReportsComponent {
     this.dataService.getSensorReportsByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(
       sensorReports => {
         this.sensorReportsForDevice = sensorReports.content;
-
-        this.pages = [];
-        for (var i = 1; i <= sensorReports.totalPages; i++) {
-          this.pages.push(i);
-        }
+        this.totalPages = sensorReports.totalPages;
       }
     );
-  }
-
-  isCurrentPage(p) {
-    return p == this.pageNumber;
   }
 
   loadPage(p) {

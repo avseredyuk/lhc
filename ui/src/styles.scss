@@ -15,5 +15,13 @@ body {
         @media (max-width: 768px) {
             padding: 0px 0px;
         }
-    }    
+    }
+}
+
+.inactiveLink {
+   pointer-events: none;
+   cursor: default;
+}
+.currentPage {
+    font-weight: bold;
 }

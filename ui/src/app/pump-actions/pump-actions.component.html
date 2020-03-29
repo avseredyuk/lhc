@@ -26,9 +26,11 @@
 								</tbody>
 							</table>
 							<div class="col-md-12">
-								<nav aria-label="...">
+								<nav aria-label="..." class="text-center">
 									<ul class="pagination pagination-lg">
-										<li *ngFor="let p of pages" class="page-item" [ngClass]="{'disabled': isCurrentPage(p)}">
+										<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
+										[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
+													 currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
 											<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
 										</li>
 									</ul>
