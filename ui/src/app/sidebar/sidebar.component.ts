@@ -11,6 +11,8 @@ export class SidebarComponent implements OnInit {
 
   currentUrl: string;
   hasToken: Boolean = false;
+  canGoBack: Boolean = false;
+  goBackCallback: () => any;
 
   constructor(private router: Router, private tokenCheckService: TokenCheckService) {
     router.events.subscribe((_: NavigationEnd) => this.currentUrl = this.router.url)
@@ -36,5 +38,10 @@ export class SidebarComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  setGoBackCallback(callback: () => any) {
+    this.canGoBack = true;
+    this.goBackCallback = callback;
   }
 }

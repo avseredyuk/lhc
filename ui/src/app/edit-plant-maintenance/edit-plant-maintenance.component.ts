@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../data.service";
@@ -9,6 +9,7 @@ import {ComponentCommunicationService} from "../component-communication.service"
 import {AppNotification, AppNotificationType} from "../model/app-notification";
 import {TokenCheckService} from "../token-check.service";
 import {UtilService} from "../util.service";
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-edit-plant-maintenance',
@@ -17,6 +18,7 @@ import {UtilService} from "../util.service";
 })
 export class EditPlantMaintenanceComponent {
 
+  @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   maintenanceId: number;
   maintenance: PlantMaintenance;
   notifications: Array<AppNotification> = [];
@@ -42,6 +44,8 @@ export class EditPlantMaintenanceComponent {
       this.router.navigate(['login']);
       return;
     }
+
+    this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId + '/maintenance']);});
 
     this.phCtrl = this.formBuilder.control('', []);
     this.tdsCtrl = this.formBuilder.control('', []);

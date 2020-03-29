@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../data.service";
@@ -8,6 +8,7 @@ import {PlantMaintenance, PlantMaintenanceDetail} from "../model/plant-maintenan
 import {TokenCheckService} from "../token-check.service";
 import {UtilService} from "../util.service";
 import {ComponentCommunicationService} from "../component-communication.service";
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-add-plant-maintenance',
@@ -16,6 +17,7 @@ import {ComponentCommunicationService} from "../component-communication.service"
 })
 export class AddPlantMaintenanceComponent {
 
+  @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   notifications: Array<AppNotification> = [];
   addForm: FormGroup;
   phCtrl: FormControl;
@@ -38,6 +40,8 @@ export class AddPlantMaintenanceComponent {
       this.router.navigate(['login']);
       return;
     }
+
+    this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId + '/maintenance']);});
 
     let clonedMaintenance = this.componentCommunicationService.getValue("clonedMaintenance");
     if (clonedMaintenance !== undefined) {

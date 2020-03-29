@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChildren, QueryList, Renderer} from "@angular/core";
+import {Component, OnInit, ViewChildren, QueryList, Renderer, ViewChild} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../data.service";
 import {PlantMaintenance} from "../model/plant-maintenance";
@@ -9,6 +9,7 @@ import {tap} from "rxjs/operators";
 import {TokenCheckService} from "../token-check.service";
 import {UtilService} from "../util.service";
 import {ApiResult} from "../model/api-result";
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-plant-maintenance',
@@ -16,7 +17,7 @@ import {ApiResult} from "../model/api-result";
   styleUrls: ['./plant-maintenance.component.scss']
 })
 export class PlantMaintenanceComponent implements OnInit {
-
+  @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   notifications: Array<AppNotification> = [];
   plantMaintenancesForDevice: Array<PlantMaintenance> = [];
   deviceId: number;
@@ -36,7 +37,7 @@ export class PlantMaintenanceComponent implements OnInit {
       this.router.navigate(['login']);
       return;
     }
-
+    this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
     this.loadPageForDevice();
 
   	this.notifications = this.componentCommunicationService.getValue("notification");

@@ -1,5 +1,15 @@
 <nav>
 	<ul>
+		<li *ngIf="canGoBack">
+			<a routerLink="" (click)="goBackCallback()">
+				<i class="material-icons">arrow_back</i>
+			</a>
+		</li>
+		<li *ngIf="!canGoBack">
+			<a class="no-pointer">
+				<i class="material-icons">remove</i>
+			</a>
+		</li>
 		<li>
 			<a routerLink="" [class.activated]="currentUrl == '/'">
 				<i class="material-icons">details</i>

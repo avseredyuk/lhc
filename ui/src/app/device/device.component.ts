@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, ViewChild} from "@angular/core";
 import {DataService} from "../data.service";
 import {ComponentCommunicationService} from "../component-communication.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -7,6 +7,7 @@ import {ApiResult} from "../model/api-result";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
 import {Location} from '@angular/common';
 import {TokenCheckService} from "../token-check.service";
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-device',
@@ -15,6 +16,7 @@ import {TokenCheckService} from "../token-check.service";
 })
 export class DeviceComponent implements OnInit {
 
+  @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   notifications: Array<AppNotification> = [];
   device: Device;
 
@@ -28,6 +30,7 @@ export class DeviceComponent implements OnInit {
       this.router.navigate(['login']);
       return;
     }
+    this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices']);});
     this.dataService.getDevice(this.device).subscribe(
       (data: ApiResult<Device>) => {
         this.device = data.data;

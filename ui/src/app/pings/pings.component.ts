@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Ping} from "../model/ping";
 import {AppNotification} from "../model/app-notification";
 import {DataService} from "../data.service";
 import {TokenCheckService} from "../token-check.service";
 import {UtilService} from "../util.service";
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-pings',
@@ -12,6 +13,7 @@ import {UtilService} from "../util.service";
   styleUrls: ['./pings.component.scss']
 })
 export class PingsComponent implements OnInit {
+  @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   pingsForDevice: Array<Ping> = [];
   notifications: Array<AppNotification> = [];
   totalPages: number;
@@ -29,6 +31,7 @@ export class PingsComponent implements OnInit {
       this.router.navigate(['login']);
       return;
     }
+    this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
     this.loadPageForDevice();
     this.dataService.getDevice(this.deviceId).subscribe(
     	apiResult => this.deviceName = apiResult.data.name

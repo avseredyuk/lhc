@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AppNotification} from "../model/app-notification";
 import {DataService} from "../data.service";
 import {TokenCheckService} from "../token-check.service";
 import {UtilService} from "../util.service";
 import {PumpAction} from "../model/pump-action";
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-pump-actions',
@@ -12,6 +13,7 @@ import {PumpAction} from "../model/pump-action";
   styleUrls: ['./pump-actions.component.scss']
 })
 export class PumpActionsComponent {
+  @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   pumpActionsForDevice: Array<PumpAction> = [];
   notifications: Array<AppNotification> = [];
   totalPages: number;
@@ -29,6 +31,7 @@ export class PumpActionsComponent {
       this.router.navigate(['login']);
       return;
     }
+    this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
     this.loadPageForDevice();
     this.dataService.getDevice(this.deviceId).subscribe(
     	apiResult => this.deviceName = apiResult.data.name

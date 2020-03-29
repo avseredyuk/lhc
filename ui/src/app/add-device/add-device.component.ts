@@ -1,9 +1,10 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {DataService} from "../data.service";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
 import {TokenCheckService} from "../token-check.service";
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-add-device',
@@ -12,6 +13,7 @@ import {TokenCheckService} from "../token-check.service";
 })
 export class AddDeviceComponent implements OnInit {
 
+  @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   notifications: Array<AppNotification> = [];
   addForm: FormGroup;
   nameCtrl: FormControl;
@@ -25,6 +27,7 @@ export class AddDeviceComponent implements OnInit {
       this.router.navigate(['login']);
       return;
     }
+    this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices']);});
     this.nameCtrl = this.formBuilder.control('', [Validators.required]);
     this.tokenCtrl = this.formBuilder.control('', [Validators.required]);
 
