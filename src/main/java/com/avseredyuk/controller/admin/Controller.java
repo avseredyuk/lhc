@@ -9,20 +9,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
 
 import com.avseredyuk.configuration.TokenProvider;
 import com.avseredyuk.dto.HistoryDto;
 import com.avseredyuk.dto.internal.ConfigDto;
 import com.avseredyuk.dto.internal.LoginDto;
-import com.avseredyuk.exception.InconsistentDataException;
 import com.avseredyuk.mapper.internal.ConfigMapper;
 import com.avseredyuk.model.internal.ApiResult;
 import com.avseredyuk.model.internal.AuthToken;
@@ -76,11 +73,6 @@ public class Controller {
     @PostMapping(value = "/clearcache")
     public ResponseEntity<ApiResult<Boolean>> clearCache() {
         return ResponseEntity.ok(new ApiResult<>(cacheService.clearCache()));
-    }
-    
-    @ExceptionHandler({ InconsistentDataException.class })
-    public ResponseEntity<ApiResult> handleInconsistentDataException(InconsistentDataException ex, WebRequest request) {
-        return ResponseEntity.badRequest().body(new ApiResult(ex.getMessage()));
     }
     
     //todo: BE: set up proper logging via log4j
