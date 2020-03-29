@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {DataService} from "../data.service";
 import {TokenCheckService} from "../token-check.service";
+import {AppNotification, AppNotificationType} from "../model/app-notification";
 
 @Component({
   selector: 'app-login',
@@ -11,11 +12,10 @@ import {TokenCheckService} from "../token-check.service";
 })
 export class LoginComponent {
 
+  notifications: Array<AppNotification> = [];
   loginForm: FormGroup;
   usernameCtrl: FormControl;
   passwordCtrl: FormControl;
-
-  invalidLogin: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private dataService: DataService, private router: Router,
     private tokenCheckService: TokenCheckService) {
@@ -45,8 +45,16 @@ export class LoginComponent {
       this.tokenCheckService.saveToken(data);
       this.router.navigate(['/']);
     }, error => {
-      this.invalidLogin = true;
+      if (error.status === 401) {
+        this.notifications = [new AppNotification('Invalid credentials', AppNotificationType.ERROR)];
+      } else {
+        this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
+      }
     });
+  }
+
+  hasNotifications(): Boolean {
+    return this.notifications.length > 0;
   }
 
 }

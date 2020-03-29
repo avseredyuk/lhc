@@ -2,7 +2,8 @@
 	<app-sidebar></app-sidebar>
 	<div id="content">
 		<div *ngIf="hasNotifications()">
-			<div *ngFor="let notification of notifications" role="alert" class="alert" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+			<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				{{ notification.message }}
 			</div>
 		</div>
@@ -29,22 +30,22 @@
 									<td>{{ r.abshumidity }}</td>
 									<td>{{ r.watertemperature }}</td>
 								</tr>
-								</tbody>
-							</table>
-							<div class="col-md-12">
-								<nav aria-label="..." class="text-center">
-									<ul class="pagination pagination-lg">
-										<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
-										[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
-													 currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
-											<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
-										</li>
-									</ul>
-								</nav>
-							</div>
-						</div>
+							</tbody>
+						</table>
+						<div class="col-md-12">
+							<nav aria-label="..." class="text-center">
+								<ul class="pagination pagination-lg">
+									<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
+									[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
+									currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
+									<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
+								</li>
+							</ul>
+						</nav>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
+</div>

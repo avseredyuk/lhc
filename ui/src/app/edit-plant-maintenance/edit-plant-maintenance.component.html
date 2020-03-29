@@ -2,7 +2,8 @@
 	<app-sidebar></app-sidebar>
 	<div id="content">
 		<div *ngIf="hasNotifications()">
-			<div *ngFor="let notification of notifications" role="alert" class="alert" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+			<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				{{ notification.message }}
 			</div>
 		</div>
