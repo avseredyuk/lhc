@@ -6,76 +6,112 @@
 				{{ notification.message }}
 			</div>
 		</div>
-		<div class="block-back">
-			<a (click)="goBack()">
-				<i class="material-icons">arrow_back</i>
-			</a>
-			<a routerLink="/devices/{{device.id}}/maintenance">
-				<i class="material-icons">local_florist</i>
-			</a>
-			<a routerLink="/devices/{{device.id}}/pings">
-				<i class="material-icons">track_changes</i>
-			</a>
-			<a routerLink="/devices/{{device.id}}/pumpactions">
-				<i class="material-icons">local_drink</i>
-			</a>
-			<a routerLink="/devices/{{device.id}}/sensorreports">
-				<i class="material-icons">library_books</i>
-			</a>
+		<div class="panel panel-info">
+			<div class="panel-heading"><h1>Device details - {{ device.name }}</h1></div>
+			<div class="panel-body">
+				<div class="col-xs-4">
+					<div class="panel panel-primary">
+						<div class="panel-heading"><h4>Details</h4></div>
+						<div class="panel-body">
+							<table class="table table-sm no-row-border">
+								<tbody>
+									<tr>
+										<td class="col-sm-3"><b>Id:</b></td>
+										<td class="col-sm-9">{{device.id}}</td>
+									</tr>
+									<tr>
+										<td class="col-sm-3"><b>Name:</b></td>
+										<td class="col-sm-9">{{device.name}}</td>
+									</tr>
+									<tr>
+										<td class="col-sm-3"><b>Token:</b></td>
+										<td class="col-sm-9">{{device.token}}</td>
+									</tr>
+									<tr>
+										<td class="col-sm-3"><b>Enabled:</b></td>
+										<td class="col-sm-9"><input class="form-check-input" type="checkbox" [checked]="device.enabled" disabled></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="panel panel-primary">
+						<div class="panel-heading"><h4>Tools</h4></div>
+						<div class="panel-body">
+							<div class="block-tools">
+								<a title="Plant Maintenances" routerLink="/devices/{{device.id}}/maintenance">
+									<i class="material-icons icon-normal">local_florist</i>
+								</a>
+								<a title="Pings" routerLink="/devices/{{device.id}}/pings">
+									<i class="material-icons">track_changes</i>
+								</a>
+								<a title="Pump Actions" routerLink="/devices/{{device.id}}/pumpactions">
+									<i class="material-icons">local_drink</i>
+								</a>
+								<a title="Sensor Reports" routerLink="/devices/{{device.id}}/sensorreports">
+									<i class="material-icons">library_books</i>
+								</a>
+								<a title="Run pump once" (click)="enableRunPumpOnce()">
+									<i class="material-icons icon-danger">power</i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-5">
+					<div class="panel panel-primary">
+						<div class="panel-heading"><h4>Configurations</h4></div>
+						<div class="panel-body">
+							<table class="table table-sm">
+								<thead>
+									<tr>
+										<th scope="col">Key</th>
+										<th scope="col">Value</th>
+										<th scope="col">Config type</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let cfg of device.config">
+										<td>{{ cfg.key }}</td>
+										<td>{{ cfg.value }}</td>
+										<td>{{ cfg.type }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-3">
+					<div class="panel panel-primary">
+						<div class="panel-heading"><h4>Exclusions</h4></div>
+						<div class="panel-body">
+							<table class="table table-condensed">
+								<thead>
+									<tr>
+										<th scope="col">Mapping</th>
+										<th scope="col">Status</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let exclusion of device.exclusions" >
+										<td >
+											{{ exclusion.map }}
+										</td>
+										<td>
+											<i class="material-icons" [ngClass]="{'toggleOff': checkExcluded(exclusion), 'toggleOn': !checkExcluded(exclusion)}"> {{ checkExcluded(exclusion) ? 'toggle_off' : 'toggle_on' }} </i>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- <ul class="contentul">
+					<li *ngIf="hasConfig()">
+					</li>
+					<li *ngIf="hasExclusions()">
+					</li>
+				</ul> -->
+			</div>
 		</div>
-		<h1>{{ device.name }}</h1>
-		<ul class="contentul">
-			<li>
-				<strong>Id:</strong> {{device.id}}
-			</li>
-			<li>
-				<strong>Name:</strong> {{device.name}}
-			</li>
-			<li>
-				<strong>Token:</strong> {{device.token}}
-			</li>
-			<li>
-				<strong>Enabled:</strong> <input class="form-check-input" type="checkbox" [checked]="device.enabled" disabled>
-			</li>
-			<li *ngIf="hasConfig()">
-				<table class="table table-sm table-no-border nopadnomargin">
-					<thead>
-						<tr>
-							<th scope="col">Key</th>
-							<th scope="col">Value</th>
-							<th scope="col">Config type</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr *ngFor="let cfg of device.config">
-							<td>{{ cfg.key }}</td>
-							<td>{{ cfg.value }}</td>
-							<td>{{ cfg.type }}</td>
-						</tr>
-					</tbody>
-				</table>
-			</li>
-			<li *ngIf="hasExclusions()">
-				<table class="table table-condensed">
-					<thead>
-						<tr>
-							<th scope="col">Mapping</th>
-							<th scope="col">Status</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr *ngFor="let exclusion of device.exclusions" >
-							<td >
-								{{ exclusion.map }}
-							</td>
-							<td>
-								<i class="material-icons" [ngClass]="{'toggleOff': checkExcluded(exclusion), 'toggleOn': !checkExcluded(exclusion)}"> {{ checkExcluded(exclusion) ? 'toggle_off' : 'toggle_on' }} </i>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</li>
-		</ul>
-
-		<button class="material-icons md-36" (click)="enableRunPumpOnce()">local_drink</button>
 	</div></div>

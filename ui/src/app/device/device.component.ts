@@ -60,18 +60,16 @@ export class DeviceComponent implements OnInit {
     }
   }
 
-  goBack() {
-    this.location.back();
-  }
-
   hasNotifications(): Boolean {
     return this.notifications.length > 0;
   }
 
+  //todo: not used right now but should be
   hasConfig(): Boolean {
     return this.device.config && this.device.config.length > 0;
   }
 
+  //todo: not used right now but should be
   hasExclusions(): Boolean {
     return this.device.exclusions && this.device.exclusions.length > 0;
   }
