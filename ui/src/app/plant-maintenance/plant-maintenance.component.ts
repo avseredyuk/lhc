@@ -38,9 +38,10 @@ export class PlantMaintenanceComponent implements OnInit {
       return;
     }
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
+
     this.loadPageForDevice();
 
-  	this.notifications = this.componentCommunicationService.getValue("notification");
+  	this.notifications = this.componentCommunicationService.getNotification();
     this.dataService.getDevice(this.deviceId).subscribe(
       apiResult => this.deviceName = apiResult.data.name
     );
@@ -71,7 +72,7 @@ export class PlantMaintenanceComponent implements OnInit {
   cloneMaintenance(plantMaintenance: PlantMaintenance) {
     this.dataService.getPlantMaintenance(plantMaintenance.deviceId, plantMaintenance.id).subscribe(
       (data: ApiResult<PlantMaintenance>) => {
-        this.componentCommunicationService.setValue("clonedMaintenance", data.data);
+        this.componentCommunicationService.setClonedMaintenance(data.data);
         this.router.navigate(['/add-plant-maintenance/' + plantMaintenance.deviceId]);
       });
   }

@@ -70,9 +70,9 @@ export class EditPlantMaintenanceComponent {
       },
       error => { // HttpErrorResponse
         if (error.status === 404) {
-          this.componentCommunicationService.setValue("notification", new AppNotification('Plant Maintenance not found', AppNotificationType.ERROR));
+          this.componentCommunicationService.setNotification(new AppNotification('Plant Maintenance not found', AppNotificationType.ERROR));
         } else {
-          this.componentCommunicationService.setValue("notification", new AppNotification('Unknown error', AppNotificationType.ERROR));
+          this.componentCommunicationService.setNotification(new AppNotification('Unknown error', AppNotificationType.ERROR));
         }
         this.router.navigate(['maintenance']);
       }

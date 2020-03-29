@@ -35,11 +35,11 @@ export class DeviceComponent implements OnInit {
       (data: ApiResult<Device>) => {
         this.device = data.data;
       },
-      error => { // HttpErrorResponse
+      error => {
         if (error.status === 404) {
-          this.componentCommunicationService.setValue("notification", new AppNotification('Device not found', AppNotificationType.ERROR));
+          this.componentCommunicationService.setNotification(new AppNotification('Device not found', AppNotificationType.ERROR));
         } else {
-          this.componentCommunicationService.setValue("notification", new AppNotification('Unknown error', AppNotificationType.ERROR));
+          this.componentCommunicationService.setNotification(new AppNotification('Unknown error', AppNotificationType.ERROR));
         }
         this.router.navigate(['devices']);
       }
@@ -52,7 +52,7 @@ export class DeviceComponent implements OnInit {
         (data: ApiResult<Boolean>) => {
           this.notifications = [new AppNotification('Pump enabled', AppNotificationType.SUCCESS)];
         },
-        error => { // HttpErrorResponse
+        error => {
           if (error.status === 400) {
             this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
           } else {

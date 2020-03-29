@@ -43,7 +43,7 @@ export class AddPlantMaintenanceComponent {
 
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId + '/maintenance']);});
 
-    let clonedMaintenance = this.componentCommunicationService.getValue("clonedMaintenance");
+    let clonedMaintenance = this.componentCommunicationService.getClonedMaintenance();
     if (clonedMaintenance !== undefined) {
       this.phCtrl = this.formBuilder.control(clonedMaintenance.ph, [Validators.required]);
       this.tdsCtrl = this.formBuilder.control(clonedMaintenance.tds, [Validators.required]);

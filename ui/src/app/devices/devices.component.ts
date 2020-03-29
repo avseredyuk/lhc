@@ -29,7 +29,7 @@ export class DevicesComponent implements OnInit {
   		data => this.devices = data
   	);
 
-    this.notifications = this.componentCommunicationService.getValue("notification");
+    this.notifications = this.componentCommunicationService.getNotification();
   }
 
   hasNotifications(): Boolean {
