@@ -14,6 +14,10 @@ public interface ConfigMapper {
     @Mapping(target = "key", source = "key")
     @Mapping(target = "value", source = "value")
     ConfigDto toDto(Config c);
+
+    @Mapping(target = "key", source = "key")
+    @Mapping(target = "value", source = "value")
+    Config toModel(ConfigDto c);
     
     List<ConfigDto> toDtoList(List<Config> c);
     

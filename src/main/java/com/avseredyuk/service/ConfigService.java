@@ -1,5 +1,6 @@
 package com.avseredyuk.service;
 
+import com.avseredyuk.exception.InconsistentDataException;
 import com.avseredyuk.model.Config;
 import com.avseredyuk.model.Config.ConfigKey;
 import com.avseredyuk.repository.ConfigRepository;
@@ -23,8 +24,10 @@ public class ConfigService {
     public List<Config> findAll() {
         return configRepository.findAll();
     }
-    
-    public Config save(Config config) {
+
+    public Config saveOrThrow(Config config) {
+        configRepository.findByKey(config.getKey())
+                .orElseThrow(() -> new InconsistentDataException("No config found by provided key"));
         return configRepository.save(config);
     }
     

@@ -5,6 +5,7 @@ import {DataService} from "../data.service";
 import {ApiResult} from "../model/api-result";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
 import {TokenCheckService} from "../token-check.service";
+import {ComponentCommunicationService} from "../component-communication.service";
 
 @Component({
   selector: 'app-settings',
@@ -16,13 +17,16 @@ export class SettingsComponent implements OnInit {
   configurations: Configuration[];
   notifications: Array<AppNotification> = [];
 
-  constructor(private router: Router, private dataService: DataService, private tokenCheckService: TokenCheckService) { }
+  constructor(private router: Router, private dataService: DataService, private tokenCheckService: TokenCheckService,
+    private componentCommunicationService: ComponentCommunicationService) { }
 
   ngOnInit() {
     if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
     }
+
+    this.notifications = this.componentCommunicationService.getNotification();
 
     this.dataService.getConfiguration().subscribe(
   		data => this.configurations = data
@@ -44,8 +48,12 @@ export class SettingsComponent implements OnInit {
       );
   }
 
+  editSettings(settingsKey: string) {
+    this.router.navigate(['/edit-settings/' + settingsKey]);
+  }
+
   hasNotifications(): Boolean {
-    return this.notifications.length > 0;
+    return typeof this.notifications !== 'undefined' && this.notifications.length > 0;
   }
 
 }

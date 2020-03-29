@@ -10,6 +10,7 @@ import {PlantMaintenanceComponent} from "./plant-maintenance/plant-maintenance.c
 import {AddPlantMaintenanceComponent} from "./add-plant-maintenance/add-plant-maintenance.component";
 import {EditPlantMaintenanceComponent} from "./edit-plant-maintenance/edit-plant-maintenance.component";
 import {SettingsComponent} from "./settings/settings.component";
+import {EditSettingsComponent} from "./edit-settings/edit-settings.component";
 import {StatusComponent} from "./status/status.component";
 import {PingsComponent} from "./pings/pings.component";
 import {PumpActionsComponent} from "./pump-actions/pump-actions.component";
@@ -39,6 +40,10 @@ const routes: Routes = [
 	{
 		path: 'settings',
 		component: SettingsComponent
+	},
+	{
+		path: 'edit-settings/:key',
+		component: EditSettingsComponent
 	},
 	{
 		path: 'history',

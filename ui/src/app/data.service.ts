@@ -33,6 +33,14 @@ export class DataService {
     return this.http.get<Configuration[]>(environment.apiUrl + 'admin/configs');
   }
 
+  getConfigurationByKey(settingsKey: string): Observable<ApiResult<Configuration>> {
+    return this.http.get<ApiResult<Configuration>>(environment.apiUrl + 'admin/configs/' + settingsKey);
+  }
+
+  updateConfiguration(configuration: Configuration): Observable<ApiResult<Configuration>> {
+    return this.http.put<ApiResult<Configuration>>(environment.apiUrl + 'admin/configs', configuration);
+  }
+
   getDevices(): Observable<Device[]> {
     return this.http.get<Device[]>(environment.apiUrl + 'admin/devices');
   }

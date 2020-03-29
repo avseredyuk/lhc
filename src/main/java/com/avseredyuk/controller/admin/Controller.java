@@ -9,18 +9,26 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 
 import com.avseredyuk.configuration.TokenProvider;
 import com.avseredyuk.dto.HistoryDto;
 import com.avseredyuk.dto.internal.ConfigDto;
 import com.avseredyuk.dto.internal.LoginDto;
+import com.avseredyuk.dto.internal.PlantMaintenanceDto;
+import com.avseredyuk.exception.InconsistentDataException;
 import com.avseredyuk.mapper.internal.ConfigMapper;
+import com.avseredyuk.model.Config;
+import com.avseredyuk.model.PlantMaintenance;
 import com.avseredyuk.model.internal.ApiResult;
 import com.avseredyuk.model.internal.AuthToken;
 import com.avseredyuk.service.ConfigService;
@@ -70,9 +78,27 @@ public class Controller {
         return configMapper.toDtoList(configService.findAll());
     }
 
+    @GetMapping(value = "/configs/{configKey}")
+    public ResponseEntity<ApiResult<ConfigDto>> getConfigByKey(@PathVariable String configKey) {
+        return ResponseEntity.ok(new ApiResult<>(configMapper.toDto(configService.getByKey(configKey))));
+    }
+
+    @PutMapping(
+            value = "/configs",
+            consumes = "application/json")
+    public void updateConfig(@RequestBody ConfigDto configDto) {
+        Config config = configMapper.toModel(configDto);
+        configService.saveOrThrow(config);
+    }
+
     @PostMapping(value = "/clearcache")
     public ResponseEntity<ApiResult<Boolean>> clearCache() {
         return ResponseEntity.ok(new ApiResult<>(cacheService.clearCache()));
+    }
+
+    @ExceptionHandler({ InconsistentDataException.class })
+    public ResponseEntity<ApiResult> handleInconsistentDataException(InconsistentDataException ex, WebRequest request) {
+        return ResponseEntity.badRequest().body(new ApiResult(ex.getMessage()));
     }
     
     //todo: BE: set up proper logging via log4j
@@ -86,7 +112,6 @@ public class Controller {
     //todo: delete device w/confirmation
     //todo: delete device  ? device_cfg ? -- remove with device
     //todo: delete device  ? report_exclusions ? -- remove with device
-    //todo: edit config  -- in place ?
     //todo: delete config w/confirmation
 
     //todo: ticket: add "device" to the path of all DeviceController request methods

@@ -21,6 +21,7 @@ import {EditPlantMaintenanceComponent} from "./edit-plant-maintenance/edit-plant
 import { PingsComponent } from './pings/pings.component';
 import { PumpActionsComponent } from './pump-actions/pump-actions.component';
 import { SensorReportsComponent } from './sensor-reports/sensor-reports.component';
+import { EditSettingsComponent } from './edit-settings/edit-settings.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { SensorReportsComponent } from './sensor-reports/sensor-reports.componen
     PingsComponent,
     PumpActionsComponent,
     SensorReportsComponent,
+    EditSettingsComponent,
   ],
   imports: [
     BrowserModule,

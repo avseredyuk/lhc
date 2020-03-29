@@ -42,9 +42,9 @@ export class DeviceComponent implements OnInit {
       },
       error => {
         if (error.status === 404) {
-          this.componentCommunicationService.setNotification(new AppNotification('Device not found', AppNotificationType.ERROR));
+          this.componentCommunicationService.setNotification([new AppNotification('Device not found', AppNotificationType.ERROR)]);
         } else {
-          this.componentCommunicationService.setNotification(new AppNotification('Unknown error', AppNotificationType.ERROR));
+          this.componentCommunicationService.setNotification([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
         }
         this.router.navigate(['devices']);
       }

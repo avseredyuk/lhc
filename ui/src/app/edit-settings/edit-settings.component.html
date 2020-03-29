@@ -1,0 +1,32 @@
+<div id="container">
+	<app-sidebar></app-sidebar>
+	<div id="content">
+		<div *ngIf="hasNotifications()">
+			<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				{{ notification.message }}
+			</div>
+		</div>
+
+		<div class="panel panel-info">
+			<div class="panel-heading"><h1>Edit Settings</h1></div>
+			<div class="panel-body">
+				<form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+					<div class="form-row">
+						<div class="col-lg-4 col-lg-offset-4 with-margin">
+							<input type="text" [formControl]="keyCtrl" placeholder="key" name="key" class="form-control" id="key">
+							<div class="error" *ngIf="keyCtrl.hasError('required') && keyCtrl.touched">Key is required</div>
+						</div>
+						<div class="col-lg-4 col-lg-offset-4 with-margin">
+							<input type="text" [formControl]="valueCtrl" placeholder="value" name="value" class="form-control" id="value">
+							<div class="error" *ngIf="valueCtrl.hasError('required') && valueCtrl.touched">Value is required</div>
+						</div>
+						<div class="col-lg-2 col-lg-offset-5 text-center">
+							<button class="btn btn-success btn-md" [disabled]="!editForm.valid">Update</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
