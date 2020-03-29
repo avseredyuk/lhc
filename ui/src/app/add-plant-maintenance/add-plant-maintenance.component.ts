@@ -28,6 +28,7 @@ export class AddPlantMaintenanceComponent {
   newDetails: Array<PlantMaintenanceDetail> = [];
   deviceId: number;
   deviceName: string;
+  pageNumber: number;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
     private route: ActivatedRoute, private tokenCheckService: TokenCheckService, public utilService: UtilService,
@@ -41,7 +42,11 @@ export class AddPlantMaintenanceComponent {
       return;
     }
 
-    this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId + '/maintenance']);});
+    this.sidebar.setGoBackCallback(() => {
+      this.componentCommunicationService.setPageNumber(this.pageNumber);
+      this.router.navigate(['devices/' + this.deviceId + '/maintenance']);
+    });
+    this.pageNumber = this.componentCommunicationService.getPageNumber();
 
     let clonedMaintenance = this.componentCommunicationService.getClonedMaintenance();
     if (clonedMaintenance !== undefined) {

@@ -30,6 +30,7 @@ export class EditPlantMaintenanceComponent {
   newDetailValueCtrl: FormControl;
   deviceId: number;
   deviceName: string;
+  pageNumber: number;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService, private route: ActivatedRoute,
   	private componentCommunicationService: ComponentCommunicationService, private tokenCheckService: TokenCheckService, private utilService: UtilService) {
@@ -45,7 +46,11 @@ export class EditPlantMaintenanceComponent {
       return;
     }
 
-    this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId + '/maintenance']);});
+    this.sidebar.setGoBackCallback(() => {
+      this.componentCommunicationService.setPageNumber(this.pageNumber);
+      this.router.navigate(['devices/' + this.deviceId + '/maintenance']);
+    });
+    this.pageNumber = this.componentCommunicationService.getPageNumber();
 
     this.phCtrl = this.formBuilder.control('', []);
     this.tdsCtrl = this.formBuilder.control('', []);

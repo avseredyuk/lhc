@@ -37,8 +37,7 @@
 										</table>
 									</td>
 									<td class="text-right">
-										<a class="btn btn-warning btn-md" type="button"
-											routerLink="/edit-plant-maintenance/{{m.id}}/{{m.deviceId}}">
+										<a class="btn btn-warning btn-md" type="button" (click)="editPlantMaintenance(m.id)">
 											<i class="material-icons md-18">edit</i>
 										</a>
 										&nbsp;
@@ -64,7 +63,7 @@
 									</ul>
 								</nav>
 								&nbsp;
-								<a routerLink='/add-plant-maintenance/{{ deviceId }}' class="btn btn-info btn-lg" role="button">Add</a>
+								<a (click)="addPlantMaintenance()" class="btn btn-info btn-lg" role="button">Add</a>
 							</div>
 						</div>
 					</div>
