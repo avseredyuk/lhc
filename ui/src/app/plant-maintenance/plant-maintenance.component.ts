@@ -27,7 +27,7 @@ export class PlantMaintenanceComponent implements OnInit {
 
   constructor(private router: Router, private dataService: DataService, private renderer: Renderer,
     private route: ActivatedRoute, private componentCommunicationService: ComponentCommunicationService,
-    private tokenCheckService: TokenCheckService, private utilService: UtilService) {
+    private tokenCheckService: TokenCheckService, public utilService: UtilService) {
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 

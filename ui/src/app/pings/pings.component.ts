@@ -20,7 +20,7 @@ export class PingsComponent implements OnInit {
   deviceName: string;
 
   constructor(private router: Router, private dataService: DataService, private tokenCheckService: TokenCheckService,
-  	private route: ActivatedRoute, private utilService: UtilService) {
+  	private route: ActivatedRoute, public utilService: UtilService) {
   	this.route.params.subscribe(params => this.deviceId = params.id);
   }
 
