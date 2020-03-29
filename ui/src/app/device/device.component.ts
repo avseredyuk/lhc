@@ -18,11 +18,12 @@ export class DeviceComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   notifications: Array<AppNotification> = [];
+  deviceId: number;
   device: Device;
 
   constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService,
     private route: ActivatedRoute, private location: Location, private tokenCheckService: TokenCheckService) {
-    this.route.params.subscribe(params => this.device = params.id)
+    this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit() {
@@ -31,7 +32,11 @@ export class DeviceComponent implements OnInit {
       return;
     }
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices']);});
-    this.dataService.getDevice(this.device).subscribe(
+    this.loadDevice();
+  }
+
+  loadDevice() {
+    this.dataService.getDevice(this.deviceId).subscribe(
       (data: ApiResult<Device>) => {
         this.device = data.data;
       },
@@ -48,9 +53,10 @@ export class DeviceComponent implements OnInit {
 
   enableRunPumpOnce() {
   	if (confirm('Are you sure you want to run pump for device "' + this.device.name + '" ?')) {
-      this.dataService.enableRunPumpOnce(this.device).subscribe(
+      this.dataService.enableRunPumpOnce(this.deviceId).subscribe(
         (data: ApiResult<Boolean>) => {
           this.notifications = [new AppNotification('Pump enabled', AppNotificationType.SUCCESS)];
+          this.loadDevice();
         },
         error => {
           if (error.status === 400) {

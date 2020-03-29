@@ -37,7 +37,7 @@ export class DataService {
     return this.http.get<Device[]>(environment.apiUrl + 'admin/devices');
   }
 
-  getDevice(deviceId): Observable<ApiResult<Device>> {
+  getDevice(deviceId: number): Observable<ApiResult<Device>> {
     return this.http.get<ApiResult<Device>>(environment.apiUrl + 'admin/devices/' + deviceId);
   }
 
@@ -45,8 +45,8 @@ export class DataService {
     return this.http.post<ApiResult<Device>>(environment.apiUrl + 'admin/devices', device);
   }
 
-  enableRunPumpOnce(device: Device): Observable<ApiResult<Boolean>> {
-    return this.http.put<ApiResult<Boolean>>(environment.apiUrl + 'admin/devices/' + device.id + '/runPumpOnce', '');
+  enableRunPumpOnce(deviceId: number): Observable<ApiResult<Boolean>> {
+    return this.http.put<ApiResult<Boolean>>(environment.apiUrl + 'admin/devices/' + deviceId + '/runPumpOnce', '');
   }
 
   getHistory(): Observable<History[]> {
