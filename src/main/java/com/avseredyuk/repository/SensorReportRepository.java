@@ -19,7 +19,7 @@ public interface SensorReportRepository extends CrudRepository<SensorReport, Lon
     @Query(nativeQuery = true, value = "SELECT * FROM sensor_report WHERE device_id = ?1 AND date_time >= NOW() - CAST(?2 || ' hours' as INTERVAL) ORDER BY date_time DESC")
     List<SensorReport> getLastReports(Long deviceId, long hoursCount);
 
-    List<SensorReport> findByDeviceIdAndDateTimeGreaterThan(Long deviceId, Date sinceDate);
+    List<SensorReport> findByDeviceIdAndDateTimeGreaterThanOrderByDateTimeDesc(Long deviceId, Date sinceDate);
     
     SensorReport findFirstByDeviceIdOrderByIdDesc(Long deviceId);
 

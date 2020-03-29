@@ -19,7 +19,7 @@ public interface PumpActionRepository extends CrudRepository<PumpActionReport, L
     @Query(nativeQuery = true, value = "SELECT * FROM pump_action WHERE device_id = ?1 AND date_time >= NOW() - CAST(?2 || ' hours' as INTERVAL) ORDER BY date_time DESC")
     List<PumpActionReport> getLastReports(Long deviceId, long hoursCount);
 
-    List<PumpActionReport> findByDeviceIdAndDateTimeGreaterThan(Long deviceId, Date sinceDate);
+    List<PumpActionReport> findByDeviceIdAndDateTimeGreaterThanOrderByDateTimeDesc(Long deviceId, Date sinceDate);
     
     PumpActionReport findFirstByDeviceIdOrderByIdDesc(Long deviceId);
 

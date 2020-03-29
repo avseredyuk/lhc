@@ -35,7 +35,7 @@ public class SensorReportService {
             return sensorReportRepository.getLastReports(device.getId(), configService.getHoursCount());
         } else {
             // use non-cached version to load all reports since provided timestamp
-            return sensorReportRepository.findByDeviceIdAndDateTimeGreaterThan(device.getId(), new Date(sinceTimestamp));
+            return sensorReportRepository.findByDeviceIdAndDateTimeGreaterThanOrderByDateTimeDesc(device.getId(), new Date(sinceTimestamp));
         }
     }
     

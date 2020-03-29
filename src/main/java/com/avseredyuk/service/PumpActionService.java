@@ -34,7 +34,7 @@ public class PumpActionService {
             return pumpActionRepository.getLastReports(device.getId(), configService.getHoursCount());
         } else {
             // use non-cached version to load all pump actions since provided timestamp
-            return pumpActionRepository.findByDeviceIdAndDateTimeGreaterThan(device.getId(), new Date(sinceTimestamp));
+            return pumpActionRepository.findByDeviceIdAndDateTimeGreaterThanOrderByDateTimeDesc(device.getId(), new Date(sinceTimestamp));
         }
     }
 
