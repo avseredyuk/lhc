@@ -52,6 +52,10 @@ public class DeviceService {
     }
     
     public void delete(Long deviceId) {
-        deviceRepository.delete(deviceId);
+        if (deviceRepository.findById(deviceId).isPresent()){
+            deviceRepository.delete(deviceId);
+        } else {
+            throw new InconsistentDataException("No device with given id found");
+        }
     }
 }

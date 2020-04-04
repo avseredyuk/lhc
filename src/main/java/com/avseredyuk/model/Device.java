@@ -1,6 +1,8 @@
 package com.avseredyuk.model;
 
 import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,10 +31,12 @@ public class Device {
     @Column(name = "enabled")
     private Boolean enabled;
     
-    @OneToMany(mappedBy = "device")
+    @OneToMany(mappedBy = "device", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE},
+            orphanRemoval = true)
     private List<DeviceConfig> config;
     
-    @OneToMany(mappedBy = "device")
+    @OneToMany(mappedBy = "device", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE},
+            orphanRemoval = true)
     private List<DeviceReportDataExclusion> exclusions;
 
     public String getDeviceConfigByKey(String key) {

@@ -122,10 +122,9 @@ public class Controller {
     //todo: edit device  ? device_cfg ?
     //todo: edit device  ? report_exclusions ?
     //todo: edit device in place ???
-    //todo: delete device w/confirmation
-    //todo: delete device  ? device_cfg ? -- remove with device
-    //todo: delete device  ? report_exclusions ? -- remove with device
-    //todo: delete config w/confirmation
+
+    //todo: delete device: after device deletion all of the non-device-related entities
+    //todo:  like sensor reports or pings or so are left in db without possibility to see them
 
     //todo: ticket: add "device" to the path of all DeviceController request methods
         //requires changes in device code

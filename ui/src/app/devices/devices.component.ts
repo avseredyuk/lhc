@@ -3,7 +3,7 @@ import {DataService} from "../data.service";
 import {ComponentCommunicationService} from "../component-communication.service";
 import {Router} from "@angular/router";
 import {Device} from "../model/device";
-import {AppNotification} from "../model/app-notification";
+import {AppNotification, AppNotificationType} from "../model/app-notification";
 import {TokenCheckService} from "../token-check.service";
 
 @Component({
@@ -25,11 +25,34 @@ export class DevicesComponent implements OnInit {
       return;
     }
 
-    this.dataService.getDevices().subscribe(
-  		data => this.devices = data
-  	);
+    this.loadData();
 
     this.notifications = this.componentCommunicationService.getNotification();
+  }
+
+  loadData() {
+    this.dataService.getDevices().subscribe(
+      data => this.devices = data
+    );
+  }
+
+  deleteDevice(device: Device) {
+    if (confirm('Are you sure you want to delete device "' + device.name + '" ?')) {
+      this.dataService.deleteDevice(device).subscribe(
+        data => {
+          this.notifications = [new AppNotification('Deleted device: ' + device.name, AppNotificationType.SUCCESS)];
+          this.loadData();
+        },
+        error => {
+          if (error.status === 400) {
+            this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
+          } else {
+            this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
+          }
+          this.loadData();
+        }
+       );
+    }
   }
 
   hasData(): Boolean {

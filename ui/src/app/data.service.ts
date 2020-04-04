@@ -29,6 +29,16 @@ export class DataService {
     return this.http.post<TokenResponse>(environment.apiUrl + 'admin/generate-token', loginPayload);
   }
 
+  getHistory(): Observable<History[]> {
+    return this.http.get<History[]>(environment.apiUrl + 'admin/history');
+  }
+
+  getHistorySince(sinceTimestamp): Observable<History[]> {
+    return this.http.get<History[]>(environment.apiUrl + 'admin/history?sinceTimestamp=' + sinceTimestamp);
+  }
+
+  /* Device */
+
   getDevices(): Observable<Device[]> {
     return this.http.get<Device[]>(environment.apiUrl + 'admin/devices');
   }
@@ -45,12 +55,8 @@ export class DataService {
     return this.http.put<ApiResult<Boolean>>(environment.apiUrl + 'admin/devices/' + deviceId + '/runPumpOnce', '');
   }
 
-  getHistory(): Observable<History[]> {
-    return this.http.get<History[]>(environment.apiUrl + 'admin/history');
-  }
-
-  getHistorySince(sinceTimestamp): Observable<History[]> {
-    return this.http.get<History[]>(environment.apiUrl + 'admin/history?sinceTimestamp=' + sinceTimestamp);
+  deleteDevice(device: Device) {
+    return this.http.delete(environment.apiUrl + 'admin/devices/' + device.id);
   }
 
   /* Configurations */
