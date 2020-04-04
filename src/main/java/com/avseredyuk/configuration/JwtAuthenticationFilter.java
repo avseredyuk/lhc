@@ -36,23 +36,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 username = jwtTokenUtil.getUsernameFromToken(authToken);
             } catch (IllegalArgumentException e) {
-                logger.error("An error occured during getting username from token", e);
+                logger.error("authtoken: An error occured during getting username from token", e);
             } catch (ExpiredJwtException e) {
-                logger.warn("The token is expired and not valid anymore", e);
+                logger.warn("authtoken: The token is expired and not valid anymore", e);
             } catch (JwtException e) {
-                logger.error("Authentication Failed. Credentials not valid", e);
+                logger.error("authtoken: Authentication Failed. Credentials not valid", e);
             }
         } else {
-            logger.warn("couldn't find bearer string, will ignore the header");
+            logger.info("authtoken: not found");
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             
             if (jwtTokenUtil.validateToken(authToken, userDetails)) {
-                UsernamePasswordAuthenticationToken authentication = jwtTokenUtil.getAuthentication(authToken, SecurityContextHolder.getContext().getAuthentication(), userDetails);
+                UsernamePasswordAuthenticationToken authentication =
+                        jwtTokenUtil.getAuthentication(authToken, userDetails);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-                logger.info("authenticated user " + username + ", setting security context");
+                logger.info("authtoken: validated as authenticated user: " + username);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

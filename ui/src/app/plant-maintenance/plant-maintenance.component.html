@@ -11,64 +11,61 @@
 			<div class="panel-heading"><h1>Plant Maintenance - {{ deviceName }}</h1></div>
 			<div class="panel-body">
 				<div class="tab-content">
-					<div>
-						<table class="table">
-							<thead>
-								<tr>
-									<th scope="col" class="col-xs-3 text-left">Date</th>
-									<th scope="col" class="col-xs-1 text-center">pH</th>
-									<th scope="col" class="col-xs-1 text-center">TDS</th>
-									<th scope="col" class="col-xs-2 text-center">Maintenance type</th>
-									<th scope="col" class="col-xs-3 text-center">Details</th>
-									<th scope="col" class="col-xs-2 text-right">Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr *ngFor="let m of plantMaintenancesForDevice">
-									<td class="text-left">{{ this.utilService.formatTimestamp(m.d) }}</td>
-									<td class="text-center">{{ m.ph }}</td>
-									<td class="text-center">{{ m.tds }}</td>
-									<td class="text-center">{{ m.maintenanceType }}</td>
-									<td class="text-center">
-										<table class="table table-details nopadnomargin">
-											<tr *ngFor="let detail of m.details">
-												<td class="col-xs-6 nopadnomargin text-right">{{ detail.key }}: &nbsp;</td>
-												<td class="col-xs-6 nopadnomargin text-left">{{ detail.value }}</td>
-											</tr>
-										</table>
-									</td>
-									<td class="text-right">
-										<a class="btn btn-warning btn-md" type="button" (click)="editPlantMaintenance(m.id)">
-											<i class="material-icons md-18">edit</i>
-										</a>
-										&nbsp;
-										<button class="btn btn-info btn-md" type="button" (click)="cloneMaintenance(m)">
-											<i class="material-icons md-18">content_copy</i>
-										</button>
-										&nbsp;
-										<button class="btn btn-danger btn-md" type="button" (click)="deleteMaintenance(m)">
-											<i class="material-icons md-18">delete</i>
-										</button>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-						<div class="col-md-12">
-							<nav aria-label="..." class="text-center">
-								<ul class="pagination pagination-lg">
-									<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
-									[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
-									currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
-									<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
-								</li>
-							</ul>
-						</nav>
-						&nbsp;
-						<a (click)="addPlantMaintenance()" class="btn btn-info btn-lg" role="button">Add</a>
-					</div>
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col" class="col-xs-3 text-left">Date</th>
+								<th scope="col" class="col-xs-1 text-center">pH</th>
+								<th scope="col" class="col-xs-1 text-center">TDS</th>
+								<th scope="col" class="col-xs-2 text-center">Maintenance type</th>
+								<th scope="col" class="col-xs-3 text-center">Details</th>
+								<th scope="col" class="col-xs-2 text-right">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let m of plantMaintenancesForDevice">
+								<td class="text-left">{{ this.utilService.formatTimestamp(m.d) }}</td>
+								<td class="text-center">{{ m.ph }}</td>
+								<td class="text-center">{{ m.tds }}</td>
+								<td class="text-center">{{ m.maintenanceType }}</td>
+								<td class="text-center">
+									<table class="table table-details nopadnomargin">
+										<tr *ngFor="let detail of m.details">
+											<td class="col-xs-6 nopadnomargin text-right">{{ detail.key }}: &nbsp;</td>
+											<td class="col-xs-6 nopadnomargin text-left">{{ detail.value }}</td>
+										</tr>
+									</table>
+								</td>
+								<td class="text-right">
+									<a class="btn btn-warning btn-md" type="button" (click)="editPlantMaintenance(m.id)">
+										<i class="material-icons md-18">edit</i>
+									</a>
+									&nbsp;
+									<button class="btn btn-info btn-md" type="button" (click)="cloneMaintenance(m)">
+										<i class="material-icons md-18">content_copy</i>
+									</button>
+									&nbsp;
+									<button class="btn btn-danger btn-md" type="button" (click)="deleteMaintenance(m)">
+										<i class="material-icons md-18">delete</i>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="col-md-12">
+						<nav aria-label="..." class="text-center">
+							<ul class="pagination pagination-lg">
+								<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
+								[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
+								currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
+								<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
+							</li>
+						</ul>
+					</nav>
 				</div>
+				&nbsp;
+				<a (click)="addPlantMaintenance()" class="btn btn-info btn-lg" role="button">Add</a>
 			</div>
 		</div>
 	</div>
-</div>
 </div>

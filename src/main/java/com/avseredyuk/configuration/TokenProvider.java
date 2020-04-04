@@ -48,7 +48,7 @@ public class TokenProvider implements Serializable {
             .getBody();
     }
     
-    private Boolean isTokenExpired(String token) {
+    private boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
@@ -66,26 +66,20 @@ public class TokenProvider implements Serializable {
             .compact();
     }
     
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
-        return
-            username.equals(userDetails.getUsername())
-                && !isTokenExpired(token);
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
     
-    public UsernamePasswordAuthenticationToken getAuthentication(final String token, final Authentication existingAuth, final UserDetails userDetails) {
-        
+    public UsernamePasswordAuthenticationToken getAuthentication(final String token,
+                                                                 final UserDetails userDetails) {
         final JwtParser jwtParser = Jwts.parser().setSigningKey(jwtTokenSecret);
-        
         final Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);
-        
         final Claims claims = claimsJws.getBody();
-        
         final Collection<? extends GrantedAuthority> authorities =
             Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-        
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
     
