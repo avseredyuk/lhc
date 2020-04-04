@@ -52,6 +52,10 @@ export class SensorReportsComponent {
     this.loadPageForDevice();
   }
 
+  hasData(): Boolean {
+    return typeof this.sensorReportsForDevice !== 'undefined' && this.sensorReportsForDevice.length > 0;
+  }
+
   hasNotifications(): Boolean {
     return this.notifications.length > 0;
   }

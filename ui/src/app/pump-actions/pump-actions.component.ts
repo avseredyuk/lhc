@@ -52,6 +52,10 @@ export class PumpActionsComponent {
     this.loadPageForDevice();
   }
 
+  hasData(): Boolean {
+    return typeof this.pumpActionsForDevice !== 'undefined' && this.pumpActionsForDevice.length > 0;
+  }
+
   hasNotifications(): Boolean {
     return this.notifications.length > 0;
   }

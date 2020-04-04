@@ -73,7 +73,6 @@ export class DeviceComponent implements OnInit {
     return this.notifications.length > 0;
   }
 
-  //todo: not used right now but should be
   hasConfig(): Boolean {
     return this.device.config && this.device.config.length > 0;
   }

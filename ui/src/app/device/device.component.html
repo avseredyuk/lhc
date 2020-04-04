@@ -63,22 +63,27 @@
 					<div class="panel panel-primary">
 						<div class="panel-heading"><h4>Configurations</h4></div>
 						<div class="panel-body">
-							<table class="table table-sm">
-								<thead>
-									<tr>
-										<th scope="col">Key</th>
-										<th scope="col">Value</th>
-										<th scope="col">Config type</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr *ngFor="let cfg of device.config">
-										<td class="breakable">{{ cfg.key }}</td>
-										<td>{{ cfg.value }}</td>
-										<td>{{ cfg.type }}</td>
-									</tr>
-								</tbody>
-							</table>
+							<div *ngIf="!hasConfig()" class="text-center">
+								No data
+							</div>
+							<div *ngIf="hasConfig()">
+								<table class="table table-sm">
+									<thead>
+										<tr>
+											<th scope="col">Key</th>
+											<th scope="col">Value</th>
+											<th scope="col">Config type</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let cfg of device.config">
+											<td class="breakable">{{ cfg.key }}</td>
+											<td>{{ cfg.value }}</td>
+											<td>{{ cfg.type }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -107,12 +112,7 @@
 						</div>
 					</div>
 				</div>
-				<!-- <ul class="contentul">
-					<li *ngIf="hasConfig()">
-					</li>
-					<li *ngIf="hasExclusions()">
-					</li>
-				</ul> -->
 			</div>
 		</div>
-	</div></div>
+	</div>
+</div>

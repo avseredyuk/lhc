@@ -80,7 +80,7 @@ export class PlantMaintenanceComponent implements OnInit {
   }
 
   editPlantMaintenance(maintenanceId: number) {
-    this.componentCommunicationService.setPageNumber(this.pageNumber); 
+    this.componentCommunicationService.setPageNumber(this.pageNumber);
     this.router.navigate(['/edit-plant-maintenance/' + maintenanceId + '/' + this.deviceId]);
   }
 
@@ -91,6 +91,10 @@ export class PlantMaintenanceComponent implements OnInit {
         this.componentCommunicationService.setPageNumber(this.pageNumber);
         this.router.navigate(['/add-plant-maintenance/' + plantMaintenance.deviceId]);
       });
+  }
+
+  hasData(): Boolean {
+    return typeof this.plantMaintenancesForDevice !== 'undefined' && this.plantMaintenancesForDevice.length > 0;
   }
 
   hasNotifications(): Boolean {

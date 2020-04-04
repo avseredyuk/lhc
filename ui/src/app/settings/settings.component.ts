@@ -76,6 +76,10 @@ export class SettingsComponent implements OnInit {
       });
   }
 
+  hasData(): Boolean {
+    return typeof this.configurations !== 'undefined' && this.configurations.length > 0;
+  }
+
   hasNotifications(): Boolean {
     return typeof this.notifications !== 'undefined' && this.notifications.length > 0;
   }

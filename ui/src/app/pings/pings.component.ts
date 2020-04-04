@@ -52,6 +52,10 @@ export class PingsComponent implements OnInit {
     this.loadPageForDevice();
   }
 
+  hasData(): Boolean {
+    return typeof this.pingsForDevice !== 'undefined' && this.pingsForDevice.length > 0;
+  }
+
   hasNotifications(): Boolean {
     return this.notifications.length > 0;
   }

@@ -17,7 +17,7 @@
 					<div class="panel panel-info">
 						<div class="panel-heading">Last pings</div>
 						<div class="panel-body">
-							<div *ngIf="!hasPings()">
+							<div *ngIf="!hasPings()" class="text-center">
 								No data
 							</div>
 							<ul class="list-group" *ngFor="let lastPing of objectKeys(status.lastPings)">
@@ -31,7 +31,7 @@
 					<div class="panel panel-info">
 						<div class="panel-heading">Last pumps</div>
 						<div class="panel-body">
-							<div *ngIf="!hasPumps()">
+							<div *ngIf="!hasPumps()" class="text-center">
 								No data
 							</div>
 							<ul class="list-group" *ngFor="let lastPump of objectKeys(status.lastPumps)">
@@ -45,7 +45,7 @@
 					<div class="panel panel-info">
 						<div class="panel-heading">Last bootups</div>
 						<div class="panel-body">
-							<div *ngIf="!hasBootups()">
+							<div *ngIf="!hasBootups()" class="text-center">
 								No data
 							</div>
 							<ul class="list-group" *ngFor="let lastBootup of objectKeys(status.lastBootups)">

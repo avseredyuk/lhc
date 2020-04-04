@@ -18,7 +18,7 @@ export class HistoryComponent implements OnInit {
 
 	getChartDataSetByChartName(chartName): any {
 		return this.chart.data.datasets.filter(function(dataset, i, ar) {
-			return dataset.label === chartName; 
+			return dataset.label === chartName;
 		});
 	}
 
@@ -33,7 +33,7 @@ export class HistoryComponent implements OnInit {
 		this.dataService.getHistorySince(this.lastGeneratedTimestamp == null ? '' : this.lastGeneratedTimestamp).subscribe(
 			historiesSince => {
 				historiesSince.forEach( (historySince, index, a) => {
-					if (historySince.data.length > 0) {	
+					if (historySince.data.length > 0) {
 						historySince.data = this.preprocessPoints(historySince.data);
 						if (historySince.reportDataType === 'PUMP') {
 							historySince.data = this.preprocessPumpData(historySince.data);
@@ -43,10 +43,10 @@ export class HistoryComponent implements OnInit {
 
 						dataset[0].data.unshift(...historySince.data);
 						//todo: probably remove all of the data checking timestamps instead of simple count
-					} 
+					}
 				});
 
-				this.lastGeneratedTimestamp = historiesSince[0].generatedTimestamp;
+				this.lastGeneratedTimestamp = historiesSince.length > 0 ? historiesSince[0].generatedTimestamp : null;
 
 				let squashedData = [];
 				this.chart.data.datasets.forEach( (dataset, index, a) => {
@@ -54,7 +54,8 @@ export class HistoryComponent implements OnInit {
 				});
 				squashedData.sort((a,b) => b.x.getTime() - a.x.getTime());
 
-				this.chart.options.scales.xAxes[0].ticks.max = squashedData[0].x;
+				this.chart.options.scales.xAxes[0].ticks.max = squashedData.length > 0 ?
+				squashedData[0].x : this.chart.options.scales.xAxes[0].ticks.max
 				this.chart.update();
 			});
 	}
@@ -68,8 +69,8 @@ export class HistoryComponent implements OnInit {
 
 				this.populateChart(this.chart, histories);
 
-				this.lastGeneratedTimestamp = histories[0].generatedTimestamp;
-				
+				this.lastGeneratedTimestamp = histories.length > 0 ? histories[0].generatedTimestamp : null;
+
 				this.chart.update();
 			}
 			);
@@ -205,24 +206,24 @@ export class HistoryComponent implements OnInit {
 	}
 
 	findLatestTimestamp(histories: History[]): any {
-		return Math.max.apply(Math, 
+		return Math.max.apply(Math,
 			histories
-			.filter(function(o, i, ar) { 
-				return o.data.length > 0; 
+			.filter(function(o, i, ar) {
+				return o.data.length > 0;
 			})
-			.map(function(o) { 
-				return o.data[0].x; 
+			.map(function(o) {
+				return o.data[0].x;
 			}));
 	}
 
 	findEarliestTimestamp(histories: History[]): any {
-		return Math.min.apply(Math, 
+		return Math.min.apply(Math,
 			histories
 			.filter(function(o, i, ar) {
-				return o.data.length > 0; 
+				return o.data.length > 0;
 			})
-			.map(function(o) { 
-				return o.data[o.data.length - 1].x; 
+			.map(function(o) {
+				return o.data[o.data.length - 1].x;
 			}));
 	}
 }
