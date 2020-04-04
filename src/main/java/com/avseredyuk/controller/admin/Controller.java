@@ -24,11 +24,9 @@ import com.avseredyuk.configuration.TokenProvider;
 import com.avseredyuk.dto.HistoryDto;
 import com.avseredyuk.dto.internal.ConfigDto;
 import com.avseredyuk.dto.internal.LoginDto;
-import com.avseredyuk.dto.internal.PlantMaintenanceDto;
 import com.avseredyuk.exception.InconsistentDataException;
 import com.avseredyuk.mapper.internal.ConfigMapper;
 import com.avseredyuk.model.Config;
-import com.avseredyuk.model.PlantMaintenance;
 import com.avseredyuk.model.internal.ApiResult;
 import com.avseredyuk.model.internal.AuthToken;
 import com.avseredyuk.service.ConfigService;
@@ -88,7 +86,16 @@ public class Controller {
             consumes = "application/json")
     public void updateConfig(@RequestBody ConfigDto configDto) {
         Config config = configMapper.toModel(configDto);
-        configService.saveOrThrow(config);
+        configService.updateOrThrow(config);
+    }
+
+    @PostMapping(
+            value = "/configs",
+            consumes = "application/json"
+    )
+    public ResponseEntity<ApiResult<ConfigDto>> createConfig(@RequestBody ConfigDto configDto) {
+        Config config = configMapper.toModel(configDto);
+        return ResponseEntity.ok(new ApiResult<>(configMapper.toDto(configService.saveOrThrow(config))));
     }
 
     @PostMapping(value = "/clearcache")

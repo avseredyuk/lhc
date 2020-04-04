@@ -41,6 +41,10 @@ export class DataService {
     return this.http.put<ApiResult<Configuration>>(environment.apiUrl + 'admin/configs', configuration);
   }
 
+  createConfiguration(configuration: Configuration): Observable<ApiResult<Configuration>> {
+    return this.http.post<ApiResult<Configuration>>(environment.apiUrl + 'admin/configs', configuration);
+  }
+
   getDevices(): Observable<Device[]> {
     return this.http.get<Device[]>(environment.apiUrl + 'admin/devices');
   }

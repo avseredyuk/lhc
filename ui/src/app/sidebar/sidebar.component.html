@@ -26,7 +26,7 @@
 			</a>
 		</li>
 		<li *ngIf="hasToken">
-			<a routerLink="/settings" [class.activated]="currentUrl == '/settings'">
+			<a routerLink="/settings" [class.activated]="isSettingsGroup()">
 				<i class="material-icons">settings</i>
 			</a>
 		</li>

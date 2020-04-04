@@ -40,6 +40,22 @@ export class SidebarComponent implements OnInit {
     return false;
   }
 
+  isSettingsGroup(): Boolean {
+    let arr = [
+    "/settings", // list
+    "/edit-settings", // edit
+    "/add-settings" // add
+    ];
+    if (this.currentUrl) {
+      for (var i = 0, len = arr.length; i < len; i++) {
+        if (this.currentUrl.includes(arr[i])) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   setGoBackCallback(callback: () => any) {
     this.canGoBack = true;
     this.goBackCallback = callback;

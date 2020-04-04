@@ -52,6 +52,10 @@ export class SettingsComponent implements OnInit {
     this.router.navigate(['/edit-settings/' + settingsKey]);
   }
 
+  addSettings() {
+    this.router.navigate(['/add-settings']);
+  }
+
   hasNotifications(): Boolean {
     return typeof this.notifications !== 'undefined' && this.notifications.length > 0;
   }

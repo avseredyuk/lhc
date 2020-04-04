@@ -25,9 +25,16 @@ public class ConfigService {
         return configRepository.findAll();
     }
 
-    public Config saveOrThrow(Config config) {
+    public Config updateOrThrow(Config config) {
         configRepository.findByKey(config.getKey())
                 .orElseThrow(() -> new InconsistentDataException("No config found by provided key"));
+        return configRepository.save(config);
+    }
+
+    public Config saveOrThrow(Config config) {
+        if (configRepository.findByKey(config.getKey()).isPresent()) {
+            throw new InconsistentDataException("Already existing key");
+        }
         return configRepository.save(config);
     }
     
