@@ -31,9 +31,13 @@
 							<td>{{ cfg.key }}</td>
 							<td>{{ cfg.value }}</td>
 							<td class="text-right">
-								<a class="btn btn-warning btn-md" type="button" (click)="editSettings(cfg.key)">
+								<button class="btn btn-warning btn-md" type="button" (click)="editSettings(cfg)">
 									<i class="material-icons md-18">edit</i>
-								</a>
+								</button>
+								&nbsp;
+								<button class="btn btn-danger btn-md" type="button" (click)="deleteSettings(cfg)">
+									<i class="material-icons md-18">delete</i>
+								</button>
 							</td>
 						</tr>
 					</tbody>

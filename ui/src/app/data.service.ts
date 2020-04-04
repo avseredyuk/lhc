@@ -29,22 +29,6 @@ export class DataService {
     return this.http.post<TokenResponse>(environment.apiUrl + 'admin/generate-token', loginPayload);
   }
 
-  getConfiguration(): Observable<Configuration[]> {
-    return this.http.get<Configuration[]>(environment.apiUrl + 'admin/configs');
-  }
-
-  getConfigurationByKey(settingsKey: string): Observable<ApiResult<Configuration>> {
-    return this.http.get<ApiResult<Configuration>>(environment.apiUrl + 'admin/configs/' + settingsKey);
-  }
-
-  updateConfiguration(configuration: Configuration): Observable<ApiResult<Configuration>> {
-    return this.http.put<ApiResult<Configuration>>(environment.apiUrl + 'admin/configs', configuration);
-  }
-
-  createConfiguration(configuration: Configuration): Observable<ApiResult<Configuration>> {
-    return this.http.post<ApiResult<Configuration>>(environment.apiUrl + 'admin/configs', configuration);
-  }
-
   getDevices(): Observable<Device[]> {
     return this.http.get<Device[]>(environment.apiUrl + 'admin/devices');
   }
@@ -67,6 +51,28 @@ export class DataService {
 
   getHistorySince(sinceTimestamp): Observable<History[]> {
     return this.http.get<History[]>(environment.apiUrl + 'admin/history?sinceTimestamp=' + sinceTimestamp);
+  }
+
+  /* Configurations */
+
+  getConfiguration(): Observable<Configuration[]> {
+    return this.http.get<Configuration[]>(environment.apiUrl + 'admin/configs');
+  }
+
+  getConfigurationByKey(settingsKey: string): Observable<ApiResult<Configuration>> {
+    return this.http.get<ApiResult<Configuration>>(environment.apiUrl + 'admin/configs/' + settingsKey);
+  }
+
+  updateConfiguration(configuration: Configuration): Observable<ApiResult<Configuration>> {
+    return this.http.put<ApiResult<Configuration>>(environment.apiUrl + 'admin/configs', configuration);
+  }
+
+  createConfiguration(configuration: Configuration): Observable<ApiResult<Configuration>> {
+    return this.http.post<ApiResult<Configuration>>(environment.apiUrl + 'admin/configs', configuration);
+  }
+
+  deleteConfiguration(configuration: Configuration) {
+    return this.http.delete(environment.apiUrl + 'admin/configs/' + configuration.key);
   }
 
   /* Plant Maintenance */

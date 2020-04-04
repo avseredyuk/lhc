@@ -28,32 +28,52 @@ export class SettingsComponent implements OnInit {
 
     this.notifications = this.componentCommunicationService.getNotification();
 
+    this.loadData();
+  }
+
+  loadData() {
     this.dataService.getConfiguration().subscribe(
-  		data => this.configurations = data
-  	);
+      data => this.configurations = data
+     );
   }
 
   clearCache() {
     this.dataService.clearCache().subscribe(
-        (data: ApiResult<Boolean>) => {
-          this.notifications = [new AppNotification('Cache cleared', AppNotificationType.SUCCESS)];
-        },
-        error => { // HttpErrorResponse
-          if (error.status === 400) {
-            this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
-          } else {
-            this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
-          }
+      (data: ApiResult<Boolean>) => {
+        this.notifications = [new AppNotification('Cache cleared', AppNotificationType.SUCCESS)];
+      },
+      error => {
+        if (error.status === 400) {
+          this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
+        } else {
+          this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
         }
+      }
       );
   }
 
-  editSettings(settingsKey: string) {
-    this.router.navigate(['/edit-settings/' + settingsKey]);
+  editSettings(configuration: Configuration) {
+    this.router.navigate(['/edit-settings/' + configuration.key]);
   }
 
   addSettings() {
     this.router.navigate(['/add-settings']);
+  }
+
+  deleteSettings(configuration: Configuration) {
+    this.dataService.deleteConfiguration(configuration).subscribe(
+      data => {
+        this.notifications = [new AppNotification('Deleted configuration with key: ' + configuration.key, AppNotificationType.SUCCESS)];
+        this.loadData();
+      },
+      error => {
+        if (error.status === 400) {
+          this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
+        } else {
+          this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
+        }
+        this.loadData();
+      });
   }
 
   hasNotifications(): Boolean {

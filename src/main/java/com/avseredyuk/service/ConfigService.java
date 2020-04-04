@@ -10,13 +10,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ConfigService {
-    private final ConfigRepository configRepository;
-    
+
     @Autowired
-    public ConfigService(ConfigRepository configRepository) {
-        this.configRepository = configRepository;
-    }
-    
+    private ConfigRepository configRepository;
+
     public Config getByKey(String key) {
         return configRepository.findOne(key);
     }
@@ -36,6 +33,12 @@ public class ConfigService {
             throw new InconsistentDataException("Already existing key");
         }
         return configRepository.save(config);
+    }
+
+    public void delete(String configKey) {
+        configRepository.findByKey(configKey)
+                .orElseThrow(() -> new InconsistentDataException("No config found by provided key"));
+        configRepository.delete(configKey);
     }
     
     public Long getHoursCount() {

@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -96,6 +97,11 @@ public class Controller {
     public ResponseEntity<ApiResult<ConfigDto>> createConfig(@RequestBody ConfigDto configDto) {
         Config config = configMapper.toModel(configDto);
         return ResponseEntity.ok(new ApiResult<>(configMapper.toDto(configService.saveOrThrow(config))));
+    }
+
+    @DeleteMapping(value = "/configs/{configKey}")
+    public void deleteMaintenance(@PathVariable String configKey) {
+        configService.delete(configKey);
     }
 
     @PostMapping(value = "/clearcache")
