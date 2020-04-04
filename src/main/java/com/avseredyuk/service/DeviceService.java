@@ -35,7 +35,7 @@ public class DeviceService {
     }
     
     public List<Device> findAll() {
-        return deviceRepository.findAllByOrderByIdAsc();
+        return deviceRepository.findAllByOrderByEnabledDescIdAsc();
     }
     
     public Device saveOrThrow(Device device) throws InconsistentDataException {

@@ -17,7 +17,11 @@
 					<table class="table no-row-border">
 						<tbody>
 							<tr *ngFor="let device of devices">
-								<td class="td-device vertical-center"><a routerLink="/devices/{{device.id}}">{{ device.name }}</a></td>
+								<td class="td-device vertical-center">
+									<span class="dot"
+										[ngClass]="{'device-enabled': device.enabled, 'device-disabled': !device.enabled}"></span>
+									&nbsp;<a routerLink="/devices/{{device.id}}">{{ device.name }}</a>
+								</td>
 
                 <td class="td-device text-right">
 
