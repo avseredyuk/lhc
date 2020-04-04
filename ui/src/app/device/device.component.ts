@@ -19,7 +19,7 @@ export class DeviceComponent implements OnInit {
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   notifications: Array<AppNotification> = [];
   deviceId: number;
-  device: Device;
+  device: Device = new Device();
 
   constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService,
     private route: ActivatedRoute, private location: Location, private tokenCheckService: TokenCheckService) {

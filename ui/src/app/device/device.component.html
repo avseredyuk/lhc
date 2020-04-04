@@ -26,7 +26,7 @@
 									</tr>
 									<tr>
 										<td class="col-sm-3"><b>Token:</b></td>
-										<td class="col-sm-9">{{device.token}}</td>
+										<td class="col-sm-9 breakable">{{device.token}}</td>
 									</tr>
 									<tr>
 										<td class="col-sm-3"><b>Enabled:</b></td>
@@ -40,16 +40,16 @@
 						<div class="panel-heading"><h4>Tools</h4></div>
 						<div class="panel-body">
 							<div class="block-tools">
-								<a title="Plant Maintenances" routerLink="/devices/{{device.id}}/maintenance">
+								<a title="Plant Maintenances" routerLink="/devices/{{deviceId}}/maintenance">
 									<i class="material-icons icon-normal">local_florist</i>
 								</a>
-								<a title="Pings" routerLink="/devices/{{device.id}}/pings">
+								<a title="Pings" routerLink="/devices/{{deviceId}}/pings">
 									<i class="material-icons">track_changes</i>
 								</a>
-								<a title="Pump Actions" routerLink="/devices/{{device.id}}/pumpactions">
+								<a title="Pump Actions" routerLink="/devices/{{deviceId}}/pumpactions">
 									<i class="material-icons">local_drink</i>
 								</a>
-								<a title="Sensor Reports" routerLink="/devices/{{device.id}}/sensorreports">
+								<a title="Sensor Reports" routerLink="/devices/{{deviceId}}/sensorreports">
 									<i class="material-icons">library_books</i>
 								</a>
 								<a title="Run pump once" (click)="enableRunPumpOnce()">
@@ -73,7 +73,7 @@
 								</thead>
 								<tbody>
 									<tr *ngFor="let cfg of device.config">
-										<td>{{ cfg.key }}</td>
+										<td class="breakable">{{ cfg.key }}</td>
 										<td>{{ cfg.value }}</td>
 										<td>{{ cfg.type }}</td>
 									</tr>
@@ -95,7 +95,7 @@
 								</thead>
 								<tbody>
 									<tr *ngFor="let exclusion of device.exclusions" >
-										<td >
+										<td class="breakable">
 											{{ exclusion.map }}
 										</td>
 										<td>
