@@ -35,3 +35,15 @@ body {
 .spacer-bottom {
     margin-bottom: 20px;
 }
+.no-row-border {
+    tbody {
+        tr {
+            td {
+                border: 0px;
+            }
+        }
+    }
+}
+.vertical-center {
+    vertical-align: middle !important;
+}

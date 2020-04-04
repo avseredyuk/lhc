@@ -32,6 +32,10 @@ export class DevicesComponent implements OnInit {
     this.notifications = this.componentCommunicationService.getNotification();
   }
 
+  hasData(): Boolean {
+    return typeof this.devices !== 'undefined' && this.devices.length > 0;
+  }
+
   hasNotifications(): Boolean {
     return typeof this.notifications !== 'undefined' && this.notifications.length > 0;
   }

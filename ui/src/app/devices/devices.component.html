@@ -10,14 +10,21 @@
 		<div class="panel panel-info">
 			<div class="panel-heading"><h1>Devices</h1></div>
 			<div class="panel-body">
-				<ul class="contentul">
-					<li *ngFor="let device of devices">
-						<a [ngClass]="(device.enabled==true)?'device-enabled':'device-disabled'" routerLink="/devices/{{device.id}}">{{ device.name }}</a>
-					</li>
-				</ul>
-				<div class="col-md-12">
-					<button routerLink="/add-device" class="btn btn-info btn-lg" role="button">Add</button>
+				<div *ngIf="!hasData()" class="text-center spacer">
+					No data
 				</div>
+				<div *ngIf="hasData()">
+					<table class="table no-row-border">
+						<tbody>
+							<tr *ngFor="let device of devices">
+								<td class="td-device vertical-center"><a routerLink="/devices/{{device.id}}">{{ device.name }}</a></td>
+
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				&nbsp;
+				<button routerLink="/add-device" class="btn btn-info btn-lg" role="button">Add</button>
 			</div>
 		</div>
 	</div>
