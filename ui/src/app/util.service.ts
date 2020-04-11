@@ -5,7 +5,15 @@ import {Injectable} from "@angular/core";
 })
 export class UtilService {
 
-  public dataTypes: Array<string> = ['FULL', 'SAMPLE', 'PARTIAL'];
+  public dataTypes: Array<string> =
+    ['FULL', 'SAMPLE', 'PARTIAL'];
+  public deviceConfigKeys: Array<string> =
+    ['PUMP_ENABLE_FREQUENCY', 'PUMP_DURATION', 'REPORT_SEND_FREQUENCY', 'RUN_PUMP_ONCE',
+     'PUMP_COLOR', 'WATER_TEMPERATURE_COLOR', 'TEMPERATURE_COLOR', 'HUMIDITY_COLOR', 'ABS_HUMIDITY_COLOR'];
+  public deviceConfigDataTypes: Array<string> =
+    ['UI', 'DEVICE'];
+  public deviceReportDataExclusionTypes: Array<string> =
+    ['AIR_TEMP', 'WATER_TEMP', 'HUMIDITY', 'PUMP', 'ABS_HUMIDITY'];
 
   formatTimestamp(timestamp: number): string {
     var localeId = 'uk-UA';

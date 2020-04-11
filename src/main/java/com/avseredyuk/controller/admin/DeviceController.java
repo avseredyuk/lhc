@@ -28,6 +28,7 @@ import com.avseredyuk.dto.internal.SensorDto;
 import com.avseredyuk.exception.InconsistentDataException;
 import com.avseredyuk.mapper.internal.DeviceMapper;
 import com.avseredyuk.mapper.internal.PlantMaintenanceMapper;
+import com.avseredyuk.model.Device;
 import com.avseredyuk.model.PlantMaintenance;
 import com.avseredyuk.model.internal.ApiResult;
 import com.avseredyuk.service.DeviceConfigService;
@@ -76,9 +77,13 @@ public class DeviceController {
         return ResponseEntity.ok(new ApiResult<>(deviceMapper.toDto(deviceService.saveOrThrow(deviceMapper.toModel(deviceDto)))));
     }
 
-    @PutMapping(consumes = "application/json")
-    public DeviceDto update(@RequestBody DeviceDto deviceDto) {
-        return deviceMapper.toDto(deviceService.update(deviceMapper.toModel(deviceDto)));
+    @PutMapping(value = "/{deviceId}",
+            consumes = "application/json")
+    public DeviceDto update(@PathVariable Long deviceId, @RequestBody DeviceDto deviceDto) {
+        Device device = deviceMapper.toModel(deviceDto);
+        device.getConfig().stream().forEach(c -> c.setDevice(device));
+        device.getExclusions().stream().forEach(e -> e.setDevice(device));
+        return deviceMapper.toDto(deviceService.update(device));
     }
 
     @DeleteMapping(value = "/{deviceId}")

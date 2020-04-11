@@ -5,7 +5,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Device, DeviceReportDataExclusion} from "../model/device";
 import {ApiResult} from "../model/api-result";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
-import {Location} from '@angular/common';
 import {TokenCheckService} from "../token-check.service";
 import {SidebarComponent} from "../sidebar/sidebar.component";
 
@@ -22,7 +21,7 @@ export class DeviceComponent implements OnInit {
   device: Device = new Device();
 
   constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService,
-    private route: ActivatedRoute, private location: Location, private tokenCheckService: TokenCheckService) {
+    private route: ActivatedRoute, private tokenCheckService: TokenCheckService) {
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
@@ -77,13 +76,8 @@ export class DeviceComponent implements OnInit {
     return this.device.config && this.device.config.length > 0;
   }
 
-  //todo: not used right now but should be
   hasExclusions(): Boolean {
     return this.device.exclusions && this.device.exclusions.length > 0;
-  }
-
-  checkExcluded(exclusion: DeviceReportDataExclusion): boolean {
-    return exclusion.excluded;
   }
 
 }

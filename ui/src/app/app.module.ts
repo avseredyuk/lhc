@@ -23,6 +23,7 @@ import { PumpActionsComponent } from './pump-actions/pump-actions.component';
 import { SensorReportsComponent } from './sensor-reports/sensor-reports.component';
 import { EditSettingsComponent } from './edit-settings/edit-settings.component';
 import { AddSettingsComponent } from './add-settings/add-settings.component';
+import { EditDeviceComponent } from './edit-device/edit-device.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { AddSettingsComponent } from './add-settings/add-settings.component';
     SensorReportsComponent,
     EditSettingsComponent,
     AddSettingsComponent,
+    EditDeviceComponent,
   ],
   imports: [
     BrowserModule,

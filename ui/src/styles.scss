@@ -4,7 +4,6 @@ body {
      font-family: 'Montserrat', sans-serif;
      height: 100vh;
 }
-
 #container {
     display: grid;
     grid-template-columns: 70px auto;
@@ -17,7 +16,6 @@ body {
         }
     }
 }
-
 .inactiveLink {
    pointer-events: none;
    cursor: default;
@@ -46,4 +44,12 @@ body {
 }
 .vertical-center {
     vertical-align: middle !important;
+}
+.block-tools {
+    a {
+        cursor: pointer;
+        i {
+            font-size: 36px;
+        }
+    }
 }

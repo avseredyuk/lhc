@@ -23,6 +23,5 @@ public class DeviceDto {
     @Data
     public static class DeviceReportDataExclusionDto {
         private String map;
-        private boolean isExcluded;
     }
 }

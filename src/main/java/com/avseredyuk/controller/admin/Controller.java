@@ -118,15 +118,4 @@ public class Controller {
     //todo: FE: routing protection to login via guard
     //todo: FE: replace confirm() calls with something more beautiful
     //todo: move from handmade security for DeviceController->service to some spring security stuff
-    //todo: edit device
-    //todo: edit device  ? device_cfg ?
-    //todo: edit device  ? report_exclusions ?
-    //todo: edit device in place ???
-
-    //todo: delete device: after device deletion all of the non-device-related entities
-    //todo:  like sensor reports or pings or so are left in db without possibility to see them
-
-    //todo: ticket: add "device" to the path of all DeviceController request methods
-        //requires changes in device code
-        //(don't forget to update web security config)
 }

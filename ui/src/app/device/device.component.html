@@ -41,7 +41,7 @@
 						<div class="panel-body">
 							<div class="block-tools">
 								<a title="Plant Maintenances" routerLink="/devices/{{deviceId}}/maintenance">
-									<i class="material-icons icon-normal">local_florist</i>
+									<i class="material-icons">local_florist</i>
 								</a>
 								<a title="Pings" routerLink="/devices/{{deviceId}}/pings">
 									<i class="material-icons">track_changes</i>
@@ -51,6 +51,9 @@
 								</a>
 								<a title="Sensor Reports" routerLink="/devices/{{deviceId}}/sensorreports">
 									<i class="material-icons">library_books</i>
+								</a>
+								<a title="Edit device" routerLink="/devices/{{deviceId}}/edit">
+									<i class="material-icons">edit</i>
 								</a>
 								<a title="Run pump once" (click)="enableRunPumpOnce()">
 									<i class="material-icons icon-danger">power</i>
@@ -91,24 +94,20 @@
 					<div class="panel panel-primary">
 						<div class="panel-heading"><h4>Exclusions</h4></div>
 						<div class="panel-body">
-							<table class="table table-condensed">
-								<thead>
-									<tr>
-										<th scope="col">Mapping</th>
-										<th scope="col">Status</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr *ngFor="let exclusion of device.exclusions" >
-										<td class="breakable">
-											{{ exclusion.map }}
-										</td>
-										<td>
-											<i class="material-icons" [ngClass]="{'toggleOff': checkExcluded(exclusion), 'toggleOn': !checkExcluded(exclusion)}"> {{ checkExcluded(exclusion) ? 'toggle_off' : 'toggle_on' }} </i>
-										</td>
-									</tr>
-								</tbody>
-							</table>
+							<div *ngIf="!hasExclusions()" class="text-center">
+								No data
+							</div>
+							<div *ngIf="hasExclusions()">
+								<table class="table table-sm no-row-border">
+									<tbody>
+										<tr *ngFor="let exclusion of device.exclusions" >
+											<td class="breakable">
+												{{ exclusion.map }}
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>

@@ -4,6 +4,7 @@ import {LoginComponent} from "./login/login.component";
 import {LogoutComponent} from "./logout/logout.component";
 import {DevicesComponent} from "./devices/devices.component";
 import {DeviceComponent} from "./device/device.component";
+import {EditDeviceComponent} from "./edit-device/edit-device.component";
 import {AddDeviceComponent} from "./add-device/add-device.component";
 import {HistoryComponent} from "./history/history.component";
 import {PlantMaintenanceComponent} from "./plant-maintenance/plant-maintenance.component";
@@ -33,6 +34,10 @@ const routes: Routes = [
 	{
 		path: 'devices/:id',
 		component: DeviceComponent
+	},
+	{
+		path: 'devices/:id/edit',
+		component: EditDeviceComponent
 	},
 	{
 		path: 'add-device',

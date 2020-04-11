@@ -59,6 +59,10 @@ export class DataService {
     return this.http.delete(environment.apiUrl + 'admin/devices/' + device.id);
   }
 
+  updateDevice(device: Device): Observable<ApiResult<Device>> {
+    return this.http.put<ApiResult<Device>>(environment.apiUrl + 'admin/devices/' + device.id, device);
+  }
+
   /* Configurations */
 
   getConfiguration(): Observable<Configuration[]> {

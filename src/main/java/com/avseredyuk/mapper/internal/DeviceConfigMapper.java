@@ -16,6 +16,14 @@ public interface DeviceConfigMapper {
     @Mapping(target = "value", source = "value")
     @Mapping(target = "type", source = "deviceConfigType")
     DeviceConfigDto toDto(DeviceConfig d);
+
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "key", source = "key")
+    @Mapping(target = "value", source = "value")
+    @Mapping(target = "deviceConfigType", source = "type")
+    DeviceConfig toModel(DeviceConfigDto d);
     
     List<DeviceConfigDto> toDtoList(List<DeviceConfig> list);
+
+    List<DeviceConfig> toModelList(List<DeviceConfigDto> list);
 }

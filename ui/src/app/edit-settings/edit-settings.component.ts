@@ -16,7 +16,7 @@ import {ApiResult} from "../model/api-result";
   styleUrls: ['./edit-settings.component.scss']
 })
 export class EditSettingsComponent implements OnInit {
-  
+
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   notifications: Array<AppNotification> = [];
   settingsKey: string;
@@ -53,7 +53,7 @@ export class EditSettingsComponent implements OnInit {
       (data: ApiResult<Configuration>) => {
         this.configuration = data.data;
         this.editForm.controls['key'].setValue(this.configuration.key);
-        this.editForm.controls['value'].setValue(this.configuration.value)
+        this.editForm.controls['value'].setValue(this.configuration.value);
       },
       error => {
         if (error.status === 404) {
