@@ -67,11 +67,13 @@ export class PlantMaintenanceComponent implements OnInit {
   }
 
   deleteMaintenance(plantMaintenance: PlantMaintenance) {
-  	this.dataService.deletePlantMaintenance(plantMaintenance).subscribe(
-      data => {
-        this.loadPageForDevice();
-      }
-    );
+    if (confirm('Are you sure you want to delete plant maintenance?')) {
+      this.dataService.deletePlantMaintenance(plantMaintenance).subscribe(
+        data => {
+          this.loadPageForDevice();
+        }
+        );
+    }
   }
 
   addPlantMaintenance() {
