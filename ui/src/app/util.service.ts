@@ -15,6 +15,9 @@ export class UtilService {
   public deviceReportDataExclusionTypes: Array<string> =
     ['AIR_TEMP', 'WATER_TEMP', 'HUMIDITY', 'PUMP', 'ABS_HUMIDITY'];
 
+  public VALIDATION_PATTERN_PH: string = "[0-9]{1,2}[,.]?[0-9]{0,2}";
+  public VALIDATION_PATTERN_TDS: string = "[0-9]{1,5}";
+
   formatTimestamp(timestamp: number): string {
     var localeId = 'uk-UA';
     return new Date(timestamp).toLocaleString(localeId);

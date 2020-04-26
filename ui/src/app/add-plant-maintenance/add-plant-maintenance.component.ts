@@ -20,8 +20,8 @@ export class AddPlantMaintenanceComponent {
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   notifications: Array<AppNotification> = [];
   addForm: FormGroup;
-  phCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern("[0-9]{1,2}[,.]?[0-9]{0,2}")])
-  tdsCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern("[0-9]{1,5}")]);
+  phCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_PH)])
+  tdsCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_TDS)]);
   typeCtrl: FormControl = this.formBuilder.control(this.utilService.dataTypes[1], [Validators.required]);
   newDetailKeyCtrl: FormControl = this.formBuilder.control('', []);
   newDetailValueCtrl: FormControl = this.formBuilder.control('', [])

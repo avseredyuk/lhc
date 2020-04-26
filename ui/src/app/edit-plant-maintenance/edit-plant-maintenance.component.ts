@@ -23,11 +23,11 @@ export class EditPlantMaintenanceComponent {
   maintenance: PlantMaintenance;
   notifications: Array<AppNotification> = [];
   editForm: FormGroup;
-  phCtrl: FormControl;
-  tdsCtrl: FormControl;
-  typeCtrl: FormControl;
-  newDetailKeyCtrl: FormControl;
-  newDetailValueCtrl: FormControl;
+  phCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_PH)]);
+  tdsCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_TDS)]);
+  typeCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
+  newDetailKeyCtrl: FormControl = this.formBuilder.control('', []);
+  newDetailValueCtrl: FormControl = this.formBuilder.control('', []);
   deviceId: number;
   deviceName: string;
   pageNumber: number;
@@ -52,12 +52,6 @@ export class EditPlantMaintenanceComponent {
     });
     this.pageNumber = this.componentCommunicationService.getPageNumber();
 
-    this.phCtrl = this.formBuilder.control('', []);
-    this.tdsCtrl = this.formBuilder.control('', []);
-    this.typeCtrl = this.formBuilder.control('', []);
-    this.newDetailKeyCtrl = this.formBuilder.control('', []);
-    this.newDetailValueCtrl = this.formBuilder.control('', []);
-
     this.editForm = this.formBuilder.group({
     	ph: this.phCtrl,
     	tds: this.tdsCtrl,
@@ -73,7 +67,7 @@ export class EditPlantMaintenanceComponent {
         this.editForm.controls['ph'].setValue(this.maintenance.ph)
         this.editForm.controls['tds'].setValue(this.maintenance.tds);
       },
-      error => { // HttpErrorResponse
+      error => {
         if (error.status === 404) {
           this.componentCommunicationService.setNotification([new AppNotification('Plant Maintenance not found', AppNotificationType.ERROR)]);
         } else {
@@ -88,7 +82,9 @@ export class EditPlantMaintenanceComponent {
   }
 
   addDetail() {
-    if (this.editForm.controls['newDetailKey'].value !== '' && this.editForm.controls['newDetailValue'].value !== '') {
+    if (this.editForm.controls['newDetailKey'].value !== ''
+      && this.editForm.controls['newDetailValue'].value !== ''
+      && this.maintenance.details.filter(c => c.key === this.editForm.controls['newDetailKey'].value).length == 0) {
       this.maintenance.details.push(new PlantMaintenanceDetail(this.editForm.controls['newDetailKey'].value, this.editForm.controls['newDetailValue'].value));
       this.editForm.controls['newDetailKey'].setValue('');
       this.editForm.controls['newDetailValue'].setValue('');
@@ -96,8 +92,11 @@ export class EditPlantMaintenanceComponent {
   }
 
   onSubmit() {
+    if (this.editForm.invalid) {
+      return;
+    }
     this.maintenance.maintenanceType = this.editForm.controls['type'].value;
-    this.maintenance.ph = parseFloat(this.editForm.controls['ph'].value);//todo: it parses string into null, it should validate it or at BE
+    this.maintenance.ph = parseFloat(this.editForm.controls['ph'].value);
     this.maintenance.tds = parseFloat(this.editForm.controls['tds'].value);
     this.dataService.updatePlantMaintenance(this.maintenance)
       .subscribe( data => {
