@@ -5,6 +5,7 @@ import {DataService} from "../data.service";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
 import {TokenCheckService} from "../token-check.service";
 import {SidebarComponent} from "../sidebar/sidebar.component";
+import {UtilService} from "../util.service";
 
 @Component({
   selector: 'app-add-device',
@@ -16,11 +17,11 @@ export class AddDeviceComponent implements OnInit {
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   notifications: Array<AppNotification> = [];
   addForm: FormGroup;
-  nameCtrl: FormControl;
-  tokenCtrl: FormControl;
+  nameCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_DEVICE_NAME)]);
+  tokenCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_DEVICE_TOKEN)]);
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
-    private tokenCheckService: TokenCheckService) { }
+    private tokenCheckService: TokenCheckService, private utilService: UtilService) { }
 
   ngOnInit() {
   	if (!this.tokenCheckService.getRawToken()) {
@@ -28,8 +29,6 @@ export class AddDeviceComponent implements OnInit {
       return;
     }
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices']);});
-    this.nameCtrl = this.formBuilder.control('', [Validators.required]);
-    this.tokenCtrl = this.formBuilder.control('', [Validators.required]);
 
     this.addForm = this.formBuilder.group({
       name: this.nameCtrl,
@@ -42,7 +41,7 @@ export class AddDeviceComponent implements OnInit {
       .subscribe( data => {
         this.router.navigate(['devices']);
       },
-      error => { // HttpErrorResponse
+      error => {
           if (error.status === 400) {
             this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
           } else {

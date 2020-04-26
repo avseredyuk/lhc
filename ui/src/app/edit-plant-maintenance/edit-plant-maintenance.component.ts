@@ -68,8 +68,8 @@ export class EditPlantMaintenanceComponent {
         this.editForm.controls['tds'].setValue(this.maintenance.tds);
       },
       error => {
-        if (error.status === 404) {
-          this.componentCommunicationService.setNotification([new AppNotification('Plant Maintenance not found', AppNotificationType.ERROR)]);
+        if (error.status === 400) {
+          this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
         } else {
           this.componentCommunicationService.setNotification([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
         }

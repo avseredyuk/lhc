@@ -22,7 +22,7 @@ export class TokenCheckService {
 
   getToken(): string {
 	  let tokenObject = JSON.parse(localStorage.getItem("token"));
-	  return tokenObject.token;
+    return tokenObject.token;
   }
 
   saveToken(tokenData: any) {

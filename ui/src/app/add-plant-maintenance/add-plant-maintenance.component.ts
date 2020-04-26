@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../data.service";
-import {AppNotification} from "../model/app-notification";
+import {AppNotification, AppNotificationType} from "../model/app-notification";
 import {Device} from "../model/device";
 import {PlantMaintenance, PlantMaintenanceDetail} from "../model/plant-maintenance";
 import {TokenCheckService} from "../token-check.service";
@@ -100,6 +100,14 @@ export class AddPlantMaintenanceComponent {
 
     this.dataService.createPlantMaintenance(newPm)
       .subscribe( data => {
+        this.router.navigate(['devices/' + this.deviceId + '/maintenance']);
+      },
+      error => {
+        if (error.status === 400) {
+          this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
+        } else {
+          this.componentCommunicationService.setNotification([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
+        }
         this.router.navigate(['devices/' + this.deviceId + '/maintenance']);
       });
   }

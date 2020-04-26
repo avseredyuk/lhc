@@ -6,6 +6,8 @@ import com.avseredyuk.repository.DeviceRepository;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,13 +40,17 @@ public class DeviceService {
         return deviceRepository.findAllByOrderByEnabledDescIdAsc();
     }
     
-    public Device saveOrThrow(Device device) throws InconsistentDataException {
-        Device devFromDb = deviceRepository.findByToken(device.getToken());
-        if (Objects.isNull(devFromDb)) {
-            return deviceRepository.save(device);
-        } else {
-            throw new InconsistentDataException("Token has to be unique");
+    public Device saveOrThrow(Device device) {
+        if (StringUtils.isBlank(device.getName())) {
+            throw new InconsistentDataException("Invalid name value");
         }
+        if (StringUtils.isBlank(device.getToken())) {
+            throw new InconsistentDataException("Invalid token value");
+        }
+        if (Objects.nonNull(deviceRepository.findByToken(device.getToken()))) {
+            throw new InconsistentDataException("Non-unique token");
+        }
+        return deviceRepository.save(device);
     }
     
     public Device update(Device device) {
