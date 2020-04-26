@@ -14,7 +14,7 @@ public interface DeviceConfigRepository extends CrudRepository<DeviceConfig, Lon
     
     List<DeviceConfig> findAllByDeviceToken(String deviceToken);
     
-    Optional<DeviceConfig> findByDeviceIdAndKey(Long deviceId, String key);
+    Optional<DeviceConfig> findByDeviceIdAndKey(Long deviceId, DeviceConfig.DeviceConfigKey key);
     
     @Transactional
     @Modifying

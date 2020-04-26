@@ -54,7 +54,7 @@ public class DeviceConfigService {
     }
     
     public boolean enableRunPumpOnceOrThrow(Long deviceId) {
-        DeviceConfig config = deviceConfigRepository.findByDeviceIdAndKey(deviceId, DeviceConfigKey.RUN_PUMP_ONCE.toString())
+        DeviceConfig config = deviceConfigRepository.findByDeviceIdAndKey(deviceId, DeviceConfigKey.RUN_PUMP_ONCE)
                 .orElseThrow(() -> new InconsistentDataException("No DeviceConfig to update"));
         config.setValue("TRUE");
         deviceConfigRepository.save(config);
