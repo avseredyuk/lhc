@@ -61,7 +61,8 @@ export class SettingsComponent implements OnInit {
   }
 
   deleteSettings(configuration: Configuration) {
-    this.dataService.deleteConfiguration(configuration).subscribe(
+    if (confirm('Are you sure you want to delete configuration "' + configuration.key + '" ?')) {
+      this.dataService.deleteConfiguration(configuration).subscribe(
       data => {
         this.notifications = [new AppNotification('Deleted configuration with key: ' + configuration.key, AppNotificationType.SUCCESS)];
         this.loadData();
@@ -74,6 +75,8 @@ export class SettingsComponent implements OnInit {
         }
         this.loadData();
       });
+    }
+
   }
 
   hasData(): Boolean {
