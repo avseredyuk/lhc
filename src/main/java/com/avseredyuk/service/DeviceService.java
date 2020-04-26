@@ -42,7 +42,7 @@ public class DeviceService {
     }
     
     public List<Device> findAll() {
-        return deviceRepository.findAllByOrderByEnabledDescIdAsc();
+        return deviceRepository.findAllByOrderByEnabledDescNameAsc();
     }
     
     public Device saveOrThrow(Device device) {
