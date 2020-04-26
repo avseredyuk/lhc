@@ -23,7 +23,8 @@ public class DeviceConfig {
     private Long id;
     
     @Column(name = "cfg_key")
-    private String key;
+    @Enumerated(EnumType.STRING)
+    private DeviceConfigKey key;
     
     @Column(name = "cfg_value")
     private String value;

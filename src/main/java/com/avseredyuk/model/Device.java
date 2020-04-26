@@ -42,7 +42,7 @@ public class Device {
     public String getDeviceConfigByKey(String key) {
         return this.config
                 .stream()
-                .filter(deviceConfig -> deviceConfig.getKey().equals(key))
+                .filter(deviceConfig -> deviceConfig.getKey().toString().equals(key))
                 .map(DeviceConfig::getValue)
                 .findFirst()
                 .orElse(null);

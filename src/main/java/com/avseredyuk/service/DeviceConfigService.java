@@ -33,7 +33,9 @@ public class DeviceConfigService {
         Map<String, String> result = fetchedDevice.getConfig()
                 .stream()
                 .filter(deviceConfig -> deviceConfig.getDeviceConfigType() == DeviceConfig.DeviceConfigType.DEVICE)
-                .collect(Collectors.toMap(DeviceConfig::getKey, DeviceConfig::getValue));
+                .collect(Collectors.toMap(
+                        dc ->dc.getKey().toString(),
+                        DeviceConfig::getValue));
 
         String configHash = DigestUtils.sha1Hex(result.entrySet()
                 .stream()
@@ -43,7 +45,7 @@ public class DeviceConfigService {
 
         fetchedDevice.getConfig().stream()
                 .filter(deviceConfig ->
-                        deviceConfig.getKey().equals(DeviceConfigKey.RUN_PUMP_ONCE.toString())
+                        deviceConfig.getKey() == DeviceConfigKey.RUN_PUMP_ONCE
                                 && Boolean.valueOf(deviceConfig.getValue()))
                 .findFirst()
                 .ifPresent(deviceConfig -> deviceConfigRepository.disablePumpRunOnce(deviceConfig.getId()));
@@ -51,7 +53,7 @@ public class DeviceConfigService {
         return result;
     }
     
-    public boolean enableRunPumpOnceOrThrow(Long deviceId) throws InconsistentDataException {
+    public boolean enableRunPumpOnceOrThrow(Long deviceId) {
         DeviceConfig config = deviceConfigRepository.findByDeviceIdAndKey(deviceId, DeviceConfigKey.RUN_PUMP_ONCE.toString())
                 .orElseThrow(() -> new InconsistentDataException("No DeviceConfig to update"));
         config.setValue("TRUE");
