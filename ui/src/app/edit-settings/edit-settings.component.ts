@@ -21,8 +21,8 @@ export class EditSettingsComponent implements OnInit {
   notifications: Array<AppNotification> = [];
   settingsKey: string;
   editForm: FormGroup;
-  keyCtrl: FormControl;
-  valueCtrl: FormControl;
+  keyCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
+  valueCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
   configuration: Configuration;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService, private route: ActivatedRoute,
@@ -42,8 +42,6 @@ export class EditSettingsComponent implements OnInit {
       this.router.navigate(['settings']);
     });
 
-    this.keyCtrl = this.formBuilder.control('', [Validators.required]);
-    this.valueCtrl = this.formBuilder.control('', [Validators.required]);
     this.editForm = this.formBuilder.group({
     	key: this.keyCtrl,
     	value: this.valueCtrl

@@ -20,11 +20,11 @@ export class AddPlantMaintenanceComponent {
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   notifications: Array<AppNotification> = [];
   addForm: FormGroup;
-  phCtrl: FormControl;
-  tdsCtrl: FormControl;
-  typeCtrl: FormControl;
-  newDetailKeyCtrl: FormControl;
-  newDetailValueCtrl: FormControl;
+  phCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern("[0-9]{1,2}[,.]?[0-9]{0,2}")])
+  tdsCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern("[0-9]{1,5}")]);
+  typeCtrl: FormControl = this.formBuilder.control(this.utilService.dataTypes[1], [Validators.required]);
+  newDetailKeyCtrl: FormControl = this.formBuilder.control('', []);
+  newDetailValueCtrl: FormControl = this.formBuilder.control('', [])
   newDetails: Array<PlantMaintenanceDetail> = [];
   deviceId: number;
   deviceName: string;
@@ -48,23 +48,6 @@ export class AddPlantMaintenanceComponent {
     });
     this.pageNumber = this.componentCommunicationService.getPageNumber();
 
-    let clonedMaintenance = this.componentCommunicationService.getClonedMaintenance();
-    if (clonedMaintenance !== undefined) {
-      this.phCtrl = this.formBuilder.control(clonedMaintenance.ph, [Validators.required]);
-      this.tdsCtrl = this.formBuilder.control(clonedMaintenance.tds, [Validators.required]);
-      this.typeCtrl = this.formBuilder.control(clonedMaintenance.maintenanceType, [Validators.required]);
-      this.newDetails = clonedMaintenance.details;
-      this.newDetails.forEach((detail, index, a) => {
-        detail.id = null;
-      });
-    } else {
-      this.phCtrl = this.formBuilder.control('', [Validators.required]);
-      this.tdsCtrl = this.formBuilder.control('', [Validators.required]);
-      this.typeCtrl = this.formBuilder.control(this.utilService.dataTypes[1], [Validators.required]);
-    }
-    this.newDetailKeyCtrl = this.formBuilder.control('', []);
-    this.newDetailValueCtrl = this.formBuilder.control('', []);
-
     this.addForm = this.formBuilder.group({
     	ph: this.phCtrl,
     	tds: this.tdsCtrl,
@@ -73,13 +56,26 @@ export class AddPlantMaintenanceComponent {
     	newDetailValue: this.newDetailValueCtrl
     });
 
+    let clonedMaintenance = this.componentCommunicationService.getClonedMaintenance();
+    if (clonedMaintenance !== undefined) {
+      this.addForm.controls['ph'].setValue(clonedMaintenance.ph);
+      this.addForm.controls['tds'].setValue(clonedMaintenance.tds);
+      this.addForm.controls['type'].setValue(clonedMaintenance.maintenanceType);
+      this.newDetails = clonedMaintenance.details;
+      this.newDetails.forEach((detail, index, a) => {
+        detail.id = null;
+      });
+    }
+
     this.dataService.getDevice(this.deviceId).subscribe(
       apiResult => this.deviceName = apiResult.data.name
     );
   }
 
   addDetail() {
-  	if (this.addForm.controls['newDetailKey'].value !== '' && this.addForm.controls['newDetailValue'].value !== '') {
+  	if (this.addForm.controls['newDetailKey'].value !== ''
+      && this.addForm.controls['newDetailValue'].value !== ''
+      && this.newDetails.filter(c => c.key === this.addForm.controls['newDetailKey'].value).length == 0) {
 	  	this.newDetails.push(new PlantMaintenanceDetail(this.addForm.controls['newDetailKey'].value, this.addForm.controls['newDetailValue'].value));
   		this.addForm.controls['newDetailKey'].setValue('');
   		this.addForm.controls['newDetailValue'].setValue('');
@@ -98,7 +94,7 @@ export class AddPlantMaintenanceComponent {
     let newPm = new PlantMaintenance();
     newPm.deviceId = this.deviceId;
     newPm.maintenanceType = this.addForm.controls['type'].value;
-    newPm.ph = parseFloat(this.addForm.controls['ph'].value);//todo: it parses string into null, it should validate it or at BE
+    newPm.ph = parseFloat(this.addForm.controls['ph'].value);
     newPm.tds = parseFloat(this.addForm.controls['tds'].value);
     newPm.details = this.newDetails;
 

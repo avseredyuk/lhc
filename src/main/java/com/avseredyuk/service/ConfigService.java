@@ -31,8 +31,9 @@ public class ConfigService {
         if (StringUtils.isBlank(config.getValue())) {
             throw new InconsistentDataException("Empty value");
         }
-        configRepository.findByKey(config.getKey())
-                .orElseThrow(() -> new InconsistentDataException("No config found by provided key"));
+        if (!configRepository.findByKey(config.getKey()).isPresent()) {
+            throw new InconsistentDataException("No config found by provided key");
+        }
         return configRepository.save(config);
     }
 

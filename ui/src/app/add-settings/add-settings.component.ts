@@ -19,8 +19,8 @@ export class AddSettingsComponent implements OnInit {
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   notifications: Array<AppNotification> = [];
   addForm: FormGroup;
-  keyCtrl: FormControl;
-  valueCtrl: FormControl;
+  keyCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
+  valueCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
     private tokenCheckService: TokenCheckService, public utilService: UtilService,
@@ -36,9 +36,6 @@ export class AddSettingsComponent implements OnInit {
       this.router.navigate(['settings']);
     });
 
-    this.keyCtrl = this.formBuilder.control('', [Validators.required]);
-    this.valueCtrl = this.formBuilder.control('', [Validators.required]);
-      
     this.addForm = this.formBuilder.group({
     	key: this.keyCtrl,
     	value: this.valueCtrl
