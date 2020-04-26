@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import lombok.Data;
 
@@ -33,10 +34,12 @@ public class Device {
     
     @OneToMany(mappedBy = "device", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE},
             orphanRemoval = true)
+    @OrderBy("deviceConfigType ASC, key ASC")
     private List<DeviceConfig> config;
     
     @OneToMany(mappedBy = "device", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE},
             orphanRemoval = true)
+    @OrderBy("map ASC")
     private List<DeviceReportDataExclusion> exclusions;
 
     public String getDeviceConfigByKey(String key) {
