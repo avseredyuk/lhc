@@ -6,13 +6,13 @@
   <groupId>com.avseredyuk</groupId>
   <artifactId>lhc</artifactId>
   <version>1.0</version>
+  <name>lhc</name>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.2.RELEASE</version>
+    <version>1.5.22.RELEASE</version>
   </parent>
-  <name>lhc</name>
 
   <properties>
     <ng.executable>ng</ng.executable>
