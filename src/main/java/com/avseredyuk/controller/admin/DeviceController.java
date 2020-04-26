@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
 
 import com.avseredyuk.dto.internal.BootupDto;
 import com.avseredyuk.dto.internal.DeviceDto;
@@ -26,7 +24,6 @@ import com.avseredyuk.dto.internal.PingDto;
 import com.avseredyuk.dto.internal.PlantMaintenanceDto;
 import com.avseredyuk.dto.internal.PumpActionDto;
 import com.avseredyuk.dto.internal.SensorDto;
-import com.avseredyuk.exception.InconsistentDataException;
 import com.avseredyuk.mapper.internal.DeviceMapper;
 import com.avseredyuk.mapper.internal.PlantMaintenanceMapper;
 import com.avseredyuk.model.Device;
@@ -164,11 +161,6 @@ public class DeviceController {
     public Page<SensorDto> getAllSensorReportsByDevice(@PathVariable Long deviceId,
                                                        @NotNull final Pageable pageable) {
         return sensorReportService.findAllByDeviceIdPaginated(deviceId, pageable);
-    }
-
-    @ExceptionHandler({ InconsistentDataException.class })
-    public ResponseEntity<ApiResult> handleInconsistentDataException(InconsistentDataException ex, WebRequest request) {
-        return ResponseEntity.badRequest().body(new ApiResult(ex.getMessage()));
     }
 
 }

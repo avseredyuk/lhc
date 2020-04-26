@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,13 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
 
 import com.avseredyuk.configuration.TokenProvider;
 import com.avseredyuk.dto.HistoryDto;
 import com.avseredyuk.dto.internal.ConfigDto;
 import com.avseredyuk.dto.internal.LoginDto;
-import com.avseredyuk.exception.InconsistentDataException;
 import com.avseredyuk.mapper.internal.ConfigMapper;
 import com.avseredyuk.model.Config;
 import com.avseredyuk.model.internal.ApiResult;
@@ -108,14 +105,15 @@ public class Controller {
     public ResponseEntity<ApiResult<Boolean>> clearCache() {
         return ResponseEntity.ok(new ApiResult<>(cacheService.clearCache()));
     }
-
-    @ExceptionHandler({ InconsistentDataException.class })
-    public ResponseEntity<ApiResult> handleInconsistentDataException(InconsistentDataException ex, WebRequest request) {
-        return ResponseEntity.badRequest().body(new ApiResult(ex.getMessage()));
-    }
     
     //todo: BE: set up proper logging via log4j
     //todo: FE: routing protection to login via guard
     //todo: FE: replace confirm() calls with something more beautiful
     //todo: move from handmade security for DeviceController->service to some spring security stuff
+
+    //todo: * add ssl
+    //todo: * validations
+    //todo:     * some of the validations are done at the mapstruct level which sucks,
+    //todo:     * some of them like field presence - not validated at all, so sql-related exceptions are being thrown
+    //todo:     * move validations to some interceptor/framework stuff
 }

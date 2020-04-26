@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.avseredyuk.dto.internal.PumpActionDto;
-import com.avseredyuk.exception.AccessDeniedException;
+import com.avseredyuk.exception.UnknownDeviceException;
 import com.avseredyuk.mapper.internal.PumpActionMapper;
 import com.avseredyuk.model.Device;
 import com.avseredyuk.model.PumpActionReport;
@@ -50,7 +50,7 @@ public class PumpActionService {
     @CacheEvict(value = "PumpAction", allEntries = true)
     public void save(PumpActionReport report) {
         Device fetchedDevice = deviceService.findTrustedDevice(report.getDevice())
-                .orElseThrow(AccessDeniedException::new);
+                .orElseThrow(UnknownDeviceException::new);
         report.setDevice(fetchedDevice);
         pumpActionRepository.save(report);
     }

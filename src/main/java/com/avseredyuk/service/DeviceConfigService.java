@@ -1,6 +1,6 @@
 package com.avseredyuk.service;
 
-import com.avseredyuk.exception.AccessDeniedException;
+import com.avseredyuk.exception.UnknownDeviceException;
 import com.avseredyuk.exception.InconsistentDataException;
 import com.avseredyuk.model.Device;
 import com.avseredyuk.model.DeviceConfig;
@@ -26,7 +26,7 @@ public class DeviceConfigService {
     
     public Map<String, String> getConfig(Device device) {
         Device fetchedDevice = deviceService.findTrustedDevice(device)
-                .orElseThrow(AccessDeniedException::new);
+                .orElseThrow(UnknownDeviceException::new);
 
         pingService.createPing(fetchedDevice.getId());
 

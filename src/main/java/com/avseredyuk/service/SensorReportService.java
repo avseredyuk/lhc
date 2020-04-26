@@ -1,7 +1,7 @@
 package com.avseredyuk.service;
 
 import com.avseredyuk.dto.internal.SensorDto;
-import com.avseredyuk.exception.AccessDeniedException;
+import com.avseredyuk.exception.UnknownDeviceException;
 import com.avseredyuk.mapper.internal.SensorMapper;
 import com.avseredyuk.model.Device;
 import com.avseredyuk.model.SensorReport;
@@ -49,7 +49,7 @@ public class SensorReportService {
     })
     public void save(SensorReport report) {
         Device fetchedDevice = deviceService.findTrustedDevice(report.getDevice())
-                .orElseThrow(AccessDeniedException::new);
+                .orElseThrow(UnknownDeviceException::new);
         report.setAbsoluteHumidity(calcAbsHumidity(report));
         report.setDevice(fetchedDevice);
         sensorReportRepository.save(report);

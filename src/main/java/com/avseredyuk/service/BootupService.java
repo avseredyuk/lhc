@@ -1,7 +1,7 @@
 package com.avseredyuk.service;
 
 import com.avseredyuk.dto.internal.BootupDto;
-import com.avseredyuk.exception.AccessDeniedException;
+import com.avseredyuk.exception.UnknownDeviceException;
 import com.avseredyuk.mapper.internal.BootupMapper;
 import com.avseredyuk.model.BootupReport;
 import com.avseredyuk.model.Device;
@@ -34,7 +34,7 @@ public class BootupService {
     @CacheEvict(value = "BootupReport", allEntries = true)
     public void create(BootupReport report) {
         Device fetchedDevice = deviceService.findTrustedDevice(report.getDevice())
-                .orElseThrow(AccessDeniedException::new);
+                .orElseThrow(UnknownDeviceException::new);
         report.setDevice(fetchedDevice);
         bootupRepository.save(report);
     }

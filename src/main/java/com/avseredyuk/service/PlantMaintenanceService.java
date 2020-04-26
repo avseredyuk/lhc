@@ -3,23 +3,19 @@ package com.avseredyuk.service;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import com.avseredyuk.dto.internal.PlantMaintenanceDto;
-import com.avseredyuk.exception.DeviceNotFoundException;
-import com.avseredyuk.exception.InconsistentDataException;
-import com.avseredyuk.mapper.internal.PlantMaintenanceMapper;
-import com.avseredyuk.model.PlantMaintenance;
-import com.avseredyuk.model.PlantMaintenanceDetail;
-import com.avseredyuk.repository.PlantMaintenanceRepository;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import com.avseredyuk.dto.internal.PlantMaintenanceDto;
+import com.avseredyuk.exception.InconsistentDataException;
+import com.avseredyuk.mapper.internal.PlantMaintenanceMapper;
+import com.avseredyuk.model.PlantMaintenance;
+import com.avseredyuk.model.PlantMaintenanceDetail;
+import com.avseredyuk.repository.PlantMaintenanceRepository;
 
 @Service
 public class PlantMaintenanceService {
@@ -55,7 +51,7 @@ public class PlantMaintenanceService {
         }
         plantMaintenance.setDevice(
             deviceService.findById(plantMaintenance.getDevice().getId())
-                .orElseThrow(DeviceNotFoundException::new)
+                .orElseThrow(() -> new InconsistentDataException("Device not found"))
         );
         return plantMaintenanceRepository.save(plantMaintenance);
     }

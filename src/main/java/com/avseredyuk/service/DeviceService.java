@@ -26,7 +26,7 @@ public class DeviceService {
         return deviceRepository.findById(id);
     }
     
-    public Optional<Device> findActiveById(long id) {
+    public Device findActiveById(long id) {
         return deviceRepository.findByIdAndEnabledTrue(id);
     }
 
