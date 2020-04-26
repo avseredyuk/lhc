@@ -1,0 +1,48 @@
+<div id="container">
+	<app-sidebar></app-sidebar>
+	<div id="content">
+		<div *ngIf="hasNotifications()">
+			<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				{{ notification.message }}
+			</div>
+		</div>
+		<div class="panel panel-info">
+			<div class="panel-heading"><h1>Bootups - {{ deviceName }}</h1></div>
+			<div class="panel-body">
+				<div class="tab-content">
+					<div>
+						<div *ngIf="!hasData()" class="text-center spacer spacer-bottom">
+							No data
+						</div>
+						<div *ngIf="hasData()">
+							<table class="table">
+								<thead>
+									<tr>
+										<th scope="col" class="col-xs-2">Date</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let p of bootupsForDevice">
+										<td>{{ this.utilService.formatTimestamp(p.d) }}</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="col-md-12">
+								<nav aria-label="..." class="text-center">
+									<ul class="pagination pagination-lg">
+										<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
+										[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
+										currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
+										<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>

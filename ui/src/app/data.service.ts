@@ -10,6 +10,7 @@ import {Status} from "./model/status";
 import {Page} from "./model/page";
 import {PlantMaintenance} from "./model/plant-maintenance";
 import {Ping} from "./model/ping";
+import {Bootup} from "./model/bootup";
 import {PumpAction} from "./model/pump-action";
 import {SensorReport} from "./model/sensor-report";
 import {environment} from "../environments/environment";
@@ -111,6 +112,12 @@ export class DataService {
 
   getPingsByDeviceId(deviceId, page): Observable<Page<Ping[]>> {
     return this.http.get<Page<Ping[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/pings?size=10&page=' + page);
+  }
+
+  /* Bootups */
+
+  getBootupsByDeviceId(deviceId, page): Observable<Page<Bootup[]>> {
+    return this.http.get<Page<Bootup[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/bootups?size=10&page=' + page);
   }
 
   /* Pump Actions */

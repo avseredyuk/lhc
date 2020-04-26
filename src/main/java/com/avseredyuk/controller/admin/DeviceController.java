@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
+import com.avseredyuk.dto.internal.BootupDto;
 import com.avseredyuk.dto.internal.DeviceDto;
 import com.avseredyuk.dto.internal.PingDto;
 import com.avseredyuk.dto.internal.PlantMaintenanceDto;
@@ -31,6 +32,7 @@ import com.avseredyuk.mapper.internal.PlantMaintenanceMapper;
 import com.avseredyuk.model.Device;
 import com.avseredyuk.model.PlantMaintenance;
 import com.avseredyuk.model.internal.ApiResult;
+import com.avseredyuk.service.BootupService;
 import com.avseredyuk.service.DeviceConfigService;
 import com.avseredyuk.service.DeviceService;
 import com.avseredyuk.service.PingService;
@@ -59,6 +61,8 @@ public class DeviceController {
     private PumpActionService pumpActionService;
     @Autowired
     private SensorReportService sensorReportService;
+    @Autowired
+    private BootupService bootupService;
 
     @GetMapping
     public List<DeviceDto> getAllDevices() {
@@ -142,6 +146,13 @@ public class DeviceController {
                                              @NotNull final Pageable pageable) {
         return pingService.findAllByDeviceIdPaginated(deviceId, pageable);
     }
+
+    @GetMapping(value = "/{deviceId}/bootups")
+    public Page<BootupDto> getAllBootupsByDevice(@PathVariable Long deviceId,
+                                                 @NotNull final Pageable pageable) {
+        return bootupService.findAllByDeviceIdPaginated(deviceId, pageable);
+    }
+
 
     @GetMapping(value = "/{deviceId}/pumpactions")
     public Page<PumpActionDto> getAllPumpActionsByDevice(@PathVariable Long deviceId,

@@ -15,6 +15,7 @@ import {AddSettingsComponent} from "./add-settings/add-settings.component";
 import {EditSettingsComponent} from "./edit-settings/edit-settings.component";
 import {StatusComponent} from "./status/status.component";
 import {PingsComponent} from "./pings/pings.component";
+import {BootupsComponent} from "./bootups/bootups.component";
 import {PumpActionsComponent} from "./pump-actions/pump-actions.component";
 import {SensorReportsComponent} from "./sensor-reports/sensor-reports.component";
 
@@ -74,6 +75,10 @@ const routes: Routes = [
 	{
 		path: 'devices/:id/pings',
 		component: PingsComponent
+	},
+	{
+		path: 'devices/:id/bootups',
+		component: BootupsComponent
 	},
 	{
 		path: 'devices/:id/pumpactions',
