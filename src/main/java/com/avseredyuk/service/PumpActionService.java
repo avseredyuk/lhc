@@ -49,8 +49,7 @@ public class PumpActionService {
     
     @CacheEvict(value = "PumpAction", allEntries = true)
     public void save(PumpActionReport report) {
-        Device fetchedDevice = deviceService.findTrustedDevice(report.getDevice())
-                .orElseThrow(UnknownDeviceException::new);
+        Device fetchedDevice = deviceService.findByToken(report.getDevice().getToken());
         report.setDevice(fetchedDevice);
         pumpActionRepository.save(report);
     }

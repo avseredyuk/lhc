@@ -30,11 +30,12 @@ public class DeviceService {
         return deviceRepository.findByIdAndEnabledTrue(id);
     }
 
-    public Optional<Device> findTrustedDevice(Device device) {
-        if (device != null && device.getToken() != null) {
-            return deviceRepository.findByTokenAndEnabledTrue(device.getToken());
-        }
-        return Optional.empty();
+    public Device findTrustedDevice(String token) {
+        return deviceRepository.findByTokenAndEnabledTrue(token);
+    }
+
+    public Device findByToken(String token) {
+        return deviceRepository.findByToken(token);
     }
     
     public List<Device> findAllActive() {

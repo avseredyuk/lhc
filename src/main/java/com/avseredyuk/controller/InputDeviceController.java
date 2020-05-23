@@ -23,37 +23,29 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class InputDeviceController {
     private static final String AUTH_TOKEN_PARAM_NAME = "AuthToken";
-    
-    private final SensorReportService sensorReportService;
-    private final PumpActionService pumpActionService;
-    private final BootupService bootupService;
-    private final DeviceConfigService deviceConfigService;
-    private final PumpActionReportMapper pumpActionReportMapper;
-    private final SensorReportMapper sensorReportMapper;
-    private final DeviceMapper deviceMapper;
-    
+
     @Autowired
-    public InputDeviceController(SensorReportService sensorReportService,
-                                 PumpActionService pumpActionService, BootupService bootupService,
-                                 DeviceConfigService deviceConfigService,
-                                 PumpActionReportMapper pumpActionReportMapper, SensorReportMapper sensorReportMapper,
-                                 DeviceMapper deviceMapper) {
-        this.sensorReportService = sensorReportService;
-        this.pumpActionService = pumpActionService;
-        this.bootupService = bootupService;
-        this.deviceConfigService = deviceConfigService;
-        this.pumpActionReportMapper = pumpActionReportMapper;
-        this.sensorReportMapper = sensorReportMapper;
-        this.deviceMapper = deviceMapper;
-    }
+    private SensorReportService sensorReportService;
+    @Autowired
+    private PumpActionService pumpActionService;
+    @Autowired
+    private BootupService bootupService;
+    @Autowired
+    private DeviceConfigService deviceConfigService;
+    @Autowired
+    private PumpActionReportMapper pumpActionReportMapper;
+    @Autowired
+    private SensorReportMapper sensorReportMapper;
+    @Autowired
+    private DeviceMapper deviceMapper;
     
     @RequestMapping(
         value = "/report/add",
         method = RequestMethod.POST,
         consumes = "application/json"
     )
-    public void newReport(@RequestBody SensorReportDto reportDto,
-                          @RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String deviceToken) {
+    public void newReport(@RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String deviceToken,
+                          @RequestBody SensorReportDto reportDto) {
         SensorReport report = sensorReportMapper.fromDto(reportDto);
         report.setDevice(deviceMapper.toModelFromToken(deviceToken));
         sensorReportService.save(report);
@@ -64,8 +56,8 @@ public class InputDeviceController {
         method = RequestMethod.POST,
         consumes = "application/json"
     )
-    public void newPumpAction(@RequestBody PumpActionReportDto actionReportDto,
-                              @RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String deviceToken) {
+    public void newPumpAction(@RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String deviceToken,
+                              @RequestBody PumpActionReportDto actionReportDto) {
         PumpActionReport report = pumpActionReportMapper.fromDto(actionReportDto);
         report.setDevice(deviceMapper.toModelFromToken(deviceToken));
         pumpActionService.save(report);
@@ -85,7 +77,8 @@ public class InputDeviceController {
         value = "/cfg",
         method = RequestMethod.GET
     )
-    public Map<String,String> getDeviceConfig(@RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String deviceToken) {
+    public Map<String,String> getDeviceConfig(
+            @RequestHeader(value = AUTH_TOKEN_PARAM_NAME, required = false) String deviceToken) {
         return deviceConfigService.getConfig(deviceMapper.toModelFromToken(deviceToken));
     }
 }

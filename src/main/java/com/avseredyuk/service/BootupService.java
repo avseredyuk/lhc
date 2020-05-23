@@ -33,8 +33,7 @@ public class BootupService {
 
     @CacheEvict(value = "BootupReport", allEntries = true)
     public void create(BootupReport report) {
-        Device fetchedDevice = deviceService.findTrustedDevice(report.getDevice())
-                .orElseThrow(UnknownDeviceException::new);
+        Device fetchedDevice = deviceService.findByToken(report.getDevice().getToken());
         report.setDevice(fetchedDevice);
         bootupRepository.save(report);
     }

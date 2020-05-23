@@ -4,6 +4,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -35,6 +36,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         logger.warn(ex.getMessage(), ex);
         return handleExceptionInternal(ex, new ApiResult("Something went wrong"),
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler({ BadCredentialsException.class })
+    protected ResponseEntity<Object> handleBadCredentials(RuntimeException ex, WebRequest request) {
+        logger.warn(ex.getMessage(), ex);
+        return handleExceptionInternal(ex, new ApiResult("Invalid credentials"),
+                new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
     }
 
     /*

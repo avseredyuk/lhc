@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface DeviceRepository extends CrudRepository<Device, Long> {
     Device findByToken(String token);
     Device findByName(String name);
-    Optional<Device> findByTokenAndEnabledTrue(String token);
+    Device findByTokenAndEnabledTrue(String token);
     Optional<Device> findById(Long id);
     Device findByIdAndEnabledTrue(Long id);
     List<Device> findByEnabledTrue();

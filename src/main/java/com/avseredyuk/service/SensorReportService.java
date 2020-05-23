@@ -48,8 +48,7 @@ public class SensorReportService {
         @CacheEvict(value = "SensorReport", allEntries = true)
     })
     public void save(SensorReport report) {
-        Device fetchedDevice = deviceService.findTrustedDevice(report.getDevice())
-                .orElseThrow(UnknownDeviceException::new);
+        Device fetchedDevice = deviceService.findByToken(report.getDevice().getToken());
         report.setAbsoluteHumidity(calcAbsHumidity(report));
         report.setDevice(fetchedDevice);
         sensorReportRepository.save(report);

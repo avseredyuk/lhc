@@ -25,8 +25,7 @@ public class DeviceConfigService {
     private PingService pingService;
     
     public Map<String, String> getConfig(Device device) {
-        Device fetchedDevice = deviceService.findTrustedDevice(device)
-                .orElseThrow(UnknownDeviceException::new);
+        Device fetchedDevice = deviceService.findByToken(device.getToken());
 
         pingService.createPing(fetchedDevice.getId());
 

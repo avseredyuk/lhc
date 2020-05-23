@@ -109,11 +109,10 @@ public class Controller {
     //todo: BE: set up proper logging via log4j
     //todo: FE: routing protection to login via guard
     //todo: FE: replace confirm() calls with something more beautiful
-    //todo: move from handmade security for DeviceController->service to some spring security stuff
 
-    //todo: * add ssl
     //todo: * validations
     //todo:     * some of the validations are done at the mapstruct level which sucks,
     //todo:     * some of them like field presence - not validated at all, so sql-related exceptions are being thrown
     //todo:     * move validations to some interceptor/framework stuff
+    //todo: swagger?
 }
