@@ -16,6 +16,9 @@ body {
         }
     }
 }
+.nopadding {
+    padding: 0px;
+}
 .inactiveLink {
    pointer-events: none;
    cursor: default;
@@ -43,7 +46,8 @@ body {
     }
 }
 .vertical-center {
-    vertical-align: middle !important;
+    display: flex;
+    align-items: center;
 }
 .block-tools {
     a {

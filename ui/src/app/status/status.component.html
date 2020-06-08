@@ -1,7 +1,6 @@
 <div id="container">
 	<app-sidebar></app-sidebar>
-	<div id="content">
-		<h1>Status</h1>
+	<div id="content" class="vertical-center">
 		<div class="container">
 			<div *ngIf="status">
 				<div #gauges *ngFor="let gauge of status.gauges; let i = index" class="col-xs-12 col-sm-8 col-md-4 col-lg-4">
@@ -9,10 +8,8 @@
 					<span class="gaugeText" id="gaugeText{{ i }}"></span>
 				</div>
 			</div>
-		</div>
-		<br/>
-		<div class="container" id="statuscont">
-			<div *ngIf="status">
+			<div class="spacer">&nbsp;</div>
+			<div *ngIf="status" class="statuscont">
 				<div class="col-xs-12 col-sm-8 col-md-4 col-lg-4">
 					<div class="panel panel-info">
 						<div class="panel-heading">Last pings</div>

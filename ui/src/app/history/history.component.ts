@@ -118,7 +118,7 @@ export class HistoryComponent implements OnInit {
 		return new Chart(document.getElementById("lineChart"), {
 			type: 'scatter',
 			options: {
-				responsive:false,
+				responsive: true,
 				maintainAspectRatio: false,
 				legend: {
 					position: 'bottom'

@@ -25,6 +25,48 @@ export class UtilService {
     return new Date(timestamp).toLocaleString(localeId);
   }
 
+  formatTimeInterval(timestampOld: number): string {
+    var timestamp = Math.floor((new Date().getTime() - timestampOld) / 1000) ;
+    var days, hours, minutes, seconds;
+    var _days = Math.floor(timestamp / 86400);
+    timestamp %= 86400;
+    var _hours = Math.floor(timestamp / 3600);
+    timestamp %= 3600;
+    var _minutes = Math.floor(timestamp / 60);
+    var _seconds = timestamp % 60;
+    if (_hours   < 10) {hours   = "0"+_hours;}   else {hours   = _hours;}
+    if (_minutes < 10) {minutes = "0"+_minutes;} else {minutes = _minutes;}
+    if (_seconds < 10) {seconds = "0"+_seconds;} else {seconds = _seconds;}
+    if (_days > 0) {
+      days = _days + " days "
+    } else {
+      days = "";
+    }
+    return days + hours + ':' + minutes + ':' + seconds;
+  }
+
+  getDateFromDateTime(timestamp: number): String {
+    return new Date(timestamp).toISOString().slice(0,10);
+  }
+
+  getTimeFromDateTime(timestamp: number): String {
+    return new Date(timestamp).toISOString().slice(11,19);
+  }
+
+  convertDateToUTC(date) {
+    return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+  }
+
+  combineDateAndTime(date, time) {
+    var timeString = time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var dateString = '' + year + '-' + month + '-' + day;
+    var combined = new Date(dateString + ' ' + timeString);
+    return combined;
+  };
+
   isCurrentPage(currentPage, pageNumber) {
     return currentPage == pageNumber;
   }

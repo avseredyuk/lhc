@@ -26,11 +26,15 @@ export class EditPlantMaintenanceComponent {
   phCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_PH)]);
   tdsCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_TDS)]);
   typeCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
+  dateCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
+  timeCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
   newDetailKeyCtrl: FormControl = this.formBuilder.control('', []);
   newDetailValueCtrl: FormControl = this.formBuilder.control('', []);
   deviceId: number;
   deviceName: string;
   pageNumber: number;
+  newDate: Date;
+  newTime: Date;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService, private route: ActivatedRoute,
   	private componentCommunicationService: ComponentCommunicationService, private tokenCheckService: TokenCheckService, private utilService: UtilService) {
@@ -56,6 +60,8 @@ export class EditPlantMaintenanceComponent {
     	ph: this.phCtrl,
     	tds: this.tdsCtrl,
     	type: this.typeCtrl,
+      date: this.dateCtrl,
+      time: this.timeCtrl,
     	newDetailKey: this.newDetailKeyCtrl,
     	newDetailValue: this.newDetailValueCtrl
     });
@@ -66,6 +72,10 @@ export class EditPlantMaintenanceComponent {
         this.editForm.controls['type'].setValue(this.maintenance.maintenanceType);
         this.editForm.controls['ph'].setValue(this.maintenance.ph)
         this.editForm.controls['tds'].setValue(this.maintenance.tds);
+        this.editForm.controls['date'].setValue(this.utilService.getDateFromDateTime(this.maintenance.d));
+        this.editForm.controls['time'].setValue(this.utilService.getTimeFromDateTime(this.maintenance.d));
+        this.newDate = new Date(this.maintenance.d);
+        this.newTime = new Date(this.maintenance.d);
       },
       error => {
         if (error.status === 400) {
@@ -98,6 +108,7 @@ export class EditPlantMaintenanceComponent {
     this.maintenance.maintenanceType = this.editForm.controls['type'].value;
     this.maintenance.ph = parseFloat(this.editForm.controls['ph'].value);
     this.maintenance.tds = parseFloat(this.editForm.controls['tds'].value);
+    this.maintenance.d = this.utilService.combineDateAndTime(this.newDate, this.newTime).getTime();
     this.dataService.updatePlantMaintenance(this.maintenance)
       .subscribe( data => {
         this.router.navigate(['devices/' + this.deviceId + '/maintenance']);

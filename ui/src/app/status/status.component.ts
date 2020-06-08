@@ -68,41 +68,21 @@ export class StatusComponent implements OnInit {
 			let unprocessedObject = status.lastPings[ping];
 			status.lastPings[ping] = new Object();
 			status.lastPings[ping].timestamp = this.utilService.formatTimestamp(unprocessedObject);
-			status.lastPings[ping].interval = this.formatTimeInterval(unprocessedObject);
+			status.lastPings[ping].interval = this.utilService.formatTimeInterval(unprocessedObject);
 		});
 		Object.keys(status.lastBootups).forEach((bootup, i, array) => {
 			let unprocessedObject = status.lastBootups[bootup];
 			status.lastBootups[bootup] = new Object();
 			status.lastBootups[bootup].timestamp = this.utilService.formatTimestamp(unprocessedObject);
-			status.lastBootups[bootup].interval = this.formatTimeInterval(unprocessedObject);
+			status.lastBootups[bootup].interval = this.utilService.formatTimeInterval(unprocessedObject);
 		});
 		Object.keys(status.lastPumps).forEach((pump, i, array) => {
 			let unprocessedObject = status.lastPumps[pump];
 			status.lastPumps[pump] = new Object();
 			status.lastPumps[pump].timestamp = this.utilService.formatTimestamp(unprocessedObject);
-			status.lastPumps[pump].interval = this.formatTimeInterval(unprocessedObject);
+			status.lastPumps[pump].interval = this.utilService.formatTimeInterval(unprocessedObject);
 		});
 		return status;
-	}
-
-	formatTimeInterval(timestampOld: number): string {
-		var timestamp = Math.floor((new Date().getTime() - timestampOld) / 1000) ;
-		var days, hours, minutes, seconds;
-		var _days = Math.floor(timestamp / 86400);
-		timestamp %= 86400;
-		var _hours = Math.floor(timestamp / 3600);
-		timestamp %= 3600;
-		var _minutes = Math.floor(timestamp / 60);
-		var _seconds = timestamp % 60;
-		if (_hours   < 10) {hours   = "0"+_hours;}   else {hours   = _hours;}
-		if (_minutes < 10) {minutes = "0"+_minutes;} else {minutes = _minutes;}
-		if (_seconds < 10) {seconds = "0"+_seconds;} else {seconds = _seconds;}
-		if (_days > 0) {
-			days = _days + " days "
-		} else {
-			days = "";
-		}
-		return days + hours + ':' + minutes + ':' + seconds;
 	}
 
 	formatGaugeMeasureUnit(dataType: string) {
