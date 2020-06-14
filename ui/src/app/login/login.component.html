@@ -4,26 +4,28 @@
 		<div class="panel panel-info">
 			<div class="panel-heading"><h1>Login</h1></div>
 			<div class="panel-body">
-				<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-					<div class="form-row">
-						<div *ngIf="hasNotifications()" class="col-lg-8 col-lg-offset-2">
-							<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
-								<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-								{{ notification.message }}
-							</div>
-						</div>
-						<div class="col-lg-4 col-lg-offset-4 with-margin">
-							<input type="text" [formControl]="usernameCtrl" placeholder="username" name="username" class="form-control" id="username">
-							<div class="error" *ngIf="usernameCtrl.hasError('required') && usernameCtrl.touched">Username is required</div>
-						</div>
-						<div class="col-lg-4 col-lg-offset-4 with-margin">
-							<input type="password" [formControl]="passwordCtrl" placeholder="password" name="password" class="form-control" id="password">
-							<div class="error" *ngIf="passwordCtrl.hasError('required') && passwordCtrl.touched">Password is required</div>
-						</div>
-						<div class="col-lg-2 col-lg-offset-5 text-center">
-							<button class="btn btn-success btn-md" [disabled]="!loginForm.valid">Login</button>
+				<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="col-lg-4 col-lg-offset-4">
+					<br/>
+
+					<div *ngIf="hasNotifications()">
+						<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+							<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+							{{ notification.message }}
 						</div>
 					</div>
+					<div class="with-margin">
+						<label for="username">Login</label>
+						<input type="text" [formControl]="usernameCtrl" name="username" class="form-control" id="username">
+					</div>
+					<div class="with-margin">
+						<label for="username">Password</label>
+						<input type="password" [formControl]="passwordCtrl" name="password" class="form-control" id="password">
+					</div>
+					<div class="text-center">
+						<button class="btn btn-success btn-md" [disabled]="!loginForm.valid">Login</button>
+					</div>
+
+					<br/>
 				</form>
 			</div>
 		</div>
