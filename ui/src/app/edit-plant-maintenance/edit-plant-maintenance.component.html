@@ -17,7 +17,7 @@
 						<div class="form-group">
 							<label for="ph" class="col-sm-3 control-label">pH</label>
 							<div class="col-sm-9">
-								<input type="text" [formControl]="phCtrl" placeholder="pH" name="ph" class="	form-control" id="ph" value="{{maintenance.ph}}">
+								<input type="text" [formControl]="phCtrl" placeholder="pH" name="ph" class=" form-control" id="ph" value="{{maintenance.ph}}">
 							</div>
 						</div>
 						<div class="form-group">
@@ -38,7 +38,7 @@
 							<label for="date" class="col-sm-3 control-label">Date</label>
 							<div class="col-sm-9 nopadding">
 								<div class="col-sm-6">
-									<input type="date" class="form-control" style="line-height:unset;" 
+									<input type="date" class="form-control" style="line-height:unset;"
 									[value]="maintenance.d | date:'yyyy-MM-dd'"
 									(input)="newDate = $event.target.valueAsDate">
 								</div>
@@ -55,7 +55,6 @@
 							</div>
 						</div>
 					</div>
-
 
 					<div class="col-sm-4">
 						<div class="col-lg-6">
@@ -91,9 +90,8 @@
 							</div>
 						</div>
 					</div>
-		
 				</form>
-
 			</div>
 		</div>
-	</div></div>
+	</div>
+</div>

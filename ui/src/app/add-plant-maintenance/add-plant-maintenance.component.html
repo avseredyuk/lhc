@@ -11,82 +11,70 @@
 		<div class="panel panel-info">
 			<div class="panel-heading"><h1>Add Plant Maintenance - {{ deviceName }}</h1></div>
 			<div class="panel-body">
-
-				<form [formGroup]="addForm" (ngSubmit)="onSubmit()">
-
-					<div class="form-row">
-
-						<div class="col-lg-8 col-lg-offset-2">
-
-							<div class="col-lg-4">
+				<br/>
+				<form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="form-horizontal">
+					<div class="col-sm-4 col-sm-offset-2">
+						<div class="form-group">
+							<label for="ph" class="col-sm-3 control-label">pH</label>
+							<div class="col-sm-9">
 								<input type="text" [formControl]="phCtrl" placeholder="pH" name="ph" class="form-control" id="ph">
-								<div class="error" *ngIf="phCtrl.hasError('required') && phCtrl.touched">pH is required</div>
 							</div>
-
-							<div class="col-lg-4">
+						</div>
+						<div class="form-group">
+							<label for="tds" class="col-sm-3 control-label">TDS</label>
+							<div class="col-sm-9">
 								<input type="text" [formControl]="tdsCtrl" placeholder="TDS" name="tds" class="form-control" id="tds">
-								<div class="error" *ngIf="tdsCtrl.hasError('required') && tdsCtrl.touched">TDS is required</div>
 							</div>
-
-							<div class="col-lg-3">
+						</div>
+						<div class="form-group">
+							<label for="type" class="col-sm-3 control-label">Type</label>
+							<div class="col-sm-9">
 								<select class="custom-select" [formControl]="typeCtrl" name="type" class="form-control" id="type">
 									<option *ngFor="let dataType of this.utilService.dataTypes" value="{{ dataType }}">{{ dataType }}</option>
 								</select>
-								<div class="error" *ngIf="typeCtrl.hasError('required') && typeCtrl.touched">Type is required</div>
 							</div>
-
-							<div class="col-lg-1">
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-3 col-sm-9">
 								<button class="btn btn-success btn-md" [disabled]="!addForm.valid">Add</button>
 							</div>
-
-						</div>
-
-					</div>
-
-					<div class="form-row">
-						<div class="col-lg-12">
-							<br/>
 						</div>
 					</div>
 
-					<div class="form-row">
-						<div class="col-lg-6 col-lg-offset-3">
-							<div class="col-lg-6">
-								<input type="text" [formControl]="newDetailKeyCtrl" placeholder="key" name="newDetailKey" class="form-control" id="newDetailKey">
+					<div class="col-sm-4">
+						<div class="col-lg-6">
+							<input type="text" [formControl]="newDetailKeyCtrl" placeholder="key" name="newDetailKey" class="form-control" id="newDetailKey">
+						</div>
+						<div class="col-lg-5">
+							<input type="text" [formControl]="newDetailValueCtrl" placeholder="value" name="newDetailValue" class="form-control" id="newDetailValue">
+						</div>
+						<div class="col-lg-1">
+							<button class="btn btn-success btn-md" type='button' (click)="addDetail()">+</button>
+						</div>
+						<div *ngIf="hasDetails()">
+							<div class="col-lg-12">
+								<br/>
 							</div>
-							<div class="col-lg-5">
-								<input type="text" [formControl]="newDetailValueCtrl" placeholder="value" name="newDetailValue" class="form-control" id="newDetailValue">
-							</div>
-							<div class="col-lg-1">
-								<button class="btn btn-success btn-md" type='button' (click)="addDetail()">+</button>
+							<div class="col-lg-12">
+								<table class="table table-sm table-no-border nopadnomargin">
+									<thead>
+										<tr>
+											<th scope="col">Detail Key</th>
+											<th scope="col">Detail Value</th>
+											<th class="col-md-1" scope="col"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let detail of newDetails">
+											<td>{{ detail.key }}</td>
+											<td>{{ detail.value }}</td>
+											<td><button class="btn btn-danger btn-md material-icons" type='button' (click)="removeDetail(detail)">delete</button></td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
-
-					<div class="form-row" *ngIf="hasDetails()">
-						<div class="col-lg-12">
-							<br/>
-						</div>
-						<div class="col-lg-6 col-lg-offset-3">
-							<table class="table table-sm table-no-border nopadnomargin">
-								<thead>
-									<tr>
-										<th scope="col">Detail Key</th>
-										<th scope="col">Detail Value</th>
-										<th class="col-md-1" scope="col"></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr *ngFor="let detail of newDetails">
-										<td>{{ detail.key }}</td>
-										<td>{{ detail.value }}</td>
-										<td><button class="btn btn-danger btn-md material-icons" type='button' (click)="removeDetail(detail)">delete</button></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-
 				</form>
 			</div>
 		</div>
