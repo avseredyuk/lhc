@@ -20,6 +20,8 @@ public interface DeviceMapper {
     @Mapping(target = "enabled", source = "enabled")
     @Mapping(target = "config", source = "config")
     DeviceDto toDto(Device d);
+
+    DeviceDto toDtoNameOnly(Device.DeviceName deviceName);
     
     List<DeviceDto> toDtoList(List<Device> d);
     

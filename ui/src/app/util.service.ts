@@ -19,6 +19,8 @@ export class UtilService {
   public VALIDATION_PATTERN_TDS: string = "[0-9]{1,5}";
   public VALIDATION_PATTERN_DEVICE_NAME: string = "[a-zA-Z -]{1,100}";
   public VALIDATION_PATTERN_DEVICE_TOKEN: string = "[a-zA-Z0-9]{1,100}";
+  public VALIDATION_PATTERN_WEIGHT: string = "[0-9]{1,2}[,.]?[0-9]{0,2}";
+  public VALIDATION_PATTERN_COUNT: string = "[0-9]{1,5}";
 
   formatTimestamp(timestamp: number): string {
     var localeId = 'uk-UA';

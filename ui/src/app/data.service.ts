@@ -14,6 +14,7 @@ import {Bootup} from "./model/bootup";
 import {PumpAction} from "./model/pump-action";
 import {SensorReport} from "./model/sensor-report";
 import {environment} from "../environments/environment";
+import {Crop, Season} from "./model/season";
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,10 @@ export class DataService {
 
   getDevice(deviceId: number): Observable<ApiResult<Device>> {
     return this.http.get<ApiResult<Device>>(environment.apiUrl + 'admin/devices/' + deviceId);
+  }
+
+  getDeviceName(deviceId: number): Observable<ApiResult<Device>> {
+    return this.http.get<ApiResult<Device>>(environment.apiUrl + 'admin/devices/' + deviceId + '/name');
   }
 
   createDevice(device: Device): Observable<ApiResult<Device>> {
@@ -106,6 +111,28 @@ export class DataService {
 
   deletePlantMaintenance(plantMaintenance: PlantMaintenance) {
     return this.http.delete(environment.apiUrl + 'admin/devices/' + plantMaintenance.deviceId + '/maintenance/' + plantMaintenance.id);
+  }
+
+  /* Crop */
+
+  getSeasonsByDeviceId(deviceId, page): Observable<Page<Season[]>> {
+    return this.http.get<Page<Season[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/crop/seasons?size=10&page=' + page);
+  }
+
+  createSeason(season: Season): Observable<ApiResult<Season>> {
+    return this.http.post<ApiResult<Season>>(environment.apiUrl + 'admin/devices/' + season.deviceId + '/crop/seasons', season);
+  }
+
+  getSeasonName(deviceId, seasonId): Observable<ApiResult<Season>> {
+    return this.http.get<ApiResult<Season>>(environment.apiUrl + 'admin/devices/' + deviceId + '/crop/seasons/' + seasonId + '/name');
+  }
+
+  createCrop(crop: Crop): Observable<ApiResult<Crop>> {
+    return this.http.post<ApiResult<Crop>>(environment.apiUrl + 'admin/devices/' + crop.seasonId + '/crop/seasons/crop', crop);
+  }
+
+  getCrops(deviceId, seasonId, page): Observable<Page<Crop[]>> {
+    return this.http.get<Page<Crop[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/crop/seasons/' + seasonId + '/?size=10&page=' + page);
   }
 
   /* Pings */

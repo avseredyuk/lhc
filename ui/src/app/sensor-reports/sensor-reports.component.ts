@@ -33,7 +33,7 @@ export class SensorReportsComponent {
     }
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
     this.loadPageForDevice();
-    this.dataService.getDevice(this.deviceId).subscribe(
+    this.dataService.getDeviceName(this.deviceId).subscribe(
     	apiResult => this.deviceName = apiResult.data.name
     );
   }

@@ -22,13 +22,11 @@
 										[ngClass]="{'device-enabled': device.enabled, 'device-disabled': !device.enabled}"></span>
 									&nbsp;<a routerLink="/devices/{{device.id}}">{{ device.name }}</a>
 								</td>
-
-                <td class="td-device text-right">
-
-                  <button class="btn btn-danger btn-md" type="button" (click)="deleteDevice(device)">
-                    <i class="material-icons md-18">delete</i>
-                  </button>
-                </td>
+                				<td class="td-device text-right">
+                					<button class="btn btn-danger btn-md" type="button" (click)="deleteDevice(device)">
+                    					<i class="material-icons md-18">delete</i>
+                					</button>
+                				</td>
 							</tr>
 						</tbody>
 					</table>

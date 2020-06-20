@@ -25,6 +25,10 @@ public class DeviceService {
     public Optional<Device> findById(long id) {
         return deviceRepository.findById(id);
     }
+
+    public Optional<Device.DeviceName> findNameById(long id) {
+        return deviceRepository.findNameById(id);
+    }
     
     public Device findActiveById(long id) {
         return deviceRepository.findByIdAndEnabledTrue(id);

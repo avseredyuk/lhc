@@ -25,6 +25,10 @@ import { EditSettingsComponent } from './edit-settings/edit-settings.component';
 import { AddSettingsComponent } from './add-settings/add-settings.component';
 import { EditDeviceComponent } from './edit-device/edit-device.component';
 import { BootupsComponent } from './bootups/bootups.component';
+import { SeasonsComponent } from './seasons/seasons.component';
+import { AddSeasonComponent } from './add-season/add-season.component';
+import { SeasonComponent } from './season/season.component';
+import { AddCropComponent } from './add-crop/add-crop.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +52,10 @@ import { BootupsComponent } from './bootups/bootups.component';
     AddSettingsComponent,
     EditDeviceComponent,
     BootupsComponent,
+    SeasonsComponent,
+    AddSeasonComponent,
+    SeasonComponent,
+    AddCropComponent,
   ],
   imports: [
     BrowserModule,

@@ -115,4 +115,6 @@ public class Controller {
     //todo:     * some of them like field presence - not validated at all, so sql-related exceptions are being thrown
     //todo:     * move validations to some interceptor/framework stuff
     //todo: swagger?
+
+    //todo: seasons 2nd page -> some season NAVIGATION goes to 2nd page of season
 }

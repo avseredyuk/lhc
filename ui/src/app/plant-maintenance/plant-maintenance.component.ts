@@ -47,7 +47,7 @@ export class PlantMaintenanceComponent implements OnInit {
     this.loadPageForDevice();
 
   	this.notifications = this.componentCommunicationService.getNotification();
-    this.dataService.getDevice(this.deviceId).subscribe(
+    this.dataService.getDeviceName(this.deviceId).subscribe(
       apiResult => this.deviceName = apiResult.data.name
     );
   }

@@ -1,0 +1,39 @@
+<div id="container">
+	<app-sidebar></app-sidebar>
+	<div id="content">
+		<div *ngIf="hasNotifications()">
+			<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				{{ notification.message }}
+			</div>
+		</div>
+
+		<div class="panel panel-info">
+			<div class="panel-heading"><h1>Add Crop - {{ seasonName }}</h1></div>
+			<div class="panel-body">
+				<br/>
+				<form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="form-horizontal">
+					<div class="col-sm-8 col-sm-offset-2">
+						<div class="form-group">
+							<label for="name" class="col-sm-3 control-label">Weight</label>
+							<div class="col-sm-9">
+								<input type="text" [formControl]="weightCtrl" placeholder="weight" name="weight" class="form-control" id="weight">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="count" class="col-sm-3 control-label">Count</label>
+							<div class="col-sm-9">
+								<input type="text" [formControl]="countCtrl" placeholder="count" name="count" class="form-control" id="count">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-3 col-sm-9">
+								<button class="btn btn-success btn-md" [disabled]="!addForm.valid">Add</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

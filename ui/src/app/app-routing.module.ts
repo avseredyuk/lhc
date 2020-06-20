@@ -18,6 +18,10 @@ import {PingsComponent} from "./pings/pings.component";
 import {BootupsComponent} from "./bootups/bootups.component";
 import {PumpActionsComponent} from "./pump-actions/pump-actions.component";
 import {SensorReportsComponent} from "./sensor-reports/sensor-reports.component";
+import {SeasonsComponent} from "./seasons/seasons.component";
+import {AddSeasonComponent} from "./add-season/add-season.component";
+import {SeasonComponent} from "./season/season.component";
+import {AddCropComponent} from "./add-crop/add-crop.component";
 
 const routes: Routes = [
 	{
@@ -87,6 +91,22 @@ const routes: Routes = [
 	{
 		path: 'devices/:id/sensorreports',
 		component: SensorReportsComponent
+	},
+	{
+		path: 'devices/:id/seasons',
+		component: SeasonsComponent
+	},
+	{
+		path: 'add-season/:deviceid',
+		component: AddSeasonComponent
+	},
+	{
+		path: 'devices/:id/seasons/:seasonid',
+		component: SeasonComponent
+	},
+	{
+		path: 'add-crop/:deviceid/:seasonid',
+		component: AddCropComponent
 	},
 	{
 		path: '',

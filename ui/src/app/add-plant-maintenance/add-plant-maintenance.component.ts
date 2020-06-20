@@ -67,7 +67,7 @@ export class AddPlantMaintenanceComponent {
       });
     }
 
-    this.dataService.getDevice(this.deviceId).subscribe(
+    this.dataService.getDeviceName(this.deviceId).subscribe(
       apiResult => this.deviceName = apiResult.data.name
     );
   }

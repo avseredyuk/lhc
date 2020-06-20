@@ -50,5 +50,9 @@ public class Device {
                 .findFirst()
                 .orElse(null);
     }
+
+    public interface DeviceName {
+        String getName();
+    }
     
 }
