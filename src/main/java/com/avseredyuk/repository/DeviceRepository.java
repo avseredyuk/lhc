@@ -17,4 +17,6 @@ public interface DeviceRepository extends CrudRepository<Device, Long> {
     Device findByIdAndEnabledTrue(Long id);
     List<Device> findByEnabledTrue();
     List<Device> findAllByOrderByEnabledDescNameAsc();
+    Device findByNameAndIdNot(String name, Long id);
+    Device findByTokenAndIdNot(String token, Long id);
 }

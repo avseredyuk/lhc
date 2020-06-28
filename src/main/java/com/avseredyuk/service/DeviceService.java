@@ -50,7 +50,7 @@ public class DeviceService {
         return deviceRepository.findAllByOrderByEnabledDescNameAsc();
     }
     
-    public Device saveOrThrow(Device device) {
+    public Device create(Device device) {
         if (StringUtils.isBlank(device.getName())) {
             throw new InconsistentDataException("Invalid name value");
         }
@@ -73,7 +73,10 @@ public class DeviceService {
         if (StringUtils.isBlank(device.getToken())) {
             throw new InconsistentDataException("Invalid token value");
         }
-        if (Objects.isNull(deviceRepository.findByToken(device.getToken()))) {
+        if (Objects.nonNull(deviceRepository.findByNameAndIdNot(device.getName(), device.getId()))) {
+            throw new InconsistentDataException("Non-unique name");
+        }
+        if (Objects.nonNull(deviceRepository.findByTokenAndIdNot(device.getToken(), device.getId()))) {
             throw new InconsistentDataException("Non-unique token");
         }
         if (device.getConfig().stream()

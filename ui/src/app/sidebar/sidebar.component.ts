@@ -30,9 +30,9 @@ export class SidebarComponent implements OnInit {
     "/add-plant-maintenance", // add plaint maintenance -- this shoud be part of view url
     "/edit-plant-maintenance",  // edit plaint maintenance -- this shoud be part of view url
     "/add-season",
-    "/add-crop" 
-    //todo: add edit-season
-    //todo: add edit-crop
+    "/add-crop",
+    "/edit-season",
+    "/edit-crop"
     ];
     if (this.currentUrl) {
       for (var i = 0, len = arr.length; i < len; i++) {

@@ -49,9 +49,6 @@ body {
     display: flex;
     align-items: center;
 }
-.td-massive-list {
-    padding: 20px;
-}
 .block-tools {
     a {
         cursor: pointer;
@@ -59,4 +56,14 @@ body {
             font-size: 36px;
         }
     }
+}
+.material-icons.md-18 { font-size: 18px; }
+
+@media screen and (min-width: 0px) and (max-width: 480px) {
+  .for-big { display: none; }
+  .for-small { display: block; }
+}
+@media screen and (min-width: 481px) {
+  .for-big { display: block; }
+  .for-small { display: none; }
 }

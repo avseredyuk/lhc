@@ -2,8 +2,9 @@
 	<app-sidebar></app-sidebar>
 	<div id="content" class="vertical-center">
 		<div class="container">
+			<div class="for-small"><br></div>
 			<div *ngIf="status">
-				<div #gauges *ngFor="let gauge of status.gauges; let i = index" class="col-xs-12 col-sm-8 col-md-4 col-lg-4">
+				<div #gauges *ngFor="let gauge of status.gauges; let i = index" class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 					<canvas class="gauge" id="gauge{{ i }}"></canvas>
 					<span class="gaugeText" id="gaugeText{{ i }}"></span>
 				</div>

@@ -42,17 +42,17 @@ export class AddCropComponent implements OnInit {
     }
 
     this.sidebar.setGoBackCallback(() => {
-      this.componentCommunicationService.setPageNumber(this.pageNumber);
+      this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
       this.router.navigate(['devices/' + this.deviceId + '/seasons/' + this.seasonId]);
     });
-    this.pageNumber = this.componentCommunicationService.getPageNumber();
+    this.pageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
 
     this.addForm = this.formBuilder.group({
     	weight: this.weightCtrl,
     	count: this.countCtrl,
     });
 
-    this.dataService.getSeasonName(this.deviceId, this.seasonId).subscribe(
+    this.dataService.getSeasonName(this.seasonId).subscribe(
       apiResult => this.seasonName = apiResult.data.name
    );
   }

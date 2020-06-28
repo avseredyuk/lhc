@@ -22,6 +22,8 @@ import {SeasonsComponent} from "./seasons/seasons.component";
 import {AddSeasonComponent} from "./add-season/add-season.component";
 import {SeasonComponent} from "./season/season.component";
 import {AddCropComponent} from "./add-crop/add-crop.component";
+import {EditCropComponent} from "./edit-crop/edit-crop.component";
+import {EditSeasonComponent} from "./edit-season/edit-season.component";
 
 const routes: Routes = [
 	{
@@ -107,6 +109,14 @@ const routes: Routes = [
 	{
 		path: 'add-crop/:deviceid/:seasonid',
 		component: AddCropComponent
+	},
+	{
+		path: 'edit-crop/:deviceid/:seasonid/:cropid',
+		component: EditCropComponent
+	},
+	{
+		path: 'edit-season/:deviceid/:seasonid',
+		component: EditSeasonComponent
 	},
 	{
 		path: '',

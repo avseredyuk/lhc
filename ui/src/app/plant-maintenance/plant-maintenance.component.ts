@@ -39,7 +39,7 @@ export class PlantMaintenanceComponent implements OnInit {
     }
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
 
-    let storedPageNumber = this.componentCommunicationService.getPageNumber();
+    let storedPageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
     if (storedPageNumber !== undefined) {
       this.pageNumber = storedPageNumber;
     }
@@ -77,12 +77,12 @@ export class PlantMaintenanceComponent implements OnInit {
   }
 
   addPlantMaintenance() {
-    this.componentCommunicationService.setPageNumber(this.pageNumber);
+    this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
     this.router.navigate(['/add-plant-maintenance/' + this.deviceId]);
   }
 
   editPlantMaintenance(maintenanceId: number) {
-    this.componentCommunicationService.setPageNumber(this.pageNumber);
+    this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
     this.router.navigate(['/edit-plant-maintenance/' + maintenanceId + '/' + this.deviceId]);
   }
 
@@ -90,7 +90,7 @@ export class PlantMaintenanceComponent implements OnInit {
     this.dataService.getPlantMaintenance(plantMaintenance.deviceId, plantMaintenance.id).subscribe(
       (data: ApiResult<PlantMaintenance>) => {
         this.componentCommunicationService.setClonedMaintenance(data.data);
-        this.componentCommunicationService.setPageNumber(this.pageNumber);
+        this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
         this.router.navigate(['/add-plant-maintenance/' + plantMaintenance.deviceId]);
       });
   }

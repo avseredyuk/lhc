@@ -18,8 +18,17 @@
 						<tbody>
 							<tr *ngFor="let season of seasons">
 								<td class="td-massive-list vertical-center">
-									<a (click)="openSeason(season.id)" [routerLink]="">{{ season.name }}</a>
+									<a class="a-massive-list" (click)="openSeason(season)" [routerLink]="">{{ season.name }}</a>
 								</td>
+								<td class="td-massive-list text-right">
+									<button class="btn btn-warning btn-md" type="button" (click)="editSeason(season)">
+										<i class="material-icons md-18">edit</i>
+									</button>
+									&nbsp;
+                					<button class="btn btn-danger btn-md" type="button" (click)="deleteSeason(season)">
+                    					<i class="material-icons md-18">delete</i>
+                					</button>
+                				</td>
 							</tr>
 						</tbody>
 					</table>

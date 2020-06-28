@@ -29,6 +29,8 @@ import { SeasonsComponent } from './seasons/seasons.component';
 import { AddSeasonComponent } from './add-season/add-season.component';
 import { SeasonComponent } from './season/season.component';
 import { AddCropComponent } from './add-crop/add-crop.component';
+import { EditCropComponent } from './edit-crop/edit-crop.component';
+import { EditSeasonComponent } from './edit-season/edit-season.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { AddCropComponent } from './add-crop/add-crop.component';
     AddSeasonComponent,
     SeasonComponent,
     AddCropComponent,
+    EditCropComponent,
+    EditSeasonComponent,
   ],
   imports: [
     BrowserModule,

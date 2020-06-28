@@ -19,7 +19,12 @@ public interface CropMapper {
 
     @Mapping(target = "weight", source = "weight")
     @Mapping(target = "count", source = "count")
-    @Mapping(target = "dateTime", source = "dateTime")
+    @Mapping(target = "dateTime", expression = "java(new java.util.Date(c.getD()))")
+    Crop toModelUpdate(CropDto c);
+
+    @Mapping(target = "weight", source = "weight")
+    @Mapping(target = "count", source = "count")
+    @Mapping(target = "d", expression = "java(c.getDateTime().getTime())")
     @Mapping(target = "id", source = "id")
     CropDto toDto(Crop c);
 

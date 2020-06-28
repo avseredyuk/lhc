@@ -38,10 +38,10 @@ export class AddSeasonComponent implements OnInit {
     }
 
     this.sidebar.setGoBackCallback(() => {
-      this.componentCommunicationService.setPageNumber(this.pageNumber);
+      this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
       this.router.navigate(['devices/' + this.deviceId + '/seasons']);
     });
-    this.pageNumber = this.componentCommunicationService.getPageNumber();
+    this.pageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
 
     this.addForm = this.formBuilder.group({
     	name: this.nameCtrl
@@ -71,7 +71,6 @@ export class AddSeasonComponent implements OnInit {
         } else {
           this.componentCommunicationService.setNotification([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
         }
-        this.router.navigate(['devices/' + this.deviceId + '/seasons']);
       });
   }
 

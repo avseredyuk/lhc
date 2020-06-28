@@ -5,10 +5,16 @@ export class Season {
   crops: Array<Crop>;
 }
 
+export class SeasonStatistics {
+	totalCount: number;
+	totalWeight: number;
+	avgCropWeight: number;
+}
+
 export class Crop {
 	id: number;
 	seasonId: number;
 	weight: number;
 	count: number;
-	dateTime: number;
+	d: number;
 }

@@ -14,12 +14,14 @@ import {Bootup} from "./model/bootup";
 import {PumpAction} from "./model/pump-action";
 import {SensorReport} from "./model/sensor-report";
 import {environment} from "../environments/environment";
-import {Crop, Season} from "./model/season";
+import {Crop, Season, SeasonStatistics} from "./model/season";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+
+  public adminApiUrl: string = environment.apiUrl + "admin/";
 
   constructor(private http: HttpClient) { }
 
@@ -28,140 +30,171 @@ export class DataService {
   }
 
   login(loginPayload) : Observable<TokenResponse> {
-    return this.http.post<TokenResponse>(environment.apiUrl + 'admin/generate-token', loginPayload);
+    return this.http.post<TokenResponse>(this.adminApiUrl + 'generate-token', loginPayload);
   }
 
   getHistory(): Observable<History[]> {
-    return this.http.get<History[]>(environment.apiUrl + 'admin/history');
+    return this.http.get<History[]>(this.adminApiUrl + 'history');
   }
 
   getHistorySince(sinceTimestamp): Observable<History[]> {
-    return this.http.get<History[]>(environment.apiUrl + 'admin/history?sinceTimestamp=' + sinceTimestamp);
+    return this.http.get<History[]>(this.adminApiUrl + 'history?sinceTimestamp=' + sinceTimestamp);
   }
 
   /* Device */
 
   getDevices(): Observable<Device[]> {
-    return this.http.get<Device[]>(environment.apiUrl + 'admin/devices');
+    return this.http.get<Device[]>(this.adminApiUrl + 'devices');
   }
 
   getDevice(deviceId: number): Observable<ApiResult<Device>> {
-    return this.http.get<ApiResult<Device>>(environment.apiUrl + 'admin/devices/' + deviceId);
+    return this.http.get<ApiResult<Device>>(this.adminApiUrl + 'devices/' + deviceId);
   }
 
   getDeviceName(deviceId: number): Observable<ApiResult<Device>> {
-    return this.http.get<ApiResult<Device>>(environment.apiUrl + 'admin/devices/' + deviceId + '/name');
+    return this.http.get<ApiResult<Device>>(this.adminApiUrl + 'devices/' + deviceId + '/name');
   }
 
   createDevice(device: Device): Observable<ApiResult<Device>> {
-    return this.http.post<ApiResult<Device>>(environment.apiUrl + 'admin/devices', device);
+    return this.http.post<ApiResult<Device>>(this.adminApiUrl + 'devices', device);
   }
 
   enableRunPumpOnce(deviceId: number): Observable<ApiResult<Boolean>> {
-    return this.http.put<ApiResult<Boolean>>(environment.apiUrl + 'admin/devices/' + deviceId + '/runPumpOnce', '');
+    return this.http.put<ApiResult<Boolean>>(this.adminApiUrl + 'devices/' + deviceId + '/runPumpOnce', '');
   }
 
   deleteDevice(device: Device) {
-    return this.http.delete(environment.apiUrl + 'admin/devices/' + device.id);
+    return this.http.delete(this.adminApiUrl + 'devices/' + device.id);
   }
 
   updateDevice(device: Device): Observable<ApiResult<Device>> {
-    return this.http.put<ApiResult<Device>>(environment.apiUrl + 'admin/devices/' + device.id, device);
+    return this.http.put<ApiResult<Device>>(this.adminApiUrl + 'devices/' + device.id, device);
   }
 
   /* Configurations */
 
   getConfiguration(): Observable<Configuration[]> {
-    return this.http.get<Configuration[]>(environment.apiUrl + 'admin/configs');
+    return this.http.get<Configuration[]>(this.adminApiUrl + 'configs');
   }
 
   getConfigurationByKey(settingsKey: string): Observable<ApiResult<Configuration>> {
-    return this.http.get<ApiResult<Configuration>>(environment.apiUrl + 'admin/configs/' + settingsKey);
+    return this.http.get<ApiResult<Configuration>>(this.adminApiUrl + 'configs/' + settingsKey);
   }
 
   updateConfiguration(configuration: Configuration): Observable<ApiResult<Configuration>> {
-    return this.http.put<ApiResult<Configuration>>(environment.apiUrl + 'admin/configs', configuration);
+    return this.http.put<ApiResult<Configuration>>(this.adminApiUrl + 'configs', configuration);
   }
 
   createConfiguration(configuration: Configuration): Observable<ApiResult<Configuration>> {
-    return this.http.post<ApiResult<Configuration>>(environment.apiUrl + 'admin/configs', configuration);
+    return this.http.post<ApiResult<Configuration>>(this.adminApiUrl + 'configs', configuration);
   }
 
   deleteConfiguration(configuration: Configuration) {
-    return this.http.delete(environment.apiUrl + 'admin/configs/' + configuration.key);
+    return this.http.delete(this.adminApiUrl + 'configs/' + configuration.key);
   }
 
   /* Plant Maintenance */
 
   getPlantMaintenancesByDeviceId(deviceId, page): Observable<Page<PlantMaintenance[]>> {
-    return this.http.get<Page<PlantMaintenance[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/maintenance?size=10&page=' + page);
+    return this.http.get<Page<PlantMaintenance[]>>(this.adminApiUrl + 'devices/' + deviceId + '/maintenance?size=10&page=' + page);
   }
 
   getPlantMaintenance(deviceId, plantMaintenanceId): Observable<ApiResult<PlantMaintenance>> {
-    return this.http.get<ApiResult<PlantMaintenance>>(environment.apiUrl + 'admin/devices/' + deviceId + '/maintenance/' + plantMaintenanceId);
+    return this.http.get<ApiResult<PlantMaintenance>>(this.adminApiUrl + 'devices/' + deviceId + '/maintenance/' + plantMaintenanceId);
   }
 
   createPlantMaintenance(plantMaintenance: PlantMaintenance): Observable<ApiResult<PlantMaintenance>> {
-    return this.http.post<ApiResult<PlantMaintenance>>(environment.apiUrl + 'admin/devices/' + plantMaintenance.deviceId + '/maintenance', plantMaintenance);
+    return this.http.post<ApiResult<PlantMaintenance>>(this.adminApiUrl + 'devices/' + plantMaintenance.deviceId + '/maintenance', plantMaintenance);
   }
 
   updatePlantMaintenance(plantMaintenance: PlantMaintenance): Observable<ApiResult<PlantMaintenance>> {
-    return this.http.put<ApiResult<PlantMaintenance>>(environment.apiUrl + 'admin/devices/' + plantMaintenance.deviceId + '/maintenance/' + plantMaintenance.id, plantMaintenance);
+    return this.http.put<ApiResult<PlantMaintenance>>(this.adminApiUrl + 'devices/' + plantMaintenance.deviceId + '/maintenance/' + plantMaintenance.id, plantMaintenance);
   }
 
   deletePlantMaintenance(plantMaintenance: PlantMaintenance) {
-    return this.http.delete(environment.apiUrl + 'admin/devices/' + plantMaintenance.deviceId + '/maintenance/' + plantMaintenance.id);
+    return this.http.delete(this.adminApiUrl + 'devices/' + plantMaintenance.deviceId + '/maintenance/' + plantMaintenance.id);
   }
 
   /* Crop */
 
+  createCrop(crop: Crop): Observable<ApiResult<Crop>> {
+    return this.http.post<ApiResult<Crop>>(this.adminApiUrl + 'crop', crop);
+  }
+
+  getCropsBySeasonId(seasonId, page): Observable<Page<Crop[]>> {
+    return this.http.get<Page<Crop[]>>(this.adminApiUrl + 'crop?seasonId=' + seasonId + '&size=10&page=' + page);
+  }
+
+  deleteCrop(cropId: number) {
+    return this.http.delete(this.adminApiUrl + 'crop/' + cropId);
+  }
+
+  getCrop(cropId): Observable<ApiResult<Crop>> {
+    return this.http.get<ApiResult<Crop>>(this.adminApiUrl + 'crop/' + cropId);
+  }
+
+  updateCrop(crop: Crop): Observable<ApiResult<Crop>> {
+    return this.http.put<ApiResult<Crop>>(this.adminApiUrl + 'crop/' + crop.id, crop);
+  }
+
+  /* Season */
+
   getSeasonsByDeviceId(deviceId, page): Observable<Page<Season[]>> {
-    return this.http.get<Page<Season[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/crop/seasons?size=10&page=' + page);
+    return this.http.get<Page<Season[]>>(this.adminApiUrl + 'season/device/' + deviceId + '?size=10&page=' + page);
   }
 
   createSeason(season: Season): Observable<ApiResult<Season>> {
-    return this.http.post<ApiResult<Season>>(environment.apiUrl + 'admin/devices/' + season.deviceId + '/crop/seasons', season);
+    return this.http.post<ApiResult<Season>>(this.adminApiUrl + 'season', season);
   }
 
-  getSeasonName(deviceId, seasonId): Observable<ApiResult<Season>> {
-    return this.http.get<ApiResult<Season>>(environment.apiUrl + 'admin/devices/' + deviceId + '/crop/seasons/' + seasonId + '/name');
+  getSeasonName(seasonId): Observable<ApiResult<Season>> {
+    return this.http.get<ApiResult<Season>>(this.adminApiUrl + 'season/' + seasonId + '/name');
   }
 
-  createCrop(crop: Crop): Observable<ApiResult<Crop>> {
-    return this.http.post<ApiResult<Crop>>(environment.apiUrl + 'admin/devices/' + crop.seasonId + '/crop/seasons/crop', crop);
+  getSeasonStatistics(seasonId): Observable<ApiResult<SeasonStatistics>> {
+    return this.http.get<ApiResult<SeasonStatistics>>(this.adminApiUrl + 'season/' + seasonId + '/stats');
   }
 
-  getCrops(deviceId, seasonId, page): Observable<Page<Crop[]>> {
-    return this.http.get<Page<Crop[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/crop/seasons/' + seasonId + '/?size=10&page=' + page);
+  getSeason(seasonId): Observable<ApiResult<Season>> {
+    return this.http.get<ApiResult<Season>>(this.adminApiUrl + 'season/' + seasonId);
   }
+
+  updateSeason(season: Season): Observable<ApiResult<Season>> {
+    return this.http.put<ApiResult<Season>>(this.adminApiUrl + 'season/' + season.id, season);
+  }
+
+  deleteSeason(seasonId: number) {
+    return this.http.delete(this.adminApiUrl + 'season/' + seasonId);
+  }
+
 
   /* Pings */
 
   getPingsByDeviceId(deviceId, page): Observable<Page<Ping[]>> {
-    return this.http.get<Page<Ping[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/pings?size=10&page=' + page);
+    return this.http.get<Page<Ping[]>>(this.adminApiUrl + 'devices/' + deviceId + '/pings?size=10&page=' + page);
   }
 
   /* Bootups */
 
   getBootupsByDeviceId(deviceId, page): Observable<Page<Bootup[]>> {
-    return this.http.get<Page<Bootup[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/bootups?size=10&page=' + page);
+    return this.http.get<Page<Bootup[]>>(this.adminApiUrl + 'devices/' + deviceId + '/bootups?size=10&page=' + page);
   }
 
   /* Pump Actions */
 
   getPumpActionsByDeviceId(deviceId, page): Observable<Page<PumpAction[]>> {
-    return this.http.get<Page<PumpAction[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/pumpactions?size=10&page=' + page);
+    return this.http.get<Page<PumpAction[]>>(this.adminApiUrl + 'devices/' + deviceId + '/pumpactions?size=10&page=' + page);
   }
 
   /* Sensor Reports */
 
   getSensorReportsByDeviceId(deviceId, page): Observable<Page<SensorReport[]>> {
-    return this.http.get<Page<SensorReport[]>>(environment.apiUrl + 'admin/devices/' + deviceId + '/sensorreports?size=10&page=' + page);
+    return this.http.get<Page<SensorReport[]>>(this.adminApiUrl + 'devices/' + deviceId + '/sensorreports?size=10&page=' + page);
   }
 
   /* System */
 
   clearCache(): Observable<ApiResult<Boolean>> {
-    return this.http.post<ApiResult<Boolean>>(environment.apiUrl + 'admin/clearcache', '');
+    return this.http.post<ApiResult<Boolean>>(this.adminApiUrl + 'clearcache', '');
   }
 }

@@ -78,7 +78,7 @@ public class DeviceController {
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<ApiResult<DeviceDto>> createDevice(@RequestBody DeviceDto deviceDto) {
-        return ResponseEntity.ok(new ApiResult<>(deviceMapper.toDto(deviceService.saveOrThrow(deviceMapper.toModel(deviceDto)))));
+        return ResponseEntity.ok(new ApiResult<>(deviceMapper.toDto(deviceService.create(deviceMapper.toModel(deviceDto)))));
     }
 
     @PutMapping(value = "/{deviceId}",

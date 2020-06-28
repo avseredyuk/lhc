@@ -36,7 +36,7 @@ export class SeasonsComponent implements OnInit {
     }
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
 
-    let storedPageNumber = this.componentCommunicationService.getPageNumber();
+    let storedPageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
     if (storedPageNumber !== undefined) {
       this.pageNumber = storedPageNumber;
     }
@@ -64,13 +64,28 @@ export class SeasonsComponent implements OnInit {
   }
 
   addSeason() {
-    this.componentCommunicationService.setPageNumber(this.pageNumber);
+    this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
     this.router.navigate(['/add-season/' + this.deviceId]);
   }
 
-  openSeason(seasonId) {
-  	this.componentCommunicationService.setPageNumber(this.pageNumber);
-  	this.router.navigate(['/devices/' + this.deviceId + '/seasons/' + seasonId]);
+  openSeason(season: Season) {
+  	this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
+  	this.router.navigate(['/devices/' + this.deviceId + '/seasons/' + season.id]);
+  }
+
+  editSeason(season: Season) {
+    this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
+    this.router.navigate(['/edit-season/' + this.deviceId + '/' + season.id]);
+  }
+
+  deleteSeason(season: Season) {
+    if (confirm('Are you sure you want to delete season?')) {
+      this.dataService.deleteSeason(season.id).subscribe(
+        data => {
+          this.loadPageForDevice();
+        }
+        );
+    }
   }
 
   hasData(): Boolean {

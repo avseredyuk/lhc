@@ -43,10 +43,10 @@ export class AddPlantMaintenanceComponent {
     }
 
     this.sidebar.setGoBackCallback(() => {
-      this.componentCommunicationService.setPageNumber(this.pageNumber);
+      this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
       this.router.navigate(['devices/' + this.deviceId + '/maintenance']);
     });
-    this.pageNumber = this.componentCommunicationService.getPageNumber();
+    this.pageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
 
     this.addForm = this.formBuilder.group({
     	ph: this.phCtrl,

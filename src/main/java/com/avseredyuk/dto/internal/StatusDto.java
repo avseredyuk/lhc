@@ -13,8 +13,7 @@ public class StatusDto {
     private Map<String, Long> lastBootups;
     private Map<String, Long> lastPumps;
     private Map<String, Long> lastPings;
-    
-    
+
     @Data
     @Builder
     public static class GaugeDto {

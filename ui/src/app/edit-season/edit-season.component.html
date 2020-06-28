@@ -1,0 +1,33 @@
+<div id="container">
+	<app-sidebar></app-sidebar>
+	<div id="content">
+		<div *ngIf="hasNotifications()">
+			<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				{{ notification.message }}
+			</div>
+		</div>
+
+		<div class="panel panel-info">
+			<div class="panel-heading"><h1>Edit Season - {{ deviceName }}</h1></div>
+			<div class="panel-body">
+				<br/>
+				<form *ngIf="season" [formGroup]="editForm" (ngSubmit)="onSubmit()" class="form-horizontal">
+					<div class="col-sm-8 col-sm-offset-2">
+						<div class="form-group">
+							<label for="name" class="col-sm-3 control-label">Name</label>
+							<div class="col-sm-9">
+								<input type="text" [formControl]="nameCtrl" placeholder="name" name="name" class="form-control" id="name" value="{{season.name}}">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-3 col-sm-9">
+								<button class="btn btn-success btn-md" [disabled]="!editForm.valid">Update</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

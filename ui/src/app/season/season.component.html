@@ -10,52 +10,89 @@
 		<div class="panel panel-info">
 			<div class="panel-heading"><h1>Season - {{ seasonName }}</h1></div>
 			<div class="panel-body">
-				<div class="tab-content">
-					<div *ngIf="!hasData()" class="text-center spacer">
-						No data
+				<div>
+					<div class="col-lg-8 col-sm-1">
+						<div class="panel panel-primary">
+							<div class="panel-heading"><h4>Crops</h4></div>
+							<div class="panel-body">
+								<div *ngIf="!hasData()" class="text-center spacer">
+									No data
+								</div>
+								<div *ngIf="hasData()">
+									<table class="table">
+										<thead>
+											<tr>
+												<th scope="col" class="col-xs-3 text-left">Date</th>
+												<th scope="col" class="col-xs-3 text-center">Weight</th>
+												<th scope="col" class="col-xs-3 text-center">Count</th>
+												<th scope="col" class="col-xs-3 text-right">Actions</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr *ngFor="let crop of cropsForSeason">
+												<td class="text-left">{{ this.utilService.formatTimestamp(crop.d) }}</td>
+												<td class="text-center">{{ crop.weight }}</td>
+												<td class="text-center">{{ crop.count }}</td>
+												<td class="text-right">
+													<button class="btn btn-warning btn-md" type="button" (click)="editCrop(crop.id)">
+														<i class="material-icons md-18">edit</i>
+													</button>
+													&nbsp;
+													<button class="btn btn-danger btn-md" type="button" (click)="deleteCrop(crop.id)">
+														<i class="material-icons md-18">delete</i>
+													</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div>
+									<nav aria-label="..." class="text-center">
+										<ul class="pagination pagination-lg">
+											<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
+											[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
+											currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
+												<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+								<div>
+									<button (click)="addCrop()" class="btn btn-info btn-lg" role="button">Add</button>
+								</div>
+							</div>
+						</div>
 					</div>
-					<div *ngIf="hasData()">
-						<table class="table">
-							<thead>
-								<tr>
-									<th scope="col" class="col-xs-3 text-left">Date</th>
-									<th scope="col" class="col-xs-3 text-center">Weight</th>
-									<th scope="col" class="col-xs-3 text-center">Count</th>
-									<th scope="col" class="col-xs-3 text-right">Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr *ngFor="let crop of cropsForSeason">
-									<td class="text-left">{{ this.utilService.formatTimestamp(crop.dateTime) }}</td>
-									<td class="text-center">{{ crop.weight }}</td>
-									<td class="text-center">{{ crop.count }}</td>
-									<td class="text-right">
-										<button class="btn btn-warning btn-md" type="button" (click)="editCrop(crop.id)">
-											<i class="material-icons md-18">edit</i>
-										</button>
-										&nbsp;
-										<button class="btn btn-danger btn-md" type="button" (click)="deleteCrop(crop.id)">
-											<i class="material-icons md-18">delete</i>
-										</button>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-						<div class="col-md-12">
-							<nav aria-label="..." class="text-center">
-								<ul class="pagination pagination-lg">
-									<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
-									[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
-									currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
-									<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
-								</li>
-							</ul>
-						</nav>
+					<div class="col-lg-4 col-sm-1">
+						<div class="panel panel-primary">
+							<div class="panel-heading"><h4>Statistics</h4></div>
+							<div class="panel-body">
+								<div *ngIf="!hasStatsData()" class="text-center spacer">
+									No data
+								</div>
+								<div *ngIf="hasStatsData()">
+									<table class="table table-sm no-row-border no-bottom-margin">
+										<tbody>
+											<tr>
+												<td class="col-sm-6"><b>Total count:</b></td>
+												<td class="col-sm-6">{{stats.totalCount}}</td>
+											</tr>
+											<tr>
+												<td class="col-sm-6"><b>Total weight:</b></td>
+												<td class="col-sm-6">{{this.utilService.roundToTwo(stats.totalWeight)}}</td>
+											</tr>
+											<tr>
+												<td class="col-sm-6"><b>Average fruit weight:</b></td>
+												<td class="col-sm-6">{{this.utilService.roundToTwo(stats.avgCropWeight)}}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-				&nbsp;
-				<button (click)="addCrop()" class="btn btn-info btn-lg" role="button">Add</button>
-			</div>
 		</div>
 	</div>
+</div>
 </div>

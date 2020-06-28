@@ -21,6 +21,7 @@ public interface SeasonMapper {
 
     SeasonDto toDtoNameOnly(Season.SeasonName seasonName);
 
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "device", ignore = true)
     @Mapping(target = "crops", ignore = true)
