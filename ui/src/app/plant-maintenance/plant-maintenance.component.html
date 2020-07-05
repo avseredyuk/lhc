@@ -1,76 +1,74 @@
-<div id="container">
-	<app-sidebar></app-sidebar>
-	<div id="content">
-		<div *ngIf="hasNotifications()">
-			<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
-				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				{{ notification.message }}
-			</div>
+<app-sidebar></app-sidebar>
+<div class="content">
+	<div *ngIf="hasNotifications()">
+		<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			{{ notification.message }}
 		</div>
-		<div class="card">
-			<div class="card-header"><h1>Plant Maintenance - {{ deviceName }}</h1></div>
-			<div class="card-body">
-				<div class="tab-content">
-					<div *ngIf="!hasData()" class="text-center spacer">
-						No data
-					</div>
-					<div *ngIf="hasData()">
-						<table class="table">
-							<thead class="thead-light">
-								<tr>
-									<th scope="col" class="col-xs-3 text-left">Date</th>
-									<th scope="col" class="col-xs-1 text-center">pH</th>
-									<th scope="col" class="col-xs-1 text-center">TDS</th>
-									<th scope="col" class="col-xs-2 text-center">Maintenance type</th>
-									<th scope="col" class="col-xs-3 text-center">Details</th>
-									<th scope="col" class="col-xs-2 text-right">Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr *ngFor="let m of plantMaintenancesForDevice">
-									<td class="text-left">{{ this.utilService.formatTimestamp(m.d) }}</td>
-									<td class="text-center">{{ m.ph }}</td>
-									<td class="text-center">{{ m.tds }}</td>
-									<td class="text-center">{{ m.maintenanceType }}</td>
-									<td class="text-center">
-										<table class="table table-details nopadnomargin">
-											<tr *ngFor="let detail of m.details">
-												<td class="col-6 nopadnomargin text-right">{{ detail.key }}: &nbsp;</td>
-												<td class="col-6 nopadnomargin text-left">{{ detail.value }}</td>
-											</tr>
-										</table>
-									</td>
-									<td class="text-right">
-										<button class="btn btn-warning btn-md" type="button" (click)="editPlantMaintenance(m.id)">
-											<i class="material-icons md-18">edit</i>
-										</button>
-										&nbsp;
-										<button class="btn btn-info btn-md" type="button" (click)="cloneMaintenance(m)">
-											<i class="material-icons md-18">content_copy</i>
-										</button>
-										&nbsp;
-										<button class="btn btn-danger btn-md" type="button" (click)="deleteMaintenance(m)">
-											<i class="material-icons md-18">delete</i>
-										</button>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-						<div class="col-md-12">
-							<nav aria-label="...">
-								<ul class="pagination pagination-lg justify-content-center">
-									<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
-									[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
-									currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
-									<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
-								</li>
-							</ul>
-						</nav>
-					</div>
+	</div>
+	<div class="card">
+		<div class="card-header"><h1>Plant Maintenance - {{ deviceName }}</h1></div>
+		<div class="card-body">
+			<div class="tab-content">
+				<div *ngIf="!hasData()" class="text-center spacer">
+					No data
 				</div>
-				&nbsp;
-				<button (click)="addPlantMaintenance()" class="btn btn-info btn-lg" role="button">Add</button>
+				<div *ngIf="hasData()">
+					<table class="table">
+						<thead class="thead-light">
+							<tr>
+								<th scope="col" class="col-xs-3 text-left">Date</th>
+								<th scope="col" class="col-xs-1 text-center">pH</th>
+								<th scope="col" class="col-xs-1 text-center">TDS</th>
+								<th scope="col" class="col-xs-2 text-center">Maintenance type</th>
+								<th scope="col" class="col-xs-3 text-center">Details</th>
+								<th scope="col" class="col-xs-2 text-right">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let m of plantMaintenancesForDevice">
+								<td class="text-left">{{ this.utilService.formatTimestamp(m.d) }}</td>
+								<td class="text-center">{{ m.ph }}</td>
+								<td class="text-center">{{ m.tds }}</td>
+								<td class="text-center">{{ m.maintenanceType }}</td>
+								<td class="text-center">
+									<table class="table table-details nopadnomargin">
+										<tr *ngFor="let detail of m.details">
+											<td class="col-6 nopadnomargin text-right">{{ detail.key }}: &nbsp;</td>
+											<td class="col-6 nopadnomargin text-left">{{ detail.value }}</td>
+										</tr>
+									</table>
+								</td>
+								<td class="text-right">
+									<button class="btn btn-warning btn-md" type="button" (click)="editPlantMaintenance(m.id)">
+										<i class="material-icons md-18">edit</i>
+									</button>
+									&nbsp;
+									<button class="btn btn-info btn-md" type="button" (click)="cloneMaintenance(m)">
+										<i class="material-icons md-18">content_copy</i>
+									</button>
+									&nbsp;
+									<button class="btn btn-danger btn-md" type="button" (click)="deleteMaintenance(m)">
+										<i class="material-icons md-18">delete</i>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="col-md-12">
+						<nav aria-label="...">
+							<ul class="pagination pagination-lg justify-content-center">
+								<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
+								[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
+								currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
+								<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
 			</div>
+			&nbsp;
+			<button (click)="addPlantMaintenance()" class="btn btn-info btn-lg" role="button">Add</button>
 		</div>
 	</div>
 </div>

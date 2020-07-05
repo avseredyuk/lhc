@@ -1,44 +1,42 @@
-<nav>
-	<ul>
-		<li *ngIf="canGoBack">
-			<a routerLink="" (click)="goBackCallback()">
-				<i class="material-icons">arrow_back</i>
-			</a>
-		</li>
-		<li *ngIf="!canGoBack">
-			<a class="no-pointer">
-				<i class="material-icons greyed-out">reorder</i>
-			</a>
-		</li>
-		<li>
-			<a routerLink="" [class.activated]="currentUrl == '/'">
-				<i class="material-icons">details</i>
-			</a>
-		</li>
-		<li *ngIf="hasToken">
-			<a routerLink="/history" [class.activated]="currentUrl == '/history'">
-				<i class="material-icons">bar_chart</i>
-			</a>
-		</li>
-		<li *ngIf="hasToken">
-			<a routerLink="/devices" [class.activated]="isDeviceGroup()">
-				<i class="material-icons">devices</i>
-			</a>
-		</li>
-		<li *ngIf="hasToken">
-			<a routerLink="/settings" [class.activated]="isSettingsGroup()">
-				<i class="material-icons">settings</i>
-			</a>
-		</li>
-		<li *ngIf="hasToken">
-			<a routerLink="/logout" [class.activated]="currentUrl == '/logout'">
-				<i class="material-icons">exit_to_app</i>
-			</a>
-		</li>
-		<li *ngIf="!hasToken">
-			<a routerLink="/login" [class.activated]="currentUrl == '/login'">
-				<i class="material-icons">account_circle</i>
-			</a>
-		</li>
-	</ul>
-</nav>
+<div class="sidebar">
+	<ng-container *ngIf="canGoBack">
+		<a routerLink="" (click)="goBackCallback()">
+			<i class="material-icons">arrow_back</i>
+		</a>
+	</ng-container>
+	<ng-container *ngIf="!canGoBack">
+		<a class="no-pointer">
+			<i class="material-icons greyed-out">reorder</i>
+		</a>
+	</ng-container>
+	<ng-container>
+		<a routerLink="" [class.active]="currentUrl == '/'">
+			<i class="material-icons">details</i>
+		</a>
+	</ng-container>
+	<ng-container *ngIf="hasToken">
+		<a routerLink="/history" [class.active]="currentUrl == '/history'">
+			<i class="material-icons">bar_chart</i>
+		</a>
+	</ng-container>
+	<ng-container *ngIf="hasToken">
+		<a routerLink="/devices" [class.active]="isDeviceGroup()">
+			<i class="material-icons">devices</i>
+		</a>
+	</ng-container>
+	<ng-container *ngIf="hasToken">
+		<a routerLink="/settings" [class.active]="isSettingsGroup()">
+			<i class="material-icons">settings</i>
+		</a>
+	</ng-container>
+	<ng-container *ngIf="hasToken">
+		<a (click)="logoutWithConfirmation()" [class.active]="currentUrl == '/logout'">
+			<i class="material-icons">exit_to_app</i>
+		</a>
+	</ng-container>
+	<ng-container *ngIf="!hasToken">
+		<a routerLink="/login" [class.active]="currentUrl == '/login'">
+			<i class="material-icons">account_circle</i>
+		</a>
+	</ng-container>
+</div>

@@ -1,6 +1,5 @@
-<div id="container">
 	<app-sidebar></app-sidebar>
-	<div id="content">
+	<div class="content">
 		<div *ngIf="hasNotifications()">
 			<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -37,4 +36,3 @@
 			</div>
 		</div>
 	</div>
-</div>
