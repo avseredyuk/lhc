@@ -7,112 +7,115 @@
 				{{ notification.message }}
 			</div>
 		</div>
-		<div class="panel panel-info">
-			<div class="panel-heading"><h1><span class="for-big">Device details - </span>{{ device.name }}</h1></div>
-			<div class="panel-body">
-				<div class="col-lg-4 col-sm-1">
-					<div class="panel panel-primary">
-						<div class="panel-heading"><h4>Details</h4></div>
-						<div class="panel-body">
-							<table class="table table-sm no-row-border">
-								<tbody>
-									<tr>
-										<td class="col-sm-3"><b>Id:</b></td>
-										<td class="col-sm-9">{{device.id}}</td>
-									</tr>
-									<tr>
-										<td class="col-sm-3"><b>Name:</b></td>
-										<td class="col-sm-9">{{device.name}}</td>
-									</tr>
-									<tr>
-										<td class="col-sm-3"><b>Token:</b></td>
-										<td class="col-sm-9 breakable">{{device.token}}</td>
-									</tr>
-									<tr>
-										<td class="col-sm-3"><b>Enabled:</b></td>
-										<td class="col-sm-9"><input class="form-check-input" type="checkbox" [checked]="device.enabled" disabled></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<div class="panel panel-primary">
-						<div class="panel-heading"><h4>Tools</h4></div>
-						<div class="panel-body">
-							<div class="block-tools">
-								<a title="Plant Maintenances" routerLink="/devices/{{deviceId}}/maintenance">
-									<i class="material-icons">local_florist</i>
-								</a>
-								<a title="Pings" routerLink="/devices/{{deviceId}}/pings">
-									<i class="material-icons">track_changes</i>
-								</a>
-								<a title="Bootups" routerLink="/devices/{{deviceId}}/bootups">
-									<i class="material-icons">offline_bolt</i>
-								</a>
-								<a title="Pump Actions" routerLink="/devices/{{deviceId}}/pumpactions">
-									<i class="material-icons">local_drink</i>
-								</a>
-								<a title="Sensor Reports" routerLink="/devices/{{deviceId}}/sensorreports">
-									<i class="material-icons">library_books</i>
-								</a>
-								<a title="Crop" routerLink="/devices/{{deviceId}}/seasons">
-									<i class="material-icons">kitchen</i>
-								</a>
-								<a title="Edit device" routerLink="/devices/{{deviceId}}/edit">
-									<i class="material-icons">edit</i>
-								</a>
-								<a title="Run pump once" (click)="enableRunPumpOnce()">
-									<i class="material-icons icon-danger">power</i>
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-5 col-sm-1">
-					<div class="panel panel-primary">
-						<div class="panel-heading"><h4>Configurations</h4></div>
-						<div class="panel-body">
-							<div *ngIf="!hasConfig()" class="text-center">
-								No data
-							</div>
-							<div *ngIf="hasConfig()">
-								<table class="table table-sm">
-									<thead>
-										<tr>
-											<th scope="col">Key</th>
-											<th scope="col">Value</th>
-											<th scope="col">Config type</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr *ngFor="let cfg of device.config">
-											<td class="breakable">{{ cfg.key }}</td>
-											<td>{{ cfg.value }}</td>
-											<td>{{ cfg.type }}</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3 col-sm-1">
-					<div class="panel panel-primary">
-						<div class="panel-heading"><h4>Exclusions</h4></div>
-						<div class="panel-body">
-							<div *ngIf="!hasExclusions()" class="text-center">
-								No data
-							</div>
-							<div *ngIf="hasExclusions()">
+		<div class="card">
+			<div class="card-header"><h1><span class="for-big">Device details - </span>{{ device.name }}</h1></div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-12 col-lg-4">
+						<div class="card">
+							<div class="card-header"><h4>Details</h4></div>
+							<div class="card-body">
 								<table class="table table-sm no-row-border">
 									<tbody>
-										<tr *ngFor="let exclusion of device.exclusions" >
-											<td class="breakable">
-												{{ exclusion.map }}
-											</td>
+										<tr>
+											<td class="col-sm-3"><b>Id:</b></td>
+											<td class="col-sm-9">{{device.id}}</td>
+										</tr>
+										<tr>
+											<td class="col-sm-3"><b>Name:</b></td>
+											<td class="col-sm-9">{{device.name}}</td>
+										</tr>
+										<tr>
+											<td class="col-sm-3"><b>Token:</b></td>
+											<td class="col-sm-9 breakable">{{device.token}}</td>
+										</tr>
+										<tr>
+											<td class="col-sm-3"><b>Enabled:</b></td>
+											<td class="col-sm-9"><input type="checkbox" [checked]="device.enabled" disabled></td>
 										</tr>
 									</tbody>
 								</table>
+							</div>
+						</div>
+						<br>
+						<div class="card">
+							<div class="card-header"><h4>Tools</h4></div>
+							<div class="card-body">
+								<div class="block-tools">
+									<a title="Plant Maintenances" routerLink="/devices/{{deviceId}}/maintenance">
+										<i class="material-icons text-secondary">local_florist</i>
+									</a>
+									<a title="Pings" routerLink="/devices/{{deviceId}}/pings">
+										<i class="material-icons text-secondary">track_changes</i>
+									</a>
+									<a title="Bootups" routerLink="/devices/{{deviceId}}/bootups">
+										<i class="material-icons text-secondary">offline_bolt</i>
+									</a>
+									<a title="Pump Actions" routerLink="/devices/{{deviceId}}/pumpactions">
+										<i class="material-icons text-secondary">local_drink</i>
+									</a>
+									<a title="Sensor Reports" routerLink="/devices/{{deviceId}}/sensorreports">
+										<i class="material-icons text-secondary">library_books</i>
+									</a>
+									<a title="Crop" routerLink="/devices/{{deviceId}}/seasons">
+										<i class="material-icons text-secondary">kitchen</i>
+									</a>
+									<a title="Edit device" routerLink="/devices/{{deviceId}}/edit">
+										<i class="material-icons text-secondary">edit</i>
+									</a>
+									<a title="Run pump once" (click)="enableRunPumpOnce()">
+										<i class="material-icons text-info">power</i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-lg-5">
+						<div class="card">
+							<div class="card-header"><h4>Configurations</h4></div>
+							<div class="card-body">
+								<div *ngIf="!hasConfig()" class="text-center">
+									No data
+								</div>
+								<div *ngIf="hasConfig()">
+									<table class="table table-sm no-row-border">
+										<thead class="thead-light">
+											<tr>
+												<th scope="col">Key</th>
+												<th scope="col">Value</th>
+												<th scope="col">Type</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr *ngFor="let cfg of device.config">
+												<td class="col-sm-6 breakable">{{ cfg.key }}</td>
+												<td class="col-sm-3">{{ cfg.value }}</td>
+												<td class="col-sm-3">{{ cfg.type }}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-lg-3">
+						<div class="card">
+							<div class="card-header"><h4>Exclusions</h4></div>
+							<div class="card-body">
+								<div *ngIf="!hasExclusions()" class="text-center">
+									No data
+								</div>
+								<div *ngIf="hasExclusions()">
+									<table class="table table-sm no-row-border">
+										<tbody>
+											<tr *ngFor="let exclusion of device.exclusions" >
+												<td class="breakable">
+													{{ exclusion.map }}
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
 					</div>

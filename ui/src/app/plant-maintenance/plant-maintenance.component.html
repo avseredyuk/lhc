@@ -7,16 +7,16 @@
 				{{ notification.message }}
 			</div>
 		</div>
-		<div class="panel panel-info">
-			<div class="panel-heading"><h1>Plant Maintenance - {{ deviceName }}</h1></div>
-			<div class="panel-body">
+		<div class="card">
+			<div class="card-header"><h1>Plant Maintenance - {{ deviceName }}</h1></div>
+			<div class="card-body">
 				<div class="tab-content">
 					<div *ngIf="!hasData()" class="text-center spacer">
 						No data
 					</div>
 					<div *ngIf="hasData()">
 						<table class="table">
-							<thead>
+							<thead class="thead-light">
 								<tr>
 									<th scope="col" class="col-xs-3 text-left">Date</th>
 									<th scope="col" class="col-xs-1 text-center">pH</th>
@@ -35,8 +35,8 @@
 									<td class="text-center">
 										<table class="table table-details nopadnomargin">
 											<tr *ngFor="let detail of m.details">
-												<td class="col-xs-6 nopadnomargin text-right">{{ detail.key }}: &nbsp;</td>
-												<td class="col-xs-6 nopadnomargin text-left">{{ detail.value }}</td>
+												<td class="col-6 nopadnomargin text-right">{{ detail.key }}: &nbsp;</td>
+												<td class="col-6 nopadnomargin text-left">{{ detail.value }}</td>
 											</tr>
 										</table>
 									</td>
@@ -57,8 +57,8 @@
 							</tbody>
 						</table>
 						<div class="col-md-12">
-							<nav aria-label="..." class="text-center">
-								<ul class="pagination pagination-lg">
+							<nav aria-label="...">
+								<ul class="pagination pagination-lg justify-content-center">
 									<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
 									[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
 									currentPage: this.utilService.isCurrentPage(p, pageNumber)}">

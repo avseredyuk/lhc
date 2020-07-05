@@ -2,18 +2,17 @@
     font-weight: bold;
     font-size:150%;
     display: block;
-    text-align: center;
 }
 .gauge {
   width: 100%;
   height: 100%;
 }
-.panel-body > ul:last-child {
-  margin-bottom: 0;
+.card-body > ul {
+  margin-bottom: 20px;
 }
-.statuscont {
-  font-size:110%;
+.card-body > ul:last-child {
+  margin-bottom: 0px;
 }
-.panel-heading {
-  font-size:125%; 
+.card-header {
+  font-size:125%;
 }

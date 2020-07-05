@@ -7,138 +7,142 @@
 				{{ notification.message }}
 			</div>
 		</div>
-		<div class="panel panel-info">
-			<div class="panel-heading"><h1><span class="for-big">Edit device - </span>{{ device.name }}</h1></div>
-			<div class="panel-body">
+		<div class="card">
+			<div class="card-header"><h1><span class="for-big">Edit device - </span>{{ device.name }}</h1></div>
+			<div class="card-body">
+				<br/>
 				<form [formGroup]="editForm">
-					<div class="col-lg-4 col-sm-1">
-						<div class="panel panel-primary">
-							<div class="panel-heading"><h4>Details</h4></div>
-							<div class="panel-body">
-								<table class="table table-sm no-row-border">
-									<tbody>
-										<tr>
-											<td class="col-sm-3"><b>Id:</b></td>
-											<td class="col-sm-9">{{device.id}}</td>
-										</tr>
-										<tr>
-											<td class="col-sm-3"><b>Name:</b></td>
-											<td class="col-sm-9"><input type="text" [formControl]="deviceNameCtrl" placeholder="device name" name="deviceName" class="form-control" id="deviceName" value="{{device.name}}"></td>
-										</tr>
-										<tr>
-											<td class="col-sm-3"><b>Token:</b></td>
-											<td class="col-sm-9 breakable"><input type="text" [formControl]="deviceTokenCtrl" placeholder="device token" name="deviceToken" class="form-control" id="deviceToken" value="{{device.token}}"></td>
-										</tr>
-										<tr>
-											<td class="col-sm-3"><b>Enabled:</b></td>
-											<td class="col-sm-9">
-												<input type="checkbox" [formControl]="deviceEnabledCtrl" name="deviceEnabled" class="form-check-input" id="deviceEnabled" [checked]="device.enabled"></td>
+					<div class="row">
+						<div class="col-12 col-lg-4">
+							<div class="card">
+								<div class="card-header"><h4>Details</h4></div>
+								<div class="card-body">
+									<table class="table table-sm no-row-border">
+										<tbody>
+											<tr>
+												<td class="col-sm-3"><b>Id:</b></td>
+												<td class="col-sm-9">{{device.id}}</td>
 											</tr>
-										</tbody>
-									</table>
+											<tr>
+												<td class="col-sm-3"><b>Name:</b></td>
+												<td class="col-sm-9"><input type="text" [formControl]="deviceNameCtrl" placeholder="device name" name="deviceName" class="form-control" id="deviceName" value="{{device.name}}"></td>
+											</tr>
+											<tr>
+												<td class="col-sm-3"><b>Token:</b></td>
+												<td class="col-sm-9 breakable"><input type="text" [formControl]="deviceTokenCtrl" placeholder="device token" name="deviceToken" class="form-control" id="deviceToken" value="{{device.token}}"></td>
+											</tr>
+											<tr>
+												<td class="col-sm-3"><b>Enabled:</b></td>
+												<td class="col-sm-9">
+													<input type="checkbox" [formControl]="deviceEnabledCtrl" name="deviceEnabled" id="deviceEnabled" [checked]="device.enabled"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
 								</div>
-							</div>
-							<div class="panel panel-primary">
-								<div class="panel-heading"><h4>Tools</h4></div>
-								<div class="panel-body">
-									<div class="block-tools">
-										<a title="Update device" (click)="updateDevice()">
-											<i class="material-icons icon-danger">save</i>
-										</a>
+								<br>
+								<div class="card">
+									<div class="card-header"><h4>Tools</h4></div>
+									<div class="card-body">
+										<div class="block-tools">
+											<a title="Update device" (click)="updateDevice()">
+												<i class="material-icons text-secondary">save</i>
+											</a>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="col-lg-5 col-sm-1">
-							<div class="panel panel-primary">
-								<div class="panel-heading"><h4>Configurations</h4></div>
-								<div class="panel-body">
-									<table class="table table-sm no-row-border">
-										<ng-container *ngIf="hasConfig()">
-											<thead>
-												<tr>
-													<th scope="col">Key</th>
-													<th scope="col">Value</th>
-													<th scope="col">Config type</th>
-													<th class="col-md-1" scope="col"></th>
-												</tr>
-											</thead>
-										</ng-container>
-										<tbody>
-											<ng-container *ngIf="!hasConfig()">
-												<tr class="text-center">
-													<td colspan="4">No data</td>
-												</tr>
-											</ng-container>
+							<div class="col-12 col-lg-5">
+								<div class="card">
+									<div class="card-header"><h4>Configurations</h4></div>
+									<div class="card-body">
+										<table class="table table-sm no-row-border">
 											<ng-container *ngIf="hasConfig()">
-												<tr *ngFor="let cfg of device.config">
-													<td class="col-sm-6 breakable">{{ cfg.key }}</td>
-													<td class="col-sm-3">{{ cfg.value }}</td>
-													<td class="col-sm-3">{{ cfg.type }}</td>
-													<td class="col-sm-3"><button class="btn btn-danger btn-md material-icons" type='button'
-														(click)="removeConfig(cfg)">delete</button></td>
-												</tr>
+												<thead class="thead-light">
+													<tr>
+														<th scope="col">Key</th>
+														<th scope="col">Value</th>
+														<th scope="col">Type</th>
+														<th class="col-md-1" scope="col"></th>
+													</tr>
+												</thead>
 											</ng-container>
-											<tr>
-												<td>
-													<select class="custom-select" [formControl]="newConfigKeyCtrl" name="type" class="form-control" id="newConfigKey">
-														<option *ngFor="let deviceConfigKey of this.utilService.deviceConfigKeys" value="{{ deviceConfigKey }}">{{ deviceConfigKey }}</option>
-													</select>
-												</td>
-												<td>
-													<input type="text" [formControl]="newConfigValueCtrl" placeholder="value" name="newConfigValue" class="form-control" id="newConfigValue">
-												</td>
-												<td>
-													<select class="custom-select" [formControl]="newConfigTypeCtrl" name="type" class="form-control" id="newConfigType">
-														<option *ngFor="let deviceConfigDataType of this.utilService.deviceConfigDataTypes" value="{{ deviceConfigDataType }}">{{ deviceConfigDataType }}</option>
-													</select>
-												</td>
-												<td>
-													<button class="btn btn-success btn-md material-icons" type='button' (click)="addConfig()">add</button>
-												</td>
-											</tr>
-										</tbody>
-									</table>
+											<tbody>
+												<ng-container *ngIf="!hasConfig()">
+													<tr class="text-center">
+														<td colspan="4">No data</td>
+													</tr>
+												</ng-container>
+												<ng-container *ngIf="hasConfig()">
+													<tr *ngFor="let cfg of device.config">
+														<td class="col-sm-6 breakable">{{ cfg.key }}</td>
+														<td class="col-sm-3">{{ cfg.value }}</td>
+														<td class="col-sm-3">{{ cfg.type }}</td>
+														<td class="col-sm-3"><button class="btn btn-danger btn-sm material-icons" type='button'
+															(click)="removeConfig(cfg)">delete</button></td>
+														</tr>
+													</ng-container>
+													<tr>
+														<td>
+															<select class="custom-select" [formControl]="newConfigKeyCtrl" name="type" class="form-control" id="newConfigKey">
+																<option *ngFor="let deviceConfigKey of this.utilService.deviceConfigKeys" value="{{ deviceConfigKey }}">{{ deviceConfigKey }}</option>
+															</select>
+														</td>
+														<td>
+															<input type="text" [formControl]="newConfigValueCtrl" placeholder="value" name="newConfigValue" class="form-control" id="newConfigValue">
+														</td>
+														<td>
+															<select class="custom-select" [formControl]="newConfigTypeCtrl" name="type" class="form-control" id="newConfigType">
+																<option *ngFor="let deviceConfigDataType of this.utilService.deviceConfigDataTypes" value="{{ deviceConfigDataType }}">{{ deviceConfigDataType }}</option>
+															</select>
+														</td>
+														<td>
+															<button class="btn btn-success btn-md material-icons" type='button' (click)="addConfig()">add</button>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<div class="col-12 col-lg-3">
+									<div class="card">
+										<div class="card-header"><h4>Exclusions</h4></div>
+										<div class="card-body">
+											<table class="table table-sm no-row-border">
+												<tbody>
+													<ng-container *ngIf="!hasExclusions()">
+														<tr class="text-center">
+															<td colspan="2">No data</td>
+														</tr>
+													</ng-container>
+													<ng-container *ngIf="hasExclusions()">
+														<tr *ngFor="let exclusion of device.exclusions" >
+															<td class="col-sm-10 breakable">
+																{{ exclusion.map }}
+															</td>
+															<td class="col-sm-2 text-center"><button class="btn btn-danger btn-sm material-icons" type='button' (click)="removeExclusion(exclusion)">delete</button>
+															</td>
+														</tr>
+													</ng-container>
+													<tr>
+														<td class="col-sm-10">
+															<select class="custom-select" [formControl]="newExclusionTypeCtrl" name="type" class="form-control" id="newExclusionType">
+																<option *ngFor="let deviceReportDataExclusionType of this.utilService.deviceReportDataExclusionTypes" value="{{ deviceReportDataExclusionType }}">{{ deviceReportDataExclusionType }}</option>
+															</select>
+														</td>
+														<td class="col-sm-2 text-center">
+															<button class="btn btn-success btn-md material-icons" type='button' (click)="addExclusion()">add</button>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="col-lg-3 col-sm-1">
-							<div class="panel panel-primary">
-								<div class="panel-heading"><h4>Exclusions</h4></div>
-								<div class="panel-body">
-									<table class="table table-sm no-row-border">
-										<tbody>
-											<ng-container *ngIf="!hasExclusions()">
-												<tr class="text-center">
-													<td colspan="2">No data</td>
-												</tr>
-											</ng-container>
-											<ng-container *ngIf="hasExclusions()">
-												<tr *ngFor="let exclusion of device.exclusions" >
-													<td class="breakable">
-														{{ exclusion.map }}
-													</td>
-													<td class="col-sm-3"><button class="btn btn-danger btn-md material-icons" type='button' (click)="removeExclusion(exclusion)">delete</button>
-													</td>
-												</tr>
-											</ng-container>
-											<tr>
-												<td class="col-sm-10">
-													<select class="custom-select" [formControl]="newExclusionTypeCtrl" name="type" class="form-control" id="newExclusionType">
-														<option *ngFor="let deviceReportDataExclusionType of this.utilService.deviceReportDataExclusionTypes" value="{{ deviceReportDataExclusionType }}">{{ deviceReportDataExclusionType }}</option>
-													</select>
-												</td>
-												<td class="col-sm-2 text-center">
-													<button class="btn btn-success btn-md material-icons" type='button' (click)="addExclusion()">add</button>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-					</form>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>

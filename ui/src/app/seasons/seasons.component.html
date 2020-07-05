@@ -7,9 +7,9 @@
 				{{ notification.message }}
 			</div>
 		</div>
-		<div class="panel panel-info">
-			<div class="panel-heading"><h1>Seasons - {{ deviceName }}</h1></div>
-			<div class="panel-body">
+		<div class="card">
+			<div class="card-header"><h1>Seasons - {{ deviceName }}</h1></div>
+			<div class="card-body">
 				<div *ngIf="!hasData()" class="text-center spacer">
 					No data
 				</div>
@@ -34,16 +34,16 @@
 					</table>
 				</div>
 				<div class="col-md-12">
-							<nav aria-label="..." class="text-center">
-								<ul class="pagination pagination-lg">
-									<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
+					<nav aria-label="...">
+						<ul class="pagination pagination-lg justify-content-center">
+							<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
 									[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
 									currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
-									<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
-								</li>
-							</ul>
-						</nav>
-					</div>
+								<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
 				&nbsp;
 				<button (click)="addSeason()" class="btn btn-info btn-lg" role="button">Add</button>
 			</div>

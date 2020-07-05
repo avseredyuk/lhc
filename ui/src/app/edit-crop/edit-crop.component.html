@@ -7,43 +7,60 @@
 				{{ notification.message }}
 			</div>
 		</div>
-
-		<div class="panel panel-info">
-			<div class="panel-heading"><h1>Edit Crop - {{ seasonName }}</h1></div>
-			<div class="panel-body">
+		<div class="card">
+			<div class="card-header"><h1>Edit Crop - {{ seasonName }}</h1></div>
+			<div class="card-body">
 				<br/>
 				<form *ngIf="crop" [formGroup]="editForm" (ngSubmit)="onSubmit()" class="form-horizontal">
-					<div class="col-sm-8 col-sm-offset-2">
-						<div class="form-group">
-							<label for="weight" class="col-sm-3 control-label">Weight</label>
-							<div class="col-sm-9">
-								<input type="text" [formControl]="weightCtrl" placeholder="weight" name="weight" class="form-control" id="weight" value="{{crop.weight}}">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="count" class="col-sm-3 control-label">Count</label>
-							<div class="col-sm-9">
-								<input type="text" [formControl]="countCtrl" placeholder="count" name="count" class="form-control" id="count" value="{{crop.count}}">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="date" class="col-sm-3 control-label">Date</label>
-							<div class="col-sm-9 nopadding">
-								<div class="col-sm-6">
-									<input type="date" class="form-control" style="line-height:unset;"
-									[value]="crop.d | date:'yyyy-MM-dd'"
-									(input)="newDate = $event.target.valueAsDate">
-								</div>
-								<div class="col-sm-6">
-									<input type="time" class="form-control" style="line-height:unset;"
-									[value]="crop.d | date:'HH:mm:ss'"
-									(input)="newTime = this.utilService.convertDateToUTC($event.target.valueAsDate)">
+					<div class="row">
+						<div class="col-8 offset-md-2">
+							<div class="form-group">
+								<div class="row">
+									<div class="col-2">
+										<label for="weight" class="col-form-label"><b>Weight</b></label>
+									</div>
+									<div class="col-10">
+										<input type="text" [formControl]="weightCtrl" name="weight" class="form-control" id="weight" value="{{crop.weight}}">
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-sm-offset-3 col-sm-9">
-								<button class="btn btn-success btn-md" [disabled]="!editForm.valid">Update</button>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-2">
+										<label for="count" class="col-form-label"><b>Count</b></label>
+									</div>
+									<div class="col-10">
+										<input type="text" [formControl]="countCtrl" placeholder="count" name="count" class="form-control" id="count" value="{{crop.count}}">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-2">
+										<label for="date" class="col-form-label"><b>Date</b></label>
+									</div>
+									<div class="col-10">
+										<div class="row">
+											<div class="col-6">
+												<input type="date" class="form-control" style="line-height:unset;"
+												[value]="crop.d | date:'yyyy-MM-dd'"
+												(input)="newDate = $event.target.valueAsDate">
+											</div>
+											<div class="col-6">
+												<input type="time" class="form-control" style="line-height:unset;"
+												[value]="crop.d | date:'HH:mm:ss'"
+												(input)="newTime = this.utilService.convertDateToUTC($event.target.valueAsDate)">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="offset-md-2 col-sm-10">
+										<button class="btn btn-success btn-md" [disabled]="!editForm.valid">Update</button>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

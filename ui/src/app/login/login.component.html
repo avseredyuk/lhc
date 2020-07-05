@@ -1,31 +1,48 @@
 <div id="container">
 	<app-sidebar></app-sidebar>
 	<div id="content">
-		<div class="panel panel-info">
-			<div class="panel-heading"><h1>Login</h1></div>
-			<div class="panel-body">
-				<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="col-lg-4 col-lg-offset-4">
-					<br/>
-
-					<div *ngIf="hasNotifications()">
-						<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
-							<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-							{{ notification.message }}
+		<div *ngIf="hasNotifications()">
+			<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				{{ notification.message }}
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-header"><h1>Login</h1></div>
+			<div class="card-body">
+				<br/>
+				<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+					<div class="row">
+						<div class="col-8 offset-md-2">
+							<div class="form-group">
+								<div class="row">
+									<div class="col-2">
+										<label class="col-form-label" for="username"><b>Login</b></label>
+									</div>
+									<div class="col-10">
+										<input type="text" [formControl]="usernameCtrl" name="username" class="form-control" id="username">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-2">
+										<label class="col-form-label" for="username"><b>Password</b></label>
+									</div>
+									<div class="col-10">
+										<input type="password" [formControl]="passwordCtrl" name="password" class="form-control" id="password">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="offset-md-2 col-sm-10">
+										<button class="btn btn-success btn-md" [disabled]="!loginForm.valid">Login</button>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="with-margin">
-						<label for="username">Login</label>
-						<input type="text" [formControl]="usernameCtrl" name="username" class="form-control" id="username">
-					</div>
-					<div class="with-margin">
-						<label for="username">Password</label>
-						<input type="password" [formControl]="passwordCtrl" name="password" class="form-control" id="password">
-					</div>
-					<div class="text-center">
-						<button class="btn btn-success btn-md" [disabled]="!loginForm.valid">Login</button>
-					</div>
-
-					<br/>
 				</form>
 			</div>
 		</div>
