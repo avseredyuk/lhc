@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.avseredyuk.dto.internal.SeasonDto;
@@ -46,8 +47,8 @@ public class SeasonController {
         return ResponseEntity.ok(new ApiResult<>(seasonMapper.toDto(cropService.create(season))));
     }
 
-    @GetMapping(value = "/season/device/{deviceId}")
-    public Page<SeasonDto> getSeasonsByDevice(@PathVariable Long deviceId,
+    @GetMapping(value = "/season")
+    public Page<SeasonDto> getSeasonsByDevice(@RequestParam Long deviceId,
                                               @NotNull final Pageable pageable) {
         Page<Season> seasons = cropService.findAllSeasonsByDeviceIdPaginated(deviceId, pageable);
         return new PageImpl<>(seasonMapper.toDtoList(seasons.getContent()), pageable, seasons.getTotalElements());

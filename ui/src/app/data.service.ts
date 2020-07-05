@@ -96,23 +96,23 @@ export class DataService {
   /* Plant Maintenance */
 
   getPlantMaintenancesByDeviceId(deviceId, page): Observable<Page<PlantMaintenance[]>> {
-    return this.http.get<Page<PlantMaintenance[]>>(this.adminApiUrl + 'devices/' + deviceId + '/maintenance?size=10&page=' + page);
+    return this.http.get<Page<PlantMaintenance[]>>(this.adminApiUrl + 'maintenance?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
   getPlantMaintenance(deviceId, plantMaintenanceId): Observable<ApiResult<PlantMaintenance>> {
-    return this.http.get<ApiResult<PlantMaintenance>>(this.adminApiUrl + 'devices/' + deviceId + '/maintenance/' + plantMaintenanceId);
+    return this.http.get<ApiResult<PlantMaintenance>>(this.adminApiUrl + 'maintenance/' + plantMaintenanceId);
   }
 
   createPlantMaintenance(plantMaintenance: PlantMaintenance): Observable<ApiResult<PlantMaintenance>> {
-    return this.http.post<ApiResult<PlantMaintenance>>(this.adminApiUrl + 'devices/' + plantMaintenance.deviceId + '/maintenance', plantMaintenance);
+    return this.http.post<ApiResult<PlantMaintenance>>(this.adminApiUrl + 'maintenance', plantMaintenance);
   }
 
   updatePlantMaintenance(plantMaintenance: PlantMaintenance): Observable<ApiResult<PlantMaintenance>> {
-    return this.http.put<ApiResult<PlantMaintenance>>(this.adminApiUrl + 'devices/' + plantMaintenance.deviceId + '/maintenance/' + plantMaintenance.id, plantMaintenance);
+    return this.http.put<ApiResult<PlantMaintenance>>(this.adminApiUrl + 'maintenance', plantMaintenance);
   }
 
   deletePlantMaintenance(plantMaintenance: PlantMaintenance) {
-    return this.http.delete(this.adminApiUrl + 'devices/' + plantMaintenance.deviceId + '/maintenance/' + plantMaintenance.id);
+    return this.http.delete(this.adminApiUrl + 'maintenance/' + plantMaintenance.id);
   }
 
   /* Crop */
@@ -140,7 +140,7 @@ export class DataService {
   /* Season */
 
   getSeasonsByDeviceId(deviceId, page): Observable<Page<Season[]>> {
-    return this.http.get<Page<Season[]>>(this.adminApiUrl + 'season/device/' + deviceId + '?size=10&page=' + page);
+    return this.http.get<Page<Season[]>>(this.adminApiUrl + 'season?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
   createSeason(season: Season): Observable<ApiResult<Season>> {
@@ -171,25 +171,25 @@ export class DataService {
   /* Pings */
 
   getPingsByDeviceId(deviceId, page): Observable<Page<Ping[]>> {
-    return this.http.get<Page<Ping[]>>(this.adminApiUrl + 'devices/' + deviceId + '/pings?size=10&page=' + page);
+    return this.http.get<Page<Ping[]>>(this.adminApiUrl + 'pings?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
   /* Bootups */
 
   getBootupsByDeviceId(deviceId, page): Observable<Page<Bootup[]>> {
-    return this.http.get<Page<Bootup[]>>(this.adminApiUrl + 'devices/' + deviceId + '/bootups?size=10&page=' + page);
+    return this.http.get<Page<Bootup[]>>(this.adminApiUrl + 'bootups?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
   /* Pump Actions */
 
   getPumpActionsByDeviceId(deviceId, page): Observable<Page<PumpAction[]>> {
-    return this.http.get<Page<PumpAction[]>>(this.adminApiUrl + 'devices/' + deviceId + '/pumpactions?size=10&page=' + page);
+    return this.http.get<Page<PumpAction[]>>(this.adminApiUrl + 'pumpactions?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
   /* Sensor Reports */
 
   getSensorReportsByDeviceId(deviceId, page): Observable<Page<SensorReport[]>> {
-    return this.http.get<Page<SensorReport[]>>(this.adminApiUrl + 'devices/' + deviceId + '/sensorreports?size=10&page=' + page);
+    return this.http.get<Page<SensorReport[]>>(this.adminApiUrl + 'sensorreports?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
   /* System */

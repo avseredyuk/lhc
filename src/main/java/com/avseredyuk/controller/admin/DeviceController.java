@@ -2,11 +2,7 @@ package com.avseredyuk.controller.admin;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,24 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.avseredyuk.dto.internal.BootupDto;
 import com.avseredyuk.dto.internal.DeviceDto;
-import com.avseredyuk.dto.internal.PingDto;
-import com.avseredyuk.dto.internal.PlantMaintenanceDto;
-import com.avseredyuk.dto.internal.PumpActionDto;
-import com.avseredyuk.dto.internal.SensorDto;
 import com.avseredyuk.mapper.internal.DeviceMapper;
-import com.avseredyuk.mapper.internal.PlantMaintenanceMapper;
 import com.avseredyuk.model.Device;
-import com.avseredyuk.model.PlantMaintenance;
 import com.avseredyuk.model.internal.ApiResult;
-import com.avseredyuk.service.BootupService;
 import com.avseredyuk.service.DeviceConfigService;
 import com.avseredyuk.service.DeviceService;
-import com.avseredyuk.service.PingService;
-import com.avseredyuk.service.PlantMaintenanceService;
-import com.avseredyuk.service.PumpActionService;
-import com.avseredyuk.service.SensorReportService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -48,14 +32,6 @@ public class DeviceController {
     private DeviceService deviceService;
     @Autowired
     private DeviceConfigService deviceConfigService;
-    @Autowired
-    private PingService pingService;
-    @Autowired
-    private PumpActionService pumpActionService;
-    @Autowired
-    private SensorReportService sensorReportService;
-    @Autowired
-    private BootupService bootupService;
 
     @GetMapping
     public List<DeviceDto> getAllDevices() {
@@ -98,30 +74,6 @@ public class DeviceController {
     @PutMapping(value = "/{deviceId}/runPumpOnce")
     public ResponseEntity<ApiResult<Boolean>> runPumpOnce(@PathVariable Long deviceId) {
         return ResponseEntity.ok(new ApiResult<>(deviceConfigService.enableRunPumpOnceOrThrow(deviceId)));
-    }
-
-    @GetMapping(value = "/{deviceId}/pings")
-    public Page<PingDto> getAllPingsByDevice(@PathVariable Long deviceId,
-                                             @NotNull final Pageable pageable) {
-        return pingService.findAllByDeviceIdPaginated(deviceId, pageable);
-    }
-
-    @GetMapping(value = "/{deviceId}/bootups")
-    public Page<BootupDto> getAllBootupsByDevice(@PathVariable Long deviceId,
-                                                 @NotNull final Pageable pageable) {
-        return bootupService.findAllByDeviceIdPaginated(deviceId, pageable);
-    }
-
-    @GetMapping(value = "/{deviceId}/pumpactions")
-    public Page<PumpActionDto> getAllPumpActionsByDevice(@PathVariable Long deviceId,
-                                                         @NotNull final Pageable pageable) {
-        return pumpActionService.findAllByDeviceIdPaginated(deviceId, pageable);
-    }
-
-    @GetMapping(value = "/{deviceId}/sensorreports")
-    public Page<SensorDto> getAllSensorReportsByDevice(@PathVariable Long deviceId,
-                                                       @NotNull final Pageable pageable) {
-        return sensorReportService.findAllByDeviceIdPaginated(deviceId, pageable);
     }
 
 }

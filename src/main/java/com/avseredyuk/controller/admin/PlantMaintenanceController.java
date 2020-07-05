@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.avseredyuk.dto.internal.PlantMaintenanceDto;
@@ -25,7 +26,7 @@ import com.avseredyuk.service.PlantMaintenanceService;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping(value = "/admin/devices/{deviceId}/maintenance")
+@RequestMapping(value = "/admin/maintenance")
 public class PlantMaintenanceController {
 
     @Autowired
@@ -36,40 +37,34 @@ public class PlantMaintenanceController {
     private DeviceMapper deviceMapper;
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<ApiResult<PlantMaintenanceDto>> createMaintenance(@PathVariable Long deviceId,
-                                                                            @RequestBody PlantMaintenanceDto plantMaintenanceDto) {
+    public ResponseEntity<ApiResult<PlantMaintenanceDto>> createMaintenance(@RequestBody PlantMaintenanceDto plantMaintenanceDto) {
         PlantMaintenance plantMaintenance = plantMaintenanceMapper.toModelCreate(plantMaintenanceDto);
-        plantMaintenance.setDevice(deviceMapper.toModelFromId(deviceId));
+        plantMaintenance.setDevice(deviceMapper.toModelFromId(plantMaintenanceDto.getDeviceId()));
         plantMaintenance.getDetails().forEach(d -> d.setPlantMaintenance(plantMaintenance));
         return ResponseEntity.ok(new ApiResult<>(plantMaintenanceMapper.toDto(plantMaintenanceService.saveOrThrow(plantMaintenance))));
     }
 
     @GetMapping
-    public Page<PlantMaintenanceDto> getAllMaintenancesByDevice(@PathVariable Long deviceId,
+    public Page<PlantMaintenanceDto> getAllMaintenancesByDevice(@RequestParam Long deviceId,
                                                                 @NotNull final Pageable pageable) {
         return plantMaintenanceService.findAllByDeviceIdPaginated(deviceId, pageable);
     }
 
     @GetMapping(value = "/{plantMaintenanceId}")
-    public ResponseEntity<ApiResult<PlantMaintenanceDto>> getMaintenanceById(@PathVariable Long deviceId,
-                                                                             @PathVariable Long plantMaintenanceId) {
+    public ResponseEntity<ApiResult<PlantMaintenanceDto>> getMaintenanceById(@PathVariable Long plantMaintenanceId) {
         return ResponseEntity.ok(new ApiResult<>(plantMaintenanceMapper.toDto(plantMaintenanceService.findOne(plantMaintenanceId))));
     }
 
-    @PutMapping(
-            value = "/{plantMaintenanceId}",
-            consumes = "application/json"
-    )
-    public void updateMaintenance(@PathVariable Long deviceId, @PathVariable Long plantMaintenanceId,
-                                  @RequestBody PlantMaintenanceDto plantMaintenanceDto) {
+    @PutMapping(consumes = "application/json")
+    public void updateMaintenance(@RequestBody PlantMaintenanceDto plantMaintenanceDto) {
         PlantMaintenance plantMaintenance = plantMaintenanceMapper.toModelUpdate(plantMaintenanceDto);
-        plantMaintenance.setDevice(deviceMapper.toModelFromId(deviceId));
+        plantMaintenance.setDevice(deviceMapper.toModelFromId(plantMaintenanceDto.getDeviceId()));
         plantMaintenance.getDetails().forEach(d -> d.setPlantMaintenance(plantMaintenance));
         plantMaintenanceService.saveOrThrow(plantMaintenance);
     }
 
     @DeleteMapping(value = "/{plantMaintenanceId}")
-    public void deleteMaintenance(@PathVariable Long deviceId, @PathVariable Long plantMaintenanceId) {
+    public void deleteMaintenance(@PathVariable Long plantMaintenanceId) {
         plantMaintenanceService.delete(plantMaintenanceId);
     }
 }
