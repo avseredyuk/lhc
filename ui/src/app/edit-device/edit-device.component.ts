@@ -22,6 +22,7 @@ export class EditDeviceComponent implements OnInit {
   deviceId: number;
   device: Device = new Device();
   editForm: FormGroup;
+  originalDeviceName: String;
   deviceNameCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
   deviceTokenCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
   deviceEnabledCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
@@ -60,6 +61,7 @@ export class EditDeviceComponent implements OnInit {
     this.dataService.getDevice(this.deviceId).subscribe(
       (data: ApiResult<Device>) => {
         this.device = data.data;
+        this.originalDeviceName = data.data.name;
         this.editForm.controls['deviceName'].setValue(this.device.name);
         this.editForm.controls['deviceToken'].setValue(this.device.token);
         this.editForm.controls['deviceEnabled'].setValue(this.device.enabled);
@@ -116,6 +118,13 @@ export class EditDeviceComponent implements OnInit {
     this.dataService.updateDevice(this.device)
       .subscribe( data => {
         this.router.navigate(['devices/' + this.deviceId]);
+      },
+      error => {
+        if (error.status === 400) {
+          this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
+        } else {
+          this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
+        }
       });
   }
 
