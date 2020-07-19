@@ -17,17 +17,17 @@
 					<table class="table">
 						<thead class="thead-light">
 							<tr>
-								<th scope="col" class="col-xs-3 text-left">Date</th>
+								<th scope="col" class="col-xs-3 for-small-centered">Date</th>
 								<th scope="col" class="col-xs-1 text-center">pH</th>
 								<th scope="col" class="col-xs-1 text-center">TDS</th>
 								<th scope="col" class="col-xs-2 text-center">Maintenance type</th>
 								<th scope="col" class="col-xs-3 text-center">Details</th>
-								<th scope="col" class="col-xs-2 text-right">Actions</th>
+								<th scope="col" class="col-xs-2 for-small-centered for-big-right-aligned">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr *ngFor="let m of plantMaintenancesForDevice">
-								<td class="text-left">{{ this.utilService.formatTimestamp(m.d) }}</td>
+								<td class="for-small-centered key-column">{{ this.utilService.formatTimestamp(m.d) }}</td>
 								<td class="text-center">{{ m.ph }}</td>
 								<td class="text-center">{{ m.tds }}</td>
 								<td class="text-center">{{ m.maintenanceType }}</td>
@@ -39,7 +39,7 @@
 										</tr>
 									</table>
 								</td>
-								<td class="text-right">
+								<td class="for-small-centered for-big-right-aligned">
 									<button class="btn btn-warning btn-md" type="button" (click)="editPlantMaintenance(m.id)">
 										<i class="material-icons md-18">edit</i>
 									</button>

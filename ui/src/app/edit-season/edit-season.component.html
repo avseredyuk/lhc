@@ -1,38 +1,37 @@
-	<app-sidebar></app-sidebar>
-	<div class="content">
-		<div *ngIf="hasNotifications()">
-			<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
-				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				{{ notification.message }}
-			</div>
+<app-sidebar></app-sidebar>
+<div class="content">
+	<div *ngIf="hasNotifications()">
+		<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			{{ notification.message }}
 		</div>
-		<div class="card">
-			<div class="card-header"><h1>Edit Season - {{ deviceName }}</h1></div>
-			<div class="card-body">
-				<br/>
-				<form *ngIf="season" [formGroup]="editForm" (ngSubmit)="onSubmit()" class="form-horizontal">
-					<div class="row">
-						<div class="col-8 offset-md-2">
-							<div class="form-group">
-								<div class="row">
-									<div class="col-2">
-										<label for="name" class="col-form-label"><b>Name</b></label>
-									</div>
-									<div class="col-10">
-										<input type="text" [formControl]="nameCtrl" name="name" class="form-control" id="name" value="{{season.name}}">
-									</div>
+	</div>
+	<div class="card">
+		<div class="card-header"><h1>Edit Season - {{ deviceName }}</h1></div>
+		<div class="card-body">
+			<form *ngIf="season" [formGroup]="editForm" (ngSubmit)="onSubmit()" class="form-horizontal">
+				<div class="row">
+					<div class="col-12 col-md-8 offset-md-2">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-4 col-md-2">
+									<label for="name" class="col-form-label"><b>Name</b></label>
+								</div>
+								<div class="col-8 col-md-10">
+									<input type="text" [formControl]="nameCtrl" name="name" class="form-control" id="name" value="{{season.name}}">
 								</div>
 							</div>
-							<div class="form-group">
-								<div class="row">
-									<div class="offset-md-2 col-sm-10">
-										<button class="btn btn-success btn-md" [disabled]="!editForm.valid">Update</button>
-									</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="offset-4 offset-md-2 col-6">
+									<button class="btn btn-success btn-md" [disabled]="!editForm.valid">Update</button>
 								</div>
 							</div>
 						</div>
 					</div>
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 	</div>
+</div>

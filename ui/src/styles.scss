@@ -1,8 +1,8 @@
 body {
-     margin: 0;
-     background: #F2F2F2;
-     font-family: 'Montserrat', sans-serif;
-     height: 100vh;
+    margin: 0;
+    background: #F2F2F2;
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
 }
 #container {
     display: grid;
@@ -62,15 +62,25 @@ body {
         }
     }
 }
-.material-icons.md-18 { font-size: 18px; }
-
+.material-icons.md-18 {
+    font-size: 18px;
+}
+.breakable {
+    word-break: break-all;
+}
 @media screen and (min-width: 0px) and (max-width: 480px) {
   .for-big { display: none; }
   .for-small {}
+  .key-column {
+    font-weight: bold;
+  }
+  .for-small-centered { text-align: center; }
+  .for-small-no-padding-left { padding-left: 0; }
 }
 @media screen and (min-width: 481px) {
   .for-big {}
   .for-small { display: none; }
+  .for-big-right-aligned { text-align: right; }
 }
 
 div.content {

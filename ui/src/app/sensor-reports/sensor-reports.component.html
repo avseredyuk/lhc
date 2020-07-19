@@ -10,35 +10,34 @@
 		<div class="card-header"><h1>Sensor Reports - {{ deviceName }}</h1></div>
 		<div class="card-body">
 			<div class="tab-content">
-				<div>
-					<div *ngIf="!hasData()" class="text-center spacer spacer-bottom">
-						No data
-					</div>
-					<div *ngIf="hasData()">
-						<table class="table">
-							<thead class="thead-light">
-								<tr>
-									<th scope="col" class="col-xs-2">Date</th>
-									<th scope="col" class="col-xs-2">Air temperature</th>
-									<th scope="col" class="col-xs-2">Relative humidity</th>
-									<th scope="col" class="col-xs-2">Absolute humidity</th>
-									<th scope="col" class="col-xs-2">Water temperature</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr *ngFor="let r of sensorReportsForDevice">
-									<td>{{ this.utilService.formatTimestamp(r.dateTime) }}</td>
-									<td>{{ r.temperature }}</td>
-									<td>{{ r.relhumidity }}</td>
-									<td>{{ r.abshumidity }}</td>
-									<td>{{ r.watertemperature }}</td>
-								</tr>
-							</tbody>
-						</table>
-						<div class="col-md-12">
-							<nav aria-label="...">
-								<ul class="pagination pagination-lg justify-content-center">
-									<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
+				<div *ngIf="!hasData()" class="text-center spacer spacer-bottom">
+					No data
+				</div>
+				<div *ngIf="hasData()">
+					<table class="table">
+						<thead class="thead-light">
+							<tr>
+								<th scope="col" class="col-xs-2 for-small-centered">Date</th>
+								<th scope="col" class="col-xs-2 text-center">Air temperature</th>
+								<th scope="col" class="col-xs-2 text-center">Relative humidity</th>
+								<th scope="col" class="col-xs-2 text-center">Absolute humidity</th>
+								<th scope="col" class="col-xs-2 text-center">Water temperature</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let r of sensorReportsForDevice">
+								<td class="for-small-centered key-column">{{ this.utilService.formatTimestamp(r.dateTime) }}</td>
+								<td class="text-center">{{ r.temperature }}</td>
+								<td class="text-center">{{ r.relhumidity }}</td>
+								<td class="text-center">{{ r.abshumidity }}</td>
+								<td class="text-center">{{ r.watertemperature }}</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="col-md-12">
+						<nav aria-label="...">
+							<ul class="pagination pagination-lg justify-content-center">
+								<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
 									[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
 									currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
 									<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
@@ -50,5 +49,4 @@
 			</div>
 		</div>
 	</div>
-</div>
 </div>

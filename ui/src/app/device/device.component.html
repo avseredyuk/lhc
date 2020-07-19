@@ -18,26 +18,25 @@
 								<table class="table table-sm no-row-border">
 									<tbody>
 										<tr>
-											<td class="col-sm-3"><b>Id:</b></td>
-											<td class="col-sm-9">{{device.id}}</td>
+											<td class="col-3"><b>Id:</b></td>
+											<td class="col-9">{{device.id}}</td>
 										</tr>
 										<tr>
-											<td class="col-sm-3"><b>Name:</b></td>
-											<td class="col-sm-9">{{device.name}}</td>
+											<td class="col-3"><b>Name:</b></td>
+											<td class="col-9">{{device.name}}</td>
 										</tr>
 										<tr>
-											<td class="col-sm-3"><b>Token:</b></td>
-											<td class="col-sm-9 breakable">{{device.token}}</td>
+											<td class="col-3"><b>Token:</b></td>
+											<td class="col-9 breakable">{{device.token}}</td>
 										</tr>
 										<tr>
-											<td class="col-sm-3"><b>Enabled:</b></td>
-											<td class="col-sm-9"><input type="checkbox" [checked]="device.enabled" disabled></td>
+											<td class="col-3"><b>Enabled:</b></td>
+											<td class="col-9"><input type="checkbox" [checked]="device.enabled" disabled></td>
 										</tr>
 									</tbody>
 								</table>
 							</div>
 						</div>
-						<br>
 						<div class="card">
 							<div class="card-header"><h4>Tools</h4></div>
 							<div class="card-body">
@@ -82,15 +81,15 @@
 										<thead class="thead-light">
 											<tr>
 												<th scope="col">Key</th>
-												<th scope="col">Value</th>
-												<th scope="col">Type</th>
+												<th scope="col" class="text-center">Value</th>
+												<th scope="col" class="text-center">Type</th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr *ngFor="let cfg of device.config">
-												<td class="col-sm-6 breakable">{{ cfg.key }}</td>
-												<td class="col-sm-3">{{ cfg.value }}</td>
-												<td class="col-sm-3">{{ cfg.type }}</td>
+												<td class="col-6 breakable key-column for-small-centered">{{ cfg.key }}</td>
+												<td class="col-3 text-center">{{ cfg.value }}</td>
+												<td class="col-3 text-center">{{ cfg.type }}</td>
 											</tr>
 										</tbody>
 									</table>
@@ -109,7 +108,7 @@
 									<table class="table table-sm no-row-border">
 										<tbody>
 											<tr *ngFor="let exclusion of device.exclusions" >
-												<td class="breakable">
+												<td class="breakable key-column for-small-centered">
 													{{ exclusion.map }}
 												</td>
 											</tr>

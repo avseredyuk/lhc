@@ -5,3 +5,14 @@
 .table-details > tr > td {
     border: none;
 }
+@media only screen and (max-width: 480px) {
+  .table>tbody>tr>td,
+  .table>tbody>tr>th,
+  .table>tfoot>tr>td,
+  .table>tfoot>tr>th,
+  .table>thead>tr>td,
+  .table>thead>tr>th {
+    display: block;
+    min-width: 100%!important;
+  }
+}

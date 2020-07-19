@@ -1,54 +1,54 @@
 <app-sidebar></app-sidebar>
 <div class="content">
-  <div *ngIf="hasNotifications()">
-    <div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      {{ notification.message }}
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header"><h1>Settings</h1></div>
-    <div class="card-body">
-      <div class="dropdown">
-        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-          Action
-        </button>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" (click)="clearCache()">Clear Cache</a>
-        </div>
-      </div>
-      <br/>
-      <div *ngIf="!hasData()" class="text-center spacer">
-        No data
-      </div>
-      <div *ngIf="hasData()">
-        <table class="table">
-          <thead class="thead-light">
-          <tr>
-            <th scope="col" class="col-8">Key</th>
-            <th scope="col" class="col-2">Value</th>
-            <th scope="col" class="col-2 text-right">Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let cfg of configurations">
-            <td>{{ cfg.key }}</td>
-            <td>{{ cfg.value }}</td>
-            <td class="text-right">
-              <button class="btn btn-warning btn-md" type="button" (click)="editSettings(cfg)">
-                <i class="material-icons md-18">edit</i>
-              </button>
-              &nbsp;
-              <button class="btn btn-danger btn-md" type="button" (click)="deleteSettings(cfg)">
-                <i class="material-icons md-18">delete</i>
-              </button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      &nbsp;
-      <button (click)="addSettings()" class="btn btn-info btn-lg" role="button">Add</button>
-    </div>
-  </div>
+	<div *ngIf="hasNotifications()">
+		<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			{{ notification.message }}
+		</div>
+	</div>
+	<div class="card">
+		<div class="card-header"><h1>Settings</h1></div>
+		<div class="card-body">
+			<div class="dropdown">
+				<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+					Action
+				</button>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" (click)="clearCache()">Clear Cache</a>
+				</div>
+			</div>
+			<br/>
+			<div *ngIf="!hasData()" class="text-center spacer">
+				No data
+			</div>
+			<div *ngIf="hasData()">
+				<table class="table">
+					<thead class="thead-light">
+						<tr>
+							<th scope="col" class="col-8 for-small-centered">Key</th>
+							<th scope="col" class="col-2 text-center">Value</th>
+							<th scope="col" class="col-2 for-small-centered for-big-right-aligned">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let cfg of configurations">
+							<td class="for-small-centered key-column">{{ cfg.key }}</td>
+							<td class="text-center">{{ cfg.value }}</td>
+							<td class="for-small-centered for-big-right-aligned">
+								<button class="btn btn-warning btn-md" type="button" (click)="editSettings(cfg)">
+									<i class="material-icons md-18">edit</i>
+								</button>
+								&nbsp;
+								<button class="btn btn-danger btn-md" type="button" (click)="deleteSettings(cfg)">
+									<i class="material-icons md-18">delete</i>
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			&nbsp;
+			<button (click)="addSettings()" class="btn btn-info btn-lg" role="button">Add</button>
+		</div>
+	</div>
 </div>

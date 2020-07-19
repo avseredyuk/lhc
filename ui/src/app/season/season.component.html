@@ -22,18 +22,18 @@
 									<table class="table">
 										<thead class="thead-light">
 											<tr>
-												<th scope="col" class="col-xs-3 text-left">Date</th>
+												<th scope="col" class="col-xs-3 for-small-centered">Date</th>
 												<th scope="col" class="col-xs-3 text-center">Weight</th>
 												<th scope="col" class="col-xs-3 text-center">Count</th>
-												<th scope="col" class="col-xs-3 text-right">Actions</th>
+												<th scope="col" class="col-xs-3 for-small-centered for-big-right-aligned">Actions</th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr *ngFor="let crop of cropsForSeason">
-												<td class="text-left">{{ this.utilService.formatTimestamp(crop.d) }}</td>
+												<td class="for-small-centered key-column">{{ this.utilService.formatTimestamp(crop.d) }}</td>
 												<td class="text-center">{{ crop.weight }}</td>
 												<td class="text-center">{{ crop.count }}</td>
-												<td class="text-right">
+												<td class="for-small-centered for-big-right-aligned">
 													<button class="btn btn-warning btn-md" type="button" (click)="editCrop(crop.id)">
 														<i class="material-icons md-18">edit</i>
 													</button>
@@ -52,41 +52,42 @@
 											<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
 											[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
 											currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
-											<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
-										</li>
-									</ul>
-								</nav>
-							</div>
-							<div>
-								<button (click)="addCrop()" class="btn btn-info btn-lg" role="button">Add</button>
+												<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+								<div>
+									<button (click)="addCrop()" class="btn btn-info btn-lg" role="button">Add</button>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col-12 col-lg-4">
-					<div class="card">
-						<div class="card-header"><h4>Statistics</h4></div>
-						<div class="card-body">
-							<div *ngIf="!hasStatsData()" class="text-center spacer-top-bottom">
-								No data
-							</div>
-							<div *ngIf="hasStatsData()">
-								<table class="table table-sm no-row-border no-bottom-margin">
-									<tbody>
-										<tr>
-											<td class="col-sm-6"><b>Total count:</b></td>
-											<td class="col-sm-6">{{stats.totalCount}}</td>
-										</tr>
-										<tr>
-											<td class="col-sm-6"><b>Total weight:</b></td>
-											<td class="col-sm-6">{{this.utilService.roundToTwo(stats.totalWeight)}}</td>
-										</tr>
-										<tr>
-											<td class="col-sm-6"><b>Average fruit weight:</b></td>
-											<td class="col-sm-6">{{this.utilService.roundToTwo(stats.avgCropWeight)}}</td>
-										</tr>
-									</tbody>
-								</table>
+					<div class="col-12 col-lg-4">
+						<div class="card">
+							<div class="card-header"><h4>Statistics</h4></div>
+							<div class="card-body">
+								<div *ngIf="!hasStatsData()" class="text-center spacer-top-bottom">
+									No data
+								</div>
+								<div *ngIf="hasStatsData()">
+									<table class="table table-sm no-row-border no-bottom-margin">
+										<tbody>
+											<tr>
+												<td class="col-sm-6"><b>Total count:</b></td>
+												<td class="col-sm-6">{{stats.totalCount}}</td>
+											</tr>
+											<tr>
+												<td class="col-sm-6"><b>Total weight:</b></td>
+												<td class="col-sm-6">{{this.utilService.roundToTwo(stats.totalWeight)}}</td>
+											</tr>
+											<tr>
+												<td class="col-sm-6"><b>Average fruit weight:</b></td>
+												<td class="col-sm-6">{{this.utilService.roundToTwo(stats.avgCropWeight)}}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -94,5 +95,4 @@
 			</div>
 		</div>
 	</div>
-</div>
 </div>

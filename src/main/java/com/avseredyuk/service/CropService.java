@@ -103,6 +103,13 @@ public class CropService {
     public SeasonDto.SeasonStatisticsDto findStatisticsById(Long seasonId) {
         Long countSum = cropRepository.countSumBySeasonId(seasonId);
         Double weightSum = cropRepository.weightSumBySeasonId(seasonId);
+        if (countSum == null || weightSum == null) {
+            return SeasonDto.SeasonStatisticsDto.builder()
+                    .totalCount(0L)
+                    .totalWeight(0.0d)
+                    .avgCropWeight(0.0d)
+                    .build();
+        }
         return SeasonDto.SeasonStatisticsDto.builder()
                 .totalCount(countSum)
                 .totalWeight(weightSum)

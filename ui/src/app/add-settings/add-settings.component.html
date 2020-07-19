@@ -9,33 +9,32 @@
 	<div class="card">
 		<div class="card-header"><h1>Add Settings</h1></div>
 		<div class="card-body">
-			<br/>
 			<form [formGroup]="addForm" (ngSubmit)="onSubmit()">
 				<div class="row">
-					<div class="col-8 offset-md-2">
+					<div class="col-12 col-md-8 offset-md-2">
 						<div class="form-group">
 							<div class="row">
-								<div class="col-2">
+								<div class="col-4 col-md-2">
 									<label for="key" class="col-form-label"><b>Key</b></label>
 								</div>
-								<div class="col-10">
+								<div class="col-8 col-md-10">
 									<input type="text" [formControl]="keyCtrl" name="key" class="form-control" id="key">
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="row">
-								<div class="col-2">
+								<div class="col-4 col-md-2">
 									<label for="value" class="col-form-label"><b>Value</b></label>
 								</div>
-								<div class="col-10">
+								<div class="col-8 col-md-10">
 									<input type="text" [formControl]="valueCtrl" name="value" class="form-control" id="value">
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="row">
-								<div class="offset-md-2 col-sm-10">
+								<div class="offset-4 offset-md-2 col-6">
 									<button class="btn btn-success btn-md" [disabled]="!addForm.valid">Add</button>
 								</div>
 							</div>

@@ -12,30 +12,30 @@
 			<br/>
 			<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 				<div class="row">
-					<div class="col-8 offset-md-2">
+					<div class="col-12 col-md-8 offset-md-2">
 						<div class="form-group">
 							<div class="row">
-								<div class="col-2">
+								<div class="col-4 col-md-2">
 									<label class="col-form-label" for="username"><b>Login</b></label>
 								</div>
-								<div class="col-10">
+								<div class="col-8 col-md-10">
 									<input type="text" [formControl]="usernameCtrl" name="username" class="form-control" id="username">
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="row">
-								<div class="col-2">
+								<div class="col-4 col-md-2">
 									<label class="col-form-label" for="username"><b>Password</b></label>
 								</div>
-								<div class="col-10">
+								<div class="col-8 col-md-10">
 									<input type="password" [formControl]="passwordCtrl" name="password" class="form-control" id="password">
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="row">
-								<div class="offset-md-2 col-sm-10">
+								<div class="offset-4 offset-md-2 col-6">
 									<button class="btn btn-success btn-md" [disabled]="!loginForm.valid">Login</button>
 								</div>
 							</div>

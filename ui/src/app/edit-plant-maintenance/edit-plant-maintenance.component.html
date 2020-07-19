@@ -9,36 +9,35 @@
 	<div class="card">
 		<div class="card-header"><h1>Edit Plant Maintenance - {{ deviceName }}</h1></div>
 		<div class="card-body">
-			<br/>
 			<form *ngIf="maintenance" [formGroup]="editForm" (ngSubmit)="onSubmit()" class="form-horizontal">
 				<div class="row">
-					<div class="col-5 offset-md-2">
+					<div class="col-12 col-md-4 offset-md-2">
 						<div class="form-group">
 							<div class="row">
-								<div class="col-2">
+								<div class="col-4 col-md-2">
 									<label for="ph" class="control-label"><b>pH</b></label>
 								</div>
-								<div class="col-10">
+								<div class="col-8 col-md-10">
 									<input type="text" [formControl]="phCtrl" name="ph" class=" form-control" id="ph" value="{{maintenance.ph}}">
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="row">
-								<div class="col-2">
+								<div class="col-4 col-md-2">
 									<label for="tds" class="control-label"><b>TDS</b></label>
 								</div>
-								<div class="col-10">
+								<div class="col-8 col-md-10">
 									<input type="text" [formControl]="tdsCtrl" name="tds" class="form-control" id="tds" value="{{maintenance.tds}}">
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="row">
-								<div class="col-2">
+								<div class="col-4 col-md-2">
 									<label for="type" class="control-label"><b>Type</b></label>
 								</div>
-								<div class="col-10">
+								<div class="col-8 col-md-10">
 									<select class="custom-select" [formControl]="typeCtrl" name="type" class="form-control" id="type">
 										<option *ngFor="let dataType of this.utilService.dataTypes" value="{{ dataType }}">{{ dataType }}</option>
 									</select>
@@ -47,17 +46,17 @@
 						</div>
 						<div class="form-group">
 							<div class="row">
-								<div class="col-2">
+								<div class="col-4 col-md-2">
 									<label for="date" class="control-label"><b>Date</b></label>
 								</div>
-								<div class="col-10">
+								<div class="col-8 col-md-10">
 									<div class="row">
-										<div class="col-6">
+										<div class="col-12 col-md-6">
 											<input type="date" class="form-control" style="line-height:unset;"
 											[value]="maintenance.d | date:'yyyy-MM-dd'"
 											(input)="newDate = $event.target.valueAsDate">
 										</div>
-										<div class="col-6">
+										<div class="col-12 col-md-6">
 											<input type="time" class="form-control" style="line-height:unset;"
 											[value]="maintenance.d | date:'HH:mm:ss'"
 											(input)="newTime = this.utilService.convertDateToUTC($event.target.valueAsDate)">
@@ -66,60 +65,62 @@
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<div class="row">
-								<div class="offset-md-2 col-sm-10">
-									<button class="btn btn-success btn-md" [disabled]="!editForm.valid">Update</button>
-								</div>
-							</div>
-						</div>
 					</div>
-					<div class="col-5">
+					<div class="col-12 col-md-4">
 						<div class="form-group">
 							<div class="row">
-								<div class="col-2">
+								<div class="col-4 col-md-2">
 									<label for="key" class="control-label"><b>Key</b></label>
 								</div>
-								<div class="col-6">
+								<div class="col-8 col-md-10">
 									<input type="text" [formControl]="newDetailKeyCtrl" name="newDetailKey" class="form-control" id="newDetailKey">
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="row">
-								<div class="col-2">
+								<div class="col-4 col-md-2">
 									<label for="value" class="control-label"><b>Value</b></label>
 								</div>
-								<div class="col-5">
+								<div class="col-6 col-md-8">
 									<input type="text" [formControl]="newDetailValueCtrl" name="newDetailValue" class="form-control" id="newDetailValue">
 								</div>
-								<div class="col-1 text-right">
+								<div class="col-2 for-small-no-padding-left text-right">
 									<button class="btn btn-success btn-md" type='button' (click)="addDetail()">+</button>
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="row">
-								<div class="col-8">
+								<div class="col-12">
 									<br/>
 								</div>
-								<div class="col-8" *ngIf="hasDetails()">
+								<div class="col-12" *ngIf="hasDetails()">
 									<table class="table table-sm table-no-border nopadnomargin">
 										<thead class="thead-light">
 											<tr>
-												<th scope="col">Detail Key</th>
-												<th scope="col">Detail Value</th>
-												<th class="col-md-1" scope="col"></th>
+												<th scope="col" class="text-center">Detail Key</th>
+												<th scope="col" class="text-center">Detail Value</th>
+												<th scope="col"></th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr *ngFor="let detail of maintenance.details">
-												<td>{{ detail.key }}</td>
-												<td>{{ detail.value }}</td>
-												<td><button class="btn btn-danger btn-md material-icons" type='button' (click)="removeDetail(detail)">delete</button></td>
+												<td class="text-center">{{ detail.key }}</td>
+												<td class="text-center">{{ detail.value }}</td>
+												<td class="col-1"><button class="btn btn-danger btn-md material-icons" type='button' (click)="removeDetail(detail)">delete</button></td>
 											</tr>
 										</tbody>
 									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-md-4 offset-md-2">
+						<div class="form-group">
+							<div class="row">
+								<div class="offset-4 offset-md-2 col-6">
+									<button class="btn btn-success btn-md" [disabled]="!editForm.valid">Update</button>
 								</div>
 							</div>
 						</div>

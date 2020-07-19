@@ -16,10 +16,10 @@
 				<table class="table no-row-border">
 					<tbody>
 						<tr *ngFor="let season of seasons">
-							<td class="td-massive-list vertical-center">
+							<td class="col-8 col-md-10 td-massive-list vertical-center for-small-centered">
 								<a class="a-massive-list" (click)="openSeason(season)" [routerLink]="">{{ season.name }}</a>
 							</td>
-							<td class="td-massive-list text-right">
+							<td class="col-4 col-md-2 td-massive-list for-small-centered for-big-right-aligned">
 								<button class="btn btn-warning btn-md" type="button" (click)="editSeason(season)">
 									<i class="material-icons md-18">edit</i>
 								</button>
