@@ -20,6 +20,8 @@ public class AppConfiguration {
     private String dbUsername;
     @Value("${spring.datasource.password}")
     private String dbPassword;
+    @Value("${spring.datasource.driver-class-name}")
+    private String driverClassName;
     
     @Bean
     public DataSource dataSource() throws SQLException {
@@ -30,6 +32,7 @@ public class AppConfiguration {
             config.setJdbcUrl(dbUrl);
             config.setUsername(dbUsername);
             config.setPassword(dbPassword);
+            config.setDriverClassName(driverClassName);
             return new HikariDataSource(config);
         }
     }
