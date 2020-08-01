@@ -67,7 +67,7 @@ void loop() {
     ESP.restart();
   }
   if (CFG.__runPumpOnce) {
-    PUMP_ENABLE();
+    switchPump(true);
     go_to_limbo("Running pump once");
   }
 }
