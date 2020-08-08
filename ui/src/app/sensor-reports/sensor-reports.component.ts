@@ -52,6 +52,16 @@ export class SensorReportsComponent {
     this.loadPageForDevice();
   }
 
+  deleteSensorReport(sensorReport: SensorReport) {
+    if (confirm('Are you sure you want to delete sensor report?')) {
+      this.dataService.deleteSensorReport(sensorReport).subscribe(
+        data => {
+          this.loadPageForDevice();
+        }
+        );
+    }
+  }
+
   hasData(): Boolean {
     return typeof this.sensorReportsForDevice !== 'undefined' && this.sensorReportsForDevice.length > 0;
   }

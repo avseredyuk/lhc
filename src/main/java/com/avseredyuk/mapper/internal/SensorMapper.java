@@ -14,6 +14,7 @@ import com.avseredyuk.model.SensorReport;
 public interface SensorMapper {
     
     @Deprecated
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "dateTime", expression = "java(r.getDateTime().getTime())")
     @Mapping(target = "temperature", source = "temperature")
     @Mapping(target = "relhumidity", source = "humidity")

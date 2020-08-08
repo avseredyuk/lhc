@@ -22,6 +22,7 @@
 								<th scope="col" class="col-xs-2 text-center">Relative humidity</th>
 								<th scope="col" class="col-xs-2 text-center">Absolute humidity</th>
 								<th scope="col" class="col-xs-2 text-center">Water temperature</th>
+								<th scope="col" class="col-xs-2 for-small-centered for-big-right-aligned">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -31,6 +32,11 @@
 								<td class="text-center">{{ r.relhumidity }}</td>
 								<td class="text-center">{{ r.abshumidity }}</td>
 								<td class="text-center">{{ r.watertemperature }}</td>
+								<td class="for-small-centered for-big-right-aligned">
+									<button class="btn btn-danger btn-md" type="button" (click)="deleteSensorReport(r)">
+										<i class="material-icons md-18">delete</i>
+									</button>
+								</td>
 							</tr>
 						</tbody>
 					</table>

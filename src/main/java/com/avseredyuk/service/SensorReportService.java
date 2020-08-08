@@ -58,6 +58,11 @@ public class SensorReportService {
         Page<SensorReport> page = sensorReportRepository.findAllByDeviceIdOrderByDateTimeDesc(deviceId, pageable);
         return new PageImpl<>(sensorMapper.toDtoList(page.getContent()), pageable, page.getTotalElements());
     }
+
+    @CacheEvict(value = "SensorReport", allEntries = true)
+    public void delete(Long sensorReportId) {
+        sensorReportRepository.delete(sensorReportId);
+    }
     
     private static Double calcAbsHumidity(SensorReport r) {
         if ((r.getHumidity() == null) || (r.getTemperature() == null)) {

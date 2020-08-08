@@ -192,6 +192,10 @@ export class DataService {
     return this.http.get<Page<SensorReport[]>>(this.adminApiUrl + 'sensorreports?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
+  deleteSensorReport(sensorReport) {
+    return this.http.delete(this.adminApiUrl + 'sensorreports/' + sensorReport.id);
+  }
+
   /* System */
 
   clearCache(): Observable<ApiResult<Boolean>> {
