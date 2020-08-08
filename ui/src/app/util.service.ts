@@ -8,7 +8,7 @@ export class UtilService {
   public dataTypes: Array<string> =
     ['FULL', 'SAMPLE', 'PARTIAL'];
   public deviceConfigKeys: Array<string> =
-    ['PUMP_ENABLE_FREQUENCY', 'PUMP_DURATION', 'REPORT_SEND_FREQUENCY', 'RUN_PUMP_ONCE',
+    ['PUMP_ENABLE_FREQUENCY', 'PUMP_DURATION', 'REPORT_SEND_FREQUENCY', 'RUN_PUMP_ONCE', 'RELAY_PIN', 'WATER_TEMP_PIN', 'AIR_TEMP_HUM_PIN',
      'PUMP_COLOR', 'WATER_TEMPERATURE_COLOR', 'TEMPERATURE_COLOR', 'HUMIDITY_COLOR', 'ABS_HUMIDITY_COLOR'];
   public deviceConfigDataTypes: Array<string> =
     ['UI', 'DEVICE'];

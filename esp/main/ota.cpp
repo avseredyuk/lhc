@@ -1,14 +1,14 @@
 #include <ArduinoOTA.h>
-#include "credentials.h"
+#include "context.h"
 
 WiFiServer TelnetServer(8266);
 
 void ota_init() {
   TelnetServer.begin();
   
-  ArduinoOTA.setPort(OTA_PORT);
-  ArduinoOTA.setHostname(OTA_HOSTNAME);
-  ArduinoOTA.setPassword(OTA_PASSWORD);
+  ArduinoOTA.setPort(credentials.otaPort);
+  ArduinoOTA.setHostname(credentials.otaHostname.c_str());
+  ArduinoOTA.setPassword(credentials.otaPassword.c_str());
   ArduinoOTA.onStart([]() {
     Serial.println("OTA Start");
   });

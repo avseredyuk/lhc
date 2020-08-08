@@ -4,3 +4,4 @@ void service_sensor();
 boolean spiffs_init();
 void go_to_limbo(String message);
 Config get_config();
+boolean getCredentials(Credentials &credentials);

@@ -28,14 +28,26 @@ typedef union BootupPackage {
   } record;
 };
 
-const int CONFIG_VERSION = 1;
+const int CONFIG_VERSION = 2;
 
 typedef struct Config {
-  unsigned int pumpEnableFrequency;
-  unsigned int pumpDuration;
-  unsigned int reportSendingFrequency;
-  String hash;
-  boolean __runPumpOnce;
+  signed int pumpEnableFrequency = -1;
+  signed int pumpDuration = -1;
+  signed int reportSendingFrequency = -1;
+  signed int relayPin = -1;
+  signed int waterTempPin = -1;
+  signed int airTempHumidityPin = -1;
+  String hash = "";
+  boolean __runPumpOnce = false;
 };
 
+typedef struct Credentials {
+  String wifiSSID;
+  String wifiPassword;
+  String lhcHost;
+  String lhcToken;
+  unsigned int otaPort;
+  String otaHostname;
+  String otaPassword;
+};
 #endif

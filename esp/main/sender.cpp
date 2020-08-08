@@ -2,8 +2,7 @@
 #include <ESP8266WiFi.h>
 #include <WString.h>
 #include "context.h"
-#include "credentials.h"
-#include "led.h"
+#include "utils.h"
 
 const int CONNECTION_TIMEOUT = 5000;
 
@@ -16,24 +15,27 @@ boolean sendToHost(String resourceUri, String content) {
 
   switchLed(true);
   
-  Serial.println("connecting to " + String(LHC_HOST));
+  Serial.println("   * Connecting to <" + credentials.lhcHost + ">");
 
   WiFiClient client;
-  if (!client.connect(LHC_HOST, 80)) {
+  if (!client.connect(credentials.lhcHost.c_str(), 80)) {
     
-    Serial.println("connection failed");
+    Serial.println("   ! Connection failed");
     
     switchLed(false);
     return false;
   }
 
-  Serial.println("Requesting URL: " + String(uriWithLogs));
+  Serial.println("      * Requesting URL: " + String(uriWithLogs));
+
+  Serial.println("      * Request: ");
+  Serial.println("         > " + content);
 
   client.println("POST " + uriWithLogs + " HTTP/1.1");
-  client.println("Host: " + String(LHC_HOST));
+  client.println("Host: " + String(credentials.lhcHost));
   client.println("Content-Length: " + String(content.length()));
   client.println("Content-Type: application/json");
-  client.println("AuthToken: " + String(AUTH_TOKEN));
+  client.println("AuthToken: " + String(credentials.lhcToken));
   client.println();
   client.println(content);
 
@@ -41,7 +43,7 @@ boolean sendToHost(String resourceUri, String content) {
   while (client.available() == 0) {
     if (millis() - timeout > CONNECTION_TIMEOUT) {
       
-      Serial.println(">>> Client Timeout !");
+      Serial.println("      ! Client Timeout !");
         
       client.stop();
       switchLed(false);
@@ -49,14 +51,13 @@ boolean sendToHost(String resourceUri, String content) {
     }
   }
 
+  Serial.println("      * Response: ");
   while (client.available()) {
     String line = client.readStringUntil('\r');
-    
-    Serial.print(line);
+    line.trim();
+    Serial.println("         > " + line);
   }
 
-  Serial.println("closing connection");
-    
   switchLed(false);
 
   return true;

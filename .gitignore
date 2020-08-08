@@ -3,6 +3,5 @@ target
 .idea/
 *.iml
 .mvn/
-credentials.cpp
-hydrocollider.log
+esp/main/data
 .directory

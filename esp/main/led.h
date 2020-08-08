@@ -1,1 +1,0 @@
-void switchLed(boolean enableParam);
