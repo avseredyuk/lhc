@@ -186,6 +186,10 @@ export class DataService {
     return this.http.get<Page<PumpAction[]>>(this.adminApiUrl + 'pumpactions?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
+  deletePumpAction(pumpAction) {
+    return this.http.delete(this.adminApiUrl + 'pumpactions/' + pumpAction.id);
+  }
+
   /* Sensor Reports */
 
   getSensorReportsByDeviceId(deviceId, page): Observable<Page<SensorReport[]>> {

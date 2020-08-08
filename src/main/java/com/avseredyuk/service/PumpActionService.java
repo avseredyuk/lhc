@@ -53,4 +53,9 @@ public class PumpActionService {
         report.setDevice(fetchedDevice);
         pumpActionRepository.save(report);
     }
+
+    @CacheEvict(value = "PumpAction", allEntries = true)
+    public void delete(Long pumpActionId) {
+        pumpActionRepository.delete(pumpActionId);
+    }
 }

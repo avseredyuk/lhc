@@ -13,6 +13,7 @@ import com.avseredyuk.model.PumpActionReport;
 @Mapper(componentModel = "spring")
 public interface PumpActionMapper {
 
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "dateTime", expression = "java(r.getDateTime().getTime())")
     @Mapping(target = "action", source = "actionType")
     PumpActionDto toDto(PumpActionReport r);

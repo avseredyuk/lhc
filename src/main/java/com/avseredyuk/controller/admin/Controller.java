@@ -97,6 +97,11 @@ public class Controller {
         return pumpActionService.findAllByDeviceIdPaginated(deviceId, pageable);
     }
 
+    @DeleteMapping(value = "/pumpactions/{pumpActionId}")
+    public void deletePumpAction(@PathVariable Long pumpActionId) {
+        pumpActionService.delete(pumpActionId);
+    }
+
     @GetMapping(value = "/sensorreports")
     public Page<SensorDto> getAllSensorReportsByDevice(@RequestParam Long deviceId,
                                                        @NotNull final Pageable pageable) {
@@ -104,7 +109,7 @@ public class Controller {
     }
 
     @DeleteMapping(value = "/sensorreports/{sensorReportId}")
-    public void getAllSensorReportsByDevice(@PathVariable Long sensorReportId) {
+    public void deleteSensorReport(@PathVariable Long sensorReportId) {
         sensorReportService.delete(sensorReportId);
     }
 

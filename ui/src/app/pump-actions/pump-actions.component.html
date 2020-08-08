@@ -19,12 +19,18 @@
 							<tr>
 								<th scope="col" class="col-xs-2 for-small-centered">Date</th>
 								<th scope="col" class="col-xs-2 text-center">Action</th>
+								<th scope="col" class="col-xs-2 for-small-centered for-big-right-aligned">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr *ngFor="let p of pumpActionsForDevice">
 								<td class="for-small-centered key-column">{{ this.utilService.formatTimestamp(p.dateTime) }}</td>
 								<td class="text-center">{{ p.action }}</td>
+								<td class="for-small-centered for-big-right-aligned">
+									<button class="btn btn-danger btn-md" type="button" (click)="deletePumpAction(p)">
+										<i class="material-icons md-18">delete</i>
+									</button>
+								</td>
 							</tr>
 						</tbody>
 					</table>

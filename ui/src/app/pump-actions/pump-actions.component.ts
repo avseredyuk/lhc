@@ -52,6 +52,16 @@ export class PumpActionsComponent {
     this.loadPageForDevice();
   }
 
+  deletePumpAction(pumpAction: PumpAction) {
+    if (confirm('Are you sure you want to delete pump action?')) {
+      this.dataService.deletePumpAction(pumpAction).subscribe(
+        data => {
+          this.loadPageForDevice();
+        }
+        );
+    }
+  }
+
   hasData(): Boolean {
     return typeof this.pumpActionsForDevice !== 'undefined' && this.pumpActionsForDevice.length > 0;
   }
