@@ -180,6 +180,10 @@ export class DataService {
     return this.http.get<Page<Bootup[]>>(this.adminApiUrl + 'bootups?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
+  deleteBootup(bootup) {
+    return this.http.delete(this.adminApiUrl + 'bootups/' + bootup.id);
+  }
+
   /* Pump Actions */
 
   getPumpActionsByDeviceId(deviceId, page): Observable<Page<PumpAction[]>> {

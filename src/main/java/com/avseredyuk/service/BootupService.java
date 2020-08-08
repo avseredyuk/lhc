@@ -42,4 +42,9 @@ public class BootupService {
         Page<BootupReport> page =  bootupRepository.findAllByDeviceIdOrderByDateTimeDesc(deviceId, pageable);
         return new PageImpl<>(bootupMapper.toDtoList(page.getContent()), pageable, page.getTotalElements());
     }
+
+    @CacheEvict(value = "BootupReport", allEntries = true)
+    public void delete(Long bootupId) {
+        bootupRepository.delete(bootupId);
+    }
 }

@@ -91,6 +91,11 @@ public class Controller {
         return bootupService.findAllByDeviceIdPaginated(deviceId, pageable);
     }
 
+    @DeleteMapping(value = "/bootups/{bootupId}")
+    public void deleteBootup(@PathVariable Long bootupId) {
+        bootupService.delete(bootupId);
+    }
+
     @GetMapping(value = "/pumpactions")
     public Page<PumpActionDto> getAllPumpActionsByDevice(@RequestParam Long deviceId,
                                                          @NotNull final Pageable pageable) {

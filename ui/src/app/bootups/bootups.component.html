@@ -18,11 +18,17 @@
 						<thead class="thead-light">
 							<tr>
 								<th scope="col" class="col-xs-2 for-small-centered">Date</th>
+								<th scope="col" class="col-xs-2 for-small-centered for-big-right-aligned">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngFor="let p of bootupsForDevice">
-								<td class="for-small-centered">{{ this.utilService.formatTimestamp(p.d) }}</td>
+							<tr *ngFor="let b of bootupsForDevice">
+								<td class="for-small-centered">{{ this.utilService.formatTimestamp(b.d) }}</td>
+								<td class="for-small-centered for-big-right-aligned">
+									<button class="btn btn-danger btn-md" type="button" (click)="deleteBootup(b)">
+										<i class="material-icons md-18">delete</i>
+									</button>
+								</td>
 							</tr>
 						</tbody>
 					</table>

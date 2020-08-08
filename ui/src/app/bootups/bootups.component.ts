@@ -54,6 +54,16 @@ export class BootupsComponent implements OnInit {
     this.loadPageForDevice();
   }
 
+  deleteBootup(bootup: Bootup) {
+    if (confirm('Are you sure you want to delete bootup?')) {
+      this.dataService.deleteBootup(bootup).subscribe(
+        data => {
+          this.loadPageForDevice();
+        }
+        );
+    }
+  }
+
   hasData(): Boolean {
     return typeof this.bootupsForDevice !== 'undefined' && this.bootupsForDevice.length > 0;
   }

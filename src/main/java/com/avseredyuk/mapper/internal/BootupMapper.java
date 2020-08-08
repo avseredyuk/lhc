@@ -13,6 +13,7 @@ import com.avseredyuk.model.BootupReport;
 @Mapper(componentModel = "spring")
 public interface BootupMapper {
 
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "d", expression = "java(b.getDateTime().getTime())")
     BootupDto toDto(BootupReport b);
 
