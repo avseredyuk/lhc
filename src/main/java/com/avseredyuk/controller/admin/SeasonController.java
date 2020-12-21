@@ -60,8 +60,13 @@ public class SeasonController {
     }
 
     @GetMapping(value = "/season/{seasonId}/stats")
-    public ResponseEntity<ApiResult<SeasonDto.SeasonStatisticsDto>> getSeasonStatisticsById(@PathVariable Long seasonId) {
+    public ResponseEntity<ApiResult<SeasonDto.SeasonStatisticsDto>> getSeasonStatisticsBySeasonId(@PathVariable Long seasonId) {
         return ResponseEntity.ok(new ApiResult<>(cropService.findStatisticsById(seasonId)));
+    }
+
+    @GetMapping(value = "/seasons/{deviceId}/stats")
+    public ResponseEntity<ApiResult<SeasonDto.SeasonStatisticsDto>> getSeasonsStatisticsByDeviceId(@PathVariable Long deviceId) {
+        return ResponseEntity.ok(new ApiResult<>(cropService.findStatisticsByDeviceId(deviceId)));
     }
 
     @GetMapping(value = "/season/{seasonId}")

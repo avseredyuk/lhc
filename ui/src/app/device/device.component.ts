@@ -80,4 +80,8 @@ export class DeviceComponent implements OnInit {
     return this.device.exclusions && this.device.exclusions.length > 0;
   }
 
+  hasNotes(): Boolean {
+    return this.device.notes != null && this.device.notes.length > 0;
+  }
+
 }

@@ -31,6 +31,9 @@ public class Device {
     
     @Column(name = "enabled")
     private Boolean enabled;
+
+    @Column(name = "notes")
+    private String notes;
     
     @OneToMany(mappedBy = "device", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE},
             orphanRemoval = true)

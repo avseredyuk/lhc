@@ -9,6 +9,7 @@ public class DeviceDto {
     private String token;
     private String name;
     private boolean enabled;
+    private String notes;
     private List<DeviceConfigDto> config;
     private List<DeviceReportDataExclusionDto> exclusions;
     

@@ -5,7 +5,7 @@ export class Season {
   crops: Array<Crop>;
 }
 
-export class SeasonStatistics {
+export class Statistics {
 	totalCount: number;
 	totalWeight: number;
 	avgCropWeight: number;

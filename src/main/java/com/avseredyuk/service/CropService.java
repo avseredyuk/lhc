@@ -116,4 +116,21 @@ public class CropService {
                 .avgCropWeight(weightSum / countSum)
                 .build();
     }
+
+    public SeasonDto.SeasonStatisticsDto findStatisticsByDeviceId(Long deviceId) {
+        Long countSum = cropRepository.countSumByDeviceId(deviceId);
+        Double weightSum = cropRepository.weightSumByDeviceId(deviceId);
+        if (countSum == null || weightSum == null) {
+            return SeasonDto.SeasonStatisticsDto.builder()
+                    .totalCount(0L)
+                    .totalWeight(0.0d)
+                    .avgCropWeight(0.0d)
+                    .build();
+        }
+        return SeasonDto.SeasonStatisticsDto.builder()
+                .totalCount(countSum)
+                .totalWeight(weightSum)
+                .avgCropWeight(weightSum / countSum)
+                .build();
+    }
 }

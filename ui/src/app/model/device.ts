@@ -3,6 +3,7 @@ export class Device {
   token: string;
   name: string;
   enabled: boolean;
+  notes: string;
   config: Array<DeviceConfig>;
   exclusions: Array<DeviceReportDataExclusion>;
 }

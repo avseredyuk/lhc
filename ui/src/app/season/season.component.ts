@@ -1,11 +1,11 @@
-import {Component, OnInit, ViewChildren, QueryList, Renderer, ViewChild} from "@angular/core";
+import { Component, OnInit, ViewChildren, QueryList, ViewChild, Renderer2 } from "@angular/core";
 import {ComponentCommunicationService} from "../component-communication.service";
 import {DataService} from "../data.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Device} from "../model/device";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
 import {TokenCheckService} from "../token-check.service";
-import {Crop, Season, SeasonStatistics} from "../model/season";
+import {Crop, Season, Statistics} from "../model/season";
 import {SidebarComponent} from "../sidebar/sidebar.component";
 import {ApiResult} from "../model/api-result";
 import {Page} from "../model/page";
@@ -27,7 +27,7 @@ export class SeasonComponent implements OnInit {
   totalPages: number;
   @ViewChildren('tabHeader') tabHeaders: QueryList<any>;
   cropsForSeason: Array<Crop> = [];
-  stats: SeasonStatistics;
+  stats: Statistics;
 
   constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService,
     private route: ActivatedRoute, private tokenCheckService: TokenCheckService, public utilService: UtilService) {

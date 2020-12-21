@@ -26,6 +26,7 @@ export class EditDeviceComponent implements OnInit {
   deviceNameCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
   deviceTokenCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
   deviceEnabledCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
+  deviceNotesCtrl: FormControl = this.formBuilder.control('', []);
   newConfigKeyCtrl: FormControl = this.formBuilder.control(this.utilService.deviceConfigKeys[0], []);
   newConfigValueCtrl: FormControl = this.formBuilder.control('', []);
   newConfigTypeCtrl: FormControl = this.formBuilder.control(this.utilService.deviceConfigDataTypes[0], []);
@@ -48,6 +49,7 @@ export class EditDeviceComponent implements OnInit {
     	deviceName: this.deviceNameCtrl,
     	deviceToken: this.deviceTokenCtrl,
     	deviceEnabled: this.deviceEnabledCtrl,
+      deviceNotes: this.deviceNotesCtrl,
     	newConfigKey: this.newConfigKeyCtrl,
     	newConfigValue: this.newConfigValueCtrl,
     	newConfigType: this.newConfigTypeCtrl,
@@ -65,6 +67,7 @@ export class EditDeviceComponent implements OnInit {
         this.editForm.controls['deviceName'].setValue(this.device.name);
         this.editForm.controls['deviceToken'].setValue(this.device.token);
         this.editForm.controls['deviceEnabled'].setValue(this.device.enabled);
+        this.editForm.controls['deviceNotes'].setValue(this.device.notes);
       },
       error => {
         if (error.status === 404) {
@@ -115,6 +118,7 @@ export class EditDeviceComponent implements OnInit {
     this.device.name = this.editForm.controls['deviceName'].value;
     this.device.token = this.editForm.controls['deviceToken'].value;
     this.device.enabled = this.editForm.controls['deviceEnabled'].value;
+    this.device.notes = this.editForm.controls['deviceNotes'].value;
     this.dataService.updateDevice(this.device)
       .subscribe( data => {
         this.router.navigate(['devices/' + this.deviceId]);

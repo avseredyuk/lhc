@@ -14,7 +14,7 @@ import {Bootup} from "./model/bootup";
 import {PumpAction} from "./model/pump-action";
 import {SensorReport} from "./model/sensor-report";
 import {environment} from "../environments/environment";
-import {Crop, Season, SeasonStatistics} from "./model/season";
+import {Crop, Season, Statistics} from "./model/season";
 
 @Injectable({
   providedIn: 'root'
@@ -151,8 +151,12 @@ export class DataService {
     return this.http.get<ApiResult<Season>>(this.adminApiUrl + 'season/' + seasonId + '/name');
   }
 
-  getSeasonStatistics(seasonId): Observable<ApiResult<SeasonStatistics>> {
-    return this.http.get<ApiResult<SeasonStatistics>>(this.adminApiUrl + 'season/' + seasonId + '/stats');
+  getSeasonStatistics(seasonId): Observable<ApiResult<Statistics>> {
+    return this.http.get<ApiResult<Statistics>>(this.adminApiUrl + 'season/' + seasonId + '/stats');
+  }
+
+  getSeasonsStatistics(deviceId): Observable<ApiResult<Statistics>> {
+    return this.http.get<ApiResult<Statistics>>(this.adminApiUrl + 'seasons/' + deviceId + '/stats');
   }
 
   getSeason(seasonId): Observable<ApiResult<Season>> {

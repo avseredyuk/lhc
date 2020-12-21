@@ -9,42 +9,81 @@
 	<div class="card">
 		<div class="card-header"><h1>Seasons - {{ deviceName }}</h1></div>
 		<div class="card-body">
-			<div *ngIf="!hasData()" class="text-center spacer">
-				No data
-			</div>
-			<div *ngIf="hasData()">
-				<table class="table no-row-border">
-					<tbody>
-						<tr *ngFor="let season of seasons">
-							<td class="col-8 col-md-10 td-massive-list vertical-center for-small-centered">
-								<a class="a-massive-list" (click)="openSeason(season)" [routerLink]="">{{ season.name }}</a>
-							</td>
-							<td class="col-4 col-md-2 td-massive-list for-small-centered for-big-right-aligned">
-								<button class="btn btn-warning btn-md" type="button" (click)="editSeason(season)">
-									<i class="material-icons md-18">edit</i>
-								</button>
+			<div>
+				<div class="row">
+					<div class="col-12 col-lg-8">
+						<div class="card">
+							<div class="card-header"><h4>Seasons</h4></div>
+							<div class="card-body">
+								<div *ngIf="!hasData()" class="text-center spacer">
+									No data
+								</div>
+								<div *ngIf="hasData()">
+									<table class="table no-row-border">
+										<tbody>
+											<tr *ngFor="let season of seasons">
+												<td class="col-8 col-md-10 td-massive-list vertical-center for-small-centered">
+													<a class="a-massive-list" (click)="openSeason(season)" [routerLink]="">{{ season.name }}</a>
+												</td>
+												<td class="col-4 col-md-2 td-massive-list for-small-centered for-big-right-aligned">
+													<button class="btn btn-warning btn-md" type="button" (click)="editSeason(season)">
+														<i class="material-icons md-18">edit</i>
+													</button>
+													&nbsp;
+													<button class="btn btn-danger btn-md" type="button" (click)="deleteSeason(season)">
+														<i class="material-icons md-18">delete</i>
+													</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="col-md-12">
+									<nav aria-label="...">
+										<ul class="pagination pagination-lg justify-content-center">
+											<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
+												[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
+												currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
+												<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
 								&nbsp;
-								<button class="btn btn-danger btn-md" type="button" (click)="deleteSeason(season)">
-									<i class="material-icons md-18">delete</i>
-								</button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+								<button (click)="addSeason()" class="btn btn-info btn-lg" role="button">Add</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-lg-4">
+						<div class="card">
+							<div class="card-header"><h4>Statistics</h4></div>
+							<div class="card-body">
+								<div *ngIf="!hasStatsData()" class="text-center spacer-top-bottom">
+									No data
+								</div>
+								<div *ngIf="hasStatsData()">
+									<table class="table table-sm no-row-border no-bottom-margin">
+										<tbody>
+											<tr>
+												<td class="col-sm-6"><b>Total count:</b></td>
+												<td class="col-sm-6">{{stats.totalCount}}</td>
+											</tr>
+											<tr>
+												<td class="col-sm-6"><b>Total weight:</b></td>
+												<td class="col-sm-6">{{this.utilService.roundToTwo(stats.totalWeight)}}</td>
+											</tr>
+											<tr>
+												<td class="col-sm-6"><b>Average fruit weight:</b></td>
+												<td class="col-sm-6">{{this.utilService.roundToTwo(stats.avgCropWeight)}}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div class="col-md-12">
-				<nav aria-label="...">
-					<ul class="pagination pagination-lg justify-content-center">
-						<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
-						[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
-						currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
-						<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
-					</li>
-				</ul>
-			</nav>
 		</div>
-		&nbsp;
-		<button (click)="addSeason()" class="btn btn-info btn-lg" role="button">Add</button>
 	</div>
-</div>
 </div>

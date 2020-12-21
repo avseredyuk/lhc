@@ -23,4 +23,14 @@ public interface CropRepository extends JpaRepository<Crop, Long> {
     @Query("select sum(c.weight) from Crop c where c.season.id = ?1")
     Double weightSumBySeasonId(Long seasonId);
 
+    @Query("select sum(c.count) from Crop c " +
+            "join c.season s " +
+            "where c.season.device.id = ?1")
+    Long countSumByDeviceId(Long deviceId);
+
+    @Query("select sum(c.weight) from Crop c " +
+            "join c.season " +
+            "where c.season.device.id = ?1")
+    Double weightSumByDeviceId(Long deviceId);
+
 }

@@ -4,7 +4,7 @@ import {ComponentCommunicationService} from "../component-communication.service"
 import {ActivatedRoute, Router} from "@angular/router";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
 import {TokenCheckService} from "../token-check.service";
-import {Season} from "../model/season";
+import {Season, Statistics} from "../model/season";
 import {SidebarComponent} from "../sidebar/sidebar.component";
 import {UtilService} from "../util.service";
 
@@ -23,6 +23,7 @@ export class SeasonsComponent implements OnInit {
   @ViewChildren('tabHeader') tabHeaders: QueryList<any>;
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   deviceName: string;
+  stats: Statistics;
 
   constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService,
     private tokenCheckService: TokenCheckService, private route: ActivatedRoute, public utilService: UtilService) {
@@ -42,6 +43,10 @@ export class SeasonsComponent implements OnInit {
     }
 
     this.loadPageForDevice();
+
+    this.dataService.getSeasonsStatistics(this.deviceId).subscribe(
+      apiResult => this.stats = apiResult.data
+    );
 
     this.notifications = this.componentCommunicationService.getNotification();
     this.dataService.getDeviceName(this.deviceId).subscribe(
@@ -90,6 +95,10 @@ export class SeasonsComponent implements OnInit {
 
   hasData(): Boolean {
     return typeof this.seasons !== 'undefined' && this.seasons.length > 0;
+  }
+
+  hasStatsData(): Boolean {
+    return typeof this.stats !== 'undefined';
   }
 
   hasNotifications(): Boolean {

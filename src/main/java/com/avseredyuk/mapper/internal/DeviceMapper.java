@@ -18,6 +18,7 @@ public interface DeviceMapper {
     @Mapping(target = "token", source = "token")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "enabled", source = "enabled")
+    @Mapping(target = "notes", source = "notes")
     @Mapping(target = "config", source = "config")
     DeviceDto toDto(Device d);
 
@@ -29,6 +30,7 @@ public interface DeviceMapper {
     @Mapping(target = "token", source = "token")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "enabled", source = "enabled")
+    @Mapping(target = "notes", source = "notes")
     Device toModel(DeviceDto d);
 
     @Mapping(target = "token", source = "deviceToken")

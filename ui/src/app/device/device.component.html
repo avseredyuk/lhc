@@ -117,6 +117,25 @@
 								</div>
 							</div>
 						</div>
+						<div class="card">
+							<div class="card-header"><h4>Notes</h4></div>
+							<div class="card-body">
+								<div *ngIf="!hasNotes()" class="text-center">
+									No data
+								</div>
+								<div *ngIf="hasNotes()">
+									<table class="table table-sm no-row-border">
+										<tbody>
+											<tr>
+												<td class="td-pre-notes">
+													{{ device.notes }}
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

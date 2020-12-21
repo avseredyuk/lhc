@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChildren, QueryList, Renderer, ViewChild} from "@angular/core";
+import { Component, OnInit, ViewChildren, QueryList, ViewChild, Renderer2 } from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../data.service";
 import {PlantMaintenance} from "../model/plant-maintenance";
@@ -26,7 +26,7 @@ export class PlantMaintenanceComponent implements OnInit {
   @ViewChildren('tabHeader') tabHeaders: QueryList<any>;
   deviceName: string;
 
-  constructor(private router: Router, private dataService: DataService, private renderer: Renderer,
+  constructor(private router: Router, private dataService: DataService, private renderer: Renderer2,
     private route: ActivatedRoute, private componentCommunicationService: ComponentCommunicationService,
     private tokenCheckService: TokenCheckService, public utilService: UtilService) {
     this.route.params.subscribe(params => this.deviceId = params.id)

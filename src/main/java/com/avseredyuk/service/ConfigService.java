@@ -5,6 +5,8 @@ import com.avseredyuk.model.Config;
 import com.avseredyuk.model.Config.ConfigKey;
 import com.avseredyuk.repository.ConfigRepository;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +59,11 @@ public class ConfigService {
     }
     
     public Long getHoursCount() {
-        return Long.parseLong(this.getByKey(ConfigKey.HISTORY_SIZE_HOURS.toString()).getValue());
+        Config config = this.getByKey(ConfigKey.HISTORY_SIZE_HOURS.toString());
+        return Optional.ofNullable(config)
+                .map(Config::getValue)
+                .map(Long::parseLong)
+                .orElse(0L);
     }
     
 }
