@@ -71,7 +71,7 @@ public class DeviceController {
         deviceService.delete(deviceId);
     }
 
-    @PutMapping(value = "/{deviceId}/runPumpOnce")
+    @PutMapping(value = "/{deviceId}/run-pump-once")
     public ResponseEntity<ApiResult<Boolean>> runPumpOnce(@PathVariable Long deviceId) {
         return ResponseEntity.ok(new ApiResult<>(deviceConfigService.enableRunPumpOnceOrThrow(deviceId)));
     }

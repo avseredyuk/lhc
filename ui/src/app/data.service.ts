@@ -60,7 +60,7 @@ export class DataService {
   }
 
   enableRunPumpOnce(deviceId: number): Observable<ApiResult<Boolean>> {
-    return this.http.put<ApiResult<Boolean>>(this.adminApiUrl + 'devices/' + deviceId + '/runPumpOnce', '');
+    return this.http.put<ApiResult<Boolean>>(this.adminApiUrl + 'devices/' + deviceId + '/run-pump-once', '');
   }
 
   deleteDevice(device: Device) {
@@ -191,26 +191,26 @@ export class DataService {
   /* Pump Actions */
 
   getPumpActionsByDeviceId(deviceId, page): Observable<Page<PumpAction[]>> {
-    return this.http.get<Page<PumpAction[]>>(this.adminApiUrl + 'pumpactions?deviceId=' + deviceId + '&size=10&page=' + page);
+    return this.http.get<Page<PumpAction[]>>(this.adminApiUrl + 'pump-actions?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
   deletePumpAction(pumpAction) {
-    return this.http.delete(this.adminApiUrl + 'pumpactions/' + pumpAction.id);
+    return this.http.delete(this.adminApiUrl + 'pump-actions/' + pumpAction.id);
   }
 
   /* Sensor Reports */
 
   getSensorReportsByDeviceId(deviceId, page): Observable<Page<SensorReport[]>> {
-    return this.http.get<Page<SensorReport[]>>(this.adminApiUrl + 'sensorreports?deviceId=' + deviceId + '&size=10&page=' + page);
+    return this.http.get<Page<SensorReport[]>>(this.adminApiUrl + 'sensor-reports?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
   deleteSensorReport(sensorReport) {
-    return this.http.delete(this.adminApiUrl + 'sensorreports/' + sensorReport.id);
+    return this.http.delete(this.adminApiUrl + 'sensor-reports/' + sensorReport.id);
   }
 
   /* System */
 
   clearCache(): Observable<ApiResult<Boolean>> {
-    return this.http.post<ApiResult<Boolean>>(this.adminApiUrl + 'clearcache', '');
+    return this.http.post<ApiResult<Boolean>>(this.adminApiUrl + 'clear-cache', '');
   }
 }

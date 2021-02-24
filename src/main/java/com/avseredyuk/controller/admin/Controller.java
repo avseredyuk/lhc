@@ -96,29 +96,29 @@ public class Controller {
         bootupService.delete(bootupId);
     }
 
-    @GetMapping(value = "/pumpactions")
+    @GetMapping(value = "/pump-actions")
     public Page<PumpActionDto> getAllPumpActionsByDevice(@RequestParam Long deviceId,
                                                          @NotNull final Pageable pageable) {
         return pumpActionService.findAllByDeviceIdPaginated(deviceId, pageable);
     }
 
-    @DeleteMapping(value = "/pumpactions/{pumpActionId}")
+    @DeleteMapping(value = "/pump-actions/{pumpActionId}")
     public void deletePumpAction(@PathVariable Long pumpActionId) {
         pumpActionService.delete(pumpActionId);
     }
 
-    @GetMapping(value = "/sensorreports")
+    @GetMapping(value = "/sensor-reports")
     public Page<SensorDto> getAllSensorReportsByDevice(@RequestParam Long deviceId,
                                                        @NotNull final Pageable pageable) {
         return sensorReportService.findAllByDeviceIdPaginated(deviceId, pageable);
     }
 
-    @DeleteMapping(value = "/sensorreports/{sensorReportId}")
+    @DeleteMapping(value = "/sensor-reports/{sensorReportId}")
     public void deleteSensorReport(@PathVariable Long sensorReportId) {
         sensorReportService.delete(sensorReportId);
     }
 
-    @PostMapping(value = "/clearcache")
+    @PostMapping(value = "/clear-cache")
     public ResponseEntity<ApiResult<Boolean>> clearCache() {
         return ResponseEntity.ok(new ApiResult<>(cacheService.clearCache()));
     }
