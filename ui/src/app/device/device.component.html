@@ -8,7 +8,7 @@
 			</div>
 		</div>
 		<div class="card">
-			<div class="card-header"><h1><span class="for-big">Device details - </span>{{ device.name }}</h1></div>
+			<div class="card-header"><h1><span class="for-big">Device details - </span>{{ this.utilService.formatDeviceName(device.name, device.privateName) }}</h1></div>
 			<div class="card-body">
 				<div class="row">
 					<div class="col-12 col-lg-4">
@@ -24,6 +24,10 @@
 										<tr>
 											<td class="col-3"><b>Name:</b></td>
 											<td class="col-9">{{device.name}}</td>
+										</tr>
+										<tr>
+											<td class="col-3"><b>Private name:</b></td>
+											<td class="col-9">{{device.privateName}}</td>
 										</tr>
 										<tr>
 											<td class="col-3"><b>Token:</b></td>

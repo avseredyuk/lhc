@@ -22,7 +22,7 @@ public interface DeviceMapper {
     @Mapping(target = "config", source = "config")
     DeviceDto toDto(Device d);
 
-    DeviceDto toDtoNameOnly(Device.DeviceName deviceName);
+    DeviceDto toDtoNamesOnly(Device.DeviceNames deviceNames);
     
     List<DeviceDto> toDtoList(List<Device> d);
     

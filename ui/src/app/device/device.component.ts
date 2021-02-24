@@ -7,6 +7,7 @@ import {ApiResult} from "../model/api-result";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
 import {TokenCheckService} from "../token-check.service";
 import {SidebarComponent} from "../sidebar/sidebar.component";
+import {UtilService} from "../util.service";
 
 @Component({
   selector: 'app-device',
@@ -21,7 +22,7 @@ export class DeviceComponent implements OnInit {
   device: Device = new Device();
 
   constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService,
-    private route: ActivatedRoute, private tokenCheckService: TokenCheckService) {
+    private route: ActivatedRoute, private tokenCheckService: TokenCheckService, public utilService: UtilService) {
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 

@@ -45,10 +45,10 @@ public class DeviceController {
                 .orElseGet(ResponseEntity.notFound()::build);
     }
 
-    @GetMapping(value = "/{deviceId}/name")
-    public ResponseEntity<ApiResult<DeviceDto>> getDeviceName(@PathVariable Long deviceId) {
+    @GetMapping(value = "/{deviceId}/full-name")
+    public ResponseEntity<ApiResult<DeviceDto>> getDeviceFullName(@PathVariable Long deviceId) {
         return deviceService.findNameById(deviceId)
-                .map(device -> ResponseEntity.ok(new ApiResult<>(deviceMapper.toDtoNameOnly(device))))
+                .map(device -> ResponseEntity.ok(new ApiResult<>(deviceMapper.toDtoNamesOnly(device))))
                 .orElseGet(ResponseEntity.notFound()::build);
     }
 

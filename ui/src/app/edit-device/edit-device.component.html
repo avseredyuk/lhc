@@ -26,6 +26,10 @@
 												<td class="col-9"><input type="text" [formControl]="deviceNameCtrl" placeholder="device name" name="deviceName" class="form-control" id="deviceName" value="{{device.name}}"></td>
 											</tr>
 											<tr>
+												<td class="col-3"><b>Private name:</b></td>
+												<td class="col-9"><input type="text" [formControl]="devicePrivateNameCtrl" placeholder="device private name" name="devicePrivateName" class="form-control" id="devicePrivateName" value="{{device.privateName}}"></td>
+											</tr>
+											<tr>
 												<td class="col-3"><b>Token:</b></td>
 												<td class="col-9 breakable"><input type="text" [formControl]="deviceTokenCtrl" placeholder="device token" name="deviceToken" class="form-control" id="deviceToken" value="{{device.token}}"></td>
 											</tr>

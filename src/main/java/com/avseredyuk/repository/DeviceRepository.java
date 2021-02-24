@@ -13,7 +13,7 @@ public interface DeviceRepository extends CrudRepository<Device, Long> {
     Device findByName(String name);
     Device findByTokenAndEnabledTrue(String token);
     Optional<Device> findById(Long id);
-    Optional<Device.DeviceName> findNameById(Long deviceId);
+    Optional<Device.DeviceNames> findNameById(Long deviceId);
     Device findByIdAndEnabledTrue(Long id);
     List<Device> findByEnabledTrue();
     List<Device> findAllByOrderByEnabledDescNameAsc();

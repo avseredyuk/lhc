@@ -34,6 +34,9 @@ public class Device {
 
     @Column(name = "notes")
     private String notes;
+
+    @Column(name = "private_name")
+    private String privateName;
     
     @OneToMany(mappedBy = "device", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE},
             orphanRemoval = true)
@@ -54,8 +57,9 @@ public class Device {
                 .orElse(null);
     }
 
-    public interface DeviceName {
+    public interface DeviceNames {
         String getName();
+        String getPrivateName();
     }
     
 }

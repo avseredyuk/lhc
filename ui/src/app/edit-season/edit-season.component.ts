@@ -68,7 +68,7 @@ ngOnInit() {
       }
     );
     this.dataService.getDeviceName(this.deviceId).subscribe(
-      apiResult => this.deviceName = apiResult.data.name
+      apiResult => this.deviceName = this.utilService.formatDeviceName(apiResult.data.name, apiResult.data.privateName)
     );
   }
 

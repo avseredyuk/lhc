@@ -26,7 +26,7 @@ public class DeviceService {
         return deviceRepository.findById(id);
     }
 
-    public Optional<Device.DeviceName> findNameById(long id) {
+    public Optional<Device.DeviceNames> findNameById(long id) {
         return deviceRepository.findNameById(id);
     }
     

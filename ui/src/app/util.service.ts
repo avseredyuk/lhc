@@ -23,6 +23,10 @@ export class UtilService {
   public VALIDATION_PATTERN_COUNT: string = "[0-9]{1,5}";
   public VALIDATION_PATTERN_SEASON_NAME: string = ".{1,100}";
 
+  formatDeviceName(name: string, privateName: string) {
+    return privateName == null ? name : name + ' (' + privateName + ')';
+  }
+
   formatTimestamp(timestamp: number): string {
     var localeId = 'uk-UA';
     return new Date(timestamp).toLocaleString(localeId);

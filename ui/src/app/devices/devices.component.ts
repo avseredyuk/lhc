@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {Device} from "../model/device";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
 import {TokenCheckService} from "../token-check.service";
+import {UtilService} from "../util.service";
 
 @Component({
   selector: 'app-devices',
@@ -17,7 +18,7 @@ export class DevicesComponent implements OnInit {
   devices: Device[];
 
   constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService,
-    private tokenCheckService: TokenCheckService) { }
+    private tokenCheckService: TokenCheckService, public utilService: UtilService) { }
 
   ngOnInit() {
     if (!this.tokenCheckService.getRawToken()) {

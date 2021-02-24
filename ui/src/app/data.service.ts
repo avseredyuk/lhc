@@ -52,7 +52,7 @@ export class DataService {
   }
 
   getDeviceName(deviceId: number): Observable<ApiResult<Device>> {
-    return this.http.get<ApiResult<Device>>(this.adminApiUrl + 'devices/' + deviceId + '/name');
+    return this.http.get<ApiResult<Device>>(this.adminApiUrl + 'devices/' + deviceId + '/full-name');
   }
 
   createDevice(device: Device): Observable<ApiResult<Device>> {

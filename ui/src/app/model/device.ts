@@ -4,6 +4,7 @@ export class Device {
   name: string;
   enabled: boolean;
   notes: string;
+  privateName: string;
   config: Array<DeviceConfig>;
   exclusions: Array<DeviceReportDataExclusion>;
 }
