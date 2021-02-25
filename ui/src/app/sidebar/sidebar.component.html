@@ -10,12 +10,12 @@
 		</a>
 	</ng-container>
 	<ng-container>
-		<a routerLink="" [class.active]="currentUrl == '/'">
+		<a routerLink="" [class.active]="isStatusGroup()">
 			<i class="material-icons">details</i>
 		</a>
 	</ng-container>
 	<ng-container *ngIf="hasToken">
-		<a routerLink="/history" [class.active]="currentUrl == '/history'">
+		<a routerLink="/history" [class.active]="isHistoryGroup()">
 			<i class="material-icons">bar_chart</i>
 		</a>
 	</ng-container>
@@ -30,12 +30,12 @@
 		</a>
 	</ng-container>
 	<ng-container *ngIf="hasToken">
-		<a (click)="logoutWithConfirmation()" [class.active]="currentUrl == '/logout'">
+		<a (click)="logoutWithConfirmation()">
 			<i class="material-icons">exit_to_app</i>
 		</a>
 	</ng-container>
 	<ng-container *ngIf="!hasToken">
-		<a routerLink="/login" [class.active]="currentUrl == '/login'">
+		<a routerLink="/login" [class.active]="isLoginGroup()">
 			<i class="material-icons">account_circle</i>
 		</a>
 	</ng-container>

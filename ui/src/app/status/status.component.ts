@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewChildren, QueryList} from "@angular/core";
 import {Status} from "../model/status";
-import {DataService} from "../data.service";
+import {DataService} from "../service/data.service";
 import {Gauge} from "src/assets/gauge.min.js";
-import {UtilService} from "../util.service";
+import {UtilService} from "../service/util.service";
 
 @Component({
 	selector: 'app-status',

@@ -1,4 +1,4 @@
-  import {
+import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
@@ -10,7 +10,7 @@ import {Observable} from "rxjs/internal/Observable";
 import {Injectable} from "@angular/core";
 import {tap} from "rxjs/operators";
 import {Router} from "@angular/router";
-import {TokenCheckService} from "../token-check.service";
+import {TokenCheckService} from "../service/token-check.service";
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {

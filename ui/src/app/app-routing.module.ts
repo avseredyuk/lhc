@@ -1,31 +1,35 @@
-import {NgModule} from "@angular/core";
-import {Routes, RouterModule} from "@angular/router";
+import {BootupsComponent} from "./bootups/bootups.component";
+import {CropAddComponent} from "./crop/add/add.component";
+import {CropEditComponent} from "./crop/edit/edit.component";
+import {DeviceAddComponent} from "./device/add/add.component";
+import {DeviceEditComponent} from "./device/edit/edit.component";
+import {DeviceListComponent} from "./device/list/list.component";
+import {DeviceViewComponent} from "./device/view/view.component";
+import {HistoryComponent} from "./history/history.component";
 import {LoginComponent} from "./login/login.component";
 import {LogoutComponent} from "./logout/logout.component";
-import {DevicesComponent} from "./devices/devices.component";
-import {DeviceComponent} from "./device/device.component";
-import {EditDeviceComponent} from "./edit-device/edit-device.component";
-import {AddDeviceComponent} from "./add-device/add-device.component";
-import {HistoryComponent} from "./history/history.component";
-import {PlantMaintenanceComponent} from "./plant-maintenance/plant-maintenance.component";
-import {AddPlantMaintenanceComponent} from "./add-plant-maintenance/add-plant-maintenance.component";
-import {EditPlantMaintenanceComponent} from "./edit-plant-maintenance/edit-plant-maintenance.component";
-import {SettingsComponent} from "./settings/settings.component";
-import {AddSettingsComponent} from "./add-settings/add-settings.component";
-import {EditSettingsComponent} from "./edit-settings/edit-settings.component";
-import {StatusComponent} from "./status/status.component";
+import {NgModule} from "@angular/core";
+import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {PingsComponent} from "./pings/pings.component";
-import {BootupsComponent} from "./bootups/bootups.component";
+import {PlantMaintenanceAddComponent} from "./plant-maintenance/add/add.component";
+import {PlantMaintenanceEditComponent} from "./plant-maintenance/edit/edit.component";
+import {PlantMaintenanceListComponent} from "./plant-maintenance/list/list.component";
 import {PumpActionsComponent} from "./pump-actions/pump-actions.component";
+import {Routes, RouterModule} from "@angular/router";
+import {SeasonAddComponent} from "./season/add/add.component";
+import {SeasonEditComponent} from "./season/edit/edit.component";
+import {SeasonListComponent} from "./season/list/list.component";
+import {SeasonViewComponent} from "./season/view/view.component";
 import {SensorReportsComponent} from "./sensor-reports/sensor-reports.component";
-import {SeasonsComponent} from "./seasons/seasons.component";
-import {AddSeasonComponent} from "./add-season/add-season.component";
-import {SeasonComponent} from "./season/season.component";
-import {AddCropComponent} from "./add-crop/add-crop.component";
-import {EditCropComponent} from "./edit-crop/edit-crop.component";
-import {EditSeasonComponent} from "./edit-season/edit-season.component";
+import {SettingsAddComponent} from "./settings/add/add.component";
+import {SettingsEditComponent} from "./settings/edit/edit.component";
+import {SettingsListComponent} from "./settings/list/list.component";
+import {StatusComponent} from "./status/status.component";
 
 const routes: Routes = [
+	
+	// Order here is important
+	
 	{
 		path: 'login',
 		component: LoginComponent
@@ -36,31 +40,31 @@ const routes: Routes = [
 	},
 	{
 		path: 'devices',
-		component: DevicesComponent
+		component: DeviceListComponent
+	},
+	{
+		path: 'devices/add',
+		component: DeviceAddComponent
 	},
 	{
 		path: 'devices/:id',
-		component: DeviceComponent
+		component: DeviceViewComponent
 	},
 	{
 		path: 'devices/:id/edit',
-		component: EditDeviceComponent
-	},
-	{
-		path: 'add-device',
-		component: AddDeviceComponent
+		component: DeviceEditComponent
 	},
 	{
 		path: 'settings',
-		component: SettingsComponent
+		component: SettingsListComponent
 	},
 	{
-		path: 'add-settings',
-		component: AddSettingsComponent
+		path: 'settings/add',
+		component: SettingsAddComponent
 	},
 	{
-		path: 'edit-settings/:key',
-		component: EditSettingsComponent
+		path: 'settings/:key/edit',
+		component: SettingsEditComponent
 	},
 	{
 		path: 'history',
@@ -68,15 +72,15 @@ const routes: Routes = [
 	},
 	{
 		path: 'devices/:id/maintenance',
-		component: PlantMaintenanceComponent
+		component: PlantMaintenanceListComponent
 	},
 	{
-		path: 'add-plant-maintenance/:id',
-		component: AddPlantMaintenanceComponent
+		path: 'devices/:id/maintenance/add',
+		component: PlantMaintenanceAddComponent
 	},
 	{
-		path: 'edit-plant-maintenance/:id/:deviceId',
-		component: EditPlantMaintenanceComponent
+		path: 'devices/:id/maintenance/:maintenanceid/edit',
+		component: PlantMaintenanceEditComponent
 	},
 	{
 		path: 'devices/:id/pings',
@@ -96,31 +100,39 @@ const routes: Routes = [
 	},
 	{
 		path: 'devices/:id/seasons',
-		component: SeasonsComponent
+		component: SeasonListComponent
 	},
 	{
-		path: 'add-season/:deviceid',
-		component: AddSeasonComponent
+		path: 'devices/:id/seasons/add',
+		component: SeasonAddComponent
 	},
 	{
 		path: 'devices/:id/seasons/:seasonid',
-		component: SeasonComponent
+		component: SeasonViewComponent
 	},
 	{
-		path: 'add-crop/:deviceid/:seasonid',
-		component: AddCropComponent
+		path: 'devices/:id/seasons/:seasonid/crop/add',
+		component: CropAddComponent
 	},
 	{
-		path: 'edit-crop/:deviceid/:seasonid/:cropid',
-		component: EditCropComponent
+		path: 'devices/:id/seasons/:seasonid/crop/:cropid/edit',
+		component: CropEditComponent
 	},
 	{
-		path: 'edit-season/:deviceid/:seasonid',
-		component: EditSeasonComponent
+		path: 'devices/:id/seasons/:seasonid/edit',
+		component: SeasonEditComponent
+	},
+	{
+		path: 'status',
+		component: StatusComponent
 	},
 	{
 		path: '',
-		component: StatusComponent
+		redirectTo: '/status', pathMatch: 'full'
+	},
+	{   
+		path: '**', 
+	    component: PageNotFoundComponent
 	}
 ];
 

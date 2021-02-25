@@ -1,8 +1,8 @@
 import {Component, OnInit} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {DataService} from "../data.service";
-import {TokenCheckService} from "../token-check.service";
+import {DataService} from "../service/data.service";
+import {TokenCheckService} from "../service/token-check.service";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
 
 @Component({

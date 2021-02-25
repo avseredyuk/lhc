@@ -1,65 +1,67 @@
-import {BrowserModule} from "@angular/platform-browser";
-import {NgModule} from "@angular/core";
-import {AppRoutingModule} from "./app-routing.module";
 import {AppComponent} from "./app.component";
-import {SidebarComponent} from "./sidebar/sidebar.component";
+import {AppRoutingModule} from "./app-routing.module";
+import {BootupsComponent} from './bootups/bootups.component';
+import {BrowserModule} from "@angular/platform-browser";
+import {CropAddComponent} from './crop/add/add.component';
+import {CropEditComponent} from './crop/edit/edit.component';
+import {DataService} from "./service/data.service";
+import {DeviceAddComponent} from "./device/add/add.component";
+import {DeviceEditComponent} from './device/edit/edit.component';
+import {DeviceListComponent} from "./device/list/list.component";
+import {DeviceViewComponent} from "./device/view/view.component";
+import {HistoryComponent} from "./history/history.component";
 import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
-import {TokenInterceptor} from "./core/interceptor";
-import {ReactiveFormsModule} from "@angular/forms";
 import {LoginComponent} from "./login/login.component";
 import {LogoutComponent} from "./logout/logout.component";
-import {DataService} from "./data.service";
-import {DevicesComponent} from "./devices/devices.component";
-import {DeviceComponent} from "./device/device.component";
-import {AddDeviceComponent} from "./add-device/add-device.component";
-import {HistoryComponent} from "./history/history.component";
-import {SettingsComponent} from "./settings/settings.component";
+import {NgModule} from "@angular/core";
+import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
+import {PingsComponent} from './pings/pings.component';
+import {PlantMaintenanceAddComponent} from "./plant-maintenance/add/add.component";
+import {PlantMaintenanceEditComponent} from "./plant-maintenance/edit/edit.component";
+import {PlantMaintenanceListComponent} from "./plant-maintenance/list/list.component";
+import {PumpActionsComponent} from './pump-actions/pump-actions.component';
+import {ReactiveFormsModule} from "@angular/forms";
+import {SeasonAddComponent} from './season/add/add.component';
+import {SeasonEditComponent} from './season/edit/edit.component';
+import {SeasonListComponent} from './season/list/list.component';
+import {SeasonViewComponent} from './season/view/view.component';
+import {SensorReportsComponent} from './sensor-reports/sensor-reports.component';
+import {SettingsAddComponent} from './settings/add/add.component';
+import {SettingsEditComponent} from './settings/edit/edit.component';
+import {SettingsListComponent} from "./settings/list/list.component";
+import {SidebarComponent} from "./sidebar/sidebar.component";
 import {StatusComponent} from "./status/status.component";
-import {PlantMaintenanceComponent} from "./plant-maintenance/plant-maintenance.component";
-import {AddPlantMaintenanceComponent} from "./add-plant-maintenance/add-plant-maintenance.component";
-import {EditPlantMaintenanceComponent} from "./edit-plant-maintenance/edit-plant-maintenance.component";
-import { PingsComponent } from './pings/pings.component';
-import { PumpActionsComponent } from './pump-actions/pump-actions.component';
-import { SensorReportsComponent } from './sensor-reports/sensor-reports.component';
-import { EditSettingsComponent } from './edit-settings/edit-settings.component';
-import { AddSettingsComponent } from './add-settings/add-settings.component';
-import { EditDeviceComponent } from './edit-device/edit-device.component';
-import { BootupsComponent } from './bootups/bootups.component';
-import { SeasonsComponent } from './seasons/seasons.component';
-import { AddSeasonComponent } from './add-season/add-season.component';
-import { SeasonComponent } from './season/season.component';
-import { AddCropComponent } from './add-crop/add-crop.component';
-import { EditCropComponent } from './edit-crop/edit-crop.component';
-import { EditSeasonComponent } from './edit-season/edit-season.component';
+import {TokenInterceptor} from "./core/interceptor";
 
 @NgModule({
   declarations: [
     AppComponent,
-    SidebarComponent,
+    BootupsComponent,
+    CropAddComponent,
+    CropEditComponent,
+    DeviceAddComponent,
+    DeviceEditComponent,
+    DeviceListComponent,
+    DeviceViewComponent,
+    HistoryComponent,
     LoginComponent,
     LogoutComponent,
-    DevicesComponent,
-    DeviceComponent,
-    AddDeviceComponent,
-    HistoryComponent,
-    SettingsComponent,
-    StatusComponent,
-    PlantMaintenanceComponent,
-    AddPlantMaintenanceComponent,
-    EditPlantMaintenanceComponent,
+    PageNotFoundComponent,
     PingsComponent,
+    PlantMaintenanceAddComponent,
+    PlantMaintenanceEditComponent,
+    PlantMaintenanceListComponent,
     PumpActionsComponent,
+    SeasonAddComponent,
+    SeasonEditComponent,
+    SeasonListComponent,
+    SeasonViewComponent,
     SensorReportsComponent,
-    EditSettingsComponent,
-    AddSettingsComponent,
-    EditDeviceComponent,
-    BootupsComponent,
-    SeasonsComponent,
-    AddSeasonComponent,
-    SeasonComponent,
-    AddCropComponent,
-    EditCropComponent,
-    EditSeasonComponent,
+    SettingsAddComponent,
+    SettingsEditComponent,
+    SettingsListComponent,
+    SidebarComponent,
+    StatusComponent,
   ],
   imports: [
     BrowserModule,

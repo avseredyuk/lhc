@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AppNotification} from "../model/app-notification";
-import {DataService} from "../data.service";
-import {TokenCheckService} from "../token-check.service";
-import {UtilService} from "../util.service";
+import {DataService} from "../service/data.service";
+import {TokenCheckService} from "../service/token-check.service";
+import {UtilService} from "../service/util.service";
 import {PumpAction} from "../model/pump-action";
 import {SidebarComponent} from "../sidebar/sidebar.component";
 

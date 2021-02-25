@@ -1,0 +1,37 @@
+	<app-sidebar></app-sidebar>
+	<div class="content">
+		<div *ngIf="hasNotifications()">
+			<div *ngFor="let notification of notifications" role="alert" class="alert alert-dismissible" [ngClass]="{'alert-warning': notification.isError(), 'alert-success': !notification.isError()}">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				{{ notification.message }}
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-header"><h1>Devices</h1></div>
+			<div class="card-body">
+				<div *ngIf="!hasData()" class="text-center spacer">
+					No data
+				</div>
+				<div *ngIf="hasData()">
+					<table class="table no-row-border">
+						<tbody>
+							<tr *ngFor="let device of devices">
+								<td class="td-device vertical-center">
+									<span class="dot"
+										[ngClass]="{'device-enabled': device.enabled, 'device-disabled': !device.enabled}"></span>
+									&nbsp;<a routerLink="/devices/{{device.id}}">{{ this.utilService.formatDeviceName(device.name, device.privateName) }}</a>
+								</td>
+                				<td class="td-device text-right">
+                					<button class="btn btn-danger btn-md" type="button" (click)="deleteDevice(device)">
+                    					<i class="material-icons md-18">delete</i>
+                					</button>
+                				</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				&nbsp;
+				<button (click)="addDevice()" class="btn btn-info btn-lg" role="button">Add</button>
+			</div>
+		</div>
+	</div>

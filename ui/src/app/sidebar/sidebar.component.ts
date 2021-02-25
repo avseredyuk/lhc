@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Router, NavigationEnd} from "@angular/router";
-import {TokenCheckService} from "../token-check.service";
+import {TokenCheckService} from "../service/token-check.service";
 
 @Component({
   selector: 'app-sidebar',
@@ -24,19 +24,11 @@ export class SidebarComponent implements OnInit {
 
   isDeviceGroup(): Boolean {
     let arr = [
-    "/devices", // list
-    "/add-device", // add
-    "/devices/", // view
-    "/add-plant-maintenance", // add plaint maintenance -- this shoud be part of view url
-    "/edit-plant-maintenance",  // edit plaint maintenance -- this shoud be part of view url
-    "/add-season",
-    "/add-crop",
-    "/edit-season",
-    "/edit-crop"
+    "/devices"
     ];
     if (this.currentUrl) {
       for (var i = 0, len = arr.length; i < len; i++) {
-        if (this.currentUrl.includes(arr[i])) {
+        if (this.currentUrl.startsWith(arr[i])) {
           return true;
         }
       }
@@ -46,13 +38,53 @@ export class SidebarComponent implements OnInit {
 
   isSettingsGroup(): Boolean {
     let arr = [
-    "/settings", // list
-    "/edit-settings", // edit
-    "/add-settings" // add
+      "/settings"
     ];
     if (this.currentUrl) {
       for (var i = 0, len = arr.length; i < len; i++) {
-        if (this.currentUrl.includes(arr[i])) {
+        if (this.currentUrl.startsWith(arr[i])) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  isStatusGroup(): Boolean {
+    let arr = [
+      "/status"
+    ];
+    if (this.currentUrl) {
+      for (var i = 0, len = arr.length; i < len; i++) {
+        if (this.currentUrl.startsWith(arr[i])) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  isHistoryGroup(): Boolean {
+    let arr = [
+      "/history"
+    ];
+    if (this.currentUrl) {
+      for (var i = 0, len = arr.length; i < len; i++) {
+        if (this.currentUrl.startsWith(arr[i])) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  isLoginGroup(): Boolean {
+    let arr = [
+      "/login"
+    ];
+    if (this.currentUrl) {
+      for (var i = 0, len = arr.length; i < len; i++) {
+        if (this.currentUrl.startsWith(arr[i])) {
           return true;
         }
       }
