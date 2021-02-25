@@ -27,7 +27,6 @@ export class PlantMaintenanceAddComponent {
   newDetailValueCtrl: FormControl = this.formBuilder.control('', [])
   newDetails: Array<PlantMaintenanceDetail> = [];
   deviceId: number;
-  deviceName: string;
   pageNumber: number;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
@@ -66,10 +65,6 @@ export class PlantMaintenanceAddComponent {
         detail.id = null;
       });
     }
-
-    this.dataService.getDeviceName(this.deviceId).subscribe(
-      apiResult => this.deviceName = this.utilService.formatDeviceName(apiResult.data.name, apiResult.data.privateName)
-    );
   }
 
   addDetail() {

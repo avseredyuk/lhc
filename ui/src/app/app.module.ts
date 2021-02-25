@@ -8,6 +8,7 @@ import {DataService} from "./service/data.service";
 import {DeviceAddComponent} from "./device/add/add.component";
 import {DeviceEditComponent} from './device/edit/edit.component';
 import {DeviceListComponent} from "./device/list/list.component";
+import {DeviceNameHeaderComponent} from './device-name-header/device-name-header.component';
 import {DeviceViewComponent} from "./device/view/view.component";
 import {HistoryComponent} from "./history/history.component";
 import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
@@ -42,6 +43,7 @@ import {TokenInterceptor} from "./core/interceptor";
     DeviceAddComponent,
     DeviceEditComponent,
     DeviceListComponent,
+    DeviceNameHeaderComponent,
     DeviceViewComponent,
     HistoryComponent,
     LoginComponent,

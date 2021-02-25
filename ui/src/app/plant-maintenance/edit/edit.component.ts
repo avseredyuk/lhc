@@ -31,7 +31,6 @@ export class PlantMaintenanceEditComponent {
   newDetailKeyCtrl: FormControl = this.formBuilder.control('', []);
   newDetailValueCtrl: FormControl = this.formBuilder.control('', []);
   deviceId: number;
-  deviceName: string;
   pageNumber: number;
   newDate: Date;
   newTime: Date;
@@ -85,9 +84,6 @@ export class PlantMaintenanceEditComponent {
         }
         this.router.navigate(['maintenance']);
       }
-    );
-    this.dataService.getDeviceName(this.deviceId).subscribe(
-      apiResult => this.deviceName = this.utilService.formatDeviceName(apiResult.data.name, apiResult.data.privateName)
     );
   }
 

@@ -24,7 +24,6 @@ export class PlantMaintenanceListComponent implements OnInit {
   pageNumber: number = 1;
   totalPages: number;
   @ViewChildren('tabHeader') tabHeaders: QueryList<any>;
-  deviceName: string;
 
   constructor(private router: Router, private dataService: DataService, private renderer: Renderer2,
     private route: ActivatedRoute, private componentCommunicationService: ComponentCommunicationService,
@@ -47,9 +46,6 @@ export class PlantMaintenanceListComponent implements OnInit {
     this.loadPageForDevice();
 
   	this.notifications = this.componentCommunicationService.getNotification();
-    this.dataService.getDeviceName(this.deviceId).subscribe(
-      apiResult => this.deviceName = this.utilService.formatDeviceName(apiResult.data.name, apiResult.data.privateName)
-    );
   }
 
   loadPageForDevice() {

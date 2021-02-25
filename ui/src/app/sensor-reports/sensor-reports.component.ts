@@ -19,7 +19,6 @@ export class SensorReportsComponent {
   totalPages: number;
   pageNumber: number = 1;
   deviceId: number;
-  deviceName: string;
 
   constructor(private router: Router, private dataService: DataService, private tokenCheckService: TokenCheckService,
   	private route: ActivatedRoute, public utilService: UtilService) {
@@ -33,9 +32,6 @@ export class SensorReportsComponent {
     }
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
     this.loadPageForDevice();
-    this.dataService.getDeviceName(this.deviceId).subscribe(
-    	apiResult => this.deviceName = this.utilService.formatDeviceName(apiResult.data.name, apiResult.data.privateName)
-    );
   }
 
   loadPageForDevice() {

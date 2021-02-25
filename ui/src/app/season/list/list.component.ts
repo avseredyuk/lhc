@@ -22,7 +22,6 @@ export class SeasonListComponent implements OnInit {
   totalPages: number;
   @ViewChildren('tabHeader') tabHeaders: QueryList<any>;
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
-  deviceName: string;
   stats: Statistics;
 
   constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService,
@@ -49,9 +48,6 @@ export class SeasonListComponent implements OnInit {
     );
 
     this.notifications = this.componentCommunicationService.getNotification();
-    this.dataService.getDeviceName(this.deviceId).subscribe(
-      apiResult => this.deviceName = this.utilService.formatDeviceName(apiResult.data.name, apiResult.data.privateName)
-    );
   }
 
   loadPageForDevice() {

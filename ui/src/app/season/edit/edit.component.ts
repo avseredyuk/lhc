@@ -26,7 +26,6 @@ export class SeasonEditComponent implements OnInit {
   nameCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_SEASON_NAME)]);
   seasonId: number;
   deviceId: number;
-  deviceName: string;
   pageNumber: number;
 
     constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService, private route: ActivatedRoute,
@@ -66,9 +65,6 @@ ngOnInit() {
         }
         this.router.navigate(['devices/' + this.deviceId + '/seasons']);
       }
-    );
-    this.dataService.getDeviceName(this.deviceId).subscribe(
-      apiResult => this.deviceName = this.utilService.formatDeviceName(apiResult.data.name, apiResult.data.privateName)
     );
   }
 

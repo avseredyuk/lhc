@@ -25,7 +25,6 @@ export class CropAddComponent implements OnInit {
   seasonName: string;
   deviceId: number;
   seasonId: number;
-  deviceName: string;
   pageNumber: number;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,

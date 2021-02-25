@@ -7,7 +7,7 @@
 		</div>
 	</div>
 	<div class="card">
-		<div class="card-header"><h1>Bootups - {{ deviceName }}</h1></div>
+		<div class="card-header"><h1>Bootups - <device-name-header [deviceId]="deviceId"></device-name-header></h1></div>
 		<div class="card-body">
 			<div class="tab-content">
 				<div *ngIf="!hasData()" class="text-center spacer spacer-bottom">

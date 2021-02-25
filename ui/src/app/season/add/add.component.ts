@@ -22,7 +22,6 @@ export class SeasonAddComponent implements OnInit {
   addForm: FormGroup;
   nameCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
   deviceId: number;
-  deviceName: string;
   pageNumber: number;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
@@ -46,10 +45,6 @@ export class SeasonAddComponent implements OnInit {
     this.addForm = this.formBuilder.group({
     	name: this.nameCtrl
     });
-
-    this.dataService.getDeviceName(this.deviceId).subscribe(
-      apiResult => this.deviceName = this.utilService.formatDeviceName(apiResult.data.name, apiResult.data.privateName)
-    );
   }
 
   onSubmit() {
