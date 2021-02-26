@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, QueryList, ViewChild, Renderer2 } from "@angular/core";
+import {Component, OnInit, ViewChild, Renderer2} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../service/data.service";
 import {PlantMaintenance} from "../../model/plant-maintenance";
@@ -23,7 +23,6 @@ export class PlantMaintenanceListComponent implements OnInit {
   deviceId: number;
   pageNumber: number = 1;
   totalPages: number;
-  @ViewChildren('tabHeader') tabHeaders: QueryList<any>;
 
   constructor(private router: Router, private dataService: DataService, private renderer: Renderer2,
     private route: ActivatedRoute, private componentCommunicationService: ComponentCommunicationService,

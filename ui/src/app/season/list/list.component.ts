@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChildren, QueryList, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {DataService} from "../../service/data.service";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -20,7 +20,6 @@ export class SeasonListComponent implements OnInit {
   deviceId: number;
   pageNumber: number = 1;
   totalPages: number;
-  @ViewChildren('tabHeader') tabHeaders: QueryList<any>;
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   stats: Statistics;
 
@@ -84,8 +83,11 @@ export class SeasonListComponent implements OnInit {
       this.dataService.deleteSeason(season.id).subscribe(
         data => {
           this.loadPageForDevice();
+          this.dataService.getSeasonsStatistics(this.deviceId).subscribe(apiResult => 
+            this.stats = apiResult.data
+          );
         }
-        );
+      );
     }
   }
 

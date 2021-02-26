@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, QueryList, ViewChild, Renderer2 } from "@angular/core";
+import {Component, OnInit, ViewChild, Renderer2} from "@angular/core";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {DataService} from "../../service/data.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -25,7 +25,6 @@ export class SeasonViewComponent implements OnInit {
   seasonName: string;
   pageNumber: number = 1;
   totalPages: number;
-  @ViewChildren('tabHeader') tabHeaders: QueryList<any>;
   cropsForSeason: Array<Crop> = [];
   stats: Statistics;
 
@@ -41,7 +40,7 @@ export class SeasonViewComponent implements OnInit {
       return;
     }
 
-	this.notifications = this.componentCommunicationService.getNotification();
+	  this.notifications = this.componentCommunicationService.getNotification();
 
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId + '/seasons']);});
 
@@ -85,8 +84,11 @@ export class SeasonViewComponent implements OnInit {
       this.dataService.deleteCrop(cropId).subscribe(
         data => {
           this.loadPageForSeason();
+          this.dataService.getSeasonStatistics(this.seasonId).subscribe(apiResult => 
+            this.stats = apiResult.data
+          );
         }
-        );
+      );
     }
   }
 
