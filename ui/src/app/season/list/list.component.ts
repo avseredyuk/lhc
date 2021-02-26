@@ -1,3 +1,4 @@
+import {BaseComponent} from "../../base/base.component";
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {DataService} from "../../service/data.service";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
@@ -13,9 +14,8 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class SeasonListComponent implements OnInit {
+export class SeasonListComponent extends BaseComponent implements OnInit {
 
-  notifications: Array<AppNotification> = [];
   seasons: Season[];
   deviceId: number;
   pageNumber: number = 1;
@@ -23,12 +23,14 @@ export class SeasonListComponent implements OnInit {
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   stats: Statistics;
 
-  constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService,
+  constructor(public router: Router, private dataService: DataService, public componentCommunicationService: ComponentCommunicationService,
     private tokenCheckService: TokenCheckService, private route: ActivatedRoute, public utilService: UtilService) {
+    super(router, componentCommunicationService);
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit() {
+    super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
@@ -45,17 +47,13 @@ export class SeasonListComponent implements OnInit {
     this.dataService.getSeasonsStatistics(this.deviceId).subscribe(
       apiResult => this.stats = apiResult.data
     );
-
-    this.notifications = this.componentCommunicationService.getNotification();
   }
 
   loadPageForDevice() {
-    this.dataService.getSeasonsByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(
-      seasons => {
-        this.seasons = seasons.content;
-        this.totalPages = seasons.totalPages;
-      }
-    );
+    this.dataService.getSeasonsByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(seasons => {
+      this.seasons = seasons.content;
+      this.totalPages = seasons.totalPages;
+    });
   }
 
   loadPage(p) {
@@ -80,14 +78,13 @@ export class SeasonListComponent implements OnInit {
 
   deleteSeason(season: Season) {
     if (confirm('Are you sure you want to delete season?')) {
-      this.dataService.deleteSeason(season.id).subscribe(
-        data => {
-          this.loadPageForDevice();
-          this.dataService.getSeasonsStatistics(this.deviceId).subscribe(apiResult => 
-            this.stats = apiResult.data
-          );
-        }
-      );
+      this.dataService.deleteSeason(season.id).subscribe(data => {
+        this.notificateThisPage([new AppNotification('Deleted season: ' + season.name, AppNotificationType.SUCCESS)]);
+        this.loadPageForDevice();
+        this.dataService.getSeasonsStatistics(this.deviceId).subscribe(apiResult => 
+          this.stats = apiResult.data
+        );
+      });
     }
   }
 
@@ -97,10 +94,6 @@ export class SeasonListComponent implements OnInit {
 
   hasStatsData(): Boolean {
     return typeof this.stats !== 'undefined';
-  }
-
-  hasNotifications(): Boolean {
-    return typeof this.notifications !== 'undefined' && this.notifications.length > 0;
   }
 
 }

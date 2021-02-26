@@ -1,5 +1,6 @@
 import {AppComponent} from "./app.component";
 import {AppRoutingModule} from "./app-routing.module";
+import {BaseComponent} from './base/base.component';
 import {BootupsComponent} from './bootups/bootups.component';
 import {BrowserModule} from "@angular/platform-browser";
 import {CropAddComponent} from './crop/add/add.component';
@@ -37,6 +38,7 @@ import {TokenInterceptor} from "./core/interceptor";
 @NgModule({
   declarations: [
     AppComponent,
+    BaseComponent,
     BootupsComponent,
     CropAddComponent,
     CropEditComponent,

@@ -1,3 +1,4 @@
+import {BaseComponent} from "../../base/base.component";
 import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {Configuration} from "../../model/configuration";
@@ -12,44 +13,41 @@ import {ComponentCommunicationService} from "../../service/component-communicati
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class SettingsListComponent implements OnInit {
+export class SettingsListComponent extends BaseComponent implements OnInit {
 
   configurations: Configuration[];
-  notifications: Array<AppNotification> = [];
 
-  constructor(private router: Router, private dataService: DataService, private tokenCheckService: TokenCheckService,
-    private componentCommunicationService: ComponentCommunicationService) { }
+  constructor(public router: Router, private dataService: DataService, private tokenCheckService: TokenCheckService,
+    public componentCommunicationService: ComponentCommunicationService) {
+    super(router, componentCommunicationService);
+  }
 
   ngOnInit() {
+    super.ngOnInit();
     if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
     }
 
-    this.notifications = this.componentCommunicationService.getNotification();
-
     this.loadData();
   }
 
   loadData() {
-    this.dataService.getConfiguration().subscribe(
-      data => this.configurations = data
-     );
+    this.dataService.getConfiguration().subscribe(data => 
+      this.configurations = data
+    );
   }
 
   clearCache() {
-    this.dataService.clearCache().subscribe(
-      (data: ApiResult<Boolean>) => {
-        this.notifications = [new AppNotification('Cache cleared', AppNotificationType.SUCCESS)];
-      },
-      error => {
-        if (error.status === 400) {
-          this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
-        } else {
-          this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
-        }
+    this.dataService.clearCache().subscribe((data: ApiResult<Boolean>) => {
+      this.notificateThisPage([new AppNotification('Cache cleared', AppNotificationType.SUCCESS)]);
+    }, error => {
+      if (error.status === 400) {
+        this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
+      } else {
+        this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
       }
-      );
+    });
   }
 
   editSettings(configuration: Configuration) {
@@ -62,29 +60,22 @@ export class SettingsListComponent implements OnInit {
 
   deleteSettings(configuration: Configuration) {
     if (confirm('Are you sure you want to delete configuration "' + configuration.key + '" ?')) {
-      this.dataService.deleteConfiguration(configuration).subscribe(
-      data => {
-        this.notifications = [new AppNotification('Deleted configuration with key: ' + configuration.key, AppNotificationType.SUCCESS)];
+      this.dataService.deleteConfiguration(configuration).subscribe(data => {
+        this.notificateThisPage([new AppNotification('Deleted configuration with key: ' + configuration.key, AppNotificationType.SUCCESS)]);
         this.loadData();
-      },
-      error => {
+      }, error => {
         if (error.status === 400) {
-          this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
+          this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
         } else {
-          this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
+          this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
         }
         this.loadData();
       });
     }
-
   }
 
   hasData(): Boolean {
     return typeof this.configurations !== 'undefined' && this.configurations.length > 0;
-  }
-
-  hasNotifications(): Boolean {
-    return typeof this.notifications !== 'undefined' && this.notifications.length > 0;
   }
 
 }

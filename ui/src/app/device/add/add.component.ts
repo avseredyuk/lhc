@@ -1,4 +1,5 @@
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
+import {BaseComponent} from "../../base/base.component";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {DataService} from "../../service/data.service";
@@ -13,19 +14,21 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
-export class DeviceAddComponent implements OnInit {
+export class DeviceAddComponent extends BaseComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
-  notifications: Array<AppNotification> = [];
   addForm: FormGroup;
   nameCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_DEVICE_NAME)]);
   tokenCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_DEVICE_TOKEN)]);
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
+  constructor(private formBuilder: FormBuilder, public router: Router, private dataService: DataService,
     private tokenCheckService: TokenCheckService, private utilService: UtilService,
-    private componentCommunicationService: ComponentCommunicationService) { }
+    public componentCommunicationService: ComponentCommunicationService) {
+    super(router, componentCommunicationService);
+  }
 
   ngOnInit() {
+    super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
@@ -38,22 +41,16 @@ export class DeviceAddComponent implements OnInit {
     });
   }
 
- onSubmit() {
-    this.dataService.createDevice(this.addForm.value)
-      .subscribe( data => {
-        this.componentCommunicationService.setNotification([new AppNotification('Success', AppNotificationType.SUCCESS)]);
-        this.router.navigate(['devices']);
-      },
-      error => {
-          if (error.status === 400) {
-            this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
-          } else {
-            this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
-          }
-        });
+  onSubmit() {
+    this.dataService.createDevice(this.addForm.value).subscribe(data => {
+      this.navigateWithNotification('devices', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+    }, error => {
+      if (error.status === 400) {
+        this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
+      } else {
+        this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
+      }
+    });
   }
 
-  hasNotifications(): Boolean {
-    return this.notifications.length > 0;
-  }
 }

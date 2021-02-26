@@ -1,31 +1,34 @@
+import {BaseComponent} from "../base/base.component";
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {AppNotification} from "../model/app-notification";
+import {AppNotification, AppNotificationType} from "../model/app-notification";
 import {DataService} from "../service/data.service";
 import {TokenCheckService} from "../service/token-check.service";
 import {UtilService} from "../service/util.service";
 import {PumpAction} from "../model/pump-action";
 import {SidebarComponent} from "../parts/sidebar/sidebar.component";
+import {ComponentCommunicationService} from "../service/component-communication.service";
 
 @Component({
   selector: 'app-pump-actions',
   templateUrl: './pump-actions.component.html',
   styleUrls: ['./pump-actions.component.scss']
 })
-export class PumpActionsComponent {
+export class PumpActionsComponent extends BaseComponent implements OnInit {
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   pumpActionsForDevice: Array<PumpAction> = [];
-  notifications: Array<AppNotification> = [];
   totalPages: number;
   pageNumber: number = 1;
   deviceId: number;
 
-  constructor(private router: Router, private dataService: DataService, private tokenCheckService: TokenCheckService,
-  	private route: ActivatedRoute, public utilService: UtilService) {
-  	this.route.params.subscribe(params => this.deviceId = params.id);
+  constructor(public router: Router, private dataService: DataService, private tokenCheckService: TokenCheckService,
+  	private route: ActivatedRoute, public utilService: UtilService, public componentCommunicationService: ComponentCommunicationService) {
+  	super(router, componentCommunicationService);
+    this.route.params.subscribe(params => this.deviceId = params.id);
   }
 
   ngOnInit() {
+    super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
@@ -35,12 +38,10 @@ export class PumpActionsComponent {
   }
 
   loadPageForDevice() {
-    this.dataService.getPumpActionsByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(
-      pumpActions => {
-        this.pumpActionsForDevice = pumpActions.content;
-        this.totalPages = pumpActions.totalPages;
-      }
-    );
+    this.dataService.getPumpActionsByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(pumpActions => {
+      this.pumpActionsForDevice = pumpActions.content;
+      this.totalPages = pumpActions.totalPages;
+    });
   }
 
   loadPage(p) {
@@ -50,20 +51,15 @@ export class PumpActionsComponent {
 
   deletePumpAction(pumpAction: PumpAction) {
     if (confirm('Are you sure you want to delete pump action?')) {
-      this.dataService.deletePumpAction(pumpAction).subscribe(
-        data => {
-          this.loadPageForDevice();
-        }
-        );
+      this.dataService.deletePumpAction(pumpAction).subscribe(data => {
+        this.notificateThisPage([new AppNotification('Deleted pump action: ' + pumpAction.id, AppNotificationType.SUCCESS)]);
+        this.loadPageForDevice();
+      });
     }
   }
 
   hasData(): Boolean {
     return typeof this.pumpActionsForDevice !== 'undefined' && this.pumpActionsForDevice.length > 0;
-  }
-
-  hasNotifications(): Boolean {
-    return this.notifications.length > 0;
   }
 
 }

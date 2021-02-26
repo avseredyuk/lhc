@@ -1,3 +1,4 @@
+import {BaseComponent} from "../../base/base.component";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -15,22 +16,23 @@ import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
-export class SeasonAddComponent implements OnInit {
+export class SeasonAddComponent extends BaseComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
-  notifications: Array<AppNotification> = [];
   addForm: FormGroup;
   nameCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
   deviceId: number;
   pageNumber: number;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
+  constructor(private formBuilder: FormBuilder, public router: Router, private dataService: DataService,
     private route: ActivatedRoute, private tokenCheckService: TokenCheckService, public utilService: UtilService,
-    private componentCommunicationService: ComponentCommunicationService) {
+    public componentCommunicationService: ComponentCommunicationService) {
+    super(router, componentCommunicationService);
   	this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit() {
+    super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
@@ -56,21 +58,15 @@ export class SeasonAddComponent implements OnInit {
     newSeason.deviceId = this.deviceId;
     newSeason.name = this.addForm.controls['name'].value;
 
-    this.dataService.createSeason(newSeason)
-      .subscribe( data => {
-        this.router.navigate(['devices/' + this.deviceId + '/seasons']);
-      },
-      error => {
-        if (error.status === 400) {
-          this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
-        } else {
-          this.componentCommunicationService.setNotification([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
-        }
-      });
-  }
-
-  hasNotifications(): Boolean {
-    return this.notifications.length > 0;
+    this.dataService.createSeason(newSeason).subscribe( data => {
+      this.navigateWithNotification('devices/' + this.deviceId + '/seasons', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+    }, error => {
+      if (error.status === 400) {
+        this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
+      } else {
+        this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
+      }
+    });
   }
 
 }

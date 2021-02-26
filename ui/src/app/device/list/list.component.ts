@@ -1,3 +1,4 @@
+import {BaseComponent} from "../../base/base.component";
 import {Component, OnInit} from "@angular/core";
 import {DataService} from "../../service/data.service";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
@@ -12,23 +13,23 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class DeviceListComponent implements OnInit {
+export class DeviceListComponent extends BaseComponent implements OnInit {
 
-  notifications: Array<AppNotification> = [];
   devices: Device[];
 
-  constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService,
-    private tokenCheckService: TokenCheckService, public utilService: UtilService) { }
+  constructor(public router: Router, private dataService: DataService, public componentCommunicationService: ComponentCommunicationService,
+    private tokenCheckService: TokenCheckService, public utilService: UtilService) {
+    super(router, componentCommunicationService);
+  }
 
   ngOnInit() {
+    super.ngOnInit();
     if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
     }
 
     this.loadData();
-
-    this.notifications = this.componentCommunicationService.getNotification();
   }
 
   loadData() {
@@ -41,14 +42,14 @@ export class DeviceListComponent implements OnInit {
     if (confirm('Are you sure you want to delete device "' + device.name + '" ?')) {
       this.dataService.deleteDevice(device).subscribe(
         data => {
-          this.notifications = [new AppNotification('Deleted device: ' + device.name, AppNotificationType.SUCCESS)];
+          this.notificateThisPage([new AppNotification('Deleted device: ' + device.name, AppNotificationType.SUCCESS)]);
           this.loadData();
         },
         error => {
           if (error.status === 400) {
-            this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
+            this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
           } else {
-            this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
+            this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
           }
           this.loadData();
         }
@@ -62,10 +63,6 @@ export class DeviceListComponent implements OnInit {
 
   hasData(): Boolean {
     return typeof this.devices !== 'undefined' && this.devices.length > 0;
-  }
-
-  hasNotifications(): Boolean {
-    return typeof this.notifications !== 'undefined' && this.notifications.length > 0;
   }
 
 }

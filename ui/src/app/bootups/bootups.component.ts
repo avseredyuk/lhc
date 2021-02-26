@@ -1,7 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
+import {BaseComponent} from "../base/base.component";
 import {Bootup} from "../model/bootup";
-import {AppNotification} from "../model/app-notification";
+import {ComponentCommunicationService} from "../service/component-communication.service";
 import {DataService} from "../service/data.service";
 import {TokenCheckService} from "../service/token-check.service";
 import {UtilService} from "../service/util.service";
@@ -13,21 +14,22 @@ import {SidebarComponent} from "../parts/sidebar/sidebar.component";
   templateUrl: './bootups.component.html',
   styleUrls: ['./bootups.component.scss']
 })
-export class BootupsComponent implements OnInit {
+export class BootupsComponent extends BaseComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   bootupsForDevice: Array<Bootup> = [];
-  notifications: Array<AppNotification> = [];
   totalPages: number;
   pageNumber: number = 1;
   deviceId: number;
 
-  constructor(private router: Router, private dataService: DataService, private tokenCheckService: TokenCheckService,
-  	private route: ActivatedRoute, public utilService: UtilService) {
+  constructor(public router: Router, private dataService: DataService, private tokenCheckService: TokenCheckService,
+  	private route: ActivatedRoute, public utilService: UtilService, public componentCommunicationService: ComponentCommunicationService) {
+    super(router, componentCommunicationService);
   	this.route.params.subscribe(params => this.deviceId = params.id);
   }
 
   ngOnInit() {
+    super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
@@ -62,10 +64,6 @@ export class BootupsComponent implements OnInit {
 
   hasData(): Boolean {
     return typeof this.bootupsForDevice !== 'undefined' && this.bootupsForDevice.length > 0;
-  }
-
-  hasNotifications(): Boolean {
-    return this.notifications.length > 0;
   }
 
 }

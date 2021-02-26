@@ -1,3 +1,4 @@
+import {BaseComponent} from "../../base/base.component";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DataService} from "../../service/data.service";
@@ -14,19 +15,21 @@ import {Router} from "@angular/router";
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
-export class SettingsAddComponent implements OnInit {
+export class SettingsAddComponent extends BaseComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
-  notifications: Array<AppNotification> = [];
   addForm: FormGroup;
   keyCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
   valueCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
+  constructor(private formBuilder: FormBuilder, public router: Router, private dataService: DataService,
     private tokenCheckService: TokenCheckService, public utilService: UtilService,
-    private componentCommunicationService: ComponentCommunicationService) { }
+    public componentCommunicationService: ComponentCommunicationService) {
+    super(router, componentCommunicationService);
+  }
 
   ngOnInit() {
+    super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
@@ -51,21 +54,15 @@ export class SettingsAddComponent implements OnInit {
     newConf.key = this.addForm.controls['key'].value;
     newConf.value = this.addForm.controls['value'].value;
 
-    this.dataService.createConfiguration(newConf)
-      .subscribe( data => {
-        this.router.navigate(['settings']);
-      },
-      error => {
-        if (error.status === 400) {
-          this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
-        } else {
-          this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
-        }
-      });
-  }
-
-  hasNotifications(): Boolean {
-    return this.notifications.length > 0;
+    this.dataService.createConfiguration(newConf).subscribe(data => {
+      this.navigateWithNotification('settings', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+    }, error => {
+      if (error.status === 400) {
+        this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
+      } else {
+        this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
+      }
+    });
   }
 
 }

@@ -1,5 +1,6 @@
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
+import {BaseComponent} from "../../base/base.component";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {DataService} from "../../service/data.service";
@@ -15,10 +16,9 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class DeviceEditComponent implements OnInit {
+export class DeviceEditComponent extends BaseComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
-  notifications: Array<AppNotification> = [];
   deviceId: number;
   device: Device = new Device();
   editForm: FormGroup;
@@ -33,13 +33,15 @@ export class DeviceEditComponent implements OnInit {
   newConfigTypeCtrl: FormControl = this.formBuilder.control(this.utilService.deviceConfigDataTypes[0], []);
   newExclusionTypeCtrl: FormControl = this.formBuilder.control(this.utilService.deviceReportDataExclusionTypes[0], []);
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private route: ActivatedRoute, private dataService: DataService,
-  	private tokenCheckService: TokenCheckService, private componentCommunicationService: ComponentCommunicationService,
+  constructor(private formBuilder: FormBuilder, public router: Router, private route: ActivatedRoute, private dataService: DataService,
+  	private tokenCheckService: TokenCheckService, public componentCommunicationService: ComponentCommunicationService,
   	public utilService: UtilService) {
+    super(router, componentCommunicationService);
   	this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit() {
+    super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
@@ -73,12 +75,13 @@ export class DeviceEditComponent implements OnInit {
         this.editForm.controls['devicePrivateName'].setValue(this.device.privateName);
       },
       error => {
+        var errNotification;
         if (error.status === 404) {
-          this.componentCommunicationService.setNotification([new AppNotification('Device not found', AppNotificationType.ERROR)]);
+          errNotification = [new AppNotification('Device not found', AppNotificationType.ERROR)];
         } else {
-          this.componentCommunicationService.setNotification([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
+          errNotification = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
         }
-        this.router.navigate(['devices/' + this.deviceId]);
+        this.navigateWithNotification('devices/' + this.deviceId, errNotification);
       }
     );
   }
@@ -123,21 +126,15 @@ export class DeviceEditComponent implements OnInit {
     this.device.enabled = this.editForm.controls['deviceEnabled'].value;
     this.device.notes = this.editForm.controls['deviceNotes'].value;
     this.device.privateName = this.editForm.controls['devicePrivateName'].value;
-    this.dataService.updateDevice(this.device)
-      .subscribe( data => {
-        this.router.navigate(['devices/' + this.deviceId]);
-      },
-      error => {
-        if (error.status === 400) {
-          this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
-        } else {
-          this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
-        }
-      });
-  }
-
-  hasNotifications(): Boolean {
-    return this.notifications.length > 0;
+    this.dataService.updateDevice(this.device).subscribe( data => {
+      this.navigateWithNotification('devices/' + this.deviceId, [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+    }, error => {
+      if (error.status === 400) {
+        this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
+      } else {
+        this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
+      }
+    });
   }
 
   hasConfig(): Boolean {

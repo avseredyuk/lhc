@@ -1,3 +1,4 @@
+import {BaseComponent} from "../../base/base.component";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -15,10 +16,9 @@ import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
-export class PlantMaintenanceAddComponent {
+export class PlantMaintenanceAddComponent extends BaseComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
-  notifications: Array<AppNotification> = [];
   addForm: FormGroup;
   phCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_PH)])
   tdsCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_TDS)]);
@@ -29,13 +29,15 @@ export class PlantMaintenanceAddComponent {
   deviceId: number;
   pageNumber: number;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService,
+  constructor(private formBuilder: FormBuilder, public router: Router, private dataService: DataService,
     private route: ActivatedRoute, private tokenCheckService: TokenCheckService, public utilService: UtilService,
-    private componentCommunicationService: ComponentCommunicationService) {
-  	this.route.params.subscribe(params => this.deviceId = params.id)
+    public componentCommunicationService: ComponentCommunicationService) {
+    super(router, componentCommunicationService);
+    this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit() {
+    super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
@@ -92,23 +94,16 @@ export class PlantMaintenanceAddComponent {
     newPm.ph = parseFloat(this.addForm.controls['ph'].value);
     newPm.tds = parseFloat(this.addForm.controls['tds'].value);
     newPm.details = this.newDetails;
-
-    this.dataService.createPlantMaintenance(newPm)
-      .subscribe( data => {
-        this.router.navigate(['devices/' + this.deviceId + '/maintenance']);
-      },
-      error => {
-        if (error.status === 400) {
-          this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
-        } else {
-          this.componentCommunicationService.setNotification([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
-        }
-        this.router.navigate(['devices/' + this.deviceId + '/maintenance']);
-      });
-  }
-
-  hasNotifications(): Boolean {
-    return this.notifications.length > 0;
+    
+    this.dataService.createPlantMaintenance(newPm).subscribe( data => {
+      this.navigateWithNotification('devices/' + this.deviceId + '/maintenance', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+    }, error => {
+      if (error.status === 400) {
+        this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
+      } else {
+        this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
+      }
+    });
   }
 
   hasDetails(): Boolean {

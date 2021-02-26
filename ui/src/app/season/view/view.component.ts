@@ -1,3 +1,4 @@
+import {BaseComponent} from "../../base/base.component";
 import {Component, OnInit, ViewChild, Renderer2} from "@angular/core";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {DataService} from "../../service/data.service";
@@ -16,10 +17,9 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.scss']
 })
-export class SeasonViewComponent implements OnInit {
+export class SeasonViewComponent extends BaseComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
-  notifications: Array<AppNotification> = [];
   deviceId: number;
   seasonId: number;
   seasonName: string;
@@ -28,19 +28,19 @@ export class SeasonViewComponent implements OnInit {
   cropsForSeason: Array<Crop> = [];
   stats: Statistics;
 
-  constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService,
+  constructor(public router: Router, private dataService: DataService, public componentCommunicationService: ComponentCommunicationService,
     private route: ActivatedRoute, private tokenCheckService: TokenCheckService, public utilService: UtilService) {
+    super(router, componentCommunicationService);
     this.route.params.subscribe(params => this.deviceId = params.id);
     this.route.params.subscribe(params => this.seasonId = params.seasonid);
   }
 
   ngOnInit() {
+    super.ngOnInit();
     if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
     }
-
-	  this.notifications = this.componentCommunicationService.getNotification();
 
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId + '/seasons']);});
 
@@ -51,22 +51,20 @@ export class SeasonViewComponent implements OnInit {
 
     this.loadPageForSeason();
 
-    this.dataService.getSeasonStatistics(this.seasonId).subscribe(
-      apiResult => this.stats = apiResult.data
+    this.dataService.getSeasonStatistics(this.seasonId).subscribe(apiResult => 
+      this.stats = apiResult.data
     );
 
-    this.dataService.getSeasonName(this.seasonId).subscribe(
-      apiResult => this.seasonName = apiResult.data.name
-   );
+    this.dataService.getSeasonName(this.seasonId).subscribe(apiResult => 
+      this.seasonName = apiResult.data.name
+    );
   }
 
   loadPageForSeason() {
-    this.dataService.getCropsBySeasonId(this.seasonId, this.pageNumber - 1).subscribe(
-      crops => {
-        this.cropsForSeason = crops.content;
-        this.totalPages = crops.totalPages;
-      }
-    );
+    this.dataService.getCropsBySeasonId(this.seasonId, this.pageNumber - 1).subscribe(crops => {
+      this.cropsForSeason = crops.content;
+      this.totalPages = crops.totalPages;
+    });
   }
 
   loadPage(p) {
@@ -81,14 +79,13 @@ export class SeasonViewComponent implements OnInit {
 
   deleteCrop(cropId: number) {
     if (confirm('Are you sure you want to delete crop?')) {
-      this.dataService.deleteCrop(cropId).subscribe(
-        data => {
-          this.loadPageForSeason();
-          this.dataService.getSeasonStatistics(this.seasonId).subscribe(apiResult => 
-            this.stats = apiResult.data
-          );
-        }
-      );
+      this.dataService.deleteCrop(cropId).subscribe(data => {
+        this.notificateThisPage([new AppNotification('Deleted crop: ' + cropId, AppNotificationType.SUCCESS)]);
+        this.loadPageForSeason();
+        this.dataService.getSeasonStatistics(this.seasonId).subscribe(apiResult => 
+          this.stats = apiResult.data
+        );
+      });
     }
   }
 
@@ -104,10 +101,6 @@ export class SeasonViewComponent implements OnInit {
 
   hasStatsData(): Boolean {
     return typeof this.stats !== 'undefined';
-  }
-
-  hasNotifications(): Boolean {
-    return typeof this.notifications !== 'undefined' && this.notifications.length > 0;
   }
 
 }

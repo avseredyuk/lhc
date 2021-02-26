@@ -1,3 +1,4 @@
+import {BaseComponent} from "../../base/base.component";
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -15,24 +16,25 @@ import {ApiResult} from "../../model/api-result";
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class SettingsEditComponent implements OnInit {
+export class SettingsEditComponent extends BaseComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
-  notifications: Array<AppNotification> = [];
   settingsKey: string;
   editForm: FormGroup;
   keyCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
   valueCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
   configuration: Configuration;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService, private route: ActivatedRoute,
-  	private componentCommunicationService: ComponentCommunicationService, private tokenCheckService: TokenCheckService, private utilService: UtilService) {
-  	this.route.params.subscribe(params => {
+  constructor(private formBuilder: FormBuilder, public router: Router, private dataService: DataService, private route: ActivatedRoute,
+  	public componentCommunicationService: ComponentCommunicationService, private tokenCheckService: TokenCheckService, private utilService: UtilService) {
+  	super(router, componentCommunicationService);
+    this.route.params.subscribe(params => {
       this.settingsKey = params.key;
     })
   }
 
   ngOnInit() {
+    super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
@@ -47,41 +49,32 @@ export class SettingsEditComponent implements OnInit {
     	value: this.valueCtrl
     });
 
-    this.dataService.getConfigurationByKey(this.settingsKey).subscribe(
-      (data: ApiResult<Configuration>) => {
-        this.configuration = data.data;
-        this.editForm.controls['key'].setValue(this.configuration.key);
-        this.editForm.controls['value'].setValue(this.configuration.value);
-      },
-      error => {
-        if (error.status === 404) {
-          this.componentCommunicationService.setNotification([new AppNotification('Plant Maintenance not found', AppNotificationType.ERROR)]);
-        } else {
-          this.componentCommunicationService.setNotification([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
-        }
-        this.router.navigate(['settings']);
+    this.dataService.getConfigurationByKey(this.settingsKey).subscribe((data: ApiResult<Configuration>) => {
+      this.configuration = data.data;
+      this.editForm.controls['key'].setValue(this.configuration.key);
+      this.editForm.controls['value'].setValue(this.configuration.value);
+    }, error => {
+      var errNotification;
+      if (error.status === 404) {
+        errNotification = [new AppNotification('Settings not found', AppNotificationType.ERROR)];
+      } else {
+        errNotification = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
       }
-    );
+      this.navigateWithNotification('settings', errNotification);
+    });
   }
 
   onSubmit() {
     this.configuration.key = this.editForm.controls['key'].value;
     this.configuration.value = this.editForm.controls['value'].value;
-    this.dataService.updateConfiguration(this.configuration).subscribe(
-      data => {
-      	this.componentCommunicationService.setNotification([new AppNotification('Success', AppNotificationType.SUCCESS)]);
-        this.router.navigate(['settings']);
-      },
-      error => {
-        if (error.status === 400) {
-          this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
-        } else {
-          this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
-        }
-      });
-  }
-
-  hasNotifications(): Boolean {
-    return this.notifications.length > 0;
+    this.dataService.updateConfiguration(this.configuration).subscribe(data => {
+      this.navigateWithNotification('settings', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+    }, error => {
+      if (error.status === 400) {
+        this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
+      } else {
+        this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
+      }
+    });
   }
 }

@@ -1,3 +1,4 @@
+import {BaseComponent} from "../../base/base.component";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -16,12 +17,11 @@ import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class CropEditComponent implements OnInit {
+export class CropEditComponent extends BaseComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   cropId: number;
   crop: Crop;
-  notifications: Array<AppNotification> = [];
   editForm: FormGroup;
   weightCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_WEIGHT)]);
   countCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_COUNT)]);
@@ -34,16 +34,18 @@ export class CropEditComponent implements OnInit {
   newDate: Date;
   newTime: Date;
 
-    constructor(private formBuilder: FormBuilder, private router: Router, private dataService: DataService, private route: ActivatedRoute,
-  	private componentCommunicationService: ComponentCommunicationService, private tokenCheckService: TokenCheckService, private utilService: UtilService) {
-  	this.route.params.subscribe(params => {
+  constructor(private formBuilder: FormBuilder, public router: Router, private dataService: DataService, private route: ActivatedRoute,
+  	public componentCommunicationService: ComponentCommunicationService, private tokenCheckService: TokenCheckService, private utilService: UtilService) {
+  	super(router, componentCommunicationService);
+    this.route.params.subscribe(params => {
       this.cropId = params.cropid;
       this.seasonId = params.seasonid;
       this.deviceId = params.id;
     })
   }
 
-ngOnInit() {
+  ngOnInit() {
+    super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
@@ -57,29 +59,28 @@ ngOnInit() {
 
     this.editForm = this.formBuilder.group({
     	weight: this.weightCtrl,
-    	count: this.countCtrl,
-        date: this.dateCtrl,
-        time: this.timeCtrl
+      count: this.countCtrl,
+      date: this.dateCtrl,
+      time: this.timeCtrl
     });
 
-    this.dataService.getCrop(this.cropId).subscribe(
-      (data: ApiResult<Crop>) => {
-        this.crop = data.data;
-        this.editForm.controls['weight'].setValue(this.crop.weight);
-        this.editForm.controls['count'].setValue(this.crop.count)
-        this.editForm.controls['date'].setValue(this.utilService.getDateFromDateTime(this.crop.d));
-        this.editForm.controls['time'].setValue(this.utilService.getTimeFromDateTime(this.crop.d));
-        this.newDate = new Date(this.crop.d);
-        this.newTime = new Date(this.crop.d);
-      },
-      error => {
-        if (error.status === 400) {
-          this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
-        } else {
-          this.componentCommunicationService.setNotification([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
-        }
-        this.router.navigate(['devices' + this.deviceId + 'seasons/' + this.seasonId]);
+    this.dataService.getCrop(this.cropId).subscribe((data: ApiResult<Crop>) => {
+      this.crop = data.data;
+      this.editForm.controls['weight'].setValue(this.crop.weight);
+      this.editForm.controls['count'].setValue(this.crop.count)
+      this.editForm.controls['date'].setValue(this.utilService.getDateFromDateTime(this.crop.d));
+      this.editForm.controls['time'].setValue(this.utilService.getTimeFromDateTime(this.crop.d));
+      this.newDate = new Date(this.crop.d);
+      this.newTime = new Date(this.crop.d);
+    }, error => {
+      var errNotification;
+      if (error.status === 400) {
+        errNotification = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
+      } else {
+        errNotification = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
       }
+      this.navigateWithNotification('devices' + this.deviceId + 'seasons/' + this.seasonId, errNotification);
+    }
     );
     this.dataService.getSeasonName(this.seasonId).subscribe(
       apiResult => this.seasonName = apiResult.data.name
@@ -97,14 +98,9 @@ ngOnInit() {
     this.crop.count = parseFloat(this.editForm.controls['count'].value);
     this.crop.d = this.utilService.combineDateAndTime(this.newDate, this.newTime).getTime();
     this.crop.seasonId = this.seasonId;
-    this.dataService.updateCrop(this.crop)
-      .subscribe( data => {
-        this.router.navigate(['devices/' + this.deviceId + '/seasons/' + this.seasonId]);
-      });
-  }
-
-  hasNotifications(): Boolean {
-    return this.notifications.length > 0;
+    this.dataService.updateCrop(this.crop).subscribe(data => {
+      this.navigateWithNotification('devices/' + this.deviceId + '/seasons/' + this.seasonId, [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+    });
   }
 
 }

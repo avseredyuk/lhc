@@ -1,6 +1,8 @@
+import {BaseComponent} from "../base/base.component";
 import {Component, OnInit} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
+import {ComponentCommunicationService} from "../service/component-communication.service";
 import {DataService} from "../service/data.service";
 import {TokenCheckService} from "../service/token-check.service";
 import {AppNotification, AppNotificationType} from "../model/app-notification";
@@ -10,18 +12,19 @@ import {AppNotification, AppNotificationType} from "../model/app-notification";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent extends BaseComponent implements OnInit {
 
-  notifications: Array<AppNotification> = [];
   loginForm: FormGroup;
   usernameCtrl: FormControl;
   passwordCtrl: FormControl;
 
-  constructor(private formBuilder: FormBuilder, private dataService: DataService, private router: Router,
-    private tokenCheckService: TokenCheckService) {
+  constructor(private formBuilder: FormBuilder, private dataService: DataService, public router: Router,
+    private tokenCheckService: TokenCheckService, public componentCommunicationService: ComponentCommunicationService) {
+    super(router, componentCommunicationService);
   }
 
   ngOnInit() {
+    super.ngOnInit();
     this.tokenCheckService.removeToken();
 
     this.usernameCtrl = this.formBuilder.control('', [Validators.required]);
@@ -46,15 +49,11 @@ export class LoginComponent {
       this.router.navigate(['/']);
     }, error => {
       if (error.status === 401) {
-        this.notifications = [new AppNotification('Invalid credentials', AppNotificationType.ERROR)];
+        this.notificateThisPage([new AppNotification('Invalid credentials', AppNotificationType.ERROR)]);
       } else {
-        this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
+        this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
       }
     });
-  }
-
-  hasNotifications(): Boolean {
-    return this.notifications.length > 0;
   }
 
 }

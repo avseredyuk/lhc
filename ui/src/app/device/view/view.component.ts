@@ -1,3 +1,4 @@
+import {BaseComponent} from "../../base/base.component";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {DataService} from "../../service/data.service";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
@@ -14,19 +15,20 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.scss']
 })
-export class DeviceViewComponent implements OnInit {
+export class DeviceViewComponent extends BaseComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
-  notifications: Array<AppNotification> = [];
   deviceId: number;
   device: Device = new Device();
 
-  constructor(private router: Router, private dataService: DataService, private componentCommunicationService: ComponentCommunicationService,
+  constructor(public router: Router, private dataService: DataService, public componentCommunicationService: ComponentCommunicationService,
     private route: ActivatedRoute, private tokenCheckService: TokenCheckService, public utilService: UtilService) {
+    super(router, componentCommunicationService);
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit() {
+    super.ngOnInit();
     if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
@@ -41,12 +43,13 @@ export class DeviceViewComponent implements OnInit {
         this.device = data.data;
       },
       error => {
+        var errNotification;
         if (error.status === 404) {
-          this.componentCommunicationService.setNotification([new AppNotification('Device not found', AppNotificationType.ERROR)]);
+          errNotification = [new AppNotification('Device not found', AppNotificationType.ERROR)];
         } else {
-          this.componentCommunicationService.setNotification([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
+          errNotification = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
         }
-        this.router.navigate(['devices']);
+        this.navigateWithNotification('devices', errNotification);
       }
     );
   }
@@ -55,22 +58,18 @@ export class DeviceViewComponent implements OnInit {
   	if (confirm('Are you sure you want to run pump for device "' + this.device.name + '" ?')) {
       this.dataService.enableRunPumpOnce(this.deviceId).subscribe(
         (data: ApiResult<Boolean>) => {
-          this.notifications = [new AppNotification('Pump enabled', AppNotificationType.SUCCESS)];
+          this.notificateThisPage([new AppNotification('Pump enabled', AppNotificationType.SUCCESS)]);
           this.loadDevice();
         },
         error => {
           if (error.status === 400) {
-            this.notifications = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
+            this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
           } else {
-            this.notifications = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
+            this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
           }
         }
       );
     }
-  }
-
-  hasNotifications(): Boolean {
-    return this.notifications.length > 0;
   }
 
   hasConfig(): Boolean {

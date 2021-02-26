@@ -1,3 +1,4 @@
+import {BaseComponent} from "../../base/base.component";
 import {Component, OnInit, ViewChild, Renderer2} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../service/data.service";
@@ -16,21 +17,22 @@ import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class PlantMaintenanceListComponent implements OnInit {
+export class PlantMaintenanceListComponent extends BaseComponent implements OnInit {
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
-  notifications: Array<AppNotification> = [];
   plantMaintenancesForDevice: Array<PlantMaintenance> = [];
   deviceId: number;
   pageNumber: number = 1;
   totalPages: number;
 
-  constructor(private router: Router, private dataService: DataService, private renderer: Renderer2,
-    private route: ActivatedRoute, private componentCommunicationService: ComponentCommunicationService,
+  constructor(public router: Router, private dataService: DataService, private renderer: Renderer2,
+    private route: ActivatedRoute, public componentCommunicationService: ComponentCommunicationService,
     private tokenCheckService: TokenCheckService, public utilService: UtilService) {
+    super(router, componentCommunicationService);
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit() {
+    super.ngOnInit();
     if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
@@ -43,17 +45,13 @@ export class PlantMaintenanceListComponent implements OnInit {
     }
 
     this.loadPageForDevice();
-
-  	this.notifications = this.componentCommunicationService.getNotification();
   }
 
   loadPageForDevice() {
-    this.dataService.getPlantMaintenancesByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(
-      maintenances => {
-        this.plantMaintenancesForDevice = maintenances.content;
-        this.totalPages = maintenances.totalPages;
-      }
-    );
+    this.dataService.getPlantMaintenancesByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(maintenances => {
+      this.plantMaintenancesForDevice = maintenances.content;
+      this.totalPages = maintenances.totalPages;
+    });
   }
 
   loadPage(p) {
@@ -63,11 +61,9 @@ export class PlantMaintenanceListComponent implements OnInit {
 
   deleteMaintenance(plantMaintenance: PlantMaintenance) {
     if (confirm('Are you sure you want to delete plant maintenance?')) {
-      this.dataService.deletePlantMaintenance(plantMaintenance).subscribe(
-        data => {
-          this.loadPageForDevice();
-        }
-        );
+      this.dataService.deletePlantMaintenance(plantMaintenance).subscribe(data => {
+        this.loadPageForDevice();
+      });
     }
   }
 
@@ -92,9 +88,5 @@ export class PlantMaintenanceListComponent implements OnInit {
 
   hasData(): Boolean {
     return typeof this.plantMaintenancesForDevice !== 'undefined' && this.plantMaintenancesForDevice.length > 0;
-  }
-
-  hasNotifications(): Boolean {
-    return typeof this.notifications !== 'undefined' && this.notifications.length > 0;
   }
 }
