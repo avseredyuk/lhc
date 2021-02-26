@@ -7,7 +7,7 @@ import {Configuration} from "../../model/configuration";
 import {TokenCheckService} from "../../service/token-check.service";
 import {UtilService} from "../../service/util.service";
 import {DataService} from "../../service/data.service";
-import {SidebarComponent} from "../../sidebar/sidebar.component";
+import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
 import {ApiResult} from "../../model/api-result";
 
 @Component({

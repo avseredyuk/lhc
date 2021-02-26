@@ -9,7 +9,7 @@ import {ComponentCommunicationService} from "../../service/component-communicati
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
 import {TokenCheckService} from "../../service/token-check.service";
 import {UtilService} from "../../service/util.service";
-import {SidebarComponent} from "../../sidebar/sidebar.component";
+import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
 
 @Component({
   selector: 'app-season-edit',

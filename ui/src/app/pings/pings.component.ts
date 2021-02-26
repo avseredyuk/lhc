@@ -5,7 +5,7 @@ import {AppNotification} from "../model/app-notification";
 import {DataService} from "../service/data.service";
 import {TokenCheckService} from "../service/token-check.service";
 import {UtilService} from "../service/util.service";
-import {SidebarComponent} from "../sidebar/sidebar.component";
+import {SidebarComponent} from "../parts/sidebar/sidebar.component";
 
 @Component({
   selector: 'app-pings',

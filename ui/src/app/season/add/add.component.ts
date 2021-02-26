@@ -8,7 +8,7 @@ import {Season} from "../../model/season";
 import {TokenCheckService} from "../../service/token-check.service";
 import {UtilService} from "../../service/util.service";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
-import {SidebarComponent} from "../../sidebar/sidebar.component";
+import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
 
 @Component({
   selector: 'app-season-add',

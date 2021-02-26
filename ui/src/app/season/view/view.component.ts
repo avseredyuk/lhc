@@ -6,7 +6,7 @@ import {Device} from "../../model/device";
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
 import {TokenCheckService} from "../../service/token-check.service";
 import {Crop, Season, Statistics} from "../../model/season";
-import {SidebarComponent} from "../../sidebar/sidebar.component";
+import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
 import {ApiResult} from "../../model/api-result";
 import {Page} from "../../model/page";
 import {UtilService} from "../../service/util.service";

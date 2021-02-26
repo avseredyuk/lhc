@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
 import {TokenCheckService} from "../../service/token-check.service";
 import {Season, Statistics} from "../../model/season";
-import {SidebarComponent} from "../../sidebar/sidebar.component";
+import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
 import {UtilService} from "../../service/util.service";
 
 @Component({

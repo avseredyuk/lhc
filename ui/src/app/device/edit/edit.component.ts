@@ -5,7 +5,7 @@ import {ComponentCommunicationService} from "../../service/component-communicati
 import {DataService} from "../../service/data.service";
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
 import {TokenCheckService} from "../../service/token-check.service";
-import {SidebarComponent} from "../../sidebar/sidebar.component";
+import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
 import {ApiResult} from "../../model/api-result";
 import {Device, DeviceConfig, DeviceReportDataExclusion} from "../../model/device";
 import {UtilService} from "../../service/util.service";

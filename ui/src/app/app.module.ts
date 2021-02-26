@@ -8,7 +8,7 @@ import {DataService} from "./service/data.service";
 import {DeviceAddComponent} from "./device/add/add.component";
 import {DeviceEditComponent} from './device/edit/edit.component';
 import {DeviceListComponent} from "./device/list/list.component";
-import {DeviceNameHeaderComponent} from './device-name-header/device-name-header.component';
+import {DeviceNameHeaderComponent} from './parts/device-name-header/device-name-header.component';
 import {DeviceViewComponent} from "./device/view/view.component";
 import {HistoryComponent} from "./history/history.component";
 import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
@@ -30,7 +30,7 @@ import {SensorReportsComponent} from './sensor-reports/sensor-reports.component'
 import {SettingsAddComponent} from './settings/add/add.component';
 import {SettingsEditComponent} from './settings/edit/edit.component';
 import {SettingsListComponent} from "./settings/list/list.component";
-import {SidebarComponent} from "./sidebar/sidebar.component";
+import {SidebarComponent} from "./parts/sidebar/sidebar.component";
 import {StatusComponent} from "./status/status.component";
 import {TokenInterceptor} from "./core/interceptor";
 

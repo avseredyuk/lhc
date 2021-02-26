@@ -6,7 +6,7 @@ import {Device, DeviceReportDataExclusion} from "../../model/device";
 import {ApiResult} from "../../model/api-result";
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
 import {TokenCheckService} from "../../service/token-check.service";
-import {SidebarComponent} from "../../sidebar/sidebar.component";
+import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
 import {UtilService} from "../../service/util.service";
 
 @Component({

@@ -5,7 +5,7 @@ import {DataService} from "../service/data.service";
 import {TokenCheckService} from "../service/token-check.service";
 import {UtilService} from "../service/util.service";
 import {SensorReport} from "../model/sensor-report";
-import {SidebarComponent} from "../sidebar/sidebar.component";
+import {SidebarComponent} from "../parts/sidebar/sidebar.component";
 
 @Component({
   selector: 'app-sensor-reports',

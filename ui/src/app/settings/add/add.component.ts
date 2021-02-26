@@ -4,7 +4,7 @@ import {DataService} from "../../service/data.service";
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
 import {Configuration} from "../../model/configuration";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
-import {SidebarComponent} from "../../sidebar/sidebar.component";
+import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
 import {UtilService} from "../../service/util.service";
 import {TokenCheckService} from "../../service/token-check.service";
 import {Router} from "@angular/router";

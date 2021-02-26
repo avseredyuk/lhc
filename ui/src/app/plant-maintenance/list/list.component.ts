@@ -9,7 +9,7 @@ import {tap} from "rxjs/operators";
 import {TokenCheckService} from "../../service/token-check.service";
 import {UtilService} from "../../service/util.service";
 import {ApiResult} from "../../model/api-result";
-import {SidebarComponent} from "../../sidebar/sidebar.component";
+import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
 
 @Component({
   selector: 'app-plant-maintenance-list',
