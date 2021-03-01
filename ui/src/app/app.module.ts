@@ -14,7 +14,6 @@ import {DeviceViewComponent} from "./device/view/view.component";
 import {HistoryComponent} from "./history/history.component";
 import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
 import {LoginComponent} from "./login/login.component";
-import {LogoutComponent} from "./logout/logout.component";
 import {NgModule} from "@angular/core";
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {PingsComponent} from './pings/pings.component';
@@ -49,7 +48,6 @@ import {TokenInterceptor} from "./core/interceptor";
     DeviceViewComponent,
     HistoryComponent,
     LoginComponent,
-    LogoutComponent,
     PageNotFoundComponent,
     PingsComponent,
     PlantMaintenanceAddComponent,

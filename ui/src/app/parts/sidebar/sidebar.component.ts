@@ -19,7 +19,7 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.hasToken = !this.tokenCheckService.isExpiredToken();
+    this.populateHasToken();
   }
 
   isGroup(url: string) {
@@ -51,9 +51,15 @@ export class SidebarComponent implements OnInit {
     this.goBackCallback = callback;
   }
 
+  populateHasToken() {
+    this.hasToken = !this.tokenCheckService.isExpiredToken();
+  }
+
   logoutWithConfirmation() {
     if (confirm('Are you sure you want to logout?"')) {
-      this.router.navigate(['logout']);
+      this.tokenCheckService.removeToken();
+      this.populateHasToken();
+      this.router.navigate(['/']);
     }
   }
 }

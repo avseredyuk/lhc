@@ -7,7 +7,6 @@ import {DeviceListComponent} from "./device/list/list.component";
 import {DeviceViewComponent} from "./device/view/view.component";
 import {HistoryComponent} from "./history/history.component";
 import {LoginComponent} from "./login/login.component";
-import {LogoutComponent} from "./logout/logout.component";
 import {NgModule} from "@angular/core";
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {PingsComponent} from "./pings/pings.component";
@@ -33,10 +32,6 @@ const routes: Routes = [
 	{
 		path: 'login',
 		component: LoginComponent
-	},
-	{
-		path: 'logout',
-		component: LogoutComponent
 	},
 	{
 		path: 'devices',
