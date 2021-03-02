@@ -29,7 +29,7 @@ export class DataService {
     return this.http.get<Status>(environment.apiUrl + 'status');
   }
 
-  login(loginPayload) : Observable<TokenResponse> {
+  login(loginPayload): Observable<TokenResponse> {
     return this.http.post<TokenResponse>(this.adminApiUrl + 'generate-token', loginPayload);
   }
 
@@ -59,8 +59,8 @@ export class DataService {
     return this.http.post<ApiResult<Device>>(this.adminApiUrl + 'devices', device);
   }
 
-  enableRunPumpOnce(deviceId: number): Observable<ApiResult<Boolean>> {
-    return this.http.put<ApiResult<Boolean>>(this.adminApiUrl + 'devices/' + deviceId + '/run-pump-once', '');
+  enableRunPumpOnce(deviceId: number): Observable<ApiResult<boolean>> {
+    return this.http.put<ApiResult<boolean>>(this.adminApiUrl + 'devices/' + deviceId + '/run-pump-once', '');
   }
 
   deleteDevice(device: Device) {
@@ -95,11 +95,11 @@ export class DataService {
 
   /* Plant Maintenance */
 
-  getPlantMaintenancesByDeviceId(deviceId, page): Observable<Page<PlantMaintenance[]>> {
+  getPlantMaintenancesByDeviceId(deviceId: number, page: number): Observable<Page<PlantMaintenance[]>> {
     return this.http.get<Page<PlantMaintenance[]>>(this.adminApiUrl + 'maintenance?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
-  getPlantMaintenance(deviceId, plantMaintenanceId): Observable<ApiResult<PlantMaintenance>> {
+  getPlantMaintenance(deviceId: number, plantMaintenanceId: number): Observable<ApiResult<PlantMaintenance>> {
     return this.http.get<ApiResult<PlantMaintenance>>(this.adminApiUrl + 'maintenance/' + plantMaintenanceId);
   }
 
@@ -121,7 +121,7 @@ export class DataService {
     return this.http.post<ApiResult<Crop>>(this.adminApiUrl + 'crop', crop);
   }
 
-  getCropsBySeasonId(seasonId, page): Observable<Page<Crop[]>> {
+  getCropsBySeasonId(seasonId: number, page: number): Observable<Page<Crop[]>> {
     return this.http.get<Page<Crop[]>>(this.adminApiUrl + 'crop?seasonId=' + seasonId + '&size=10&page=' + page);
   }
 
@@ -129,7 +129,7 @@ export class DataService {
     return this.http.delete(this.adminApiUrl + 'crop/' + cropId);
   }
 
-  getCrop(cropId): Observable<ApiResult<Crop>> {
+  getCrop(cropId: number): Observable<ApiResult<Crop>> {
     return this.http.get<ApiResult<Crop>>(this.adminApiUrl + 'crop/' + cropId);
   }
 
@@ -139,7 +139,7 @@ export class DataService {
 
   /* Season */
 
-  getSeasonsByDeviceId(deviceId, page): Observable<Page<Season[]>> {
+  getSeasonsByDeviceId(deviceId: number, page: number): Observable<Page<Season[]>> {
     return this.http.get<Page<Season[]>>(this.adminApiUrl + 'season?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
@@ -147,19 +147,19 @@ export class DataService {
     return this.http.post<ApiResult<Season>>(this.adminApiUrl + 'season', season);
   }
 
-  getSeasonName(seasonId): Observable<ApiResult<Season>> {
+  getSeasonName(seasonId: number): Observable<ApiResult<Season>> {
     return this.http.get<ApiResult<Season>>(this.adminApiUrl + 'season/' + seasonId + '/name');
   }
 
-  getSeasonStatistics(seasonId): Observable<ApiResult<Statistics>> {
+  getSeasonStatistics(seasonId: number): Observable<ApiResult<Statistics>> {
     return this.http.get<ApiResult<Statistics>>(this.adminApiUrl + 'season/' + seasonId + '/stats');
   }
 
-  getSeasonsStatistics(deviceId): Observable<ApiResult<Statistics>> {
+  getSeasonsStatistics(deviceId: number): Observable<ApiResult<Statistics>> {
     return this.http.get<ApiResult<Statistics>>(this.adminApiUrl + 'seasons/' + deviceId + '/stats');
   }
 
-  getSeason(seasonId): Observable<ApiResult<Season>> {
+  getSeason(seasonId: number): Observable<ApiResult<Season>> {
     return this.http.get<ApiResult<Season>>(this.adminApiUrl + 'season/' + seasonId);
   }
 
@@ -174,13 +174,13 @@ export class DataService {
 
   /* Pings */
 
-  getPingsByDeviceId(deviceId, page): Observable<Page<Ping[]>> {
+  getPingsByDeviceId(deviceId: number, page: number): Observable<Page<Ping[]>> {
     return this.http.get<Page<Ping[]>>(this.adminApiUrl + 'pings?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
   /* Bootups */
 
-  getBootupsByDeviceId(deviceId, page): Observable<Page<Bootup[]>> {
+  getBootupsByDeviceId(deviceId: number, page: number): Observable<Page<Bootup[]>> {
     return this.http.get<Page<Bootup[]>>(this.adminApiUrl + 'bootups?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
@@ -190,7 +190,7 @@ export class DataService {
 
   /* Pump Actions */
 
-  getPumpActionsByDeviceId(deviceId, page): Observable<Page<PumpAction[]>> {
+  getPumpActionsByDeviceId(deviceId: number, page: number): Observable<Page<PumpAction[]>> {
     return this.http.get<Page<PumpAction[]>>(this.adminApiUrl + 'pump-actions?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
@@ -200,7 +200,7 @@ export class DataService {
 
   /* Sensor Reports */
 
-  getSensorReportsByDeviceId(deviceId, page): Observable<Page<SensorReport[]>> {
+  getSensorReportsByDeviceId(deviceId: number, page: number): Observable<Page<SensorReport[]>> {
     return this.http.get<Page<SensorReport[]>>(this.adminApiUrl + 'sensor-reports?deviceId=' + deviceId + '&size=10&page=' + page);
   }
 
@@ -210,7 +210,7 @@ export class DataService {
 
   /* System */
 
-  clearCache(): Observable<ApiResult<Boolean>> {
-    return this.http.post<ApiResult<Boolean>>(this.adminApiUrl + 'clear-cache', '');
+  clearCache(): Observable<ApiResult<boolean>> {
+    return this.http.post<ApiResult<boolean>>(this.adminApiUrl + 'clear-cache', '');
   }
 }

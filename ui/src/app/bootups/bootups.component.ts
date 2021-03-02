@@ -28,7 +28,7 @@ export class BootupsComponent extends BaseComponent implements OnInit {
   	this.route.params.subscribe(params => this.deviceId = params.id);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -38,7 +38,7 @@ export class BootupsComponent extends BaseComponent implements OnInit {
     this.loadPageForDevice();
   }
 
-  loadPageForDevice() {
+  loadPageForDevice(): void {
     this.dataService.getBootupsByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(
       bootups => {
         this.bootupsForDevice = bootups.content;
@@ -47,12 +47,12 @@ export class BootupsComponent extends BaseComponent implements OnInit {
     );
   }
 
-  loadPage(p) {
+  loadPage(p: number): void {
     this.pageNumber = p;
     this.loadPageForDevice();
   }
 
-  deleteBootup(bootup: Bootup) {
+  deleteBootup(bootup: Bootup): void {
     if (confirm('Are you sure you want to delete bootup?')) {
       this.dataService.deleteBootup(bootup).subscribe(
         data => {
@@ -62,7 +62,7 @@ export class BootupsComponent extends BaseComponent implements OnInit {
     }
   }
 
-  hasData(): Boolean {
+  hasData(): boolean {
     return typeof this.bootupsForDevice !== 'undefined' && this.bootupsForDevice.length > 0;
   }
 

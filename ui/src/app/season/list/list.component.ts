@@ -29,7 +29,7 @@ export class SeasonListComponent extends BaseComponent implements OnInit {
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -37,7 +37,7 @@ export class SeasonListComponent extends BaseComponent implements OnInit {
     }
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
 
-    let storedPageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
+    const storedPageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
     if (storedPageNumber !== undefined) {
       this.pageNumber = storedPageNumber;
     }
@@ -49,34 +49,34 @@ export class SeasonListComponent extends BaseComponent implements OnInit {
     );
   }
 
-  loadPageForDevice() {
+  loadPageForDevice(): void {
     this.dataService.getSeasonsByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(seasons => {
       this.seasons = seasons.content;
       this.totalPages = seasons.totalPages;
     });
   }
 
-  loadPage(p) {
+  loadPage(p: number): void {
     this.pageNumber = p;
     this.loadPageForDevice();
   }
 
-  addSeason() {
+  addSeason(): void {
     this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
     this.router.navigate(['devices/' + this.deviceId + '/seasons/add']);
   }
 
-  openSeason(season: Season) {
+  openSeason(season: Season): void {
   	this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
   	this.router.navigate(['devices/' + this.deviceId + '/seasons/' + season.id]);
   }
 
-  editSeason(season: Season) {
+  editSeason(season: Season): void {
     this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
     this.router.navigate(['devices/' + this.deviceId + '/seasons/' + season.id + '/edit']);
   }
 
-  deleteSeason(season: Season) {
+  deleteSeason(season: Season): void {
     if (confirm('Are you sure you want to delete season?')) {
       this.dataService.deleteSeason(season.id).subscribe(data => {
         this.notificateThisPage([new AppNotification('Deleted season: ' + season.name, AppNotificationType.SUCCESS)]);
@@ -88,11 +88,11 @@ export class SeasonListComponent extends BaseComponent implements OnInit {
     }
   }
 
-  hasData(): Boolean {
+  hasData(): boolean {
     return typeof this.seasons !== 'undefined' && this.seasons.length > 0;
   }
 
-  hasStatsData(): Boolean {
+  hasStatsData(): boolean {
     return typeof this.stats !== 'undefined';
   }
 

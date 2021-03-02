@@ -18,7 +18,7 @@ export class HistoryComponent implements OnInit {
 
   constructor(private dataService: DataService, public router: Router, private tokenCheckService: TokenCheckService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
       return;
@@ -54,7 +54,7 @@ export class HistoryComponent implements OnInit {
     });
   }
 
-  updateHistory() {
+  updateHistory(): void {
     this.dataService.getHistorySince(this.lastGeneratedTimestamp == null ? '' : this.lastGeneratedTimestamp).subscribe(
       historiesSince => {
         historiesSince.forEach( (historySince, index, a) => {
@@ -64,7 +64,7 @@ export class HistoryComponent implements OnInit {
               historySince.data = this.preprocessPumpData(historySince.data);
             }
 
-            var dataset = this.getChartDataSetByChartName(historySince.chartName);
+            const dataset = this.getChartDataSetByChartName(historySince.chartName);
 
             dataset[0].data.unshift(...historySince.data);
             //todo: probably remove all of the data checking timestamps instead of simple count
@@ -73,7 +73,7 @@ export class HistoryComponent implements OnInit {
 
         this.lastGeneratedTimestamp = historiesSince.length > 0 ? historiesSince[0].generatedTimestamp : null;
 
-        let squashedData = [];
+        const squashedData = [];
         this.chart.data.datasets.forEach( (dataset, index, a) => {
           squashedData.push(...dataset.data);
         });
@@ -85,18 +85,18 @@ export class HistoryComponent implements OnInit {
       });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.timer) {
       clearInterval(this.timer);
     }
   }
 
   preprocessPumpData(sourceData: Array<any>): Array<any> {
-    var newData = [];
+    const newData = [];
     sourceData.forEach(p => {
       newData.push(p);
       if (p.y === 1) {
-        var newP = Object.assign({}, p);
+        const newP = Object.assign({}, p);
         newP.x = new Date(newP.x.getTime() - 1);
         newP.y = 0;
         newData.push(newP);
@@ -118,8 +118,8 @@ export class HistoryComponent implements OnInit {
   }
 
   createChart(histories: Array<History>): any {
-    var latestTimestamp = this.findLatestTimestamp(histories);
-    var earliestTimestamp = this.findEarliestTimestamp(histories);
+    const latestTimestamp = this.findLatestTimestamp(histories);
+    const earliestTimestamp = this.findEarliestTimestamp(histories);
 
     return new Chart(document.getElementById("lineChart"), {
       type: 'scatter',
@@ -171,12 +171,12 @@ export class HistoryComponent implements OnInit {
     });
   }
 
-  populateChart(chart: any, histories: Array<History>) {
+  populateChart(chart: any, histories: Array<History>): void {
     histories.forEach( (history, index, a) => {
       history.data = this.preprocessPoints(history.data);
 
-      var yAxisIdMap;
-      var lineTensionMap = 0.4;
+      let yAxisIdMap;
+      let lineTensionMap = 0.4;
       switch (history.reportDataType) {
         case 'AIR_TEMP':
         yAxisIdMap = 'temperature';

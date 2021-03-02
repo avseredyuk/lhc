@@ -13,7 +13,7 @@ export class StatusComponent implements OnInit {
   objectKeys = Object.keys;
   status: Status;
   gaugeObjects: Array<Gauge> = [];
-  gaugesInitialized: Boolean = false;
+  gaugesInitialized: boolean = false;
   timer: any;
 
   @ViewChildren('gauges') gauges: QueryList<any>;
@@ -40,7 +40,7 @@ export class StatusComponent implements OnInit {
 
   constructor(private dataService: DataService, private utilService: UtilService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.dataService.getStatus().subscribe(
       data => {
         this.status = this.postProcessStatus(data);
@@ -51,13 +51,13 @@ export class StatusComponent implements OnInit {
     }, 60000);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.timer) {
       clearInterval(this.timer);
     }
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.gauges.changes.subscribe(t => {
       this.initGauges();
     })
@@ -65,19 +65,19 @@ export class StatusComponent implements OnInit {
 
   postProcessStatus(status: Status): Status {
     Object.keys(status.lastPings).forEach((ping, i, array) => {
-      let unprocessedObject = status.lastPings[ping];
+      const unprocessedObject = status.lastPings[ping];
       status.lastPings[ping] = new Object();
       status.lastPings[ping].timestamp = this.utilService.formatTimestamp(unprocessedObject);
       status.lastPings[ping].interval = this.utilService.formatTimeInterval(unprocessedObject);
     });
     Object.keys(status.lastBootups).forEach((bootup, i, array) => {
-      let unprocessedObject = status.lastBootups[bootup];
+      const unprocessedObject = status.lastBootups[bootup];
       status.lastBootups[bootup] = new Object();
       status.lastBootups[bootup].timestamp = this.utilService.formatTimestamp(unprocessedObject);
       status.lastBootups[bootup].interval = this.utilService.formatTimeInterval(unprocessedObject);
     });
     Object.keys(status.lastPumps).forEach((pump, i, array) => {
-      let unprocessedObject = status.lastPumps[pump];
+      const unprocessedObject = status.lastPumps[pump];
       status.lastPumps[pump] = new Object();
       status.lastPumps[pump].timestamp = this.utilService.formatTimestamp(unprocessedObject);
       status.lastPumps[pump].interval = this.utilService.formatTimeInterval(unprocessedObject);
@@ -85,7 +85,7 @@ export class StatusComponent implements OnInit {
     return status;
   }
 
-  formatGaugeMeasureUnit(dataType: string) {
+  formatGaugeMeasureUnit(dataType: string): string {
     if (dataType === 'AIR_TEMP') {
       return " °C";
     } else if (dataType === 'HUMIDITY') {
@@ -95,11 +95,11 @@ export class StatusComponent implements OnInit {
     }
   }
 
-  updateGauges() {
+  updateGauges(): void {
     this.dataService.getStatus().subscribe((data) => {
       this.gaugeObjects.forEach((gauge, i, array) => {
-        let originalValue = +data.gauges[i].value;
-        let roundedValue = Math.round(originalValue * 100) / 100;
+        const originalValue = +data.gauges[i].value;
+        const roundedValue = Math.round(originalValue * 100) / 100;
         gauge.set(originalValue);
         gauge.canvas.nextElementSibling.innerText = String(roundedValue) + this.formatGaugeMeasureUnit(data.gauges[i].dataType);
       });
@@ -110,16 +110,16 @@ export class StatusComponent implements OnInit {
     });
   }
 
-  initGauges() {
+  initGauges(): void {
     if (this.gaugesInitialized) {
       return;
     }
     this.gaugesInitialized = true;
     this.status.gauges.forEach((gauge, i, array) => {
-      let originalValue = +this.status.gauges[i].value;
-      let roundedValue = Math.round(originalValue * 100) / 100;
+      const originalValue = +this.status.gauges[i].value;
+      const roundedValue = Math.round(originalValue * 100) / 100;
 
-      let localOptions =  JSON.parse(JSON.stringify(this.gaugeOptions));
+      const localOptions =  JSON.parse(JSON.stringify(this.gaugeOptions));
 
       let minValue;
       let maxValue;
@@ -152,7 +152,7 @@ export class StatusComponent implements OnInit {
         ]
       }
 
-      let g = new Gauge(document.getElementById("gauge" + i)).setOptions(localOptions);
+      const g = new Gauge(document.getElementById("gauge" + i)).setOptions(localOptions);
       g.maxValue = maxValue;
       g.animationSpeed = 1;
       g.setMinValue(minValue);
@@ -165,15 +165,15 @@ export class StatusComponent implements OnInit {
 
   }
 
-  hasPings(): Boolean {
+  hasPings(): boolean {
     return this.status.lastPings && Object.keys(this.status.lastPings).length > 0;
   }
 
-  hasPumps(): Boolean {
+  hasPumps(): boolean {
     return this.status.lastPumps && Object.keys(this.status.lastPumps).length > 0;
   }
 
-  hasBootups(): Boolean {
+  hasBootups(): boolean {
     return this.status.lastBootups && Object.keys(this.status.lastBootups).length > 0;
   }
 

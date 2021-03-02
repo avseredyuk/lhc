@@ -6,7 +6,7 @@ export class Status {
 }
 
 export class GaugeData {
-	deviceName: string;
-	dataType: string;
-	value: string;
+  deviceName: string;
+  dataType: string;
+  value: string;
 }

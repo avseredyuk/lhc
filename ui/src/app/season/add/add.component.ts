@@ -4,7 +4,6 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../service/data.service";
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
-import {Device} from "../../model/device";
 import {Season} from "../../model/season";
 import {TokenCheckService} from "../../service/token-check.service";
 import {UtilService} from "../../service/util.service";
@@ -31,7 +30,7 @@ export class SeasonAddComponent extends BaseComponent implements OnInit {
   	this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -49,16 +48,16 @@ export class SeasonAddComponent extends BaseComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
   	if (this.addForm.invalid) {
       return;
     }
 
-    let newSeason = new Season();
+    const newSeason = new Season();
     newSeason.deviceId = this.deviceId;
     newSeason.name = this.addForm.controls['name'].value;
 
-    this.dataService.createSeason(newSeason).subscribe( data => {
+    this.dataService.createSeason(newSeason).subscribe(data => {
       this.navigateWithNotification('devices/' + this.deviceId + '/seasons', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     }, error => {
       if (error.status === 400) {

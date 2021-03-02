@@ -6,15 +6,15 @@ export class Season {
 }
 
 export class Statistics {
-	totalCount: number;
-	totalWeight: number;
-	avgCropWeight: number;
+  totalCount: number;
+  totalWeight: number;
+  avgCropWeight: number;
 }
 
 export class Crop {
-	id: number;
-	seasonId: number;
-	weight: number;
-	count: number;
-	d: number;
+  id: number;
+  seasonId: number;
+  weight: number;
+  count: number;
+  d: number;
 }

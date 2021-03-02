@@ -5,7 +5,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../service/data.service";
 import {PlantMaintenance, PlantMaintenanceDetail} from "../../model/plant-maintenance";
 import {ApiResult} from "../../model/api-result";
-import {Device} from "../../model/device";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
 import {TokenCheckService} from "../../service/token-check.service";
@@ -44,7 +43,7 @@ export class PlantMaintenanceEditComponent extends BaseComponent implements OnIn
     })
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -79,7 +78,7 @@ export class PlantMaintenanceEditComponent extends BaseComponent implements OnIn
         this.newTime = new Date(this.maintenance.d);
       },
       error => {
-        var errNotification;
+        let errNotification;
         if (error.status === 400) {
           errNotification = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
         } else {
@@ -90,7 +89,7 @@ export class PlantMaintenanceEditComponent extends BaseComponent implements OnIn
     );
   }
 
-  addDetail() {
+  addDetail(): void {
     if (this.editForm.controls['newDetailKey'].value !== ''
       && this.editForm.controls['newDetailValue'].value !== ''
       && this.maintenance.details.filter(c => c.key === this.editForm.controls['newDetailKey'].value).length == 0) {
@@ -100,7 +99,7 @@ export class PlantMaintenanceEditComponent extends BaseComponent implements OnIn
     }
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.editForm.invalid) {
       return;
     }
@@ -108,16 +107,16 @@ export class PlantMaintenanceEditComponent extends BaseComponent implements OnIn
     this.maintenance.ph = parseFloat(this.editForm.controls['ph'].value);
     this.maintenance.tds = parseFloat(this.editForm.controls['tds'].value);
     this.maintenance.d = this.utilService.combineDateAndTime(this.newDate, this.newTime).getTime();
-    this.dataService.updatePlantMaintenance(this.maintenance).subscribe( data => {
+    this.dataService.updatePlantMaintenance(this.maintenance).subscribe(data => {
       this.navigateWithNotification('devices/' + this.deviceId + '/maintenance', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     });
   }
 
-  removeDetail(detail: PlantMaintenanceDetail) {
+  removeDetail(detail: PlantMaintenanceDetail): void {
     this.maintenance.details = this.maintenance.details.filter(d => d.key != detail.key);
   }
 
-  hasDetails(): Boolean {
+  hasDetails(): boolean {
     return this.maintenance !== undefined && this.maintenance.details !== undefined && this.maintenance.details.length > 0;
   }
 

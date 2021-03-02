@@ -4,7 +4,6 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../service/data.service";
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
-import {Device} from "../../model/device";
 import {PlantMaintenance, PlantMaintenanceDetail} from "../../model/plant-maintenance";
 import {TokenCheckService} from "../../service/token-check.service";
 import {UtilService} from "../../service/util.service";
@@ -36,7 +35,7 @@ export class PlantMaintenanceAddComponent extends BaseComponent implements OnIni
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -57,19 +56,19 @@ export class PlantMaintenanceAddComponent extends BaseComponent implements OnIni
     	newDetailValue: this.newDetailValueCtrl
     });
 
-    let clonedMaintenance = this.componentCommunicationService.getClonedMaintenance();
+    const clonedMaintenance = this.componentCommunicationService.getClonedMaintenance();
     if (clonedMaintenance !== undefined) {
       this.addForm.controls['ph'].setValue(clonedMaintenance.ph);
       this.addForm.controls['tds'].setValue(clonedMaintenance.tds);
       this.addForm.controls['type'].setValue(clonedMaintenance.maintenanceType);
       this.newDetails = clonedMaintenance.details;
-      this.newDetails.forEach((detail, index, a) => {
+      this.newDetails.forEach(detail => {
         detail.id = null;
       });
     }
   }
 
-  addDetail() {
+  addDetail(): void {
   	if (this.addForm.controls['newDetailKey'].value !== ''
       && this.addForm.controls['newDetailValue'].value !== ''
       && this.newDetails.filter(c => c.key === this.addForm.controls['newDetailKey'].value).length == 0) {
@@ -79,23 +78,23 @@ export class PlantMaintenanceAddComponent extends BaseComponent implements OnIni
   	}
   }
 
-  removeDetail(detail: PlantMaintenanceDetail) {
+  removeDetail(detail: PlantMaintenanceDetail): void {
     this.newDetails = this.newDetails.filter(d => d.key != detail.key);
   }
 
-  onSubmit() {
+  onSubmit(): void {
   	if (this.addForm.invalid) {
       return;
     }
 
-    let newPm = new PlantMaintenance();
+    const newPm = new PlantMaintenance();
     newPm.deviceId = this.deviceId;
     newPm.maintenanceType = this.addForm.controls['type'].value;
     newPm.ph = parseFloat(this.addForm.controls['ph'].value);
     newPm.tds = parseFloat(this.addForm.controls['tds'].value);
     newPm.details = this.newDetails;
     
-    this.dataService.createPlantMaintenance(newPm).subscribe( data => {
+    this.dataService.createPlantMaintenance(newPm).subscribe(data => {
       this.navigateWithNotification('devices/' + this.deviceId + '/maintenance', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     }, error => {
       if (error.status === 400) {
@@ -106,7 +105,7 @@ export class PlantMaintenanceAddComponent extends BaseComponent implements OnIni
     });
   }
 
-  hasDetails(): Boolean {
+  hasDetails(): boolean {
     return this.newDetails.length > 0;
   }
 }

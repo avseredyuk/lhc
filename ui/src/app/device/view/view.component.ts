@@ -3,7 +3,7 @@ import {Component, OnInit, ViewChild} from "@angular/core";
 import {DataService} from "../../service/data.service";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Device, DeviceReportDataExclusion} from "../../model/device";
+import {Device} from "../../model/device";
 import {ApiResult} from "../../model/api-result";
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
 import {TokenCheckService} from "../../service/token-check.service";
@@ -27,7 +27,7 @@ export class DeviceViewComponent extends BaseComponent implements OnInit {
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
     if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -37,13 +37,13 @@ export class DeviceViewComponent extends BaseComponent implements OnInit {
     this.loadDevice();
   }
 
-  loadDevice() {
+  loadDevice(): void {
     this.dataService.getDevice(this.deviceId).subscribe(
       (data: ApiResult<Device>) => {
         this.device = data.data;
       },
       error => {
-        var errNotification;
+        let errNotification;
         if (error.status === 404) {
           errNotification = [new AppNotification('Device not found', AppNotificationType.ERROR)];
         } else {
@@ -54,33 +54,30 @@ export class DeviceViewComponent extends BaseComponent implements OnInit {
     );
   }
 
-  enableRunPumpOnce() {
+  enableRunPumpOnce(): void {
   	if (confirm('Are you sure you want to run pump for device "' + this.device.name + '" ?')) {
-      this.dataService.enableRunPumpOnce(this.deviceId).subscribe(
-        (data: ApiResult<Boolean>) => {
-          this.notificateThisPage([new AppNotification('Pump enabled', AppNotificationType.SUCCESS)]);
-          this.loadDevice();
-        },
-        error => {
-          if (error.status === 400) {
-            this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
-          } else {
-            this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
-          }
+      this.dataService.enableRunPumpOnce(this.deviceId).subscribe((data: ApiResult<boolean>) => {
+        this.notificateThisPage([new AppNotification('Pump enabled', AppNotificationType.SUCCESS)]);
+        this.loadDevice();
+      }, error => {
+        if (error.status === 400) {
+          this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
+        } else {
+          this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
         }
-      );
+      });
     }
   }
 
-  hasConfig(): Boolean {
+  hasConfig(): boolean {
     return this.device.config && this.device.config.length > 0;
   }
 
-  hasExclusions(): Boolean {
+  hasExclusions(): boolean {
     return this.device.exclusions && this.device.exclusions.length > 0;
   }
 
-  hasNotes(): Boolean {
+  hasNotes(): boolean {
     return this.device.notes != null && this.device.notes.length > 0;
   }
 

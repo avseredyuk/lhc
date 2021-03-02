@@ -7,7 +7,7 @@ export class AppNotification {
   	this.type = type;
   }
 
-  isError(): Boolean {
+  isError(): boolean {
   	return this.type === AppNotificationType.ERROR;
   }
 }

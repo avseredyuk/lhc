@@ -22,7 +22,7 @@ export class DeviceListComponent extends BaseComponent implements OnInit {
     super(router, componentCommunicationService);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
     if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -32,36 +32,33 @@ export class DeviceListComponent extends BaseComponent implements OnInit {
     this.loadData();
   }
 
-  loadData() {
+  loadData(): void {
     this.dataService.getDevices().subscribe(
       data => this.devices = data
     );
   }
 
-  deleteDevice(device: Device) {
+  deleteDevice(device: Device): void {
     if (confirm('Are you sure you want to delete device "' + device.name + '" ?')) {
-      this.dataService.deleteDevice(device).subscribe(
-        data => {
-          this.notificateThisPage([new AppNotification('Deleted device: ' + device.name, AppNotificationType.SUCCESS)]);
-          this.loadData();
-        },
-        error => {
-          if (error.status === 400) {
-            this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
-          } else {
-            this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
-          }
-          this.loadData();
+      this.dataService.deleteDevice(device).subscribe(data => {
+        this.notificateThisPage([new AppNotification('Deleted device: ' + device.name, AppNotificationType.SUCCESS)]);
+        this.loadData();
+      }, error => {
+        if (error.status === 400) {
+          this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
+        } else {
+          this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
         }
-       );
+        this.loadData();
+      });
     }
   }
 
-  addDevice() {
+  addDevice(): void {
     this.router.navigate(['devices/add']);
   }
 
-  hasData(): Boolean {
+  hasData(): boolean {
     return typeof this.devices !== 'undefined' && this.devices.length > 0;
   }
 

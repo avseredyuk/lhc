@@ -27,7 +27,7 @@ export class SensorReportsComponent extends BaseComponent implements OnInit {
   	this.route.params.subscribe(params => this.deviceId = params.id);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -37,19 +37,19 @@ export class SensorReportsComponent extends BaseComponent implements OnInit {
     this.loadPageForDevice();
   }
 
-  loadPageForDevice() {
+  loadPageForDevice(): void {
     this.dataService.getSensorReportsByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(sensorReports => {
       this.sensorReportsForDevice = sensorReports.content;
       this.totalPages = sensorReports.totalPages;
     });
   }
 
-  loadPage(p) {
+  loadPage(p: number): void {
     this.pageNumber = p;
     this.loadPageForDevice();
   }
 
-  deleteSensorReport(sensorReport: SensorReport) {
+  deleteSensorReport(sensorReport: SensorReport): void {
     if (confirm('Are you sure you want to delete sensor report?')) {
       this.dataService.deleteSensorReport(sensorReport).subscribe(data => {
         this.notificateThisPage([new AppNotification('Deleted sensor report: ' + sensorReport.id, AppNotificationType.SUCCESS)]);
@@ -58,7 +58,7 @@ export class SensorReportsComponent extends BaseComponent implements OnInit {
     }
   }
 
-  hasData(): Boolean {
+  hasData(): boolean {
     return typeof this.sensorReportsForDevice !== 'undefined' && this.sensorReportsForDevice.length > 0;
   }
 }

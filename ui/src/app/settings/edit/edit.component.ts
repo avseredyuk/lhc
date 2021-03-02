@@ -33,7 +33,7 @@ export class SettingsEditComponent extends BaseComponent implements OnInit {
     })
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -54,7 +54,7 @@ export class SettingsEditComponent extends BaseComponent implements OnInit {
       this.editForm.controls['key'].setValue(this.configuration.key);
       this.editForm.controls['value'].setValue(this.configuration.value);
     }, error => {
-      var errNotification;
+      let errNotification;
       if (error.status === 404) {
         errNotification = [new AppNotification('Settings not found', AppNotificationType.ERROR)];
       } else {
@@ -64,7 +64,7 @@ export class SettingsEditComponent extends BaseComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.configuration.key = this.editForm.controls['key'].value;
     this.configuration.value = this.editForm.controls['value'].value;
     this.dataService.updateConfiguration(this.configuration).subscribe(data => {

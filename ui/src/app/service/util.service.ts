@@ -23,24 +23,24 @@ export class UtilService {
   public VALIDATION_PATTERN_COUNT: string = "[0-9]{1,5}";
   public VALIDATION_PATTERN_SEASON_NAME: string = ".{1,100}";
 
-  formatDeviceName(name: string, privateName: string) {
+  formatDeviceName(name: string, privateName: string): string {
     return privateName == null ? name : name + ' (' + privateName + ')';
   }
 
   formatTimestamp(timestamp: number): string {
-    var localeId = 'uk-UA';
+    const localeId = 'uk-UA';
     return new Date(timestamp).toLocaleString(localeId);
   }
 
   formatTimeInterval(timestampOld: number): string {
-    var timestamp = Math.floor((new Date().getTime() - timestampOld) / 1000) ;
-    var days, hours, minutes, seconds;
-    var _days = Math.floor(timestamp / 86400);
+    let timestamp = Math.floor((new Date().getTime() - timestampOld) / 1000) ;
+    let days, hours, minutes, seconds;
+    const _days = Math.floor(timestamp / 86400);
     timestamp %= 86400;
-    var _hours = Math.floor(timestamp / 3600);
+    const _hours = Math.floor(timestamp / 3600);
     timestamp %= 3600;
-    var _minutes = Math.floor(timestamp / 60);
-    var _seconds = timestamp % 60;
+    const _minutes = Math.floor(timestamp / 60);
+    const _seconds = timestamp % 60;
     if (_hours   < 10) {hours   = "0"+_hours;}   else {hours   = _hours;}
     if (_minutes < 10) {minutes = "0"+_minutes;} else {minutes = _minutes;}
     if (_seconds < 10) {seconds = "0"+_seconds;} else {seconds = _seconds;}
@@ -52,55 +52,55 @@ export class UtilService {
     return days + hours + ':' + minutes + ':' + seconds;
   }
 
-  getDateFromDateTime(timestamp: number): String {
+  getDateFromDateTime(timestamp: number): string {
     return new Date(timestamp).toISOString().slice(0,10);
   }
 
-  getTimeFromDateTime(timestamp: number): String {
+  getTimeFromDateTime(timestamp: number): string {
     return new Date(timestamp).toISOString().slice(11,19);
   }
 
-  convertDateToUTC(date) {
+  convertDateToUTC(date): Date {
     return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
   }
 
-  combineDateAndTime(date, time) {
-    var timeString = time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var day = date.getDate();
-    var dateString = '' + year + '-' + month + '-' + day;
-    var combined = new Date(dateString + ' ' + timeString);
+  combineDateAndTime(date, time): Date {
+    const timeString = time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const dateString = '' + year + '-' + month + '-' + day;
+    const combined = new Date(dateString + ' ' + timeString);
     return combined;
-  };
+  }
 
   roundToTwo(num: number) {
     return Math.round((num + Number.EPSILON) * 100) / 100;
   }
 
-  isCurrentPage(currentPage, pageNumber) {
+  isCurrentPage(currentPage: any, pageNumber: any) {
     return currentPage == pageNumber;
   }
 
-  isPointsOrCurrentPage(currentPage, pageNumber) {
+  isPointsOrCurrentPage(currentPage: any, pageNumber: any) {
     return this.isCurrentPage(currentPage, pageNumber) || currentPage == '...';
   }
 
   pagination(c, m): Array<string> {
-    var current = c,
+    const current = c,
         last = m,
         delta = 2,
         left = current - delta,
         right = current + delta + 1,
         range = [],
-        rangeWithDots = [],
-        l;
+        rangeWithDots = [];
+    let l;
     for (let i = 1; i <= last; i++) {
         if (i == 1 || i == last || i >= left && i < right) {
             range.push(i);
         }
     }
-    for (let i of range) {
+    for (const i of range) {
         if (l) {
             if (i - l === 2) {
                 rangeWithDots.push(l + 1);

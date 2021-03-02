@@ -3,10 +3,7 @@ import {Component, OnInit, ViewChild, Renderer2} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../service/data.service";
 import {PlantMaintenance} from "../../model/plant-maintenance";
-import {AppNotification} from "../../model/app-notification";
-import {Device} from "../../model/device";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
-import {tap} from "rxjs/operators";
 import {TokenCheckService} from "../../service/token-check.service";
 import {UtilService} from "../../service/util.service";
 import {ApiResult} from "../../model/api-result";
@@ -31,7 +28,7 @@ export class PlantMaintenanceListComponent extends BaseComponent implements OnIn
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
     if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -39,7 +36,7 @@ export class PlantMaintenanceListComponent extends BaseComponent implements OnIn
     }
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
 
-    let storedPageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
+    const storedPageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
     if (storedPageNumber !== undefined) {
       this.pageNumber = storedPageNumber;
     }
@@ -47,19 +44,19 @@ export class PlantMaintenanceListComponent extends BaseComponent implements OnIn
     this.loadPageForDevice();
   }
 
-  loadPageForDevice() {
+  loadPageForDevice(): void {
     this.dataService.getPlantMaintenancesByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(maintenances => {
       this.plantMaintenancesForDevice = maintenances.content;
       this.totalPages = maintenances.totalPages;
     });
   }
 
-  loadPage(p) {
+  loadPage(p: number): void {
     this.pageNumber = p;
     this.loadPageForDevice();
   }
 
-  deleteMaintenance(plantMaintenance: PlantMaintenance) {
+  deleteMaintenance(plantMaintenance: PlantMaintenance): void {
     if (confirm('Are you sure you want to delete plant maintenance?')) {
       this.dataService.deletePlantMaintenance(plantMaintenance).subscribe(data => {
         this.loadPageForDevice();
@@ -67,17 +64,17 @@ export class PlantMaintenanceListComponent extends BaseComponent implements OnIn
     }
   }
 
-  addPlantMaintenance() {
+  addPlantMaintenance(): void {
     this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
     this.router.navigate(['devices/' + this.deviceId + '/maintenance/add']);
   }
 
-  editPlantMaintenance(maintenanceId: number) {
+  editPlantMaintenance(maintenanceId: number): void {
     this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
     this.router.navigate(['devices/' + this.deviceId + '/maintenance/' + maintenanceId + '/edit']);
   }
 
-  cloneMaintenance(plantMaintenance: PlantMaintenance) {
+  cloneMaintenance(plantMaintenance: PlantMaintenance): void {
     this.dataService.getPlantMaintenance(plantMaintenance.deviceId, plantMaintenance.id).subscribe(
       (data: ApiResult<PlantMaintenance>) => {
         this.componentCommunicationService.setClonedMaintenance(data.data);
@@ -86,7 +83,7 @@ export class PlantMaintenanceListComponent extends BaseComponent implements OnIn
       });
   }
 
-  hasData(): Boolean {
+  hasData(): boolean {
     return typeof this.plantMaintenancesForDevice !== 'undefined' && this.plantMaintenancesForDevice.length > 0;
   }
 }

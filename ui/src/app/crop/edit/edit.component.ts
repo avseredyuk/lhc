@@ -5,7 +5,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../service/data.service";
 import {Crop} from "../../model/season";
 import {ApiResult} from "../../model/api-result";
-import {Device} from "../../model/device";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
 import {TokenCheckService} from "../../service/token-check.service";
@@ -44,7 +43,7 @@ export class CropEditComponent extends BaseComponent implements OnInit {
     })
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -73,7 +72,7 @@ export class CropEditComponent extends BaseComponent implements OnInit {
       this.newDate = new Date(this.crop.d);
       this.newTime = new Date(this.crop.d);
     }, error => {
-      var errNotification;
+      let errNotification;
       if (error.status === 400) {
         errNotification = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
       } else {
@@ -87,7 +86,7 @@ export class CropEditComponent extends BaseComponent implements OnInit {
     );
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.editForm.invalid) {
       return;
     }

@@ -27,7 +27,7 @@ export class PumpActionsComponent extends BaseComponent implements OnInit {
     this.route.params.subscribe(params => this.deviceId = params.id);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -37,19 +37,19 @@ export class PumpActionsComponent extends BaseComponent implements OnInit {
     this.loadPageForDevice();
   }
 
-  loadPageForDevice() {
+  loadPageForDevice(): void {
     this.dataService.getPumpActionsByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(pumpActions => {
       this.pumpActionsForDevice = pumpActions.content;
       this.totalPages = pumpActions.totalPages;
     });
   }
 
-  loadPage(p) {
+  loadPage(p: number): void {
     this.pageNumber = p;
     this.loadPageForDevice();
   }
 
-  deletePumpAction(pumpAction: PumpAction) {
+  deletePumpAction(pumpAction: PumpAction): void {
     if (confirm('Are you sure you want to delete pump action?')) {
       this.dataService.deletePumpAction(pumpAction).subscribe(data => {
         this.notificateThisPage([new AppNotification('Deleted pump action: ' + pumpAction.id, AppNotificationType.SUCCESS)]);
@@ -58,7 +58,7 @@ export class PumpActionsComponent extends BaseComponent implements OnInit {
     }
   }
 
-  hasData(): Boolean {
+  hasData(): boolean {
     return typeof this.pumpActionsForDevice !== 'undefined' && this.pumpActionsForDevice.length > 0;
   }
 

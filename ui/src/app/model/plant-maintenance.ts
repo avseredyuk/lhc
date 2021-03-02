@@ -9,11 +9,11 @@ export class PlantMaintenance {
 }
 
 export class PlantMaintenanceDetail {
-	constructor(key:string, value:string) {
-		this.key = key;
-		this.value = value;
-	}
-	id: number;
-	key: string;
-	value: string;
+  constructor(key:string, value:string) {
+    this.key = key;
+    this.value = value;
+  }
+  id: number;
+  key: string;
+  value: string;
 }

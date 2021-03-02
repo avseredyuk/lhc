@@ -4,8 +4,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../service/data.service";
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
-import {Device} from "../../model/device";
-import {Crop, Season} from "../../model/season";
+import {Crop} from "../../model/season";
 import {TokenCheckService} from "../../service/token-check.service";
 import {UtilService} from "../../service/util.service";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
@@ -35,7 +34,7 @@ export class CropAddComponent extends BaseComponent implements OnInit {
   	this.route.params.subscribe(params => this.seasonId = params.seasonid)
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -58,12 +57,12 @@ export class CropAddComponent extends BaseComponent implements OnInit {
    );
   }
 
-  onSubmit() {
+  onSubmit(): void {
   	if (this.addForm.invalid) {
       return;
     }
 
-    let newCrop = new Crop();
+    const newCrop = new Crop();
     newCrop.seasonId = this.seasonId;
     newCrop.weight = this.addForm.controls['weight'].value;
     newCrop.count = this.addForm.controls['count'].value;
@@ -71,7 +70,7 @@ export class CropAddComponent extends BaseComponent implements OnInit {
     this.dataService.createCrop(newCrop).subscribe( data => {
       this.navigateWithNotification('devices/' + this.deviceId + '/seasons/' + this.seasonId, [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     }, error => {
-      var errNotification;
+      let errNotification;
       if (error.status === 400 && error.error !== null) {
         errNotification = error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)});
       } else {

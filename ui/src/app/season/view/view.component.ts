@@ -1,15 +1,12 @@
 import {BaseComponent} from "../../base/base.component";
-import {Component, OnInit, ViewChild, Renderer2} from "@angular/core";
+import {Component, OnInit, ViewChild} from "@angular/core";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {DataService} from "../../service/data.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Device} from "../../model/device";
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
 import {TokenCheckService} from "../../service/token-check.service";
-import {Crop, Season, Statistics} from "../../model/season";
+import {Crop, Statistics} from "../../model/season";
 import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
-import {ApiResult} from "../../model/api-result";
-import {Page} from "../../model/page";
 import {UtilService} from "../../service/util.service";
 
 @Component({
@@ -35,7 +32,7 @@ export class SeasonViewComponent extends BaseComponent implements OnInit {
     this.route.params.subscribe(params => this.seasonId = params.seasonid);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
     if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -44,7 +41,7 @@ export class SeasonViewComponent extends BaseComponent implements OnInit {
 
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId + '/seasons']);});
 
-    let storedPageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
+    const storedPageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
     if (storedPageNumber !== undefined) {
       this.pageNumber = storedPageNumber;
     }
@@ -60,24 +57,24 @@ export class SeasonViewComponent extends BaseComponent implements OnInit {
     );
   }
 
-  loadPageForSeason() {
+  loadPageForSeason(): void {
     this.dataService.getCropsBySeasonId(this.seasonId, this.pageNumber - 1).subscribe(crops => {
       this.cropsForSeason = crops.content;
       this.totalPages = crops.totalPages;
     });
   }
 
-  loadPage(p) {
+  loadPage(p: number): void {
     this.pageNumber = p;
     this.loadPageForSeason();
   }
 
-  addCrop() {
+  addCrop(): void {
     this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
     this.router.navigate(['devices/' + this.deviceId + '/seasons/' + this.seasonId + '/crop/add']);
   }
 
-  deleteCrop(cropId: number) {
+  deleteCrop(cropId: number): void {
     if (confirm('Are you sure you want to delete crop?')) {
       this.dataService.deleteCrop(cropId).subscribe(data => {
         this.notificateThisPage([new AppNotification('Deleted crop: ' + cropId, AppNotificationType.SUCCESS)]);
@@ -89,17 +86,16 @@ export class SeasonViewComponent extends BaseComponent implements OnInit {
     }
   }
 
-  editCrop(cropId: number) {
+  editCrop(cropId: number): void {
     this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
     this.router.navigate(['devices/' + this.deviceId + '/seasons/' + this.seasonId + '/crop/' + cropId + '/edit']);
   }
 
-
-  hasData(): Boolean {
+  hasData(): boolean {
     return typeof this.cropsForSeason !== 'undefined' && this.cropsForSeason.length > 0;
   }
 
-  hasStatsData(): Boolean {
+  hasStatsData(): boolean {
     return typeof this.stats !== 'undefined';
   }
 

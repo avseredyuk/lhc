@@ -27,7 +27,7 @@ export class DeviceAddComponent extends BaseComponent implements OnInit {
     super(router, componentCommunicationService);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -41,7 +41,7 @@ export class DeviceAddComponent extends BaseComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.dataService.createDevice(this.addForm.value).subscribe(data => {
       this.navigateWithNotification('devices', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     }, error => {

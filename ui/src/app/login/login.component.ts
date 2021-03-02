@@ -23,7 +23,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
     super(router, componentCommunicationService);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
     this.tokenCheckService.removeToken();
 
@@ -36,7 +36,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.loginForm.invalid) {
       return;
     }

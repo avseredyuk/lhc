@@ -10,52 +10,52 @@ import {TokenCheckService} from "../../service/token-check.service";
 export class SidebarComponent implements OnInit {
 
   currentUrl: string;
-  hasToken: Boolean = false;
-  canGoBack: Boolean = false;
+  hasToken: boolean = false;
+  canGoBack: boolean = false;
   goBackCallback: () => any;
 
   constructor(private router: Router, private tokenCheckService: TokenCheckService) {
     router.events.subscribe((_: NavigationEnd) => this.currentUrl = this.router.url)
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.populateHasToken();
   }
 
-  isGroup(url: string) {
+  isGroup(url: string): boolean {
     return this.currentUrl && this.currentUrl.startsWith(url);
   }
 
-  isDeviceGroup(): Boolean {
+  isDeviceGroup(): boolean {
     return this.isGroup("/devices");
   }
 
-  isSettingsGroup(): Boolean {
+  isSettingsGroup(): boolean {
     return this.isGroup("/settings");
   }
 
-  isStatusGroup(): Boolean {
+  isStatusGroup(): boolean {
     return this.isGroup("/status");
   }
 
-  isHistoryGroup(): Boolean {
+  isHistoryGroup(): boolean {
     return this.isGroup("/history");
   }
 
-  isLoginGroup(): Boolean {
+  isLoginGroup(): boolean {
     return this.isGroup("/login");
   }
 
-  setGoBackCallback(callback: () => any) {
+  setGoBackCallback(callback: () => any): void {
     this.canGoBack = true;
     this.goBackCallback = callback;
   }
 
-  populateHasToken() {
+  populateHasToken(): void {
     this.hasToken = !this.tokenCheckService.isExpiredToken();
   }
 
-  logoutWithConfirmation() {
+  logoutWithConfirmation(): void {
     if (confirm('Are you sure you want to logout?"')) {
       this.tokenCheckService.removeToken();
       this.populateHasToken();

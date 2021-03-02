@@ -18,15 +18,15 @@ export class BaseComponent implements OnInit {
   	this.notifications = this.componentCommunicationService.getNotification();
   }
 
-  public hasNotifications(): Boolean {
+  public hasNotifications(): boolean {
     return typeof this.notifications !== 'undefined' && this.notifications.length > 0;
   }
 
-  public notificateThisPage(notifications: Array<AppNotification>) {
+  public notificateThisPage(notifications: Array<AppNotification>): void {
   	this.notifications = notifications;
   }
 
-  public navigateWithNotification(path: string, notifications: Array<AppNotification>) {
+  public navigateWithNotification(path: string, notifications: Array<AppNotification>): void {
   	this.componentCommunicationService.setNotification(notifications);
     this.router.navigate([path]);
   }

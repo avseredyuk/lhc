@@ -28,7 +28,7 @@ export class SettingsAddComponent extends BaseComponent implements OnInit {
     super(router, componentCommunicationService);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -45,12 +45,12 @@ export class SettingsAddComponent extends BaseComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
   	if (this.addForm.invalid) {
       return;
     }
 
-    let newConf = new Configuration();
+    const newConf = new Configuration();
     newConf.key = this.addForm.controls['key'].value;
     newConf.value = this.addForm.controls['value'].value;
 

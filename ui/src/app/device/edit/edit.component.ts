@@ -22,7 +22,7 @@ export class DeviceEditComponent extends BaseComponent implements OnInit {
   deviceId: number;
   device: Device = new Device();
   editForm: FormGroup;
-  originalDeviceName: String;
+  originalDeviceName: string;
   deviceNameCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
   deviceTokenCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
   deviceEnabledCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
@@ -40,7 +40,7 @@ export class DeviceEditComponent extends BaseComponent implements OnInit {
   	this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
   	if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -63,7 +63,7 @@ export class DeviceEditComponent extends BaseComponent implements OnInit {
     this.loadDevice();
   }
 
-  loadDevice() {
+  loadDevice(): void {
     this.dataService.getDevice(this.deviceId).subscribe(
       (data: ApiResult<Device>) => {
         this.device = data.data;
@@ -75,7 +75,7 @@ export class DeviceEditComponent extends BaseComponent implements OnInit {
         this.editForm.controls['devicePrivateName'].setValue(this.device.privateName);
       },
       error => {
-        var errNotification;
+        let errNotification;
         if (error.status === 404) {
           errNotification = [new AppNotification('Device not found', AppNotificationType.ERROR)];
         } else {
@@ -86,7 +86,7 @@ export class DeviceEditComponent extends BaseComponent implements OnInit {
     );
   }
 
-  addConfig() {
+  addConfig(): void {
     if (this.editForm.controls['newConfigKey'].value !== ''
     	&& this.editForm.controls['newConfigValue'].value !== ''
     	&& this.editForm.controls['newConfigType'].value !== ''
@@ -102,11 +102,11 @@ export class DeviceEditComponent extends BaseComponent implements OnInit {
     }
   }
 
-  removeConfig(config: DeviceConfig) {
+  removeConfig(config: DeviceConfig): void {
     this.device.config = this.device.config.filter(c => c.key != config.key);
   }
 
-  addExclusion() {
+  addExclusion(): void {
   	if (this.editForm.controls['newExclusionType'].value !== ''
   		&& this.device.exclusions.filter(e => e.map === this.editForm.controls['newExclusionType'].value).length == 0) {
       this.device.exclusions.push(
@@ -116,17 +116,17 @@ export class DeviceEditComponent extends BaseComponent implements OnInit {
     }
   }
 
-  removeExclusion(exclusion: DeviceReportDataExclusion) {
+  removeExclusion(exclusion: DeviceReportDataExclusion): void {
     this.device.exclusions = this.device.exclusions.filter(e => e.map != exclusion.map);
   }
 
-  updateDevice() {
+  updateDevice(): void {
     this.device.name = this.editForm.controls['deviceName'].value;
     this.device.token = this.editForm.controls['deviceToken'].value;
     this.device.enabled = this.editForm.controls['deviceEnabled'].value;
     this.device.notes = this.editForm.controls['deviceNotes'].value;
     this.device.privateName = this.editForm.controls['devicePrivateName'].value;
-    this.dataService.updateDevice(this.device).subscribe( data => {
+    this.dataService.updateDevice(this.device).subscribe(data => {
       this.navigateWithNotification('devices/' + this.deviceId, [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     }, error => {
       if (error.status === 400) {
@@ -137,11 +137,11 @@ export class DeviceEditComponent extends BaseComponent implements OnInit {
     });
   }
 
-  hasConfig(): Boolean {
+  hasConfig(): boolean {
     return this.device.config && this.device.config.length > 0;
   }
 
-  hasExclusions(): Boolean {
+  hasExclusions(): boolean {
     return this.device.exclusions && this.device.exclusions.length > 0;
   }
 

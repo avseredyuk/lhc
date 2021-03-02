@@ -22,7 +22,7 @@ export class SettingsListComponent extends BaseComponent implements OnInit {
     super(router, componentCommunicationService);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
     if (!this.tokenCheckService.getRawToken()) {
       this.router.navigate(['login']);
@@ -32,14 +32,14 @@ export class SettingsListComponent extends BaseComponent implements OnInit {
     this.loadData();
   }
 
-  loadData() {
+  loadData(): void {
     this.dataService.getConfiguration().subscribe(data => 
       this.configurations = data
     );
   }
 
-  clearCache() {
-    this.dataService.clearCache().subscribe((data: ApiResult<Boolean>) => {
+  clearCache(): void {
+    this.dataService.clearCache().subscribe((data: ApiResult<boolean>) => {
       this.notificateThisPage([new AppNotification('Cache cleared', AppNotificationType.SUCCESS)]);
     }, error => {
       if (error.status === 400) {
@@ -50,15 +50,15 @@ export class SettingsListComponent extends BaseComponent implements OnInit {
     });
   }
 
-  editSettings(configuration: Configuration) {
+  editSettings(configuration: Configuration): void {
     this.router.navigate(['/settings/' + configuration.key + '/edit']);
   }
 
-  addSettings() {
+  addSettings(): void {
     this.router.navigate(['settings/add']);
   }
 
-  deleteSettings(configuration: Configuration) {
+  deleteSettings(configuration: Configuration): void {
     if (confirm('Are you sure you want to delete configuration "' + configuration.key + '" ?')) {
       this.dataService.deleteConfiguration(configuration).subscribe(data => {
         this.notificateThisPage([new AppNotification('Deleted configuration with key: ' + configuration.key, AppNotificationType.SUCCESS)]);
@@ -74,7 +74,7 @@ export class SettingsListComponent extends BaseComponent implements OnInit {
     }
   }
 
-  hasData(): Boolean {
+  hasData(): boolean {
     return typeof this.configurations !== 'undefined' && this.configurations.length > 0;
   }
 
