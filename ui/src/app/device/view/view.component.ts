@@ -1,4 +1,4 @@
-import {BaseComponent} from "../../base/base.component";
+import {BaseAuthComponent} from "../../base-auth/base-auth.component";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {DataService} from "../../service/data.service";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
@@ -15,24 +15,20 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.scss']
 })
-export class DeviceViewComponent extends BaseComponent implements OnInit {
+export class DeviceViewComponent extends BaseAuthComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   deviceId: number;
   device: Device = new Device();
 
   constructor(public router: Router, private dataService: DataService, public componentCommunicationService: ComponentCommunicationService,
-    private route: ActivatedRoute, private tokenCheckService: TokenCheckService, public utilService: UtilService) {
-    super(router, componentCommunicationService);
+    private route: ActivatedRoute, public tokenCheckService: TokenCheckService, public utilService: UtilService) {
+    super(router, componentCommunicationService, tokenCheckService);
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-    if (!this.tokenCheckService.getRawToken()) {
-      this.router.navigate(['login']);
-      return;
-    }
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices']);});
     this.loadDevice();
   }

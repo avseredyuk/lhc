@@ -1,4 +1,4 @@
-import {BaseComponent} from "../../base/base.component";
+import {BaseAuthComponent} from "../../base-auth/base-auth.component";
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {DataService} from "../../service/data.service";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
@@ -14,7 +14,7 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class SeasonListComponent extends BaseComponent implements OnInit {
+export class SeasonListComponent extends BaseAuthComponent implements OnInit {
 
   seasons: Season[];
   deviceId: number;
@@ -24,17 +24,14 @@ export class SeasonListComponent extends BaseComponent implements OnInit {
   stats: Statistics;
 
   constructor(public router: Router, private dataService: DataService, public componentCommunicationService: ComponentCommunicationService,
-    private tokenCheckService: TokenCheckService, private route: ActivatedRoute, public utilService: UtilService) {
-    super(router, componentCommunicationService);
+    public tokenCheckService: TokenCheckService, private route: ActivatedRoute, public utilService: UtilService) {
+    super(router, componentCommunicationService, tokenCheckService);
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-  	if (!this.tokenCheckService.getRawToken()) {
-      this.router.navigate(['login']);
-      return;
-    }
+
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
 
     const storedPageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
@@ -81,7 +78,7 @@ export class SeasonListComponent extends BaseComponent implements OnInit {
       this.dataService.deleteSeason(season.id).subscribe(data => {
         this.notificateThisPage([new AppNotification('Deleted season: ' + season.name, AppNotificationType.SUCCESS)]);
         this.loadPageForDevice();
-        this.dataService.getSeasonsStatistics(this.deviceId).subscribe(apiResult => 
+        this.dataService.getSeasonsStatistics(this.deviceId).subscribe(apiResult =>
           this.stats = apiResult.data
         );
       });

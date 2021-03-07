@@ -1,4 +1,4 @@
-import {BaseComponent} from "../../base/base.component";
+import {BaseAuthComponent} from "../../base-auth/base-auth.component";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -16,7 +16,7 @@ import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class SeasonEditComponent extends BaseComponent implements OnInit {
+export class SeasonEditComponent extends BaseAuthComponent implements OnInit {
 
  @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   cropId: number;
@@ -28,8 +28,8 @@ export class SeasonEditComponent extends BaseComponent implements OnInit {
   pageNumber: number;
 
   constructor(private formBuilder: FormBuilder, public router: Router, private dataService: DataService, private route: ActivatedRoute,
-  	public componentCommunicationService: ComponentCommunicationService, private tokenCheckService: TokenCheckService, private utilService: UtilService) {
-  	super(router, componentCommunicationService);
+  	public componentCommunicationService: ComponentCommunicationService, public tokenCheckService: TokenCheckService, private utilService: UtilService) {
+  	super(router, componentCommunicationService, tokenCheckService);
     this.route.params.subscribe(params => {
       this.seasonId = params.seasonid;
       this.deviceId = params.id;
@@ -38,10 +38,6 @@ export class SeasonEditComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     super.ngOnInit();
-    if (!this.tokenCheckService.getRawToken()) {
-      this.router.navigate(['login']);
-      return;
-    }
 
     this.sidebar.setGoBackCallback(() => {
       this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
@@ -71,7 +67,7 @@ export class SeasonEditComponent extends BaseComponent implements OnInit {
     if (this.editForm.invalid) {
       return;
     }
-    
+
     this.season.name = this.editForm.controls['name'].value;
     this.season.deviceId = this.deviceId;
     this.dataService.updateSeason(this.season).subscribe(data => {

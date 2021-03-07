@@ -1,5 +1,6 @@
 import {AppComponent} from "./app.component";
 import {AppRoutingModule} from "./app-routing.module";
+import {BaseAuthComponent} from './base-auth/base-auth.component';
 import {BaseComponent} from './base/base.component';
 import {BootupsComponent} from './bootups/bootups.component';
 import {BrowserModule} from "@angular/platform-browser";
@@ -64,6 +65,7 @@ import {TokenInterceptor} from "./core/interceptor";
     SettingsListComponent,
     SidebarComponent,
     StatusComponent,
+    BaseAuthComponent,
   ],
   imports: [
     BrowserModule,

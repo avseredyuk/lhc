@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {BaseComponent} from "../../base/base.component";
+import {BaseAuthComponent} from "../../base-auth/base-auth.component";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {DataService} from "../../service/data.service";
@@ -16,7 +16,7 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class DeviceEditComponent extends BaseComponent implements OnInit {
+export class DeviceEditComponent extends BaseAuthComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   deviceId: number;
@@ -34,18 +34,15 @@ export class DeviceEditComponent extends BaseComponent implements OnInit {
   newExclusionTypeCtrl: FormControl = this.formBuilder.control(this.utilService.deviceReportDataExclusionTypes[0], []);
 
   constructor(private formBuilder: FormBuilder, public router: Router, private route: ActivatedRoute, private dataService: DataService,
-  	private tokenCheckService: TokenCheckService, public componentCommunicationService: ComponentCommunicationService,
+  	public tokenCheckService: TokenCheckService, public componentCommunicationService: ComponentCommunicationService,
   	public utilService: UtilService) {
-    super(router, componentCommunicationService);
+    super(router, componentCommunicationService, tokenCheckService);
   	this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-  	if (!this.tokenCheckService.getRawToken()) {
-      this.router.navigate(['login']);
-      return;
-    }
+    
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
 
     this.editForm = this.formBuilder.group({

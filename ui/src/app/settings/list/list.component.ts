@@ -1,4 +1,4 @@
-import {BaseComponent} from "../../base/base.component";
+import {BaseAuthComponent} from "../../base-auth/base-auth.component";
 import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {Configuration} from "../../model/configuration";
@@ -13,27 +13,23 @@ import {ComponentCommunicationService} from "../../service/component-communicati
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class SettingsListComponent extends BaseComponent implements OnInit {
+export class SettingsListComponent extends BaseAuthComponent implements OnInit {
 
   configurations: Configuration[];
 
-  constructor(public router: Router, private dataService: DataService, private tokenCheckService: TokenCheckService,
+  constructor(public router: Router, private dataService: DataService, public tokenCheckService: TokenCheckService,
     public componentCommunicationService: ComponentCommunicationService) {
-    super(router, componentCommunicationService);
+    super(router, componentCommunicationService, tokenCheckService);
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-    if (!this.tokenCheckService.getRawToken()) {
-      this.router.navigate(['login']);
-      return;
-    }
 
     this.loadData();
   }
 
   loadData(): void {
-    this.dataService.getConfiguration().subscribe(data => 
+    this.dataService.getConfiguration().subscribe(data =>
       this.configurations = data
     );
   }

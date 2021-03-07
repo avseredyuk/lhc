@@ -1,4 +1,4 @@
-import {BaseComponent} from "../../base/base.component";
+import {BaseAuthComponent} from "../../base-auth/base-auth.component";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {DataService} from "../../service/data.service";
@@ -14,7 +14,7 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.scss']
 })
-export class SeasonViewComponent extends BaseComponent implements OnInit {
+export class SeasonViewComponent extends BaseAuthComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   deviceId: number;
@@ -26,18 +26,14 @@ export class SeasonViewComponent extends BaseComponent implements OnInit {
   stats: Statistics;
 
   constructor(public router: Router, private dataService: DataService, public componentCommunicationService: ComponentCommunicationService,
-    private route: ActivatedRoute, private tokenCheckService: TokenCheckService, public utilService: UtilService) {
-    super(router, componentCommunicationService);
+    private route: ActivatedRoute, public tokenCheckService: TokenCheckService, public utilService: UtilService) {
+    super(router, componentCommunicationService, tokenCheckService);
     this.route.params.subscribe(params => this.deviceId = params.id);
     this.route.params.subscribe(params => this.seasonId = params.seasonid);
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-    if (!this.tokenCheckService.getRawToken()) {
-      this.router.navigate(['login']);
-      return;
-    }
 
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId + '/seasons']);});
 
@@ -48,11 +44,11 @@ export class SeasonViewComponent extends BaseComponent implements OnInit {
 
     this.loadPageForSeason();
 
-    this.dataService.getSeasonStatistics(this.seasonId).subscribe(apiResult => 
+    this.dataService.getSeasonStatistics(this.seasonId).subscribe(apiResult =>
       this.stats = apiResult.data
     );
 
-    this.dataService.getSeasonName(this.seasonId).subscribe(apiResult => 
+    this.dataService.getSeasonName(this.seasonId).subscribe(apiResult =>
       this.seasonName = apiResult.data.name
     );
   }
@@ -79,7 +75,7 @@ export class SeasonViewComponent extends BaseComponent implements OnInit {
       this.dataService.deleteCrop(cropId).subscribe(data => {
         this.notificateThisPage([new AppNotification('Deleted crop: ' + cropId, AppNotificationType.SUCCESS)]);
         this.loadPageForSeason();
-        this.dataService.getSeasonStatistics(this.seasonId).subscribe(apiResult => 
+        this.dataService.getSeasonStatistics(this.seasonId).subscribe(apiResult =>
           this.stats = apiResult.data
         );
       });

@@ -1,4 +1,6 @@
+import {BaseAuthComponent} from "../base-auth/base-auth.component";
 import {Component, OnInit} from "@angular/core";
+import {ComponentCommunicationService} from "../service/component-communication.service";
 import {DataService} from "../service/data.service";
 import {History} from "../model/history";
 import {Chart} from "chart.js";
@@ -10,19 +12,19 @@ import {Router} from "@angular/router";
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.scss']
 })
-export class HistoryComponent implements OnInit {
+export class HistoryComponent extends BaseAuthComponent implements OnInit {
 
   chart: any;
   timer: any;
   lastGeneratedTimestamp: any = null;
 
-  constructor(private dataService: DataService, public router: Router, private tokenCheckService: TokenCheckService) { }
+  constructor(private dataService: DataService, public router: Router, public tokenCheckService: TokenCheckService,
+  	public componentCommunicationService: ComponentCommunicationService) {
+    super(router, componentCommunicationService, tokenCheckService);
+  }
 
   ngOnInit(): void {
-    if (!this.tokenCheckService.getRawToken()) {
-      this.router.navigate(['login']);
-      return;
-    }
+  	super.ngOnInit();
     this.dataService.getHistory().subscribe(
       histories => {
         histories.sort((a,b) => (a.reportDataType == 'PUMP') ? 1 : -1);

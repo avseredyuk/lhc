@@ -1,4 +1,4 @@
-import {BaseComponent} from "../../base/base.component";
+import {BaseAuthComponent} from "../../base-auth/base-auth.component";
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -16,7 +16,7 @@ import {ApiResult} from "../../model/api-result";
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class SettingsEditComponent extends BaseComponent implements OnInit {
+export class SettingsEditComponent extends BaseAuthComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   settingsKey: string;
@@ -26,8 +26,8 @@ export class SettingsEditComponent extends BaseComponent implements OnInit {
   configuration: Configuration;
 
   constructor(private formBuilder: FormBuilder, public router: Router, private dataService: DataService, private route: ActivatedRoute,
-  	public componentCommunicationService: ComponentCommunicationService, private tokenCheckService: TokenCheckService, private utilService: UtilService) {
-  	super(router, componentCommunicationService);
+  	public componentCommunicationService: ComponentCommunicationService, public tokenCheckService: TokenCheckService, private utilService: UtilService) {
+  	super(router, componentCommunicationService, tokenCheckService);
     this.route.params.subscribe(params => {
       this.settingsKey = params.key;
     })
@@ -35,11 +35,7 @@ export class SettingsEditComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     super.ngOnInit();
-  	if (!this.tokenCheckService.getRawToken()) {
-      this.router.navigate(['login']);
-      return;
-    }
-
+    
     this.sidebar.setGoBackCallback(() => {
       this.router.navigate(['settings']);
     });

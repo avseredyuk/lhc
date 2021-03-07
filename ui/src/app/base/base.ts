@@ -1,12 +1,10 @@
 import {AppNotification} from "../model/app-notification";
-import {Component, OnInit} from '@angular/core';
+import {OnInit} from '@angular/core';
+import {Injectable} from "@angular/core";
 import {ComponentCommunicationService} from "../service/component-communication.service";
 import {Router} from "@angular/router";
 
-@Component({
-  selector: 'app-base',
-  template: ''
-})
+@Injectable()
 export class BaseComponent implements OnInit {
  
   public notifications: Array<AppNotification> = [];

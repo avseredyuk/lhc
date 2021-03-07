@@ -1,4 +1,4 @@
-import {BaseComponent} from "../../base/base.component";
+import {BaseAuthComponent} from "../../base-auth/base-auth.component";
 import {Component, OnInit} from "@angular/core";
 import {DataService} from "../../service/data.service";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
@@ -13,21 +13,17 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class DeviceListComponent extends BaseComponent implements OnInit {
+export class DeviceListComponent extends BaseAuthComponent implements OnInit {
 
   devices: Device[];
 
   constructor(public router: Router, private dataService: DataService, public componentCommunicationService: ComponentCommunicationService,
-    private tokenCheckService: TokenCheckService, public utilService: UtilService) {
-    super(router, componentCommunicationService);
+    public tokenCheckService: TokenCheckService, public utilService: UtilService) {
+    super(router, componentCommunicationService, tokenCheckService);
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-    if (!this.tokenCheckService.getRawToken()) {
-      this.router.navigate(['login']);
-      return;
-    }
 
     this.loadData();
   }

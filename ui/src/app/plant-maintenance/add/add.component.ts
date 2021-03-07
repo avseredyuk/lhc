@@ -1,4 +1,4 @@
-import {BaseComponent} from "../../base/base.component";
+import {BaseAuthComponent} from "../../base-auth/base-auth.component";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -15,7 +15,7 @@ import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
-export class PlantMaintenanceAddComponent extends BaseComponent implements OnInit {
+export class PlantMaintenanceAddComponent extends BaseAuthComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   addForm: FormGroup;
@@ -29,19 +29,15 @@ export class PlantMaintenanceAddComponent extends BaseComponent implements OnIni
   pageNumber: number;
 
   constructor(private formBuilder: FormBuilder, public router: Router, private dataService: DataService,
-    private route: ActivatedRoute, private tokenCheckService: TokenCheckService, public utilService: UtilService,
+    private route: ActivatedRoute, public tokenCheckService: TokenCheckService, public utilService: UtilService,
     public componentCommunicationService: ComponentCommunicationService) {
-    super(router, componentCommunicationService);
+    super(router, componentCommunicationService, tokenCheckService);
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-  	if (!this.tokenCheckService.getRawToken()) {
-      this.router.navigate(['login']);
-      return;
-    }
-
+    
     this.sidebar.setGoBackCallback(() => {
       this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
       this.router.navigate(['devices/' + this.deviceId + '/maintenance']);
@@ -93,7 +89,7 @@ export class PlantMaintenanceAddComponent extends BaseComponent implements OnIni
     newPm.ph = parseFloat(this.addForm.controls['ph'].value);
     newPm.tds = parseFloat(this.addForm.controls['tds'].value);
     newPm.details = this.newDetails;
-    
+
     this.dataService.createPlantMaintenance(newPm).subscribe(data => {
       this.navigateWithNotification('devices/' + this.deviceId + '/maintenance', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     }, error => {

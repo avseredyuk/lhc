@@ -1,5 +1,5 @@
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
-import {BaseComponent} from "../../base/base.component";
+import {BaseAuthComponent} from "../../base-auth/base-auth.component";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {DataService} from "../../service/data.service";
@@ -14,7 +14,7 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
-export class DeviceAddComponent extends BaseComponent implements OnInit {
+export class DeviceAddComponent extends BaseAuthComponent implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   addForm: FormGroup;
@@ -22,17 +22,14 @@ export class DeviceAddComponent extends BaseComponent implements OnInit {
   tokenCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_DEVICE_TOKEN)]);
 
   constructor(private formBuilder: FormBuilder, public router: Router, private dataService: DataService,
-    private tokenCheckService: TokenCheckService, private utilService: UtilService,
+    public tokenCheckService: TokenCheckService, private utilService: UtilService,
     public componentCommunicationService: ComponentCommunicationService) {
-    super(router, componentCommunicationService);
+    super(router, componentCommunicationService, tokenCheckService);
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-  	if (!this.tokenCheckService.getRawToken()) {
-      this.router.navigate(['login']);
-      return;
-    }
+    
     this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices']);});
 
     this.addForm = this.formBuilder.group({
