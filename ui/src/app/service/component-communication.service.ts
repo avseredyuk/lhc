@@ -32,11 +32,11 @@ export class ComponentCommunicationService {
     this.setValue("clonedMaintenance", cloned);
   }
 
-  getPageNumber(key: string): number {
-    return this.getValue(key + "pageNumber");
+  getPageData(key: string): [number, number] {
+    return this.getValue(key + "pageData");
   }
 
-  setPageNumber(key: string, pageNumber: number): void {
-    this.setValue(key + "pageNumber", pageNumber);
+  setPageData(key: string, pageData: [number, number]): void {
+    this.setValue(key + "pageData", pageData);
   }
 }

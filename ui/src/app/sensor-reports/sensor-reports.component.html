@@ -44,6 +44,8 @@
 						<mat-paginator [length]="totalElements"
               				[pageSize]="pageSize"
               				[pageSizeOptions]="[5, 10, 25, 100, 1000]"
+              				[showFirstLastButtons]="true"
+              				[pageIndex]="pageNumber"
 							(page)="loadPage($event)">
 						</mat-paginator>
 					</div>

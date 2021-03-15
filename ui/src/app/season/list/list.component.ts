@@ -41,17 +41,17 @@ export class SeasonListComponent extends BasePageableStorable<Season> implements
   }
 
   addSeason(): void {
-    this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_SEASON_LIST, this.pageNumber);
+    this.storePaginationInfo();
     this.router.navigate(['devices', this.deviceId, 'seasons', 'add']);
   }
 
   openSeason(season: Season): void {
-  	this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_SEASON_LIST, this.pageNumber);
+  	this.storePaginationInfo();
   	this.router.navigate(['devices', this.deviceId, 'seasons', season.id]);
   }
 
   editSeason(season: Season): void {
-    this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_SEASON_LIST, this.pageNumber);
+    this.storePaginationInfo();
     this.router.navigate(['devices', this.deviceId, 'seasons', season.id, 'edit']);
   }
 

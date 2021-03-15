@@ -45,12 +45,12 @@ export class SettingsListComponent extends BasePageableStorable<Configuration> i
   }
 
   editSettings(configuration: Configuration): void {
-    this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_SETTINGS_LIST, this.pageNumber);
+    this.storePaginationInfo();
     this.router.navigate(['settings', configuration.key, 'edit']);
   }
 
   addSettings(): void {
-    this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_SETTINGS_LIST, this.pageNumber);
+    this.storePaginationInfo();
     this.router.navigate(['settings', 'add']);
   }
 

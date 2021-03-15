@@ -48,12 +48,12 @@ export class DeviceListComponent extends BasePageableStorable<Device> implements
   }
 
   openDevice(device: Device): void {
-    this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_DEVICE_LIST, this.pageNumber);
+    this.storePaginationInfo();
     this.router.navigate(['devices', device.id]);
   }
 
   addDevice(): void {
-    this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_DEVICE_LIST, this.pageNumber);
+    this.storePaginationInfo();
     this.router.navigate(['devices', 'add']);
   }
 

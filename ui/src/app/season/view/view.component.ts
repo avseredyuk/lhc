@@ -50,7 +50,7 @@ export class SeasonViewComponent extends BasePageableStorable<Crop> implements O
   }
 
   addCrop(): void {
-    this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_SEASON_VIEW, this.pageNumber);
+    this.storePaginationInfo();
     this.router.navigate(['devices', this.deviceId, 'seasons', this.seasonId, 'crop', 'add']);
   }
 
@@ -67,7 +67,7 @@ export class SeasonViewComponent extends BasePageableStorable<Crop> implements O
   }
 
   editCrop(cropId: number): void {
-    this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_SEASON_VIEW, this.pageNumber);
+    this.storePaginationInfo();
     this.router.navigate(['devices', this.deviceId, 'seasons', this.seasonId, 'crop', cropId, 'edit']);
   }
 

@@ -46,12 +46,12 @@ export class PlantMaintenanceListComponent extends BasePageableStorable<PlantMai
   }
 
   addPlantMaintenance(): void {
-    this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_PLANT_MAINTENANCE_LIST, this.pageNumber);
+    this.storePaginationInfo();
     this.router.navigate(['devices', this.deviceId, 'maintenance', 'add']);
   }
 
   editPlantMaintenance(maintenanceId: number): void {
-    this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_PLANT_MAINTENANCE_LIST, this.pageNumber);
+    this.storePaginationInfo();
     this.router.navigate(['devices', this.deviceId, 'maintenance', maintenanceId, 'edit']);
   }
 
@@ -59,7 +59,7 @@ export class PlantMaintenanceListComponent extends BasePageableStorable<PlantMai
     this.dataService.getPlantMaintenance(plantMaintenance.deviceId, plantMaintenance.id).subscribe(
       (data: ApiResult<PlantMaintenance>) => {
         this.componentCommunicationService.setClonedMaintenance(data.data);
-        this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_PLANT_MAINTENANCE_LIST, this.pageNumber);
+        this.storePaginationInfo();
         this.router.navigate(['devices', plantMaintenance.deviceId, 'maintenance', 'add']);
       });
   }

@@ -19,10 +19,15 @@ export abstract class BasePageableStorable<T> extends BasePageable<T> implements
 
   ngOnInit(): void {
     super.ngOnInit();
-    const storedPageNumber = this.componentCommunicationService.getPageNumber(this.className);
-    if (storedPageNumber !== undefined) {
-      this.pageNumber = storedPageNumber;
+    const storedPageData = this.componentCommunicationService.getPageData(this.className);
+    if (storedPageData !== undefined) {
+      this.pageNumber = storedPageData[0];
+      this.pageSize = storedPageData[1];
     }
     this.loadPageData();
+  }
+
+  storePaginationInfo() {
+    this.componentCommunicationService.setPageData(this.className, [this.pageNumber, this.pageSize]);
   }
 }
