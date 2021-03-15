@@ -26,7 +26,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngFor="let m of plantMaintenancesForDevice">
+							<tr *ngFor="let m of data">
 								<td class="for-small-centered key-column">{{ this.utilService.formatTimestamp(m.d) }}</td>
 								<td class="text-center">{{ m.ph }}</td>
 								<td class="text-center">{{ m.tds }}</td>
@@ -56,19 +56,18 @@
 						</tbody>
 					</table>
 					<div class="col-md-12">
-						<nav aria-label="...">
-							<ul class="pagination pagination-lg justify-content-center">
-								<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
-								[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
-								currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
-								<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
-							</li>
-						</ul>
-					</nav>
+						<mat-paginator [length]="totalElements"
+              				[pageSize]="pageSize"
+              				[pageSizeOptions]="[5, 10, 25, 100, 1000]"
+              				[showFirstLastButtons]="true"
+              				[pageIndex]="pageNumber"
+							(page)="loadPage($event)">
+						</mat-paginator>
+					</div>
 				</div>
+				&nbsp;
+				<button (click)="addPlantMaintenance()" class="btn btn-info btn-lg" role="button">Add</button>
 			</div>
-			&nbsp;
-			<button (click)="addPlantMaintenance()" class="btn btn-info btn-lg" role="button">Add</button>
 		</div>
 	</div>
 </div>

@@ -21,7 +21,7 @@
 								<div *ngIf="hasData()">
 									<table class="table no-row-border">
 										<tbody>
-											<tr *ngFor="let season of seasons">
+											<tr *ngFor="let season of data">
 												<td class="col-8 col-md-10 td-massive-list vertical-center for-small-centered">
 													<a class="a-massive-list" (click)="openSeason(season)" [routerLink]="">{{ season.name }}</a>
 												</td>
@@ -39,15 +39,13 @@
 									</table>
 								</div>
 								<div class="col-md-12">
-									<nav aria-label="...">
-										<ul class="pagination pagination-lg justify-content-center">
-											<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
-												[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
-												currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
-												<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
-											</li>
-										</ul>
-									</nav>
+									<mat-paginator [length]="totalElements"
+              						[pageSize]="pageSize"
+              						[pageSizeOptions]="[5, 10, 25, 100, 1000]"
+              						[showFirstLastButtons]="true"
+              						[pageIndex]="pageNumber"
+									(page)="loadPage($event)">
+									</mat-paginator>
 								</div>
 								&nbsp;
 								<button (click)="addSeason()" class="btn btn-info btn-lg" role="button">Add</button>

@@ -15,11 +15,11 @@
 				<div *ngIf="hasData()">
 					<table class="table no-row-border">
 						<tbody>
-							<tr *ngFor="let device of devices">
+							<tr *ngFor="let device of data">
 								<td class="td-device vertical-center">
 									<span class="dot"
 										[ngClass]="{'device-enabled': device.enabled, 'device-disabled': !device.enabled}"></span>
-									&nbsp;<a routerLink="/devices/{{device.id}}">{{ this.utilService.formatDeviceName(device.name, device.privateName) }}</a>
+									&nbsp;<a (click)="openDevice(device)" [routerLink]="">{{ this.utilService.formatDeviceName(device.name, device.privateName) }}</a>
 								</td>
                 				<td class="td-device text-right">
                 					<button class="btn btn-danger btn-md" type="button" (click)="deleteDevice(device)">
@@ -29,6 +29,13 @@
 							</tr>
 						</tbody>
 					</table>
+					<mat-paginator [length]="totalElements"
+              			[pageSize]="pageSize"
+              			[pageSizeOptions]="[5, 10, 25, 100, 1000]"
+              			[showFirstLastButtons]="true"
+              			[pageIndex]="pageNumber"
+						(page)="loadPage($event)">
+					</mat-paginator>
 				</div>
 				&nbsp;
 				<button (click)="addDevice()" class="btn btn-info btn-lg" role="button">Add</button>

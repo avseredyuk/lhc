@@ -1,21 +1,17 @@
 package com.avseredyuk.service;
 
-import com.avseredyuk.dto.internal.SensorDto;
-import com.avseredyuk.exception.UnknownDeviceException;
-import com.avseredyuk.mapper.internal.SensorMapper;
 import com.avseredyuk.model.Device;
 import com.avseredyuk.model.SensorReport;
 import com.avseredyuk.repository.SensorReportRepository;
-
-import java.util.Date;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class SensorReportService {
@@ -26,8 +22,6 @@ public class SensorReportService {
     private ConfigService configService;
     @Autowired
     private DeviceService deviceService;
-    @Autowired
-    private SensorMapper sensorMapper;
 
     List<SensorReport> getLastReportsByDevice(Device device, Long sinceTimestamp) {
         if (sinceTimestamp == null) {
@@ -54,9 +48,8 @@ public class SensorReportService {
         sensorReportRepository.save(report);
     }
 
-    public Page<SensorDto> findAllByDeviceIdPaginated(Long deviceId, Pageable pageable) {
-        Page<SensorReport> page = sensorReportRepository.findAllByDeviceIdOrderByDateTimeDesc(deviceId, pageable);
-        return new PageImpl<>(sensorMapper.toDtoList(page.getContent()), pageable, page.getTotalElements());
+    public Page<SensorReport> findAllByDeviceIdPaginated(Long deviceId, Pageable pageable) {
+        return sensorReportRepository.findAllByDeviceIdOrderByDateTimeDesc(deviceId, pageable);
     }
 
     @CacheEvict(value = "SensorReport", allEntries = true)

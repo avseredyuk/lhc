@@ -1,14 +1,9 @@
 package com.avseredyuk.service;
 
-import com.avseredyuk.dto.internal.PingDto;
-import com.avseredyuk.dto.internal.PlantMaintenanceDto;
-import com.avseredyuk.mapper.internal.PingMapper;
 import com.avseredyuk.model.Ping;
-import com.avseredyuk.model.PlantMaintenance;
 import com.avseredyuk.repository.PingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +14,6 @@ public class PingService {
 
     @Autowired
     private PingRepository pingRepository;
-    @Autowired
-    private PingMapper pingMapper;
 
     public void createPing(Long deviceId) {
         Ping ping = new Ping();
@@ -32,9 +25,8 @@ public class PingService {
         return pingRepository.findFirstByDeviceIdOrderByDateTimeDesc(deviceId);
     }
 
-    public Page<PingDto> findAllByDeviceIdPaginated(Long deviceId, Pageable pageable) {
-        Page<Ping> page =  pingRepository.findAllByDeviceIdOrderByDateTimeDesc(deviceId, pageable);
-        return new PageImpl<>(pingMapper.toDtoList(page.getContent()), pageable, page.getTotalElements());
+    public Page<Ping> findAllByDeviceIdPaginated(Long deviceId, Pageable pageable) {
+        return pingRepository.findAllByDeviceIdOrderByDateTimeDesc(deviceId, pageable);
     }
 
 }

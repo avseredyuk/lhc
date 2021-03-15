@@ -1,8 +1,9 @@
 package com.avseredyuk.controller.admin;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +21,8 @@ import com.avseredyuk.model.Config;
 import com.avseredyuk.model.internal.ApiResult;
 import com.avseredyuk.service.ConfigService;
 
+import javax.validation.constraints.NotNull;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(value = "/admin/configs")
@@ -31,8 +34,9 @@ public class ConfigController {
     private ConfigMapper configMapper;
 
     @GetMapping
-    public List<ConfigDto> getAllConfigs() {
-        return configMapper.toDtoList(configService.findAll());
+    public Page<ConfigDto> getAllConfigs(@NotNull final Pageable pageable) {
+        Page<Config> configs = configService.findAllPaginated(pageable);
+        return new PageImpl<>(configMapper.toDtoList(configs.getContent()), pageable, configs.getTotalElements());
     }
 
     @GetMapping(value = "/{configKey}")

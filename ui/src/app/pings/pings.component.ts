@@ -1,4 +1,4 @@
-import {BaseAuthComponent} from "../base-auth/base-auth.component";
+import {BasePageable} from "../base/base-pageable";
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {ComponentCommunicationService} from "../service/component-communication.service";
@@ -7,17 +7,15 @@ import {DataService} from "../service/data.service";
 import {TokenCheckService} from "../service/token-check.service";
 import {UtilService} from "../service/util.service";
 import {SidebarComponent} from "../parts/sidebar/sidebar.component";
+import {PageEvent} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-pings',
   templateUrl: './pings.component.html',
   styleUrls: ['./pings.component.scss']
 })
-export class PingsComponent extends BaseAuthComponent implements OnInit {
+export class PingsComponent extends BasePageable<Ping> implements OnInit {
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
-  pingsForDevice: Array<Ping> = [];
-  totalPages: number;
-  pageNumber: number = 1;
   deviceId: number;
 
   constructor(public router: Router, private dataService: DataService, public tokenCheckService: TokenCheckService,
@@ -28,23 +26,14 @@ export class PingsComponent extends BaseAuthComponent implements OnInit {
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
-    this.loadPageForDevice();
+    this.sidebar.setGoBackCallback(() => this.router.navigate(['devices', this.deviceId]));
+    this.loadPageData();
   }
 
-  loadPageForDevice(): void {
-    this.dataService.getPingsByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(pings => {
-      this.pingsForDevice = pings.content;
-      this.totalPages = pings.totalPages;
+  loadPageData(): void {
+    this.dataService.getPingsByDeviceId(this.deviceId, this.pageNumber, this.pageSize).subscribe(pings => {
+      this.data = pings.content;
+      this.totalElements = pings.totalElements;
     });
-  }
-
-  loadPage(p: number): void {
-    this.pageNumber = p;
-    this.loadPageForDevice();
-  }
-
-  hasData(): boolean {
-    return typeof this.pingsForDevice !== 'undefined' && this.pingsForDevice.length > 0;
   }
 }

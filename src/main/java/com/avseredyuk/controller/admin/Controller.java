@@ -4,8 +4,17 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.avseredyuk.mapper.internal.BootupMapper;
+import com.avseredyuk.mapper.internal.PingMapper;
+import com.avseredyuk.mapper.internal.PumpActionMapper;
+import com.avseredyuk.mapper.internal.SensorMapper;
+import com.avseredyuk.model.BootupReport;
+import com.avseredyuk.model.Ping;
+import com.avseredyuk.model.PumpActionReport;
+import com.avseredyuk.model.SensorReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -59,6 +68,14 @@ public class Controller {
     private SensorReportService sensorReportService;
     @Autowired
     private BootupService bootupService;
+    @Autowired
+    private BootupMapper bootupMapper;
+    @Autowired
+    private PingMapper pingMapper;
+    @Autowired
+    private PumpActionMapper pumpActionMapper;
+    @Autowired
+    private SensorMapper sensorMapper;
     
     @PostMapping(value = "/generate-token")
     public ResponseEntity<AuthToken> generate(@RequestBody LoginDto loginDto) {
@@ -82,13 +99,15 @@ public class Controller {
     @GetMapping(value = "/pings")
     public Page<PingDto> getAllPingsByDevice(@RequestParam Long deviceId,
                                              @NotNull final Pageable pageable) {
-        return pingService.findAllByDeviceIdPaginated(deviceId, pageable);
+        Page<Ping> page = pingService.findAllByDeviceIdPaginated(deviceId, pageable);
+        return new PageImpl<>(pingMapper.toDtoList(page.getContent()), pageable, page.getTotalElements());
     }
 
     @GetMapping(value = "/bootups")
     public Page<BootupDto> getAllBootupsByDevice(@RequestParam Long deviceId,
                                                  @NotNull final Pageable pageable) {
-        return bootupService.findAllByDeviceIdPaginated(deviceId, pageable);
+        Page<BootupReport> bootups = bootupService.findAllByDeviceIdPaginated(deviceId, pageable);
+        return new PageImpl<>(bootupMapper.toDtoList(bootups.getContent()), pageable, bootups.getTotalElements());
     }
 
     @DeleteMapping(value = "/bootups/{bootupId}")
@@ -99,7 +118,8 @@ public class Controller {
     @GetMapping(value = "/pump-actions")
     public Page<PumpActionDto> getAllPumpActionsByDevice(@RequestParam Long deviceId,
                                                          @NotNull final Pageable pageable) {
-        return pumpActionService.findAllByDeviceIdPaginated(deviceId, pageable);
+        Page<PumpActionReport> page = pumpActionService.findAllByDeviceIdPaginated(deviceId, pageable);
+        return new PageImpl<>(pumpActionMapper.toDtoList(page.getContent()), pageable, page.getTotalElements());
     }
 
     @DeleteMapping(value = "/pump-actions/{pumpActionId}")
@@ -110,7 +130,8 @@ public class Controller {
     @GetMapping(value = "/sensor-reports")
     public Page<SensorDto> getAllSensorReportsByDevice(@RequestParam Long deviceId,
                                                        @NotNull final Pageable pageable) {
-        return sensorReportService.findAllByDeviceIdPaginated(deviceId, pageable);
+        Page<SensorReport> page = sensorReportService.findAllByDeviceIdPaginated(deviceId, pageable);
+        return new PageImpl<>(sensorMapper.toDtoList(page.getContent()), pageable, page.getTotalElements());
     }
 
     @DeleteMapping(value = "/sensor-reports/{sensorReportId}")

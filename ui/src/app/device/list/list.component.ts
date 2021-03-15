@@ -1,4 +1,4 @@
-import {BaseAuthComponent} from "../../base-auth/base-auth.component";
+import {BasePageableStorable} from "../../base/base-pageable-storable";
 import {Component, OnInit} from "@angular/core";
 import {DataService} from "../../service/data.service";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
@@ -13,49 +13,48 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class DeviceListComponent extends BaseAuthComponent implements OnInit {
-
-  devices: Device[];
+export class DeviceListComponent extends BasePageableStorable<Device> implements OnInit {
 
   constructor(public router: Router, private dataService: DataService, public componentCommunicationService: ComponentCommunicationService,
     public tokenCheckService: TokenCheckService, public utilService: UtilService) {
-    super(router, componentCommunicationService, tokenCheckService);
+    super(utilService.PAGINATED_COMPONENT_DEVICE_LIST, router, componentCommunicationService, tokenCheckService);
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-
-    this.loadData();
   }
 
-  loadData(): void {
-    this.dataService.getDevices().subscribe(
-      data => this.devices = data
-    );
+  loadPageData(): void {
+    this.dataService.getDevices(this.pageNumber, this.pageSize).subscribe(devices => {
+      this.data = devices.content;
+      this.totalElements = devices.totalElements;
+    });
   }
 
   deleteDevice(device: Device): void {
     if (confirm('Are you sure you want to delete device "' + device.name + '" ?')) {
       this.dataService.deleteDevice(device).subscribe(data => {
         this.notificateThisPage([new AppNotification('Deleted device: ' + device.name, AppNotificationType.SUCCESS)]);
-        this.loadData();
+        this.loadPageData();
       }, error => {
         if (error.status === 400) {
           this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
         } else {
           this.notificateThisPage([new AppNotification('Unknown error', AppNotificationType.ERROR)]);
         }
-        this.loadData();
+        this.loadPageData();
       });
     }
   }
 
-  addDevice(): void {
-    this.router.navigate(['devices/add']);
+  openDevice(device: Device): void {
+    this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_DEVICE_LIST, this.pageNumber);
+    this.router.navigate(['devices', device.id]);
   }
 
-  hasData(): boolean {
-    return typeof this.devices !== 'undefined' && this.devices.length > 0;
+  addDevice(): void {
+    this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_DEVICE_LIST, this.pageNumber);
+    this.router.navigate(['devices', 'add']);
   }
 
 }

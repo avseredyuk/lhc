@@ -5,7 +5,7 @@ import {ComponentCommunicationService} from "../service/component-communication.
 import {Router} from "@angular/router";
 
 @Injectable()
-export class BaseComponent implements OnInit {
+export class Base implements OnInit {
  
   public notifications: Array<AppNotification> = [];
 
@@ -23,7 +23,7 @@ export class BaseComponent implements OnInit {
   	this.notifications = notifications;
   }
 
-  public navigateWithNotification(path: string, notifications: Array<AppNotification>): void {
+  public navigateWithNotification(path: any[], notifications: Array<AppNotification>): void {
   	this.componentCommunicationService.setNotification(notifications);
     this.router.navigate([path]);
   }

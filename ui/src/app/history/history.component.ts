@@ -1,4 +1,4 @@
-import {BaseAuthComponent} from "../base-auth/base-auth.component";
+import {BaseAuth} from "../base/base-auth";
 import {Component, OnInit} from "@angular/core";
 import {ComponentCommunicationService} from "../service/component-communication.service";
 import {DataService} from "../service/data.service";
@@ -12,7 +12,7 @@ import {Router} from "@angular/router";
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.scss']
 })
-export class HistoryComponent extends BaseAuthComponent implements OnInit {
+export class HistoryComponent extends BaseAuth implements OnInit {
 
   chart: any;
   timer: any;

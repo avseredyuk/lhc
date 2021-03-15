@@ -1,4 +1,4 @@
-import {BaseAuthComponent} from "../../base-auth/base-auth.component";
+import {BaseAuth} from "../../base/base-auth";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -16,7 +16,7 @@ import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class SeasonEditComponent extends BaseAuthComponent implements OnInit {
+export class SeasonEditComponent extends BaseAuth implements OnInit {
 
  @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   cropId: number;
@@ -25,7 +25,6 @@ export class SeasonEditComponent extends BaseAuthComponent implements OnInit {
   nameCtrl: FormControl = this.formBuilder.control('', [Validators.required, Validators.pattern(this.utilService.VALIDATION_PATTERN_SEASON_NAME)]);
   seasonId: number;
   deviceId: number;
-  pageNumber: number;
 
   constructor(private formBuilder: FormBuilder, public router: Router, private dataService: DataService, private route: ActivatedRoute,
   	public componentCommunicationService: ComponentCommunicationService, public tokenCheckService: TokenCheckService, private utilService: UtilService) {
@@ -39,11 +38,7 @@ export class SeasonEditComponent extends BaseAuthComponent implements OnInit {
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.sidebar.setGoBackCallback(() => {
-      this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
-      this.router.navigate(['devices/' + this.deviceId + '/seasons']);
-    });
-    this.pageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
+    this.sidebar.setGoBackCallback(() => this.router.navigate(['devices', this.deviceId, 'seasons']));
 
     this.editForm = this.formBuilder.group({
     	name: this.nameCtrl
@@ -59,7 +54,7 @@ export class SeasonEditComponent extends BaseAuthComponent implements OnInit {
       } else {
         errNotification = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
       }
-      this.navigateWithNotification('devices/' + this.deviceId + '/seasons', errNotification);
+      this.navigateWithNotification(['devices', this.deviceId, 'seasons'], errNotification);
     });
   }
 
@@ -71,7 +66,7 @@ export class SeasonEditComponent extends BaseAuthComponent implements OnInit {
     this.season.name = this.editForm.controls['name'].value;
     this.season.deviceId = this.deviceId;
     this.dataService.updateSeason(this.season).subscribe(data => {
-      this.navigateWithNotification('devices/' + this.deviceId + '/seasons', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+      this.navigateWithNotification(['devices', this.deviceId, 'seasons'], [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     }, error => {
       if (error.status === 400) {
         this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));

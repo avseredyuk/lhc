@@ -1,4 +1,4 @@
-import {BaseAuthComponent} from "../../base-auth/base-auth.component";
+import {BaseAuth} from "../../base/base-auth";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -16,7 +16,7 @@ import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class CropEditComponent extends BaseAuthComponent implements OnInit {
+export class CropEditComponent extends BaseAuth implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   cropId: number;
@@ -29,7 +29,6 @@ export class CropEditComponent extends BaseAuthComponent implements OnInit {
   seasonId: number;
   deviceId: number;
   seasonName: string;
-  pageNumber: number;
   newDate: Date;
   newTime: Date;
 
@@ -46,11 +45,7 @@ export class CropEditComponent extends BaseAuthComponent implements OnInit {
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.sidebar.setGoBackCallback(() => {
-      this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
-      this.router.navigate(['devices/' + this.deviceId + '/seasons/' + this.seasonId]);
-    });
-    this.pageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
+    this.sidebar.setGoBackCallback(() => this.router.navigate(['devices', this.deviceId, 'seasons', this.seasonId]));
 
     this.editForm = this.formBuilder.group({
     	weight: this.weightCtrl,
@@ -74,7 +69,7 @@ export class CropEditComponent extends BaseAuthComponent implements OnInit {
       } else {
         errNotification = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
       }
-      this.navigateWithNotification('devices' + this.deviceId + 'seasons/' + this.seasonId, errNotification);
+      this.navigateWithNotification(['devices', this.deviceId, 'seasons', this.seasonId], errNotification);
     }
     );
     this.dataService.getSeasonName(this.seasonId).subscribe(
@@ -94,7 +89,7 @@ export class CropEditComponent extends BaseAuthComponent implements OnInit {
     this.crop.d = this.utilService.combineDateAndTime(this.newDate, this.newTime).getTime();
     this.crop.seasonId = this.seasonId;
     this.dataService.updateCrop(this.crop).subscribe(data => {
-      this.navigateWithNotification('devices/' + this.deviceId + '/seasons/' + this.seasonId, [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+      this.navigateWithNotification(['devices', this.deviceId, 'seasons', this.seasonId], [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     });
   }
 

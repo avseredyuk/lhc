@@ -1,4 +1,4 @@
-import {BaseAuthComponent} from "../../base-auth/base-auth.component";
+import {BaseAuth} from "../../base/base-auth";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {DataService} from "../../service/data.service";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
@@ -15,7 +15,7 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.scss']
 })
-export class DeviceViewComponent extends BaseAuthComponent implements OnInit {
+export class DeviceViewComponent extends BaseAuth implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   deviceId: number;
@@ -29,7 +29,7 @@ export class DeviceViewComponent extends BaseAuthComponent implements OnInit {
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices']);});
+    this.sidebar.setGoBackCallback(() => this.router.navigate(['devices']));
     this.loadDevice();
   }
 
@@ -45,7 +45,7 @@ export class DeviceViewComponent extends BaseAuthComponent implements OnInit {
         } else {
           errNotification = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
         }
-        this.navigateWithNotification('devices', errNotification);
+        this.navigateWithNotification(['devices'], errNotification);
       }
     );
   }

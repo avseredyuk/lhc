@@ -1,4 +1,4 @@
-import {BaseAuthComponent} from "../../base-auth/base-auth.component";
+import {BaseAuth} from "../../base/base-auth";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -16,7 +16,7 @@ import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class PlantMaintenanceEditComponent extends BaseAuthComponent implements OnInit {
+export class PlantMaintenanceEditComponent extends BaseAuth implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   maintenanceId: number;
@@ -30,7 +30,6 @@ export class PlantMaintenanceEditComponent extends BaseAuthComponent implements 
   newDetailKeyCtrl: FormControl = this.formBuilder.control('', []);
   newDetailValueCtrl: FormControl = this.formBuilder.control('', []);
   deviceId: number;
-  pageNumber: number;
   newDate: Date;
   newTime: Date;
 
@@ -46,11 +45,7 @@ export class PlantMaintenanceEditComponent extends BaseAuthComponent implements 
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.sidebar.setGoBackCallback(() => {
-      this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
-      this.router.navigate(['devices/' + this.deviceId + '/maintenance']);
-    });
-    this.pageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
+    this.sidebar.setGoBackCallback(() => this.router.navigate(['devices', this.deviceId, 'maintenance']));
 
     this.editForm = this.formBuilder.group({
     	ph: this.phCtrl,
@@ -80,7 +75,7 @@ export class PlantMaintenanceEditComponent extends BaseAuthComponent implements 
         } else {
           errNotification = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
         }
-        this.navigateWithNotification('maintenance', errNotification);
+        this.navigateWithNotification(['maintenance'], errNotification);
       }
     );
   }
@@ -104,7 +99,7 @@ export class PlantMaintenanceEditComponent extends BaseAuthComponent implements 
     this.maintenance.tds = parseFloat(this.editForm.controls['tds'].value);
     this.maintenance.d = this.utilService.combineDateAndTime(this.newDate, this.newTime).getTime();
     this.dataService.updatePlantMaintenance(this.maintenance).subscribe(data => {
-      this.navigateWithNotification('devices/' + this.deviceId + '/maintenance', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+      this.navigateWithNotification(['devices', this.deviceId, 'maintenance'], [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     });
   }
 

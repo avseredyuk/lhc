@@ -1,8 +1,7 @@
 import {AppComponent} from "./app.component";
 import {AppRoutingModule} from "./app-routing.module";
-import {BaseAuthComponent} from './base-auth/base-auth.component';
-import {BaseComponent} from './base/base.component';
 import {BootupsComponent} from './bootups/bootups.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserModule} from "@angular/platform-browser";
 import {CropAddComponent} from './crop/add/add.component';
 import {CropEditComponent} from './crop/edit/edit.component';
@@ -15,6 +14,7 @@ import {DeviceViewComponent} from "./device/view/view.component";
 import {HistoryComponent} from "./history/history.component";
 import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
 import {LoginComponent} from "./login/login.component";
+import {MatPaginatorModule} from '@angular/material/paginator';
 import {NgModule} from "@angular/core";
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {PingsComponent} from './pings/pings.component';
@@ -38,7 +38,6 @@ import {TokenInterceptor} from "./core/interceptor";
 @NgModule({
   declarations: [
     AppComponent,
-    BaseComponent,
     BootupsComponent,
     CropAddComponent,
     CropEditComponent,
@@ -65,13 +64,14 @@ import {TokenInterceptor} from "./core/interceptor";
     SettingsListComponent,
     SidebarComponent,
     StatusComponent,
-    BaseAuthComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatPaginatorModule
   ],
   providers: [DataService, {provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,

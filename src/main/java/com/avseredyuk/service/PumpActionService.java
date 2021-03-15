@@ -1,21 +1,16 @@
 package com.avseredyuk.service;
 
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import com.avseredyuk.dto.internal.PumpActionDto;
-import com.avseredyuk.exception.UnknownDeviceException;
-import com.avseredyuk.mapper.internal.PumpActionMapper;
 import com.avseredyuk.model.Device;
 import com.avseredyuk.model.PumpActionReport;
 import com.avseredyuk.repository.PumpActionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class PumpActionService {
@@ -25,8 +20,6 @@ public class PumpActionService {
     private ConfigService configService;
     @Autowired
     private DeviceService deviceService;
-    @Autowired
-    private PumpActionMapper pumpActionMapper;
 
     public List<PumpActionReport> getLastReportsByDevice(Device device, Long sinceTimestamp) {
         if (sinceTimestamp == null) {
@@ -38,9 +31,8 @@ public class PumpActionService {
         }
     }
 
-    public Page<PumpActionDto> findAllByDeviceIdPaginated(Long deviceId, Pageable pageable) {
-        Page<PumpActionReport> page = pumpActionRepository.findAllByDeviceIdOrderByDateTimeDesc(deviceId, pageable);
-        return new PageImpl<>(pumpActionMapper.toDtoList(page.getContent()), pageable, page.getTotalElements());
+    public Page<PumpActionReport> findAllByDeviceIdPaginated(Long deviceId, Pageable pageable) {
+        return pumpActionRepository.findAllByDeviceIdOrderByDateTimeDesc(deviceId, pageable);
     }
     
     public PumpActionReport getLastReportByDevice(Device device) {

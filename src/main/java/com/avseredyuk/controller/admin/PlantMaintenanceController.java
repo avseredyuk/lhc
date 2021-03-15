@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -47,7 +48,8 @@ public class PlantMaintenanceController {
     @GetMapping
     public Page<PlantMaintenanceDto> getAllMaintenancesByDevice(@RequestParam Long deviceId,
                                                                 @NotNull final Pageable pageable) {
-        return plantMaintenanceService.findAllByDeviceIdPaginated(deviceId, pageable);
+        Page<PlantMaintenance> page = plantMaintenanceService.findAllByDeviceIdPaginated(deviceId, pageable);
+        return new PageImpl<>(plantMaintenanceMapper.toDtoList(page.getContent()), pageable, page.getTotalElements());
     }
 
     @GetMapping(value = "/{plantMaintenanceId}")

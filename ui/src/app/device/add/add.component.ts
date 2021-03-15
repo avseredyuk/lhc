@@ -1,5 +1,5 @@
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
-import {BaseAuthComponent} from "../../base-auth/base-auth.component";
+import {BaseAuth} from "../../base/base-auth";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {DataService} from "../../service/data.service";
@@ -14,7 +14,7 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
-export class DeviceAddComponent extends BaseAuthComponent implements OnInit {
+export class DeviceAddComponent extends BaseAuth implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   addForm: FormGroup;
@@ -30,7 +30,7 @@ export class DeviceAddComponent extends BaseAuthComponent implements OnInit {
   ngOnInit(): void {
     super.ngOnInit();
     
-    this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices']);});
+    this.sidebar.setGoBackCallback(() => this.router.navigate(['devices']));
 
     this.addForm = this.formBuilder.group({
       name: this.nameCtrl,
@@ -40,7 +40,7 @@ export class DeviceAddComponent extends BaseAuthComponent implements OnInit {
 
   onSubmit(): void {
     this.dataService.createDevice(this.addForm.value).subscribe(data => {
-      this.navigateWithNotification('devices', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+      this.navigateWithNotification(['devices'], [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     }, error => {
       if (error.status === 400) {
         this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));

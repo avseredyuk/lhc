@@ -1,4 +1,4 @@
-import {BaseAuthComponent} from "../../base-auth/base-auth.component";
+import {BaseAuth} from "../../base/base-auth";
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -16,7 +16,7 @@ import {ApiResult} from "../../model/api-result";
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class SettingsEditComponent extends BaseAuthComponent implements OnInit {
+export class SettingsEditComponent extends BaseAuth implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   settingsKey: string;
@@ -36,9 +36,7 @@ export class SettingsEditComponent extends BaseAuthComponent implements OnInit {
   ngOnInit(): void {
     super.ngOnInit();
     
-    this.sidebar.setGoBackCallback(() => {
-      this.router.navigate(['settings']);
-    });
+    this.sidebar.setGoBackCallback(() => this.router.navigate(['settings']));
 
     this.editForm = this.formBuilder.group({
     	key: this.keyCtrl,
@@ -56,7 +54,7 @@ export class SettingsEditComponent extends BaseAuthComponent implements OnInit {
       } else {
         errNotification = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
       }
-      this.navigateWithNotification('settings', errNotification);
+      this.navigateWithNotification(['settings'], errNotification);
     });
   }
 
@@ -64,7 +62,7 @@ export class SettingsEditComponent extends BaseAuthComponent implements OnInit {
     this.configuration.key = this.editForm.controls['key'].value;
     this.configuration.value = this.editForm.controls['value'].value;
     this.dataService.updateConfiguration(this.configuration).subscribe(data => {
-      this.navigateWithNotification('settings', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+      this.navigateWithNotification(['settings'], [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     }, error => {
       if (error.status === 400) {
         this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));

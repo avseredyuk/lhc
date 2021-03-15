@@ -1,4 +1,4 @@
-import {BaseComponent} from "../base/base.component";
+import {Base} from "../base/base";
 import {Component, OnInit} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
@@ -12,7 +12,7 @@ import {AppNotification, AppNotificationType} from "../model/app-notification";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent extends BaseComponent implements OnInit {
+export class LoginComponent extends Base implements OnInit {
 
   loginForm: FormGroup;
   usernameCtrl: FormControl;

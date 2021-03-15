@@ -31,7 +31,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr *ngFor="let cfg of configurations">
+						<tr *ngFor="let cfg of data">
 							<td class="for-small-centered key-column">{{ cfg.key }}</td>
 							<td class="text-center">{{ cfg.value }}</td>
 							<td class="for-small-centered for-big-right-aligned">
@@ -46,6 +46,13 @@
 						</tr>
 					</tbody>
 				</table>
+				<mat-paginator [length]="totalElements"
+              		[pageSize]="pageSize"
+              		[pageSizeOptions]="[5, 10, 25, 100, 1000]"
+              		[showFirstLastButtons]="true"
+              		[pageIndex]="pageNumber"
+					(page)="loadPage($event)">
+				</mat-paginator>
 			</div>
 			&nbsp;
 			<button (click)="addSettings()" class="btn btn-info btn-lg" role="button">Add</button>

@@ -23,6 +23,12 @@ export class UtilService {
   public VALIDATION_PATTERN_COUNT: string = "[0-9]{1,5}";
   public VALIDATION_PATTERN_SEASON_NAME: string = ".{1,100}";
 
+  public PAGINATED_COMPONENT_PLANT_MAINTENANCE_LIST = 'PLANT_MAINTENANCE_LIST';
+  public PAGINATED_COMPONENT_SEASON_VIEW = 'SEASON_VIEW';
+  public PAGINATED_COMPONENT_SEASON_LIST = 'SEASON_LIST';
+  public PAGINATED_COMPONENT_SETTINGS_LIST = 'SETTINGS_LIST';
+  public PAGINATED_COMPONENT_DEVICE_LIST = "DEVICE_LIST";
+
   formatDeviceName(name: string, privateName: string): string {
     return privateName == null ? name : name + ' (' + privateName + ')';
   }
@@ -77,42 +83,5 @@ export class UtilService {
   roundToTwo(num: number) {
     return Math.round((num + Number.EPSILON) * 100) / 100;
   }
-
-  isCurrentPage(currentPage: any, pageNumber: any) {
-    return currentPage == pageNumber;
-  }
-
-  isPointsOrCurrentPage(currentPage: any, pageNumber: any) {
-    return this.isCurrentPage(currentPage, pageNumber) || currentPage == '...';
-  }
-
-  pagination(c, m): Array<string> {
-    const current = c,
-        last = m,
-        delta = 2,
-        left = current - delta,
-        right = current + delta + 1,
-        range = [],
-        rangeWithDots = [];
-    let l;
-    for (let i = 1; i <= last; i++) {
-        if (i == 1 || i == last || i >= left && i < right) {
-            range.push(i);
-        }
-    }
-    for (const i of range) {
-        if (l) {
-            if (i - l === 2) {
-                rangeWithDots.push(l + 1);
-            } else if (i - l !== 1) {
-                rangeWithDots.push('...');
-            }
-        }
-        rangeWithDots.push(i);
-        l = i;
-    }
-    return rangeWithDots;
-}
-
 
 }

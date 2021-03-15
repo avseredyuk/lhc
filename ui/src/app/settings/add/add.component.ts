@@ -1,4 +1,4 @@
-import {BaseAuthComponent} from "../../base-auth/base-auth.component";
+import {BaseAuth} from "../../base/base-auth";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DataService} from "../../service/data.service";
@@ -15,7 +15,7 @@ import {Router} from "@angular/router";
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
-export class SettingsAddComponent extends BaseAuthComponent implements OnInit {
+export class SettingsAddComponent extends BaseAuth implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   addForm: FormGroup;
@@ -31,9 +31,7 @@ export class SettingsAddComponent extends BaseAuthComponent implements OnInit {
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.sidebar.setGoBackCallback(() => {
-      this.router.navigate(['settings']);
-    });
+    this.sidebar.setGoBackCallback(() => this.router.navigate(['settings']));
 
     this.addForm = this.formBuilder.group({
     	key: this.keyCtrl,
@@ -51,7 +49,7 @@ export class SettingsAddComponent extends BaseAuthComponent implements OnInit {
     newConf.value = this.addForm.controls['value'].value;
 
     this.dataService.createConfiguration(newConf).subscribe(data => {
-      this.navigateWithNotification('settings', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+      this.navigateWithNotification(['settings'], [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     }, error => {
       if (error.status === 400) {
         this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));

@@ -1,4 +1,4 @@
-import {BaseAuthComponent} from "../../base-auth/base-auth.component";
+import {BaseAuth} from "../../base/base-auth";
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -15,13 +15,12 @@ import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
-export class SeasonAddComponent extends BaseAuthComponent implements OnInit {
+export class SeasonAddComponent extends BaseAuth implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   addForm: FormGroup;
   nameCtrl: FormControl = this.formBuilder.control('', [Validators.required]);
   deviceId: number;
-  pageNumber: number;
 
   constructor(private formBuilder: FormBuilder, public router: Router, private dataService: DataService,
     private route: ActivatedRoute, public tokenCheckService: TokenCheckService, public utilService: UtilService,
@@ -33,11 +32,7 @@ export class SeasonAddComponent extends BaseAuthComponent implements OnInit {
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.sidebar.setGoBackCallback(() => {
-      this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
-      this.router.navigate(['devices/' + this.deviceId + '/seasons']);
-    });
-    this.pageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
+    this.sidebar.setGoBackCallback(() => this.router.navigate(['devices', this.deviceId, 'seasons']));
 
     this.addForm = this.formBuilder.group({
     	name: this.nameCtrl
@@ -54,7 +49,7 @@ export class SeasonAddComponent extends BaseAuthComponent implements OnInit {
     newSeason.name = this.addForm.controls['name'].value;
 
     this.dataService.createSeason(newSeason).subscribe(data => {
-      this.navigateWithNotification('devices/' + this.deviceId + '/seasons', [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+      this.navigateWithNotification(['devices', this.deviceId, 'seasons'], [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     }, error => {
       if (error.status === 400) {
         this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));

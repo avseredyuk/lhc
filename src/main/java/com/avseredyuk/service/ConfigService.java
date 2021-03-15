@@ -10,6 +10,8 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,8 +24,8 @@ public class ConfigService {
         return configRepository.findOne(key);
     }
     
-    public List<Config> findAll() {
-        return configRepository.findAll();
+    public Page<Config> findAllPaginated(Pageable pageable) {
+        return configRepository.findAll(pageable);
     }
 
     public Config updateOrThrow(Config config) {

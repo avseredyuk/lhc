@@ -1,8 +1,9 @@
 package com.avseredyuk.controller.admin;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +22,8 @@ import com.avseredyuk.model.internal.ApiResult;
 import com.avseredyuk.service.DeviceConfigService;
 import com.avseredyuk.service.DeviceService;
 
+import javax.validation.constraints.NotNull;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(value = "/admin/devices")
@@ -34,8 +37,9 @@ public class DeviceController {
     private DeviceConfigService deviceConfigService;
 
     @GetMapping
-    public List<DeviceDto> getAllDevices() {
-        return deviceMapper.toDtoList(deviceService.findAll());
+    public Page<DeviceDto> getAllDevices(@NotNull final Pageable pageable) {
+        Page<Device> page = deviceService.findAllPaginated(pageable);
+        return new PageImpl<>(deviceMapper.toDtoList(page.getContent()), pageable, page.getTotalElements());
     }
 
     @GetMapping(value = "/{deviceId}")

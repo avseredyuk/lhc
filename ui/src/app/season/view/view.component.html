@@ -29,7 +29,7 @@
 											</tr>
 										</thead>
 										<tbody>
-											<tr *ngFor="let crop of cropsForSeason">
+											<tr *ngFor="let crop of data">
 												<td class="for-small-centered key-column">{{ this.utilService.formatTimestamp(crop.d) }}</td>
 												<td class="text-center">{{ crop.weight }}</td>
 												<td class="text-center">{{ crop.count }}</td>
@@ -47,15 +47,13 @@
 									</table>
 								</div>
 								<div>
-									<nav aria-label="...">
-										<ul class="pagination pagination-lg justify-content-center">
-											<li *ngFor="let p of this.utilService.pagination(pageNumber, totalPages)" class="page-item"
-											[ngClass]="{'inactiveLink disabled': this.utilService.isPointsOrCurrentPage(p, pageNumber),
-											currentPage: this.utilService.isCurrentPage(p, pageNumber)}">
-												<a class="page-link" [routerLink]="" (click)="loadPage(p)">{{ p }}</a>
-											</li>
-										</ul>
-									</nav>
+									<mat-paginator [length]="totalElements"
+              							[pageSize]="pageSize"
+              							[pageSizeOptions]="[5, 10, 25, 100, 1000]"
+              							[showFirstLastButtons]="true"
+              							[pageIndex]="pageNumber"
+										(page)="loadPage($event)">
+									</mat-paginator>
 								</div>
 								<div>
 									<button (click)="addCrop()" class="btn btn-info btn-lg" role="button">Add</button>

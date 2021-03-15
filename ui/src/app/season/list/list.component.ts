@@ -1,4 +1,4 @@
-import {BaseAuthComponent} from "../../base-auth/base-auth.component";
+import {BasePageableStorable} from "../../base/base-pageable-storable";
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {DataService} from "../../service/data.service";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
@@ -14,79 +14,57 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class SeasonListComponent extends BaseAuthComponent implements OnInit {
-
-  seasons: Season[];
-  deviceId: number;
-  pageNumber: number = 1;
-  totalPages: number;
+export class SeasonListComponent extends BasePageableStorable<Season> implements OnInit {
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
+  deviceId: number;
   stats: Statistics;
 
   constructor(public router: Router, private dataService: DataService, public componentCommunicationService: ComponentCommunicationService,
     public tokenCheckService: TokenCheckService, private route: ActivatedRoute, public utilService: UtilService) {
-    super(router, componentCommunicationService, tokenCheckService);
+    super(utilService.PAGINATED_COMPONENT_SEASON_LIST, router, componentCommunicationService, tokenCheckService);
     this.route.params.subscribe(params => this.deviceId = params.id)
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-
-    this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
-
-    const storedPageNumber = this.componentCommunicationService.getPageNumber(this.constructor.name);
-    if (storedPageNumber !== undefined) {
-      this.pageNumber = storedPageNumber;
-    }
-
-    this.loadPageForDevice();
-
+    this.sidebar.setGoBackCallback(() => this.router.navigate(['devices', this.deviceId]));
     this.dataService.getSeasonsStatistics(this.deviceId).subscribe(
       apiResult => this.stats = apiResult.data
     );
   }
 
-  loadPageForDevice(): void {
-    this.dataService.getSeasonsByDeviceId(this.deviceId, this.pageNumber - 1).subscribe(seasons => {
-      this.seasons = seasons.content;
-      this.totalPages = seasons.totalPages;
+  loadPageData(): void {
+    this.dataService.getSeasonsByDeviceId(this.deviceId, this.pageNumber, this.pageSize).subscribe(seasons => {
+      this.data = seasons.content;
+      this.totalElements = seasons.totalElements;
     });
   }
 
-  loadPage(p: number): void {
-    this.pageNumber = p;
-    this.loadPageForDevice();
-  }
-
   addSeason(): void {
-    this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
-    this.router.navigate(['devices/' + this.deviceId + '/seasons/add']);
+    this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_SEASON_LIST, this.pageNumber);
+    this.router.navigate(['devices', this.deviceId, 'seasons', 'add']);
   }
 
   openSeason(season: Season): void {
-  	this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
-  	this.router.navigate(['devices/' + this.deviceId + '/seasons/' + season.id]);
+  	this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_SEASON_LIST, this.pageNumber);
+  	this.router.navigate(['devices', this.deviceId, 'seasons', season.id]);
   }
 
   editSeason(season: Season): void {
-    this.componentCommunicationService.setPageNumber(this.constructor.name, this.pageNumber);
-    this.router.navigate(['devices/' + this.deviceId + '/seasons/' + season.id + '/edit']);
+    this.componentCommunicationService.setPageNumber(this.utilService.PAGINATED_COMPONENT_SEASON_LIST, this.pageNumber);
+    this.router.navigate(['devices', this.deviceId, 'seasons', season.id, 'edit']);
   }
 
   deleteSeason(season: Season): void {
     if (confirm('Are you sure you want to delete season?')) {
       this.dataService.deleteSeason(season.id).subscribe(data => {
         this.notificateThisPage([new AppNotification('Deleted season: ' + season.name, AppNotificationType.SUCCESS)]);
-        this.loadPageForDevice();
+        this.loadPageData();
         this.dataService.getSeasonsStatistics(this.deviceId).subscribe(apiResult =>
           this.stats = apiResult.data
         );
       });
     }
-  }
-
-  hasData(): boolean {
-    return typeof this.seasons !== 'undefined' && this.seasons.length > 0;
   }
 
   hasStatsData(): boolean {

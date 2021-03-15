@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {BaseAuthComponent} from "../../base-auth/base-auth.component";
+import {BaseAuth} from "../../base/base-auth";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {DataService} from "../../service/data.service";
@@ -16,7 +16,7 @@ import {UtilService} from "../../service/util.service";
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class DeviceEditComponent extends BaseAuthComponent implements OnInit {
+export class DeviceEditComponent extends BaseAuth implements OnInit {
 
   @ViewChild(SidebarComponent, {static: true}) sidebar: SidebarComponent;
   deviceId: number;
@@ -43,7 +43,7 @@ export class DeviceEditComponent extends BaseAuthComponent implements OnInit {
   ngOnInit(): void {
     super.ngOnInit();
     
-    this.sidebar.setGoBackCallback(() => {this.router.navigate(['devices/' + this.deviceId]);});
+    this.sidebar.setGoBackCallback(() => this.router.navigate(['devices', this.deviceId]));
 
     this.editForm = this.formBuilder.group({
     	deviceName: this.deviceNameCtrl,
@@ -78,7 +78,7 @@ export class DeviceEditComponent extends BaseAuthComponent implements OnInit {
         } else {
           errNotification = [new AppNotification('Unknown error', AppNotificationType.ERROR)];
         }
-        this.navigateWithNotification('devices/' + this.deviceId, errNotification);
+        this.navigateWithNotification(['devices', this.deviceId], errNotification);
       }
     );
   }
@@ -124,7 +124,7 @@ export class DeviceEditComponent extends BaseAuthComponent implements OnInit {
     this.device.notes = this.editForm.controls['deviceNotes'].value;
     this.device.privateName = this.editForm.controls['devicePrivateName'].value;
     this.dataService.updateDevice(this.device).subscribe(data => {
-      this.navigateWithNotification('devices/' + this.deviceId, [new AppNotification('Success', AppNotificationType.SUCCESS)]);
+      this.navigateWithNotification(['devices', this.deviceId], [new AppNotification('Success', AppNotificationType.SUCCESS)]);
     }, error => {
       if (error.status === 400) {
         this.notificateThisPage(error.error.errors.map(function(n) {return new AppNotification(n, AppNotificationType.ERROR)}));
