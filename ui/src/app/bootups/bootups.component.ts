@@ -7,6 +7,8 @@ import {DataService} from "../service/data.service";
 import {TokenCheckService} from "../service/token-check.service";
 import {UtilService} from "../service/util.service";
 import {SidebarComponent} from "../parts/sidebar/sidebar.component";
+import {Observable} from "rxjs";
+import {Page} from "../model/page";
 
 @Component({
   selector: 'app-bootups',
@@ -29,13 +31,8 @@ export class BootupsComponent extends BasePageable<Bootup> implements OnInit {
     this.loadPageData();
   }
 
-  loadPageData(): void {
-    this.dataService.getBootupsByDeviceId(this.deviceId, this.pageNumber, this.pageSize).subscribe(
-      bootups => {
-        this.data = bootups.content;
-        this.totalElements = bootups.totalElements;
-      }
-    );
+  providePageData(): Observable<Page<Bootup>> {
+    return this.dataService.getBootupsByDeviceId(this.deviceId, this.pageNumber, this.pageSize);
   }
 
   deleteBootup(bootup: Bootup): void {

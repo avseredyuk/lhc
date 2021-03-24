@@ -1,5 +1,5 @@
 export class Page<T> {
-  content: T;
+  content: Array<T>;
   totalElements: number;
   totalPages: number;
   first: boolean;

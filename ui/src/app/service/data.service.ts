@@ -43,8 +43,8 @@ export class DataService {
 
   /* Device */
 
-  getDevices(pageNumber: number, pageSize: number): Observable<Page<Device[]>> {
-    return this.http.get<Page<Device[]>>(this.adminApiUrl + 'devices?size=' + pageSize + '&page=' + pageNumber);
+  getDevices(pageNumber: number, pageSize: number): Observable<Page<Device>> {
+    return this.http.get<Page<Device>>(this.adminApiUrl + 'devices?size=' + pageSize + '&page=' + pageNumber);
   }
 
   getDevice(deviceId: number): Observable<ApiResult<Device>> {
@@ -73,8 +73,8 @@ export class DataService {
 
   /* Configurations */
 
-  getConfiguration(pageNumber: number, pageSize: number): Observable<Page<Configuration[]>> {
-    return this.http.get<Page<Configuration[]>>(
+  getConfiguration(pageNumber: number, pageSize: number): Observable<Page<Configuration>> {
+    return this.http.get<Page<Configuration>>(
       this.adminApiUrl + 'configs?size=' + pageSize + '&page=' + pageNumber);
   }
 
@@ -96,8 +96,8 @@ export class DataService {
 
   /* Plant Maintenance */
 
-  getPlantMaintenancesByDeviceId(deviceId: number, pageNumber: number, pageSize: number): Observable<Page<PlantMaintenance[]>> {
-    return this.http.get<Page<PlantMaintenance[]>>(
+  getPlantMaintenancesByDeviceId(deviceId: number, pageNumber: number, pageSize: number): Observable<Page<PlantMaintenance>> {
+    return this.http.get<Page<PlantMaintenance>>(
       this.adminApiUrl + 'maintenance?deviceId=' + deviceId + '&size=' + pageSize + '&page=' + pageNumber);
   }
 
@@ -123,8 +123,8 @@ export class DataService {
     return this.http.post<ApiResult<Crop>>(this.adminApiUrl + 'crop', crop);
   }
 
-  getCropsBySeasonId(seasonId: number, pageNumber: number, pageSize: number): Observable<Page<Crop[]>> {
-    return this.http.get<Page<Crop[]>>(
+  getCropsBySeasonId(seasonId: number, pageNumber: number, pageSize: number): Observable<Page<Crop>> {
+    return this.http.get<Page<Crop>>(
       this.adminApiUrl + 'crop?seasonId=' + seasonId + '&size=' + pageSize + '&page=' + pageNumber);
   }
 
@@ -142,8 +142,8 @@ export class DataService {
 
   /* Season */
 
-  getSeasonsByDeviceId(deviceId: number, pageNumber: number, pageSize: number): Observable<Page<Season[]>> {
-    return this.http.get<Page<Season[]>>(
+  getSeasonsByDeviceId(deviceId: number, pageNumber: number, pageSize: number): Observable<Page<Season>> {
+    return this.http.get<Page<Season>>(
       this.adminApiUrl + 'season?deviceId=' + deviceId + '&size=' + pageSize + '&page=' + pageNumber);
   }
 
@@ -178,15 +178,15 @@ export class DataService {
 
   /* Pings */
 
-  getPingsByDeviceId(deviceId: number, pageNumber: number, pageSize: number): Observable<Page<Ping[]>> {
-    return this.http.get<Page<Ping[]>>(
+  getPingsByDeviceId(deviceId: number, pageNumber: number, pageSize: number): Observable<Page<Ping>> {
+    return this.http.get<Page<Ping>>(
       this.adminApiUrl + 'pings?deviceId=' + deviceId + '&size=' + pageSize + '&page=' + pageNumber);
   }
 
   /* Bootups */
 
-  getBootupsByDeviceId(deviceId: number, pageNumber: number, pageSize: number): Observable<Page<Bootup[]>> {
-    return this.http.get<Page<Bootup[]>>(
+  getBootupsByDeviceId(deviceId: number, pageNumber: number, pageSize: number): Observable<Page<Bootup>> {
+    return this.http.get<Page<Bootup>>(
       this.adminApiUrl + 'bootups?deviceId=' + deviceId + '&size=' + pageSize + '&page=' + pageNumber);
   }
 
@@ -196,8 +196,8 @@ export class DataService {
 
   /* Pump Actions */
 
-  getPumpActionsByDeviceId(deviceId: number, pageNumber: number, pageSize: number): Observable<Page<PumpAction[]>> {
-    return this.http.get<Page<PumpAction[]>>(
+  getPumpActionsByDeviceId(deviceId: number, pageNumber: number, pageSize: number): Observable<Page<PumpAction>> {
+    return this.http.get<Page<PumpAction>>(
       this.adminApiUrl + 'pump-actions?deviceId=' + deviceId + '&size=' + pageSize + '&page=' + pageNumber);
   }
 
@@ -207,8 +207,8 @@ export class DataService {
 
   /* Sensor Reports */
 
-  getSensorReportsByDeviceId(deviceId: number, pageNumber: number, pageSize: number): Observable<Page<SensorReport[]>> {
-    return this.http.get<Page<SensorReport[]>>(
+  getSensorReportsByDeviceId(deviceId: number, pageNumber: number, pageSize: number): Observable<Page<SensorReport>> {
+    return this.http.get<Page<SensorReport>>(
       this.adminApiUrl + 'sensor-reports?deviceId=' + deviceId + '&size=' + pageSize + '&page=' + pageNumber);
   }
 

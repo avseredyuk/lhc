@@ -9,6 +9,8 @@ import {PumpAction} from "../model/pump-action";
 import {SidebarComponent} from "../parts/sidebar/sidebar.component";
 import {ComponentCommunicationService} from "../service/component-communication.service";
 import {PageEvent} from '@angular/material/paginator';
+import {Observable} from "rxjs";
+import {Page} from "../model/page";
 
 @Component({
   selector: 'app-pump-actions',
@@ -31,11 +33,8 @@ export class PumpActionsComponent extends BasePageable<PumpAction> implements On
     this.loadPageData();
   }
 
-  loadPageData(): void {
-    this.dataService.getPumpActionsByDeviceId(this.deviceId, this.pageNumber, this.pageSize).subscribe(pumpActions => {
-      this.data = pumpActions.content;
-      this.totalElements = pumpActions.totalElements;
-    });
+  providePageData(): Observable<Page<PumpAction>> {
+    return this.dataService.getPumpActionsByDeviceId(this.deviceId, this.pageNumber, this.pageSize);
   }
 
   deletePumpAction(pumpAction: PumpAction): void {

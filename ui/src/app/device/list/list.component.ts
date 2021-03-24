@@ -7,6 +7,8 @@ import {Device} from "../../model/device";
 import {AppNotification, AppNotificationType} from "../../model/app-notification";
 import {TokenCheckService} from "../../service/token-check.service";
 import {UtilService} from "../../service/util.service";
+import {Observable} from "rxjs";
+import {Page} from "../../model/page";
 
 @Component({
   selector: 'app-device-list',
@@ -22,13 +24,11 @@ export class DeviceListComponent extends BasePageableStorable<Device> implements
 
   ngOnInit(): void {
     super.ngOnInit();
+    this.loadPageData();
   }
 
-  loadPageData(): void {
-    this.dataService.getDevices(this.pageNumber, this.pageSize).subscribe(devices => {
-      this.data = devices.content;
-      this.totalElements = devices.totalElements;
-    });
+  providePageData(): Observable<Page<Device>> {
+    return this.dataService.getDevices(this.pageNumber, this.pageSize);
   }
 
   deleteDevice(device: Device): void {

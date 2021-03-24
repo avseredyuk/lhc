@@ -8,6 +8,8 @@ import {TokenCheckService} from "../../service/token-check.service";
 import {Season, Statistics} from "../../model/season";
 import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
 import {UtilService} from "../../service/util.service";
+import {Observable} from "rxjs";
+import {Page} from "../../model/page";
 
 @Component({
   selector: 'app-season-list',
@@ -27,17 +29,15 @@ export class SeasonListComponent extends BasePageableStorable<Season> implements
 
   ngOnInit(): void {
     super.ngOnInit();
+    this.loadPageData();
     this.sidebar.setGoBackCallback(() => this.router.navigate(['devices', this.deviceId]));
     this.dataService.getSeasonsStatistics(this.deviceId).subscribe(
       apiResult => this.stats = apiResult.data
     );
   }
 
-  loadPageData(): void {
-    this.dataService.getSeasonsByDeviceId(this.deviceId, this.pageNumber, this.pageSize).subscribe(seasons => {
-      this.data = seasons.content;
-      this.totalElements = seasons.totalElements;
-    });
+  providePageData(): Observable<Page<Season>> {
+    return this.dataService.getSeasonsByDeviceId(this.deviceId, this.pageNumber, this.pageSize);
   }
 
   addSeason(): void {

@@ -24,7 +24,6 @@ export abstract class BasePageableStorable<T> extends BasePageable<T> implements
       this.pageNumber = storedPageData[0];
       this.pageSize = storedPageData[1];
     }
-    this.loadPageData();
   }
 
   storePaginationInfo() {

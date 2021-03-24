@@ -8,6 +8,8 @@ import {TokenCheckService} from "../service/token-check.service";
 import {UtilService} from "../service/util.service";
 import {SidebarComponent} from "../parts/sidebar/sidebar.component";
 import {PageEvent} from '@angular/material/paginator';
+import {Observable} from "rxjs";
+import {Page} from "../model/page";
 
 @Component({
   selector: 'app-pings',
@@ -30,10 +32,8 @@ export class PingsComponent extends BasePageable<Ping> implements OnInit {
     this.loadPageData();
   }
 
-  loadPageData(): void {
-    this.dataService.getPingsByDeviceId(this.deviceId, this.pageNumber, this.pageSize).subscribe(pings => {
-      this.data = pings.content;
-      this.totalElements = pings.totalElements;
-    });
+  providePageData(): Observable<Page<Ping>> {
+    return this.dataService.getPingsByDeviceId(this.deviceId, this.pageNumber, this.pageSize);
   }
+
 }

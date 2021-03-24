@@ -5,6 +5,8 @@ import {ComponentCommunicationService} from "../service/component-communication.
 import {Router} from "@angular/router";
 import {PageEvent} from '@angular/material/paginator';
 import {Injectable} from "@angular/core";
+import {Observable} from "rxjs";
+import {Page} from "../model/page";
 
 @Injectable()
 export abstract class BasePageable<T> extends BaseAuth implements OnInit {
@@ -23,12 +25,19 @@ export abstract class BasePageable<T> extends BaseAuth implements OnInit {
     super.ngOnInit();
   }
 
-  public abstract loadPageData(): void;
+  public abstract providePageData(): Observable<Page<T>>
 
   loadPage(event: PageEvent) {
     this.pageNumber = event.pageIndex;
     this.pageSize = event.pageSize;
     this.loadPageData();
+  }
+
+  loadPageData() {
+    this.providePageData().subscribe(page => {
+      this.data = page.content;
+      this.totalElements = page.totalElements;
+    });
   }
 
   hasData(): boolean {

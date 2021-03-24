@@ -9,6 +9,8 @@ import {SensorReport} from "../model/sensor-report";
 import {SidebarComponent} from "../parts/sidebar/sidebar.component";
 import {ComponentCommunicationService} from "../service/component-communication.service";
 import {PageEvent} from '@angular/material/paginator';
+import {Observable} from "rxjs";
+import {Page} from "../model/page";
 
 @Component({
   selector: 'app-sensor-reports',
@@ -31,11 +33,8 @@ export class SensorReportsComponent extends BasePageable<SensorReport> implement
     this.loadPageData();
   }
 
-  loadPageData(): void {
-    this.dataService.getSensorReportsByDeviceId(this.deviceId, this.pageNumber, this.pageSize).subscribe(sensorReports => {
-      this.data = sensorReports.content;
-      this.totalElements = sensorReports.totalElements;
-    });
+  providePageData(): Observable<Page<SensorReport>> {
+    return this.dataService.getSensorReportsByDeviceId(this.deviceId, this.pageNumber, this.pageSize);
   }
 
   deleteSensorReport(sensorReport: SensorReport): void {

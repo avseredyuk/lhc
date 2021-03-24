@@ -8,6 +8,8 @@ import {AppNotification, AppNotificationType} from "../../model/app-notification
 import {TokenCheckService} from "../../service/token-check.service";
 import {ComponentCommunicationService} from "../../service/component-communication.service";
 import {UtilService} from "../../service/util.service";
+import {Observable} from "rxjs";
+import {Page} from "../../model/page";
 
 @Component({
   selector: 'app-settings-list',
@@ -23,13 +25,11 @@ export class SettingsListComponent extends BasePageableStorable<Configuration> i
 
   ngOnInit(): void {
     super.ngOnInit();
+    this.loadPageData();
   }
 
-  loadPageData(): void {
-    this.dataService.getConfiguration(this.pageNumber, this.pageSize).subscribe(settings => {
-      this.data = settings.content;
-      this.totalElements = settings.totalElements;
-    });
+  providePageData(): Observable<Page<Configuration>> {
+    return this.dataService.getConfiguration(this.pageNumber, this.pageSize);
   }
 
   clearCache(): void {

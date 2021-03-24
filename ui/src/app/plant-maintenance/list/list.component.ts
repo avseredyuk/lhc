@@ -8,6 +8,8 @@ import {TokenCheckService} from "../../service/token-check.service";
 import {UtilService} from "../../service/util.service";
 import {ApiResult} from "../../model/api-result";
 import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
+import {Observable} from "rxjs";
+import {Page} from "../../model/page";
 
 @Component({
   selector: 'app-plant-maintenance-list',
@@ -28,13 +30,11 @@ export class PlantMaintenanceListComponent extends BasePageableStorable<PlantMai
   ngOnInit(): void {
     super.ngOnInit();
     this.sidebar.setGoBackCallback(() => this.router.navigate(['devices', this.deviceId]));
+    this.loadPageData();
   }
 
-  loadPageData(): void {
-    this.dataService.getPlantMaintenancesByDeviceId(this.deviceId, this.pageNumber, this.pageSize).subscribe(maintenances => {
-      this.data = maintenances.content;
-      this.totalElements = maintenances.totalElements;
-    });
+  providePageData(): Observable<Page<PlantMaintenance>> {
+    return this.dataService.getPlantMaintenancesByDeviceId(this.deviceId, this.pageNumber, this.pageSize);
   }
 
   deleteMaintenance(plantMaintenance: PlantMaintenance): void {

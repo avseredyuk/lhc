@@ -8,6 +8,8 @@ import {TokenCheckService} from "../../service/token-check.service";
 import {Crop, Statistics} from "../../model/season";
 import {SidebarComponent} from "../../parts/sidebar/sidebar.component";
 import {UtilService} from "../../service/util.service";
+import {Observable} from "rxjs";
+import {Page} from "../../model/page";
 
 @Component({
   selector: 'app-season-view',
@@ -33,6 +35,7 @@ export class SeasonViewComponent extends BasePageableStorable<Crop> implements O
 
   ngOnInit(): void {
     super.ngOnInit();
+    this.loadPageData();
     this.sidebar.setGoBackCallback(() => this.router.navigate(['devices', this.deviceId, 'seasons']));
     this.dataService.getSeasonStatistics(this.seasonId).subscribe(apiResult =>
       this.stats = apiResult.data
@@ -42,11 +45,8 @@ export class SeasonViewComponent extends BasePageableStorable<Crop> implements O
     );
   }
 
-  loadPageData(): void {
-    this.dataService.getCropsBySeasonId(this.seasonId, this.pageNumber, this.pageSize).subscribe(crops => {
-      this.data = crops.content;
-      this.totalElements = crops.totalElements;
-    });
+  providePageData(): Observable<Page<Crop>> {
+    return this.dataService.getCropsBySeasonId(this.seasonId, this.pageNumber, this.pageSize);
   }
 
   addCrop(): void {
